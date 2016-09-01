@@ -65,6 +65,9 @@ namespace BEYON.Component.Data.EF
 
         public DbSet<ProtectUnits> protectUnitss { get; set; }
 
+        //地理所财务
+        public DbSet<ApplicationForm> ApplicationForms { get; set; }
+
         //[ImportMany(typeof(IEntityMapper))]
         //public IEnumerable<IEntityMapper> EntityMappers { get; set; }
 
@@ -99,6 +102,9 @@ namespace BEYON.Component.Data.EF
             modelBuilder.Configurations.Add(new ProtectUnitsConfiguration());
 
             modelBuilder.Configurations.Add(new AuditConfiguration());
+
+            //地理所财务
+            modelBuilder.Configurations.Add(new ApplicationFormConfiguration());
             //if (EntityMappers == null)
             //{
             //    return;

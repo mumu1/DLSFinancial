@@ -72,6 +72,7 @@
     <Compile Include="Plot\OthersVM.cs" />
     <Compile Include="Plot\PointsVM.cs" />
     <Compile Include="Plot\StatisticsVM.cs" />
+    <Compile Include="Plot\ApplicationFormVM.cs" />
     <Compile Include="Plot\UmrcoverVM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SideBarMenuVM.cs" />

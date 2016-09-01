@@ -68,6 +68,7 @@
     <Compile Include="Plot\Photos.cs" />
     <Compile Include="Plot\Drafts.cs" />
     <Compile Include="Plot\Samples.cs" />
+    <Compile Include="Plot\ApplicationForm.cs" />
     <Compile Include="Plot\Umrcover.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
