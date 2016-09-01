@@ -1,0 +1,160 @@
+﻿@using BEYON.ViewModel
+@using BEYON.ViewModel.Member
+@using BEYON.Domain.Model.Member;
+@{
+    List<ModuleVM> sidebarMenuDataList = ViewBag.SidebarMenuModel;
+    User user = ViewBag.User;
+}
+
+@section css{
+    <!-- #CSS Links -->
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+    <!-- Basic Styles -->
+    <link rel="stylesheet" type="text/css" media="screen" href="@Url.Content("~/Content/css/bootstrap.min.css")">
+    <link rel="stylesheet" type="text/css" media="screen" href="@Url.Content("~/Content/css/font-awesome.min.css")">
+
+    <!-- SmartAdmin Styles : Caution! DO NOT change the order -->
+    <link rel="stylesheet" type="text/css" media="screen" href="@Url.Content("~/Content/css/smartadmin-production-plugins.min.css")">
+    <link rel="stylesheet" type="text/css" media="screen" href="@Url.Content("~/Content/css/smartadmin-production.min.css")">
+    <link rel="stylesheet" type="text/css" media="screen" href="@Url.Content("~/Content/css/smartadmin-skins.min.css")">
+    
+    <!-- SmartAdmin RTL Support -->
+    <link rel="stylesheet" type="text/css" media="screen" href="@Url.Content("~/Content/css/smartadmin-rtl.min.css")">
+
+    <!--TimePicker Styles-->
+    <link rel="stylesheet" type="text/css" media="screen" href="@Url.Content("~/Content/css/bootstrap-datetimepicker.min.css")">
+    <!--TimePicker Styles-->
+<link rel="stylesheet" type="text/css" media="screen" href="@Url.Content("~/Content/css/bootstrap-switch.css")">   
+    <link rel="stylesheet" type="text/css" media="screen" href="@Url.Content("~/Content/css/highlight.css")">     
+     <!--Table Styles-->
+    <link rel="stylesheet" type="text/css" media="screen" href="@Url.Content("~/Content/css/bootstrap-table.css")">
+        <!--fileInput-->
+    <link rel="stylesheet" type="text/css" media="screen" href="@Url.Content("~/Content/css/fileinput.min.css")">
+
+    <!--Select Styles-->
+    <link rel="stylesheet" type="text/css" media="screen" href="@Url.Content("~/Content/css/bootstrap-select.css")">
+    <!-- We recommend you use "your_style.css" to override SmartAdmin
+         specific styles this will also ensure you retrain your customization with each SmartAdmin update.
+    <link rel="stylesheet" type="text/css" media="screen" href="css/your_style.css"> -->
+    <!-- Demo purpose only: goes with demo.js, you can delete this css when designing your own WebApp -->
+    <link rel="stylesheet" type="text/css" media="screen" href="@Url.Content("~/Content/css/demo.min.css")">
+
+    <!-- #FAVICONS -->
+    <link rel="shortcut icon" href="@Url.Content("~/Content/css/img/favicon/favicon.ico")" type="image/x-icon">
+    <link rel="icon" href="@Url.Content("~/Content/css/img/favicon/favicon.ico")" type="image/x-icon">
+
+    <!-- #GOOGLE FONT -->
+    @*<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700">*@
+
+    <!-- #APP SCREEN / ICONS -->
+    <!-- Specifying a Webpage Icon for Web Clip
+         Ref: https://developer.apple.com/library/ios/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html -->
+    <link rel="apple-touch-icon" href="@Url.Content("~/Content/img/splash/sptouch-icon-iphone.png")">
+    <link rel="apple-touch-icon" sizes="76x76" href="@Url.Content("~/Content/img/splash/touch-icon-ipad.png")">
+    <link rel="apple-touch-icon" sizes="120x120" href="@Url.Content("~/Content/img/splash/touch-icon-iphone-retina.png")">
+    <link rel="apple-touch-icon" sizes="152x152" href="@Url.Content("~/Content/img/splash/touch-icon-ipad-retina.png")">
+
+    <!-- iOS web-app metas : hides Safari UI Components and Changes Status Bar Appearance -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <!-- Startup image for web apps -->
+    <link rel="apple-touch-startup-image" href="@Url.Content("~/Content/img/splash/ipad-landscape.png")" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape)">
+    <link rel="apple-touch-startup-image" href="@Url.Content("~/Content/img/splash/ipad-portrait.png")" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait)">
+    <link rel="apple-touch-startup-image" href="@Url.Content("~/Content/img/splash/iphone.png")" media="screen and (max-device-width: 320px)">
+}
+
+<!-- Main Header -->
+@Html.Partial("_MainHeader", user)
+<!-- Left side menus. contains the logo and sidebar -->
+@Html.Partial("_LeftSideMenus", sidebarMenuDataList)
+
+<!-- Content Wrapper. Contains page content -->
+@Html.Partial("_MainContent", sidebarMenuDataList)
+
+@Html.Partial("_Shortcut")
+
+@section scripts{
+    @Scripts.Render("~/bundles/bootstrap")
+ 
+    <script src="@Url.Content("~/Scripts/Toastr/toastr.min.js")"></script>
+
+    <script src="@Url.Content("~/Scripts/libs/jquery-ui-1.10.3.min.js")"></script>
+
+    <script src="@Url.Content("~/Scripts/app.config.js")"></script>
+
+    <script src="@Url.Content("~/Scripts/plugin/jquery-touch/jquery.ui.touch-punch.min.js")"></script>
+
+
+    <script src="@Url.Content("~/Scripts/notification/SmartNotification.min.js")"></script>
+
+
+    <script src="@Url.Content("~/Scripts/smartwidgets/jarvis.widget.min.js")"></script>
+
+
+    <script src="@Url.Content("~/Scripts/plugin/easy-pie-chart/jquery.easy-pie-chart.min.js")"></script>
+
+    <script src="@Url.Content("~/Scripts/plugin/sparkline/jquery.sparkline.min.js")"></script>
+
+
+    <script src="@Url.Content("~/Scripts/plugin/jquery-validate/jquery.validate.min.js")"></script>
+
+
+    <script src="@Url.Content("~/Scripts/plugin/masked-input/jquery.maskedinput.min.js")"></script>
+
+
+    <script src="@Url.Content("~/Scripts/plugin/select2/select2.min.js")"></script>
+
+
+    <script src="@Url.Content("~/Scripts/plugin/bootstrap-slider/bootstrap-slider.min.js")"></script>
+
+
+    <script src="@Url.Content("~/Scripts/plugin/msie-fix/jquery.mb.browser.min.js")"></script>
+
+
+    <script src="@Url.Content("~/Scripts/plugin/fastclick/fastclick.min.js")"></script>
+
+
+    <script src="@Url.Content("~/Scripts/demo.min.js")"></script>
+
+
+    <script src="@Url.Content("~/Scripts/app.min.js")"></script>
+
+
+    <script src="@Url.Content("~/Scripts/speech/voicecommand.min.js")"></script>
+
+
+    <script src="@Url.Content("~/Scripts/smart-chat-ui/smart.chat.ui.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/smart-chat-ui/smart.chat.manager.min.js")"></script>
+
+
+    <script src="@Url.Content("~/Scripts/Custom/Config.js")"></script>
+    <script src="@Url.Content("~/Scripts/Custom/LoadModule.js")"></script>
+
+
+    <script src="@Url.Content("~/Scripts/plugin/chartjs/chart.min.js")" type="text/javascript" chartset="utf8"></script>
+    <script src="@Url.Content("~/Scripts/plugin/datatables/jquery.dataTables.min.js")" type="text/javascript" chartset="utf8"></script>
+    <script src="@Url.Content("~/Scripts/plugin/datatables/dataTables.colVis.min.js")" type="text/javascript" chartset="utf8"></script>
+    <script src="@Url.Content("~/Scripts/plugin/datatables/dataTables.tableTools.min.js")" type="text/javascript" chartset="utf8"></script>
+    <script src="@Url.Content("~/Scripts/plugin/datatables/dataTables.bootstrap.min.js")" type="text/javascript" chartset="utf8"></script>
+    <script src="@Url.Content("~/Scripts/plugin/datatable-responsive/datatables.responsive.min.js")" type="text/javascript" chartset="utf8"></script>
+    <script src="@Url.Content("~/Scripts/plugin/datatables/dataTables.rowsGroup.js")" type="text/javascript" chartset="utf8"></script>
+@*<script src="@Url.Content("~/Scripts/Custom/bootstrap/bootstrap-datetimepicker.fr.js")"></script>*@
+@*<script src="@Url.Content("~/Scripts/Custom/bootstrap/bootstrap-datetimepicker.js")"></script>*@
+<script src="@Url.Content("~/Scripts/Custom/bootstrap-datetimepicker.zh-CN.js")"></script>
+<script src="@Url.Content("~/Scripts/Custom/fileinput.min.js")"></script>
+<script src="@Url.Content("~/Scripts/Custom/bootstrap-switch.min.js")"></script>
+@*<script src="@Url.Content("~/Scripts/Custom/highlight.js")"></script>*@
+@*<script src="@Url.Content("~/Scripts/Custom/main.js")"></script>*@
+    <script src="@Url.Content("~/Scripts/plugin/jquery-signalr/jquery.signalR-2.0.3.min.js")"></script>
+     <!--Reference the autogenerated SignalR hub script. -->
+    <script src="~/signalr/hubs"></script>
+    <script type="text/javascript">
+        toastr.options = { positionClass: "toast-top-center", showDuration: "150", hideDuration: "2000", showMethod: "fadeIn" };
+    </script>
+}
+
+
+

@@ -1,0 +1,169 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{78885325-016E-4ADF-8DB5-A6CDAC1AEFD5}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>BEYON.CoreBLL.Service</RootNamespace>
+    <AssemblyName>BEYON.CoreBLL.Service</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Autofac, Version=3.0.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.3.1.0\lib\net40\Autofac.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Autofac.Integration.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.Mvc4.3.1.0\lib\net40\Autofac.Integration.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.Extended, Version=6.0.0.0, Culture=neutral, PublicKeyToken=05b7e29bdd433584, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.Extended.6.1.0.168\lib\net45\EntityFramework.Extended.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="LinqToExcel">
+      <HintPath>..\Support\LinqToExcelLib\LinqToExcel.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Support\LinqToExcelLib\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Remotion.Data.Linq">
+      <HintPath>..\Support\LinqToExcelLib\Remotion.Data.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Member\AccountService.cs" />
+    <Compile Include="CoreServiceBase.cs" />
+    <Compile Include="Member\Interface\IAccountService.cs" />
+    <Compile Include="Member\Interface\IModuleService.cs" />
+    <Compile Include="Member\Interface\IPermissionService.cs" />
+    <Compile Include="Member\Interface\IRoleService.cs" />
+    <Compile Include="Member\Interface\IUserGroupService.cs" />
+    <Compile Include="Member\Interface\IUserService.cs" />
+    <Compile Include="Member\PermissionService.cs" />
+    <Compile Include="Member\RoleService.cs" />
+    <Compile Include="Member\ModuleService.cs" />
+    <Compile Include="Member\UserGroupService.cs" />
+    <Compile Include="Member\UserService.cs" />
+    <Compile Include="Plot\ProtectUnitAuditService.cs" />
+    <Compile Include="Plot\DigsituationBeforeService.cs" />
+    <Compile Include="Plot\ExportService.cs" />
+    <Compile Include="Plot\ImportService.cs" />
+    <Compile Include="Plot\Interface\IProtectUnitAuditService.cs" />
+    <Compile Include="Plot\Interface\IExportService.cs" />
+    <Compile Include="Plot\Interface\IImportService.cs" />
+    <Compile Include="Plot\Interface\IProtectUnitsService.cs" />
+    <Compile Include="Plot\LiteratureService.cs" />
+    <Compile Include="Plot\Interface\ILiteratureService.cs" />
+    <Compile Include="Plot\Interface\ILayerDepositService.cs" />
+    <Compile Include="Plot\LayerDepositService.cs" />
+    <Compile Include="Plot\ImportAntsitesService.cs" />
+    <Compile Include="Plot\Interface\IDigsituationBeforeService.cs" />
+    <Compile Include="Plot\Interface\IImportAntsitesService.cs" />
+    <Compile Include="Plot\Interface\IDraftsService.cs" />
+    <Compile Include="Plot\Interface\INotifyService.cs" />
+    <Compile Include="Plot\Interface\IOthersService.cs" />
+    <Compile Include="Plot\Interface\IPhotosService.cs" />
+    <Compile Include="Plot\Interface\IPlotBeforeService.cs" />
+    <Compile Include="Plot\Interface\ISamplesService.cs" />
+    <Compile Include="Plot\Interface\IAuditService.cs" />
+    <Compile Include="Plot\Interface\IBasicPropertyService.cs" />
+    <Compile Include="Plot\Interface\IPointsService.cs" />
+    <Compile Include="Plot\Interface\IStatisticsService.cs" />
+    <Compile Include="Plot\Interface\IUmrcoverService.cs" />
+    <Compile Include="Plot\DraftsService.cs" />
+    <Compile Include="Plot\NotifyService.cs" />
+    <Compile Include="Plot\OthersService.cs" />
+    <Compile Include="Plot\PhotosService.cs" />
+    <Compile Include="Plot\ProtectUnitsService.cs" />
+    <Compile Include="Plot\PlotBeforeService.cs" />
+    <Compile Include="Plot\SamplesService.cs" />
+    <Compile Include="Plot\AuditService.cs" />
+    <Compile Include="Plot\BasicPropertyService.cs" />
+    <Compile Include="Plot\PointsService.cs" />
+    <Compile Include="Plot\StatisticsService.cs" />
+    <Compile Include="Plot\UmrcoverService.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BEYON.Component.Data\BEYON.Component.Data.csproj">
+      <Project>{72685c95-126e-49b3-bc02-b0d82389a2e1}</Project>
+      <Name>BEYON.Component.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BEYON.Component.Tools\BEYON.Component.Tools.csproj">
+      <Project>{e824ee20-20ee-4a4f-aa4a-80830b7ad867}</Project>
+      <Name>BEYON.Component.Tools</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BEYON.Domain.Data\BEYON.Domain.Data.csproj">
+      <Project>{a3c03f94-613c-44d8-aed4-263822ed6a8a}</Project>
+      <Name>BEYON.Domain.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BEYON.Domain.Model\BEYON.Domain.Model.csproj">
+      <Project>{05920370-3d78-4b96-84e1-f13ba192c2d7}</Project>
+      <Name>BEYON.Domain.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BEYON.ViewModel\BEYON.ViewModel.csproj">
+      <Project>{c313d453-0d23-4e85-8352-1210506f4479}</Project>
+      <Name>BEYON.ViewModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Support\ExcelExporter.0.0.1\ExcelExporter.csproj">
+      <Project>{a4d2a183-c0f8-4dfc-b3ba-0288b4cd00ce}</Project>
+      <Name>ExcelExporter</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

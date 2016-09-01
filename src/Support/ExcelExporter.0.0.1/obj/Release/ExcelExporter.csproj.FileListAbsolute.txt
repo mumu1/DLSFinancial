@@ -1,0 +1,6 @@
+F:\workspace\projects\JiLinGuMu\src\Support\ExcelExporter.0.0.1\bin\Release\ExcelExporter.XML
+F:\workspace\projects\JiLinGuMu\src\Support\ExcelExporter.0.0.1\bin\Release\ExcelExporter.dll
+F:\workspace\projects\JiLinGuMu\src\Support\ExcelExporter.0.0.1\bin\Release\ExcelExporter.pdb
+F:\workspace\projects\JiLinGuMu\src\Support\ExcelExporter.0.0.1\obj\Release\ExcelExporter.csprojResolveAssemblyReference.cache
+F:\workspace\projects\JiLinGuMu\src\Support\ExcelExporter.0.0.1\obj\Release\ExcelExporter.dll
+F:\workspace\projects\JiLinGuMu\src\Support\ExcelExporter.0.0.1\obj\Release\ExcelExporter.pdb

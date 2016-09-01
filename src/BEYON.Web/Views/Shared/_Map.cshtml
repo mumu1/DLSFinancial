@@ -1,0 +1,55 @@
+﻿@using BEYON.ViewModel.Member
+
+@Styles.Render("~/Content/css")
+@Scripts.Render("~/bundles/modernizr")
+
+<link href="@Url.Content("~/Content/beyonmap/Widgets/beyonmap-navigation/beyonmap-navigation.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/beyonmap/Widgets/widgets.css")" rel="stylesheet" type="text/css" />
+
+ <!-- Main content -->
+<div id="MapArea" style="position:absolute;top:40px; left:0px;width:100%;height:100%;">
+    <div id="beyonmapContainer"></div>
+    <div id="window" style="opacity:0.8;"></div>
+    <div id="MapTerrainTheme" style="opacity:0.8;display:none">
+        <div id="MapWidget" style="position: absolute;right:0;">
+            <div id="mapType">
+                <div class="mapTypeCard normal" data-name="contour"><span>等高线</span></div>
+                <div class="mapTypeCard earth" data-name="slope"><span>坡度</span></div>
+                <div class="mapTypeCard panorama choosedType active" data-name="aspect"><span>坡向</span></div>
+                <div class="closeMapType">
+                </div>
+            </div>
+            
+        </div>
+        <div id="MapLegend" class="mapLegend">
+
+        </div>
+    </div>
+</div><!-- /.content -->
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#beyonmapContainer').height($(document).height() - 89);
+        $('#MapWidget').css("top", $(document).height() - 91);
+        $('#MapLegend').css("top", $(document).height() - 91 - 196);
+        $(window).resize(function () {
+            $('#beyonmapContainer').height($(document).height() - 89);
+            $('#MapWidget').css("top", $(document).height() - 91);
+            $('#MapLegend').css("top", $(document).height() - 91 - 196);
+        })
+
+        loadScript("../Scripts/beyonmap/BeyonMap.js", function () {
+            loadScript("../Scripts/beyonmap/beyonmap-navigation.js", function () {
+                loadScript("../Scripts/Custom/App/Map.js", function () {
+                    loadScript("../Scripts/Custom/App/Navigation.js", function () {
+                        loadScript("../Scripts/Custom/App/Plot.js", function () {
+                            loadScript("../Scripts/Custom/App/Query.js", function () {
+                                loadScript("../Scripts/Custom/App/MapTool.js");
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    })
+</script>

@@ -1,0 +1,62 @@
+﻿@using BEYON.Domain.Model.Member
+@{
+
+}
+
+<div class="content-wrapper">
+    <!-- Main content -->
+    <section class="content" id="permissionSection">
+        <div class="panel-body" style="padding-bottom:0px;">
+            <div class="panel panel-default">
+                <div class="panel-heading">查询条件</div>
+                <div class="panel-body">
+                    <form id="formSearch" class="form-horizontal">
+                        <div class="form-group" style="margin-top: 15px">
+                            <label class="control-label  col-sm-1" for="txt_search_permissionname">权限名称</label>
+                            <div class=" col-sm-3">
+                                <input type="text" class="form-control" id="txt_search_permissionname">
+                            </div>
+                            <label class="control-label col-sm-1">是否激活</label>
+                            <div class="col-sm-4" style="text-align:right;">
+                                <button type="button" style="margin-right:100px" id="btn_query" class="btn btn-primary">查询</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+
+        @Html.Partial("_ModalForm")
+    </section><!-- /.content -->
+</div><!-- /.content-wrapper -->
+@*@section scripts{*@
+
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")"></script>
+<script src="@Url.Content("~/Scripts/Custom/TableOperation.js")"></script>
+<script src="@Url.Content("~/Scripts/Custom/ModalForm.js")"></script>
+
+<script>
+    pageSetUp();
+
+    // pagefunction
+    var pagefunction = function () {
+
+    };
+    // end pagefunction
+
+    // destroy generated instances
+    // pagedestroy is called automatically before loading a new page
+    // only usable in AJAX version!
+    var pagedestroy = function () {
+
+    }
+    // end destroy
+
+    pagefunction();
+</script>
+@*}*@
+
+
+

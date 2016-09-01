@@ -1,0 +1,28 @@
+{
+"type": "FeatureCollection",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+                                                                                
+"features": [
+{ "type": "Feature", "properties": { "osm_id": "244080892", "name": "吉林市", "type": "city" }, "geometry": { "type": "Point", "coordinates": [ 126.54349360000001, 43.8357587 ] } },
+{ "type": "Feature", "properties": { "osm_id": "244084984", "name": "丰满区", "type": "suburb" }, "geometry": { "type": "Point", "coordinates": [ 126.5322942, 43.7931498 ] } },
+{ "type": "Feature", "properties": { "osm_id": "244084986", "name": "昌邑区", "type": "suburb" }, "geometry": { "type": "Point", "coordinates": [ 126.5753529, 43.8519807 ] } },
+{ "type": "Feature", "properties": { "osm_id": "244084993", "name": "龙潭区", "type": "suburb" }, "geometry": { "type": "Point", "coordinates": [ 126.5563544, 43.9086134 ] } },
+{ "type": "Feature", "properties": { "osm_id": "2289892504", "name": "口前镇", "type": "town" }, "geometry": { "type": "Point", "coordinates": [ 126.4994131, 43.661571 ] } },
+{ "type": "Feature", "properties": { "osm_id": "2289898636", "name": "金珠乡", "type": "town" }, "geometry": { "type": "Point", "coordinates": [ 126.5492584, 44.0264901 ] } },
+{ "type": "Feature", "properties": { "osm_id": "2332775212", "name": "江密峰镇", "type": "town" }, "geometry": { "type": "Point", "coordinates": [ 126.7437347, 43.9557249 ] } },
+{ "type": "Feature", "properties": { "osm_id": "2332808265", "name": "乌拉街镇", "type": "town" }, "geometry": { "type": "Point", "coordinates": [ 126.467452, 44.0884937 ] } },
+{ "type": "Feature", "properties": { "osm_id": "3956330417", "name": "张家沟", "type": "suburb" }, "geometry": { "type": "Point", "coordinates": [ 126.5805975, 44.0033763 ] } },
+{ "type": "Feature", "properties": { "osm_id": "3962856370", "name": "乌拉街满族镇", "type": "town" }, "geometry": { "type": "Point", "coordinates": [ 126.46612, 44.08808 ] } },
+{ "type": "Feature", "properties": { "osm_id": "3962856543", "name": "土城子满族朝鲜族乡", "type": "town" }, "geometry": { "type": "Point", "coordinates": [ 126.40576, 44.08764 ] } },
+{ "type": "Feature", "properties": { "osm_id": "3962856620", "name": "孤店子镇", "type": "town" }, "geometry": { "type": "Point", "coordinates": [ 126.37162, 43.98528 ] } },
+{ "type": "Feature", "properties": { "osm_id": "3962856840", "name": "江北乡", "type": "town" }, "geometry": { "type": "Point", "coordinates": [ 126.55222, 43.94149 ] } },
+{ "type": "Feature", "properties": { "osm_id": "3962856842", "name": "江密峰镇", "type": "town" }, "geometry": { "type": "Point", "coordinates": [ 126.74669, 43.95434 ] } },
+{ "type": "Feature", "properties": { "osm_id": "3962859538", "name": "丰满乡", "type": "town" }, "geometry": { "type": "Point", "coordinates": [ 126.6732, 43.7284 ] } },
+{ "type": "Feature", "properties": { "osm_id": "3962859834", "name": "前二道乡", "type": "town" }, "geometry": { "type": "Point", "coordinates": [ 126.48772, 43.75532 ] } },
+{ "type": "Feature", "properties": { "osm_id": "3962860148", "name": "口前乡", "type": "town" }, "geometry": { "type": "Point", "coordinates": [ 126.4964, 43.65948 ] } },
+{ "type": "Feature", "properties": { "osm_id": "3962860444", "name": "大绥河镇", "type": "town" }, "geometry": { "type": "Point", "coordinates": [ 126.30811, 43.86777 ] } },
+{ "type": "Feature", "properties": { "osm_id": "3962860990", "name": "小白山乡", "type": "town" }, "geometry": { "type": "Point", "coordinates": [ 126.5534, 43.78717 ] } },
+{ "type": "Feature", "properties": { "osm_id": "3962861376", "name": "春登乡", "type": "town" }, "geometry": { "type": "Point", "coordinates": [ 126.41351, 43.65452 ] } },
+{ "type": "Feature", "properties": { "osm_id": "3962861666", "name": "江南乡", "type": "town" }, "geometry": { "type": "Point", "coordinates": [ 126.55332, 43.82268 ] } }
+]
+}

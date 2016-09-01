@@ -1,0 +1,187 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A3C03F94-613C-44D8-AED4-263822ED6A8A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>BEYON.Domain.Data</RootNamespace>
+    <AssemblyName>BEYON.Domain.Data</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.Extended, Version=6.0.0.0, Culture=neutral, PublicKeyToken=05b7e29bdd433584, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.Extended.6.1.0.168\lib\net45\EntityFramework.Extended.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\Support\LinqToExcelLib\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\Member\IModuleRepository.cs" />
+    <Compile Include="Repositories\Member\IModuleRepository.generated.cs" />
+    <Compile Include="Repositories\Member\Impl\ModuleRepository.cs" />
+    <Compile Include="Repositories\Member\Impl\PermissionRepository.cs" />
+    <Compile Include="Repositories\Member\IPermissionRepository.cs" />
+    <Compile Include="Repositories\Member\Impl\ModuleRepository.generated.cs" />
+    <Compile Include="Repositories\Member\Impl\PermissionRepository.generated.cs" />
+    <Compile Include="Repositories\Member\Impl\RoleRepository.generated.cs" />
+    <Compile Include="Repositories\Member\Impl\UserGroupRepository.generated.cs" />
+    <Compile Include="Repositories\Member\Impl\UserRepository.generated.cs" />
+    <Compile Include="Repositories\Member\IPermissionRepository.generated.cs" />
+    <Compile Include="Repositories\Member\IRoleRepository.generated.cs" />
+    <Compile Include="Repositories\Member\IUserGroupRepository.generated.cs" />
+    <Compile Include="Repositories\Member\IUserRepository.generated.cs" />
+    <Compile Include="Repositories\Plot\IProtectUnitAuditRepository.cs" />
+    <Compile Include="Repositories\Plot\IAuditRepository.cs" />
+    <Compile Include="Repositories\Plot\IProtectUnitAuditRepository.generated.cs" />
+    <Compile Include="Repositories\Plot\IDigsituationBeforeRepository.generated.cs" />
+    <Compile Include="Repositories\Plot\ILiteratureRepository.generated.cs" />
+    <Compile Include="Repositories\Plot\ILayerDepositRepository.generated.cs" />
+    <Compile Include="Repositories\Plot\IImportAntsitesRepository.generated.cs" />
+    <Compile Include="Repositories\Plot\Impl\ProtectUnitAuditRepository.generated.cs" />
+    <Compile Include="Repositories\Plot\Impl\ProtectUnitAuditRepository.io.cs" />
+    <Compile Include="Repositories\Plot\Impl\ProtectUnitAuditRepository.cs" />
+    <Compile Include="Repositories\Plot\Impl\AuditRepository.cs" />
+    <Compile Include="Repositories\Plot\Impl\BasicPropertyRepository.io.cs" />
+    <Compile Include="Repositories\Plot\Impl\DigsituationBeforeRepository.io.cs" />
+    <Compile Include="Repositories\Plot\Impl\DigsituationBeforeRepository.generated.cs" />
+    <Compile Include="Repositories\Plot\Impl\DraftsRepository.io.cs" />
+    <Compile Include="Repositories\Plot\Impl\ImportAntsitesRepository.io.cs" />
+    <Compile Include="Repositories\Plot\Impl\LayerDepositRepository.io.cs" />
+    <Compile Include="Repositories\Plot\Impl\LiteratureRepository.io.cs" />
+    <Compile Include="Repositories\Plot\Impl\LiteratureRepository.generated.cs" />
+    <Compile Include="Repositories\Plot\Impl\LayerDepositRepository.generated.cs" />
+    <Compile Include="Repositories\Plot\Impl\ImportAntsitesRepository.generated.cs" />
+    <Compile Include="Repositories\Plot\Impl\OthersRepository.io.cs" />
+    <Compile Include="Repositories\Plot\Impl\OthersRepository.generated.cs" />
+    <Compile Include="Repositories\Plot\Impl\PhotosRepository.io.cs" />
+    <Compile Include="Repositories\Plot\Impl\PointsRepository.io.cs" />
+    <Compile Include="Repositories\Plot\Impl\ProtectUnitsRepository.generated.cs" />
+    <Compile Include="Repositories\Plot\Impl\SamplesRepository.io.cs" />
+    <Compile Include="Repositories\Plot\Impl\AuditRepository.io.cs" />
+    <Compile Include="Repositories\Plot\Impl\UmrcoverRepository.io.cs" />
+    <Compile Include="Repositories\Plot\Impl\UmrcoverRepository.cs" />
+    <Compile Include="Repositories\Plot\Impl\PointsRepository.generated.cs" />
+    <Compile Include="Repositories\Plot\Impl\PhotosRepository.generated.cs" />
+    <Compile Include="Repositories\Plot\Impl\PlotAfterRepository.generated.cs" />
+    <Compile Include="Repositories\Plot\Impl\PlotBeforeRepository.generated.cs" />
+    <Compile Include="Repositories\Plot\Impl\AuditRepository.generated.cs" />
+    <Compile Include="Repositories\Plot\Impl\BasicPropertyRepository.generated.cs" />
+    <Compile Include="Repositories\Plot\Impl\DraftsRepository.generated.cs" />
+    <Compile Include="Repositories\Plot\Impl\UmrcoverRepository.generated.cs" />
+    <Compile Include="Repositories\Plot\Impl\SamplesRepository.generated.cs" />
+    <Compile Include="Repositories\Plot\IOthersRepository.generated.cs" />
+    <Compile Include="Repositories\Plot\IProtectUnitsRepository.generated.cs" />
+    <Compile Include="Repositories\Plot\IPointsRepository.generated.cs" />
+    <Compile Include="Repositories\Plot\IPhotosRepository.generated.cs" />
+    <Compile Include="Repositories\Plot\IPlotAfterRepository.generated.cs" />
+    <Compile Include="Repositories\Plot\IPlotBeforeRepository.generated.cs" />
+    <Compile Include="Repositories\Plot\IAuditRepository.generated.cs" />
+    <Compile Include="Repositories\Plot\IBasicPropertyRepository.generated.cs" />
+    <Compile Include="Repositories\Plot\IDraftsRepository.generated.cs" />
+    <Compile Include="Repositories\Plot\IUmrcoverRepository.cs" />
+    <Compile Include="Repositories\Plot\IUmrcoverRepository.generated.cs" />
+    <Compile Include="Repositories\Plot\ISamplesRepository.generated.cs" />
+    <Compile Include="T4\EntityCodeScript.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EntityCodeScript.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BEYON.Component.Data\BEYON.Component.Data.csproj">
+      <Project>{72685c95-126e-49b3-bc02-b0d82389a2e1}</Project>
+      <Name>BEYON.Component.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BEYON.Component.Tools\BEYON.Component.Tools.csproj">
+      <Project>{e824ee20-20ee-4a4f-aa4a-80830b7ad867}</Project>
+      <Name>BEYON.Component.Tools</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BEYON.Domain.Model\BEYON.Domain.Model.csproj">
+      <Project>{05920370-3d78-4b96-84e1-f13ba192c2d7}</Project>
+      <Name>BEYON.Domain.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BEYON.ViewModel\BEYON.ViewModel.csproj">
+      <Project>{c313d453-0d23-4e85-8352-1210506f4479}</Project>
+      <Name>BEYON.ViewModel</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+    <None Include="T4\EntityCodeScript.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>EntityCodeScript.cs</LastGenOutput>
+      <LastOutputs>
+..\Repositories\Member\IModuleRepository.generated.cs
+..\Repositories\Member\Impl\ModuleRepository.generated.cs
+..\Repositories\Member\Impl\OperationRepository.generated.cs
+..\Repositories\Member\Impl\PermissionRepository.generated.cs
+..\Repositories\Member\Impl\RoleRepository.generated.cs
+..\Repositories\Member\Impl\UserGroupRepository.generated.cs
+..\Repositories\Member\Impl\UserRepository.generated.cs
+..\Repositories\Member\IOperationRepository.generated.cs
+..\Repositories\Member\IPermissionRepository.generated.cs
+..\Repositories\Member\IRoleRepository.generated.cs
+..\Repositories\Member\IUserGroupRepository.generated.cs
+..\Repositories\Member\IUserRepository.generated.cs
+.\EntityCodeScript.cs
+</LastOutputs>
+    </None>
+    <None Include="T4\EntityRepositoryTemplate.tt" />
+    <None Include="T4\IEntityRepositoryTemplate.tt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Interface\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

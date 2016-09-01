@@ -1,0 +1,275 @@
+﻿<!-- #HEADER -->
+@using System
+@using System.Collections.Generic
+@{
+    var lastUpdate = DateTime.Now;
+    var hasNotify = false;
+}
+
+<header id="header">
+    <div id="logo-group" style="width:400px">
+
+        <!-- PLACE YOUR LOGO HERE -->
+        <span id="logo" style="position: absolute; margin-top:8px"><img src="@Url.Content("~/Content/img/logo.png") " style=" width: 400px;height:30px" /></span>
+
+        @*<span id="logo" style="position: absolute; width: 400px; font-family: '华文隶书 Bold', '华文隶书'; font-size: 35px; margin-left: 8px; margin-top: 4px; color: #474544; "><img src="@Url.Content("~/Content/img/title.png") " /></span>*@
+        <!-- END LOGO PLACEHOLDER -->
+        <!--<b>吉林古墓群信息管理系统</b>-->
+    </div>
+
+    <!-- #PROJECTS: projects dropdown -->
+    @*<div class="project-context hidden-xs">
+
+            <span class="label">Projects:</span>
+            <span class="project-selector dropdown-toggle" data-toggle="dropdown">Recent projects <i class="fa fa-angle-down"></i></span>
+
+            <!-- Suggestion: populate this list with fetch and push technique -->
+            <ul class="dropdown-menu">
+                <li>
+                    <a href="javascript:void(0);">Online e-merchant management system - attaching integration with the iOS</a>
+                </li>
+                <li>
+                    <a href="javascript:void(0);">Notes on pipeline upgradee</a>
+                </li>
+                <li>
+                    <a href="javascript:void(0);">Assesment Report for merchant account</a>
+                </li>
+                <li class="divider"></li>
+                <li>
+                    <a href="javascript:void(0);"><i class="fa fa-power-off"></i> Clear</a>
+                </li>
+            </ul>
+            <!-- end dropdown-menu-->
+
+        </div>*@
+    <!-- end projects dropdown -->
+    <!-- #TOGGLE LAYOUT BUTTONS -->
+    <!-- pulled right: nav area -->
+    <div class="pull-right" id="pull-right-group">
+        <!-- notify container -->
+        <div id="notify-container" class="btn-header pull-left">
+
+        </div>
+        <!-- end notify container -->
+
+        <!-- collapse menu button -->
+        <div id="hide-menu" class="btn-header pull-right">
+            <span> <a href="javascript:void(0);" data-action="toggleMenu" title="折叠菜单"><i class="fa fa-reorder"></i></a> </span>
+        </div>
+        <!-- end collapse menu -->
+        <!-- #MOBILE -->
+        <!-- Top menu profile link : this shows only when top menu is active -->
+        <ul id="mobile-profile-img" class="header-dropdown-list hidden-xs padding-5">
+            <li class="">
+                <a href="#" class="dropdown-toggle no-margin userdropdown" data-toggle="dropdown">
+                    <img src="../Content/img/main_user25x25.png" alt="@Model.TrueName" class="online" />
+                </a>
+                <ul class="dropdown-menu pull-right">
+                    <li>
+                        <a href="javascript:void(0);" class="padding-10 padding-top-0 padding-bottom-0"><i class="fa fa-cog"></i> 设置</a>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <a href="#ajax/profile.html" class="padding-10 padding-top-0 padding-bottom-0"> <i class="fa fa-user"></i> 个人喜好</a>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <a href="javascript:void(0);" class="padding-10 padding-top-0 padding-bottom-0" data-action="toggleShortcut"><i class="fa fa-arrow-down"></i> 快捷键</a>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <a href="javascript:void(0);" class="padding-10 padding-top-0 padding-bottom-0" data-action="launchFullscreen"><i class="fa fa-arrows-alt"></i> 全屏</a>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <a href="login.html" class="padding-10 padding-top-5 padding-bottom-5" data-action="userLogout"><i class="fa fa-sign-out fa-lg"></i> <strong>退出</strong></a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+
+        <!-- logout button -->
+        <div id="logout" class="btn-header transparent pull-right">
+            <span> <a href="@Url.Action("Logout", "Login", new { Area="Common"})" title="退出" data-action="userLogout" data-logout-msg="是否退出系统？"><i class="fa fa-sign-out"></i></a> </span>
+        </div>
+        <!-- end logout button -->
+        <!-- search mobile button (this is hidden till mobile view port) -->
+        <div id="search-mobile" class="btn-header transparent pull-right">
+            <span> <a href="javascript:void(0)" title="Search"><i class="fa fa-search"></i></a> </span>
+        </div>
+        <!-- end search mobile button -->
+        <!-- #SEARCH -->
+        <!-- input: search field -->
+        @*<form action="#ajax/search.html" class="header-search pull-right">
+            <input id="search-fld" type="text" name="param" placeholder="标签查询">
+            <button type="submit">
+                <i class="fa fa-search"></i>
+            </button>
+            <a href="javascript:void(0);" id="cancel-search-js" title="取消查询"><i class="fa fa-times"></i></a>
+        </form>*@
+        <!-- end input: search field -->
+        <!-- fullscreen button -->
+        <div id="fullscreen" class="btn-header transparent pull-right">
+            <span> <a href="javascript:void(0);" data-action="launchFullscreen" title="全屏"><i class="fa fa-arrows-alt"></i></a> </span>
+        </div>
+        <!-- end fullscreen button -->
+        <!-- #Voice Command: Start Speech -->
+        <!-- NOTE: Voice command button will only show in browsers that support it. Currently it is hidden under mobile browsers.
+                   You can take off the "hidden-sm" and "hidden-xs" class to display inside mobile browser-->
+        @*<div id="speech-btn" class="btn-header transparent pull-right hidden-sm hidden-xs">
+                <div>
+                    <a href="javascript:void(0)" title="Voice Command" data-action="voiceCommand"><i class="fa fa-microphone"></i></a>
+                    <div class="popover bottom">
+                        <div class="arrow"></div>
+                        <div class="popover-content">
+                            <h4 class="vc-title">Voice command activated <br><small>Please speak clearly into the mic</small></h4>
+                            <h4 class="vc-title-error text-center">
+                                <i class="fa fa-microphone-slash"></i> Voice command failed
+                                <br><small class="txt-color-red">Must <strong>"Allow"</strong> Microphone</small>
+                                <br><small class="txt-color-red">Must have <strong>Internet Connection</strong></small>
+                            </h4>
+                            <a href="javascript:void(0);" class="btn btn-success" onclick="commands.help()">See Commands</a>
+                            <a href="javascript:void(0);" class="btn bg-color-purple txt-color-white" onclick="$('#speech-btn .popover').fadeOut(50);">Close Popup</a>
+                        </div>
+                    </div>
+                </div>
+            </div>*@
+        <!-- end voice command -->
+        <!-- multiple lang dropdown : find all flags in the flags page -->
+        @*<ul class="header-dropdown-list hidden-xs">
+                <li>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <img src="@Url.Content("~/Content/img/blank.gif")" class="flag flag-cn" alt="China"> <span> 中文</span> <i class="fa fa-angle-down"></i> </a>
+                    <ul class="dropdown-menu pull-right">
+                        <li>
+                            <a href="javascript:void(0);"><img src="@Url.Content("~/Content/img/blank.gif")" class="flag flag-us" alt="United States"> English (US)></a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);"><img src="@Url.Content("~/Content/img/blank.gif")" class="flag flag-fr" alt="France"> Français</a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);"><img src="@Url.Content("~/Content/img/blank.gif")" class="flag flag-es" alt="Spanish"> Español</a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);"><img src="@Url.Content("~/Content/img/blank.gif")" class="flag flag-de" alt="German"> Deutsch</a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);"><img src="@Url.Content("~/Content/img/blank.gif")" class="flag flag-jp" alt="Japan"> 日本語</a>
+                        </li>
+                        <li class="active">
+                            <a href="javascript:void(0);"><img src="@Url.Content("~/Content/img/blank.gif")" class="flag flag-cn" alt="China"> 中文</a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);"><img src="@Url.Content("~/Content/img/blank.gif")" class="flag flag-it" alt="Italy"> Italiano</a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);"><img src="@Url.Content("~/Content/img/blank.gif")" class="flag flag-pt" alt="Portugal"> Portugal</a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);"><img src="@Url.Content("~/Content/img/blank.gif")" class="flag flag-ru" alt="Russia"> Русский язык</a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);"><img src="@Url.Content("~/Content/img/blank.gif")" class="flag flag-kr" alt="Korea"> 한국어</a>
+                        </li>
+
+                    </ul>
+                </li>
+            </ul>*@
+        <!-- end multiple lang -->
+
+    </div>
+    <!-- end pulled right: nav area -->
+
+</header>
+<!-- END HEADER -->
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        @{
+            foreach (var role in Model.Roles)
+            {
+                var roleName = role.RoleName;
+
+                if (roleName == "所里审核人员" ||
+                    roleName == "项目负责人" ||
+                    roleName == "数据录入人员" ||
+                    roleName == "局里审核人员")
+                {
+                    hasNotify = true;
+                    break;
+                }
+            }
+            
+        }
+
+        if ('@hasNotify' == 'True') {
+            $('#notify-container').load('../Map/Notify?userId=@Model.Id');
+
+            @*$.ajax({
+                type: "POST",
+                dataType: "html",
+                url: "../Map/Notify?userId=@Model.Id",
+                success: function (result) {
+
+                    $('#pull-right-group').prepend(result);
+                },
+                error: function () {
+                    toastr.error('获取状态消息错误！');
+                }
+            })*@
+        }
+    });
+
+    @*$(document).ready(function () {
+        if ($("#activity").length > 0) {
+            updateNotify(@Model.Id);
+        }
+    })
+
+    function updateNotify(id) {
+
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: "../Map/Notify?userId=" + id,
+            success: function (result) {
+                $('#activity b.badge').text(result.Total);
+                $('.ajax-dropdown .btn-group>label').each(function () {
+                    var value = $(this).text();
+                    var input = $('input[type=radio]', $(this));
+                    for (var i = 0; i < result.NotifyItems.length; i++) {
+                        var item = result.NotifyItems[i];
+                        if (value.indexOf(item.Name) > 0) {
+                            input.attr("id", "../Map/Notify/Detail?rolename=" + result.RoleName + "&&name=" + item.Name + "&&count=" + item.Count);
+                            $(this).empty();
+                            $(this).text(input.html() + item.Name + ' (' + item.Count + ')');
+                            $(this).append(input);
+                            break;
+                        }
+                    }
+                });
+
+                $('input[name="activity"]').change(function () {
+                    var a = $(this);
+                    url = a.attr("id");
+                    container = $(".ajax-notifications");
+                    loadURL(url, container);
+                    a = null
+                });
+
+
+                var today=new Date();
+                var s=today.getFullYear()+"/"+today.getMonth()+"/"+today.getDate()+" "+today.getHours()+":"+today.getMinutes()+":"+today.getSeconds()
+                var refreshButton = $('.ajax-dropdown button')
+                $('.ajax-dropdown span').empty();
+                $('.ajax-dropdown span').text('最后更新时间: ' + s);
+                $('.ajax-dropdown span').append(refreshButton);
+                $("button[data-loading-text]").on("click", function () {
+                    updateNotify(@Model.Id);
+                });
+            },
+            error: function () {
+                toastr.error('获取状态消息错误！');
+            }
+        })
+    }*@
+</script>

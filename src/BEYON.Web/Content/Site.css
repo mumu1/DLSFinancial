@@ -1,0 +1,170 @@
+﻿body {
+    font-size: .85em;
+    font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif;
+    color: #232323;
+    background-color: #fff;
+}
+
+header, footer, nav, section {
+    display: block;
+}
+
+
+/* Styles for basic forms
+-----------------------------------------------------------*/
+fieldset {
+    border: 1px solid #ddd;
+    padding: 0 1.4em 1.4em 1.4em;
+    margin: 0 0 1.5em 0;
+}
+
+legend {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+textarea {
+    min-height: 75px;
+}
+
+.editor-label {
+    margin: 1em 0 0 0;
+}
+
+.editor-field {
+    margin: 0.5em 0 0 0;
+}
+
+
+/* Styles for validation helpers
+-----------------------------------------------------------*/
+.field-validation-error {
+    color: #f00;
+}
+
+.field-validation-valid {
+    display: none;
+}
+
+.input-validation-error {
+    border: 1px solid #f00;
+    background-color: #fee;
+}
+
+.validation-summary-errors {
+    font-weight: bold;
+    color: #f00;
+}
+
+.validation-summary-valid {
+    display: none;
+}
+
+
+/******************************地图工具条****************************/
+.beyondb-maptoolbar{
+    background-color: #222d32;
+    list-style: none;
+    /*border-radius: 4px;*/
+    white-space: nowrap;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+}
+
+.beyondb-maptoolbar .maptool-item-first{
+    float: left; 
+    margin-left: 90px; 
+    color:#FFF;
+}
+
+.beyondb-maptoolbar .maptool-item{
+    float: left; 
+    margin-left: 20px; 
+    color:#FFF;
+}
+
+.beyondb-maptoolbar .maptool-info{
+    float: right; 
+    margin-right: 20px; 
+    color:#FFF;
+}
+
+.beyondb-maptoolbar li > a {
+    position: relative;
+}
+.beyondb-maptoolbar > li > a {
+    padding: 12px 5px 12px 15px;
+    display: block;
+}
+
+
+/************统计模块*******************/
+.chart-legend {
+    
+}
+
+.chart-legend li span{
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    margin-right: 5px;
+}
+
+/*#MapArea {
+    display : block;
+    position: absolute;
+    top : 40px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}*/
+
+#mapType{position:absolute;bottom:0;right:0;height:80px;cursor:pointer;-webkit-transition-property:width,background-color;transition-property:width,background-color;-webkit-transition-duration:.4s;transition-duration:.4s;width:110px;background-color:rgba(255,255,255,0)}
+#mapType:hover{width:298px;background-color:#fff;background-color:rgba(255,255,255,.8)}
+#mapType:hover .mapTypeCard{border:1px solid rgba(255,255,255,0);background-image:url(../Content/img/terrain/maptype.png)}
+#mapType:hover .mapTypeCard.active{border:1px solid #3385FF}
+#mapType:hover .normal{right:202px}
+#mapType:hover .satellite,#mapType:hover .earth{right:106px}
+    #mapType .closeMapType {
+        display:none;
+    }
+#mapType:hover .closeMapType{
+    position:absolute;
+    top:0;
+    right:0;
+    width:14px;
+    height:14px;
+    display:inline-block;
+    background : no-repeat 0 0;
+    background-image:url(../Content/img/terrain/close_0.5X0.5.png);
+}
+#mapType .mapTypeCard{height:60px;width:86px;position:absolute;border-radius:2px;top:10px;box-sizing:border-box;border:1px solid transparent;border:1px solid rgba(153,153,153,.42);background:url(../Content/img/shadow_terrain.png) no-repeat 0 0;background-size:86px 240px;-webkit-transition-property:right,background-image;transition-property:right,background-image;-webkit-transition-duration:.4s;transition-duration:.4s}
+#mapType .mapTypeCard span{position:absolute;bottom:0;right:0; display:inline-block;padding-left:4px;padding-right:3px; font-size:12px;height:12px;line-height:12px;color:#FFF;border-top-left-radius:2px}
+
+#MapTerrainTheme .mapLegend{
+    position:absolute;
+    left:2px;
+    width:247px;
+    height:322px;
+    display:inline-block;
+    background : no-repeat 0 0;
+    background-image:url(../Content/img/terrain/aspect_legend_116x322.png);
+}
+
+#mapType .mapTypeCard.active span,#mapType .mapTypeCard:hover span{background-color:#3385FF}
+#mapType .mapTypeCard:hover{border:1px solid #3385FF}
+#mapType .normal{z-index:1;background-position:0 0;right:20px}
+#mapType .normal .switch-box p{margin-left:20px}
+#mapType .normal .switch-box input.switch{left:5px}
+#mapType .normal:hover .switch-box{visibility:visible}
+#mapType .satellite,#mapType .earth{right:15px;z-index:2;background-position:0 -60px}
+#mapType .satellite:hover .switch-box,#mapType .earth:hover .switch-box{visibility:visible}
+#mapType .earth{background-position:0 -181px}
+#mapType .panorama{z-index:3;right:10px;background-image:url(../Content/img/terrain/maptype.png);background-position:0 -81px;border-left:1px solid rgba(153,153,153,.6)}
+#mapType .switch-box{visibility:hidden;position:absolute;width:100%;height:20px;line-height:22px;color:#fff;background:rgba(0,0,0,.5)}
+#mapType .switch-box p{display:inline-block;margin-left:25px}
+#mapType .switch-box input.switch{position:absolute;left:8px;top:4px;cursor:pointer}

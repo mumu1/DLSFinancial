@@ -1,0 +1,72 @@
+﻿@using BEYON.ViewModel.Member
+@model IEnumerable<ModuleVM>
+@using BEYON.Domain.Model.Member;
+@{
+    User user = ViewBag.User;
+}
+
+<!-- #NAVIGATION -->
+<!-- Left panel : Navigation area -->
+<!-- Note: This width of the aside area can be adjusted through LESS/SASS variables -->
+<aside id="left-panel">
+
+    <!-- User info -->
+    <div class="login-info">
+        <span>
+            <!-- User image size is adjusted inside CSS, it should stay as is -->
+
+            <a href="javascript:void(0);" id="show-shortcut1" data-action="toggleShortcut1">
+                <img src="../Content/img/main_user25x25.png" alt="me" class="online" />
+                <span>
+                    @user.TrueName
+                </span>
+                @*<i class="fa fa-angle-down"></i>*@
+            </a>
+
+        </span>
+    </div>
+    <!-- end user info -->
+    <!-- NAVIGATION : This navigation is also responsive
+
+    To make this navigation dynamic please make sure to link the node
+    (the reference to the nav > ul) after page load. Or the navigation
+    will not initialize.
+    -->
+    <nav>
+        <!--
+        NOTE: Notice the gaps after each icon usage <i></i>..
+        Please note that these links work a bit different than
+        traditional href="" links. See documentation for details.
+        -->
+
+        <ul>
+            @*<li>
+                <a href="#" title="地图"><i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">地图</span></a>
+                <ul>
+                    <li class="">
+                        <a href="/Common/Home/Index" title="地图"><span class="menu-item-parent">地图</span></a>
+                    </li>
+                </ul>
+            </li>*@
+
+            @foreach (var item in Model)
+            {
+                <li>
+                    <a href="@item.LinkUrl"><i class="fa fa-lg fa-fw @item.Icon"></i> <span class="menu-item-parent">@item.Name</span></a>
+                    <ul>
+                        @{
+                            foreach (var child in item.ChildModules)
+                            {
+                                <li><a href="@Url.Content(@child.LinkUrl)">@child.Name</a></li>
+                            }
+                        }
+                    </ul>
+                </li>
+            }
+        </ul>
+    </nav>
+
+    <span class="minifyme" data-action="minifyMenu"> <i class="fa fa-arrow-circle-left hit"></i> </span>
+
+</aside>
+<!-- END NAVIGATION -->
