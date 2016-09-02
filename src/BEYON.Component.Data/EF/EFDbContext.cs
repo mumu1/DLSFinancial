@@ -35,35 +35,6 @@ namespace BEYON.Component.Data.EF
 
         public DbSet<Module> Modules { get; set; }
 
-        public DbSet<Umrcover> Umrcovers { get; set; }
-
-        public DbSet<BasicProperty> BasicPropertys { get; set; }
-
-        public DbSet<Points> Pointss { get; set; }
-
-        public DbSet<Drafts> Draftss { get; set; }
-
-        public DbSet<Samples> Sampless { get; set; }
-
-        public DbSet<Others> Otherss { get; set; }
-
-        public DbSet<Photos> Photoss { get; set; }
-
-        public DbSet<PlotBefore> PlotBefores { get; set; }
-        public DbSet<PlotAfter> PlotAfters { get; set; }
-
-        public DbSet<Audit> Audits { get; set; }
-        public DbSet<ProtectUnitAudit> ProtectUnitAudits { get; set; }
-
-        public DbSet<DigsituationBefore> DigsituationBefores { get; set; }
-
-        public DbSet<LayerDeposit> LayerDeposits { get; set; }
-
-        public DbSet<ImportAntsites> ImportAntsitess { get; set; }
-
-        public DbSet<Literature> literatures { get; set; }
-
-        public DbSet<ProtectUnits> protectUnitss { get; set; }
 
         //地理所财务
         public DbSet<ApplicationForm> ApplicationForms { get; set; }
@@ -104,23 +75,6 @@ namespace BEYON.Component.Data.EF
             modelBuilder.Configurations.Add(new RoleConfiguration());
             modelBuilder.Configurations.Add(new ModuleConfiguration());
             modelBuilder.Configurations.Add(new UserGroupConfiguration());
-
-            modelBuilder.Configurations.Add(new UmrcoverConfiguration());
-            modelBuilder.Configurations.Add(new BasicPropertyConfiguration());
-            modelBuilder.Configurations.Add(new PointsConfiguration());
-            modelBuilder.Configurations.Add(new SamplesConfiguration());
-            modelBuilder.Configurations.Add(new OthersConfiguration());
-            modelBuilder.Configurations.Add(new DraftsConfiguration());
-            modelBuilder.Configurations.Add(new PhotosConfiguration());
-            modelBuilder.Configurations.Add(new PlotAfterConfiguration());
-            modelBuilder.Configurations.Add(new PlotBeforeConfiguration());
-            modelBuilder.Configurations.Add(new DigsituationBeforeConfiguration());
-            modelBuilder.Configurations.Add(new LayerDepositConfiguration());
-            modelBuilder.Configurations.Add(new ImportAntsitesConfiguration());
-            modelBuilder.Configurations.Add(new LiteratureConfiguration());
-            modelBuilder.Configurations.Add(new ProtectUnitsConfiguration());
-
-            modelBuilder.Configurations.Add(new AuditConfiguration());
 
             //地理所财务
             modelBuilder.Configurations.Add(new ApplicationFormConfiguration());

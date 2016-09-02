@@ -70,57 +70,6 @@
     <Compile Include="Repositories\Member\IRoleRepository.generated.cs" />
     <Compile Include="Repositories\Member\IUserGroupRepository.generated.cs" />
     <Compile Include="Repositories\Member\IUserRepository.generated.cs" />
-    <Compile Include="Repositories\Plot\IProtectUnitAuditRepository.cs" />
-    <Compile Include="Repositories\Plot\IAuditRepository.cs" />
-    <Compile Include="Repositories\Plot\IProtectUnitAuditRepository.generated.cs" />
-    <Compile Include="Repositories\Plot\IDigsituationBeforeRepository.generated.cs" />
-    <Compile Include="Repositories\Plot\ILiteratureRepository.generated.cs" />
-    <Compile Include="Repositories\Plot\ILayerDepositRepository.generated.cs" />
-    <Compile Include="Repositories\Plot\IImportAntsitesRepository.generated.cs" />
-    <Compile Include="Repositories\Plot\Impl\ProtectUnitAuditRepository.generated.cs" />
-    <Compile Include="Repositories\Plot\Impl\ProtectUnitAuditRepository.io.cs" />
-    <Compile Include="Repositories\Plot\Impl\ProtectUnitAuditRepository.cs" />
-    <Compile Include="Repositories\Plot\Impl\AuditRepository.cs" />
-    <Compile Include="Repositories\Plot\Impl\BasicPropertyRepository.io.cs" />
-    <Compile Include="Repositories\Plot\Impl\DigsituationBeforeRepository.io.cs" />
-    <Compile Include="Repositories\Plot\Impl\DigsituationBeforeRepository.generated.cs" />
-    <Compile Include="Repositories\Plot\Impl\DraftsRepository.io.cs" />
-    <Compile Include="Repositories\Plot\Impl\ImportAntsitesRepository.io.cs" />
-    <Compile Include="Repositories\Plot\Impl\LayerDepositRepository.io.cs" />
-    <Compile Include="Repositories\Plot\Impl\LiteratureRepository.io.cs" />
-    <Compile Include="Repositories\Plot\Impl\LiteratureRepository.generated.cs" />
-    <Compile Include="Repositories\Plot\Impl\LayerDepositRepository.generated.cs" />
-    <Compile Include="Repositories\Plot\Impl\ImportAntsitesRepository.generated.cs" />
-    <Compile Include="Repositories\Plot\Impl\OthersRepository.io.cs" />
-    <Compile Include="Repositories\Plot\Impl\OthersRepository.generated.cs" />
-    <Compile Include="Repositories\Plot\Impl\PhotosRepository.io.cs" />
-    <Compile Include="Repositories\Plot\Impl\PointsRepository.io.cs" />
-    <Compile Include="Repositories\Plot\Impl\ProtectUnitsRepository.generated.cs" />
-    <Compile Include="Repositories\Plot\Impl\SamplesRepository.io.cs" />
-    <Compile Include="Repositories\Plot\Impl\AuditRepository.io.cs" />
-    <Compile Include="Repositories\Plot\Impl\UmrcoverRepository.io.cs" />
-    <Compile Include="Repositories\Plot\Impl\UmrcoverRepository.cs" />
-    <Compile Include="Repositories\Plot\Impl\PointsRepository.generated.cs" />
-    <Compile Include="Repositories\Plot\Impl\PhotosRepository.generated.cs" />
-    <Compile Include="Repositories\Plot\Impl\PlotAfterRepository.generated.cs" />
-    <Compile Include="Repositories\Plot\Impl\PlotBeforeRepository.generated.cs" />
-    <Compile Include="Repositories\Plot\Impl\AuditRepository.generated.cs" />
-    <Compile Include="Repositories\Plot\Impl\BasicPropertyRepository.generated.cs" />
-    <Compile Include="Repositories\Plot\Impl\DraftsRepository.generated.cs" />
-    <Compile Include="Repositories\Plot\Impl\UmrcoverRepository.generated.cs" />
-    <Compile Include="Repositories\Plot\Impl\SamplesRepository.generated.cs" />
-    <Compile Include="Repositories\Plot\IOthersRepository.generated.cs" />
-    <Compile Include="Repositories\Plot\IProtectUnitsRepository.generated.cs" />
-    <Compile Include="Repositories\Plot\IPointsRepository.generated.cs" />
-    <Compile Include="Repositories\Plot\IPhotosRepository.generated.cs" />
-    <Compile Include="Repositories\Plot\IPlotAfterRepository.generated.cs" />
-    <Compile Include="Repositories\Plot\IPlotBeforeRepository.generated.cs" />
-    <Compile Include="Repositories\Plot\IAuditRepository.generated.cs" />
-    <Compile Include="Repositories\Plot\IBasicPropertyRepository.generated.cs" />
-    <Compile Include="Repositories\Plot\IDraftsRepository.generated.cs" />
-    <Compile Include="Repositories\Plot\IUmrcoverRepository.cs" />
-    <Compile Include="Repositories\Plot\IUmrcoverRepository.generated.cs" />
-    <Compile Include="Repositories\Plot\ISamplesRepository.generated.cs" />
     <Compile Include="T4\EntityCodeScript.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -175,6 +124,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Interface\" />
+    <Folder Include="Repositories\App\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

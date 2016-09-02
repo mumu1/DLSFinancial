@@ -16,10 +16,7 @@ using BEYON.CoreBLL.Service.Member;
 using BEYON.CoreBLL.Service.Member.Interface;
 using BEYON.Domain.Data.Repositories.Member;
 using BEYON.Domain.Data.Repositories.Member.Impl;
-using BEYON.CoreBLL.Service.Plot;
-using BEYON.CoreBLL.Service.Plot.Interface;
-using BEYON.Domain.Data.Repositories.Plot;
-using BEYON.Domain.Data.Repositories.Plot.Impl;
+
 
 namespace BEYON.Web
 {
@@ -59,72 +56,7 @@ namespace BEYON.Web
             builder.RegisterType<PermissionRepository>().As<IPermissionRepository>().InstancePerHttpRequest();
             builder.RegisterType<ModuleRepository>().As<IModuleRepository>().InstancePerHttpRequest();
 
-            //Plot
-            builder.RegisterType<PlotBeforeService>().As<IPlotBeforeService>().InstancePerHttpRequest();
-
-            builder.RegisterType<PlotBeforeRepository>().As<IPlotBeforeRepository>().InstancePerHttpRequest();
-            builder.RegisterType<PlotAfterRepository>().As<IPlotAfterRepository>().InstancePerHttpRequest();
-
-            builder.RegisterType<SamplesService>().As<ISamplesService>().InstancePerHttpRequest();
-            builder.RegisterType<UmrcoverService>().As<IUmrcoverService>().InstancePerHttpRequest();
-
-            builder.RegisterType<SamplesRepository>().As<ISamplesRepository>().InstancePerHttpRequest();
-            builder.RegisterType<UmrcoverRepository>().As<IUmrcoverRepository>().InstancePerHttpRequest();
-
-            builder.RegisterType<PhotosService>().As<IPhotosService>().InstancePerHttpRequest();
-            builder.RegisterType<PhotosRepository>().As<IPhotosRepository>().InstancePerHttpRequest();
-
-            builder.RegisterType<AuditService>().As<IAuditService>().InstancePerHttpRequest();
-            builder.RegisterType<AuditRepository>().As<IAuditRepository>().InstancePerHttpRequest();
-
-            builder.RegisterType<ImportAntsitesService>().As<IImportAntsitesService>().InstancePerHttpRequest();
-            builder.RegisterType<ImportAntsitesRepository>().As<IImportAntsitesRepository>().InstancePerHttpRequest();
-
-            builder.RegisterType<DigsituationBeforeRepository>().As<IDigsituationBeforeRepository>().InstancePerHttpRequest();
-            builder.RegisterType<DigsituationBeforeService>().As<IDigsituationBeforeService>().InstancePerHttpRequest();
-
-            builder.RegisterType<LiteratureRepository>().As<ILiteratureRepository>().InstancePerHttpRequest();
-            builder.RegisterType<LiteratureService>().As<ILiteratureService>().InstancePerHttpRequest();
-
-            builder.RegisterType<LayerDepositRepository>().As<ILayerDepositRepository>().InstancePerHttpRequest();
-            builder.RegisterType<LayerDepositService>().As<ILayerDepositService>().InstancePerHttpRequest();
-
-            builder.RegisterType<BasicPropertyService>().As<IBasicPropertyService>().InstancePerHttpRequest();
-            builder.RegisterType<BasicPropertyRepository>().As<IBasicPropertyRepository>().InstancePerHttpRequest();
-
-            builder.RegisterType<DraftsService>().As<IDraftsService>().InstancePerHttpRequest();
-            builder.RegisterType<DraftsRepository>().As<IDraftsRepository>().InstancePerHttpRequest();
-
-            builder.RegisterType<OthersService>().As<IOthersService>().InstancePerHttpRequest();
-            builder.RegisterType<OthersRepository>().As<IOthersRepository>().InstancePerHttpRequest();
-
-            builder.RegisterType<PointsService>().As<IPointsService>().InstancePerHttpRequest();
-            builder.RegisterType<PointsRepository>().As<IPointsRepository>().InstancePerHttpRequest();
-
-            builder.RegisterType<DigsituationBeforeService>().As<IDigsituationBeforeService>().InstancePerHttpRequest();
-            builder.RegisterType<DigsituationBeforeRepository>().As<IDigsituationBeforeRepository>().InstancePerHttpRequest();
-
-            builder.RegisterType<ProtectUnitsService>().As<IProtectUnitsService>().InstancePerHttpRequest();
-            builder.RegisterType<ProtectUnitsRepository>().As<IProtectUnitsRepository>().InstancePerHttpRequest();
-
-            builder.RegisterType<ImportAntsitesService>().As<IImportAntsitesService>().InstancePerHttpRequest();
-            builder.RegisterType<ImportAntsitesRepository>().As<IImportAntsitesRepository>().InstancePerHttpRequest();
-
-            builder.RegisterType<LayerDepositService>().As<ILayerDepositService>().InstancePerHttpRequest();
-            builder.RegisterType<LayerDepositRepository>().As<ILayerDepositRepository>().InstancePerHttpRequest();
-
-            builder.RegisterType<LiteratureService>().As<ILiteratureService>().InstancePerHttpRequest();
-            builder.RegisterType<LiteratureRepository>().As<ILiteratureRepository>().InstancePerHttpRequest();
-
-            builder.RegisterType<ProtectUnitAuditRepository>().As<IProtectUnitAuditRepository>().InstancePerHttpRequest();
-            builder.RegisterType<ProtectUnitAuditService>().As<IProtectUnitAuditService>().InstancePerHttpRequest();
-
-            builder.RegisterType<StatisticsService>().As<IStatisticsService>().InstancePerHttpRequest();
-
-            builder.RegisterType<NotifyService>().As<INotifyService>().InstancePerHttpRequest();
-
-            builder.RegisterType<ExportService>().As<IExportService>().InstancePerHttpRequest();
-            builder.RegisterType<ImportService>().As<IImportService>().InstancePerHttpRequest();
+          
             #endregion
             // then
             var container = builder.Build();

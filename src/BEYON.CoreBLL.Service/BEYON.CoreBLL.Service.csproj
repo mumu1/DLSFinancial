@@ -87,44 +87,6 @@
     <Compile Include="Member\ModuleService.cs" />
     <Compile Include="Member\UserGroupService.cs" />
     <Compile Include="Member\UserService.cs" />
-    <Compile Include="Plot\ProtectUnitAuditService.cs" />
-    <Compile Include="Plot\DigsituationBeforeService.cs" />
-    <Compile Include="Plot\ExportService.cs" />
-    <Compile Include="Plot\ImportService.cs" />
-    <Compile Include="Plot\Interface\IProtectUnitAuditService.cs" />
-    <Compile Include="Plot\Interface\IExportService.cs" />
-    <Compile Include="Plot\Interface\IImportService.cs" />
-    <Compile Include="Plot\Interface\IProtectUnitsService.cs" />
-    <Compile Include="Plot\LiteratureService.cs" />
-    <Compile Include="Plot\Interface\ILiteratureService.cs" />
-    <Compile Include="Plot\Interface\ILayerDepositService.cs" />
-    <Compile Include="Plot\LayerDepositService.cs" />
-    <Compile Include="Plot\ImportAntsitesService.cs" />
-    <Compile Include="Plot\Interface\IDigsituationBeforeService.cs" />
-    <Compile Include="Plot\Interface\IImportAntsitesService.cs" />
-    <Compile Include="Plot\Interface\IDraftsService.cs" />
-    <Compile Include="Plot\Interface\INotifyService.cs" />
-    <Compile Include="Plot\Interface\IOthersService.cs" />
-    <Compile Include="Plot\Interface\IPhotosService.cs" />
-    <Compile Include="Plot\Interface\IPlotBeforeService.cs" />
-    <Compile Include="Plot\Interface\ISamplesService.cs" />
-    <Compile Include="Plot\Interface\IAuditService.cs" />
-    <Compile Include="Plot\Interface\IBasicPropertyService.cs" />
-    <Compile Include="Plot\Interface\IPointsService.cs" />
-    <Compile Include="Plot\Interface\IStatisticsService.cs" />
-    <Compile Include="Plot\Interface\IUmrcoverService.cs" />
-    <Compile Include="Plot\DraftsService.cs" />
-    <Compile Include="Plot\NotifyService.cs" />
-    <Compile Include="Plot\OthersService.cs" />
-    <Compile Include="Plot\PhotosService.cs" />
-    <Compile Include="Plot\ProtectUnitsService.cs" />
-    <Compile Include="Plot\PlotBeforeService.cs" />
-    <Compile Include="Plot\SamplesService.cs" />
-    <Compile Include="Plot\AuditService.cs" />
-    <Compile Include="Plot\BasicPropertyService.cs" />
-    <Compile Include="Plot\PointsService.cs" />
-    <Compile Include="Plot\StatisticsService.cs" />
-    <Compile Include="Plot\UmrcoverService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -157,7 +119,9 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="App\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

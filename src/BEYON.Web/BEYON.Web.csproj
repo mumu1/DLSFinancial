@@ -231,10 +231,14 @@
     <Content Include="Content\img\line_conn.gif" />
     <Content Include="Content\img\line_conn.png" />
     <Content Include="Content\img\loading.gif" />
-    <Content Include="Content\img\login\background.png" />
+    <Content Include="Content\img\login\background2.png" />
     <Content Include="Content\img\login\loginBox.png" />
+    <Content Include="Content\img\login\loginuser2.png" />
     <Content Include="Content\img\login\loginuser.png" />
+    <Content Include="Content\img\login\title2.png" />
+    <Content Include="Content\img\login\background.png" />
     <Content Include="Content\img\login\title.png" />
+    <Content Include="Content\img\login\loginBox3.png" />
     <Content Include="Content\img\login\unitname.png" />
     <Content Include="Content\img\logo.png" />
     <Content Include="Content\img\main_user25x25.png" />

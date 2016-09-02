@@ -18,7 +18,7 @@ using BEYON.Component.Data.Enum;
 using BEYON.Component.Tools;
 using BEYON.Component.Tools.helpers;
 using BEYON.CoreBLL.Service;
-using BEYON.CoreBLL.Service.Plot.Interface;
+//using BEYON.CoreBLL.Service.Plot.Interface;
 using BEYON.Domain.Model.Plot;
 using BEYON.ViewModel;
 using BEYON.ViewModel.Plot;
@@ -27,18 +27,18 @@ using BEYON.Web.Extension.Filters;
 using BEYON.Domain.Model.Member;
 using BEYON.CoreBLL.Service.Member.Interface;
 using BEYON.ViewModel.Member;
-using BEYON.Domain.Data.Repositories.Plot;
+//using BEYON.Domain.Data.Repositories.Plot;
 
 namespace BEYON.Web.Areas.App.Controllers
 {
     public class ExportController : Controller
     {
-        private readonly IExportService _exportService;
+        //private readonly IExportService _exportService;
 
-        public ExportController(IExportService exportService)
-        {
-            this._exportService = exportService;
-        }
+        //public ExportController(IExportService exportService)
+        //{
+        //    this._exportService = exportService;
+        //}
 
         [HttpPost]
         public ActionResult ExportFile(string[] urmids)
@@ -49,7 +49,7 @@ namespace BEYON.Web.Areas.App.Controllers
                 Directory.CreateDirectory(filepath + "Exports/");
             }
 
-            String file = this._exportService.Export(filepath, urmids.ToList());
+            String file = null;// this._exportService.Export(filepath, urmids.ToList());
 
 
             return Json(file);
