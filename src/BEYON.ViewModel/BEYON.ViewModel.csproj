@@ -55,6 +55,15 @@
     <Compile Include="Member\RoleVM.cs" />
     <Compile Include="Member\UserGroupVM.cs" />
     <Compile Include="Member\UserVM.cs" />
+    <Compile Include="Plot\RefundTypeVM.cs" />
+    <Compile Include="Plot\BankVM.cs" />
+    <Compile Include="Plot\TaxBaseByMonthVM.cs" />
+    <Compile Include="Plot\TitleVM.cs" />
+    <Compile Include="Plot\ProjectCostVM.cs" />
+    <Compile Include="Plot\PersonalLabourVM.cs" />
+    <Compile Include="Plot\PersonalSalaryVM.cs" />
+    <Compile Include="Plot\TaxPerOrderVM.cs" />
+    <Compile Include="Plot\PersonalRecordVM.cs" />
     <Compile Include="Plot\ProtectUnitAuditVM.cs" />
     <Compile Include="Plot\ProtectUnitsVM.cs" />
     <Compile Include="Plot\LiteratureVM.cs" />

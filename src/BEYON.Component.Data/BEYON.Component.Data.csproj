@@ -76,6 +76,15 @@
     <Compile Include="Configurations\Member\Mapping\RoleConfiguration.cs" />
     <Compile Include="Configurations\Member\Mapping\UserConfiguration .cs" />
     <Compile Include="Configurations\Member\Mapping\UserGroupConfiguration.cs" />
+    <Compile Include="Configurations\Plot\TaxBaseByMonthConfiguration.generated.cs" />
+    <Compile Include="Configurations\Plot\RefundTypeConfiguration.generated.cs" />
+    <Compile Include="Configurations\Plot\BankConfiguration.generated.cs" />
+    <Compile Include="Configurations\Plot\TitleConfiguration.generated.cs" />
+    <Compile Include="Configurations\Plot\ProjectCostConfiguration.generated.cs" />
+    <Compile Include="Configurations\Plot\PersonalLabourConfiguration.generated.cs" />
+    <Compile Include="Configurations\Plot\PersonalSalaryConfiguration.generated.cs" />
+    <Compile Include="Configurations\Plot\TaxPerOrderConfiguration.generated.cs" />
+    <Compile Include="Configurations\Plot\ApplicationFormConfiguration.generated.cs" />
     <Compile Include="Configurations\Plot\ProtectUnitAuditConfiguration.generated.cs" />
     <Compile Include="Configurations\Plot\Mapping\ProtectUnitAuditConfiguration.cs" />
     <Compile Include="Configurations\Plot\ProtectUnitsConfiguration.generated.cs" />
@@ -100,7 +109,7 @@
     <Compile Include="Configurations\Plot\OthersConfiguration.generated.cs" />
     <Compile Include="Configurations\Plot\PhotosConfiguration.generated.cs" />
     <Compile Include="Configurations\Plot\SamplesConfiguration.generated.cs" />
-    <Compile Include="Configurations\Plot\ApplicationFormConfiguration.generated.cs" />
+    <Compile Include="Configurations\Plot\PersonalRecordConfiguration.generated.cs" />
     <Compile Include="Configurations\Plot\UmrcoverConfiguration.generated.cs" />
     <Compile Include="Configurations\Plot\PlotAfterConfiguration.generated.cs" />
     <Compile Include="Configurations\Plot\PlotBeforeConfiguration.generated.cs" />

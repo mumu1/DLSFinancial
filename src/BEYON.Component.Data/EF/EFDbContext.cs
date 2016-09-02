@@ -68,6 +68,25 @@ namespace BEYON.Component.Data.EF
         //地理所财务
         public DbSet<ApplicationForm> ApplicationForms { get; set; }
 
+        public DbSet<PersonalRecord> PersonalRecords { get; set; }
+
+        public DbSet<TaxPerOrder> TaxPerOrders { get; set; }
+
+        public DbSet<PersonalSalary> PersonalSalarys { get; set; }
+
+        public DbSet<PersonalLabour> PersonalLabours { get; set; }
+
+        public DbSet<ProjectCost> ProjectCosts { get; set; }
+
+        public DbSet<Title> Titles { get; set; }
+
+        public DbSet<RefundType> RefundTypes { get; set; }
+
+        public DbSet<Bank> Banks { get; set; }
+
+        public DbSet<TaxBaseByMonth> TaxBaseByMonths { get; set; }
+
+
         //[ImportMany(typeof(IEntityMapper))]
         //public IEnumerable<IEntityMapper> EntityMappers { get; set; }
 
@@ -105,6 +124,15 @@ namespace BEYON.Component.Data.EF
 
             //地理所财务
             modelBuilder.Configurations.Add(new ApplicationFormConfiguration());
+            modelBuilder.Configurations.Add(new PersonalRecordConfiguration());
+            modelBuilder.Configurations.Add(new TaxPerOrderConfiguration());
+            modelBuilder.Configurations.Add(new PersonalSalaryConfiguration());
+            modelBuilder.Configurations.Add(new PersonalLabourConfiguration());
+            modelBuilder.Configurations.Add(new ProjectCostConfiguration());
+            modelBuilder.Configurations.Add(new TitleConfiguration());
+            modelBuilder.Configurations.Add(new RefundTypeConfiguration());
+            modelBuilder.Configurations.Add(new BankConfiguration());
+            modelBuilder.Configurations.Add(new TaxBaseByMonthConfiguration());
             //if (EntityMappers == null)
             //{
             //    return;
