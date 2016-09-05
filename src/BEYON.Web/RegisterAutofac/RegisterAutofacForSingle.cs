@@ -16,6 +16,10 @@ using BEYON.CoreBLL.Service.Member;
 using BEYON.CoreBLL.Service.Member.Interface;
 using BEYON.Domain.Data.Repositories.Member;
 using BEYON.Domain.Data.Repositories.Member.Impl;
+using BEYON.CoreBLL.Service.App;
+using BEYON.CoreBLL.Service.App.Interface;
+using BEYON.Domain.Data.Repositories.App;
+using BEYON.Domain.Data.Repositories.App.Impl;
 
 
 namespace BEYON.Web
@@ -55,6 +59,10 @@ namespace BEYON.Web
             builder.RegisterType<RoleRepository>().As<IRoleRepository>().InstancePerHttpRequest();
             builder.RegisterType<PermissionRepository>().As<IPermissionRepository>().InstancePerHttpRequest();
             builder.RegisterType<ModuleRepository>().As<IModuleRepository>().InstancePerHttpRequest();
+
+            //App services
+            builder.RegisterType<RefundTypeService>().As<IRefundTypeService>().InstancePerHttpRequest();
+            builder.RegisterType<RefundTypeRepository>().As<IRefundTypeRepository>().InstancePerHttpRequest();
 
           
             #endregion

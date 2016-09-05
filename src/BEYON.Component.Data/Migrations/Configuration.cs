@@ -6,7 +6,7 @@ using System.Data.Entity.Migrations;
 using System.Linq;
 using BEYON.Component.Data.Enum;
 using BEYON.Domain.Model.Member;
-using BEYON.Domain.Model.Plot;
+using BEYON.Domain.Model.App;
 
 namespace BEYON.Component.Data.Migrations
 {

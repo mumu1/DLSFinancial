@@ -13,7 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BEYON.Component.Tools;
 
-namespace BEYON.Domain.Model.Plot
+namespace BEYON.Domain.Model.App
 {
     [Description("整月课题成本表")]
     public class ProjectCost : EntityBase<int>

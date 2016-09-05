@@ -13,7 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BEYON.Component.Tools;
 
-namespace BEYON.Domain.Model.Plot
+namespace BEYON.Domain.Model.App
 {
     [Description("所外个人劳务表")]
     public class PersonalLabour : EntityBase<int>

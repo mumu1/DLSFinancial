@@ -13,7 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BEYON.Component.Tools;
 
-namespace BEYON.Domain.Model.Plot
+namespace BEYON.Domain.Model.App
 {
     [Description("职称字典表")]
     public class Title : EntityBase<int>

@@ -74,6 +74,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App\Interface\IRefundTypeService.cs" />
+    <Compile Include="App\RefundTypeService.cs" />
     <Compile Include="Member\AccountService.cs" />
     <Compile Include="CoreServiceBase.cs" />
     <Compile Include="Member\Interface\IAccountService.cs" />
@@ -119,9 +121,7 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

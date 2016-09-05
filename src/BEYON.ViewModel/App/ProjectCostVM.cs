@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace BEYON.ViewModel.Plot
+namespace BEYON.ViewModel.App
 {
     public class ProjectCostVM
     {

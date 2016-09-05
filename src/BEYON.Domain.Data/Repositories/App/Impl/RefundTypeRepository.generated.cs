@@ -6,39 +6,36 @@
 //	   如存在本生成代码外的新需求，请在相同命名空间下创建同名分部类进行实现。
 // </auto-generated>
 //
-// <copyright file="RoleConfiguration.generated.cs">
-//		Copyright(c)2015 Beyon.All rights reserved.
+// <copyright file="UserRepository.generated.cs">
+//		Copyright(c)2013 Beyon.All rights reserved.
 //		CLR版本：4.5.1
 //		开发组织：北京博阳世通信息技术有限公司
 //		公司网站：http://www.beyondb.com.cn
-//		所属工程：BEYON.Component.Data
-//		生成时间：2016-02-22 14:41
+//		所属工程：BEYON.Domain.Data
+//		生成时间：2016-03-01 16:09
 // </copyright>
 //------------------------------------------------------------------------------
 
 using System;
 using System.Collections.Generic;
-using System.Data.Entity.ModelConfiguration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BEYON.Component.Data;
+using BEYON.Component.Data.EF;
+using BEYON.Component.Data.EF.Interface;
 using BEYON.Domain.Model.App;
 
 
-namespace BEYON.Component.Data.Configurations.App
+namespace BEYON.Domain.Data.Repositories.App.Impl
 {
 	/// <summary>
-    ///   实体类数据表关系配置——角色信息
+    ///   仓储操作层实现——用户信息
     /// </summary>
-    internal partial class BankConfiguration : EntityTypeConfiguration<Bank>
+    public partial class RefundTypeRepository : EFRepositoryBase<RefundType, Int32>, IRefundTypeRepository
     {
-        public BankConfiguration()
-        {
-            BankConfigurationAppend();
-        }
-         /// <summary>
-        /// 额外的数据映射
-        /// </summary>
-        partial void BankConfigurationAppend();
-    }
+        public RefundTypeRepository(IUnitOfWork unitOfWork)
+            : base()
+        { }
+     }
 }

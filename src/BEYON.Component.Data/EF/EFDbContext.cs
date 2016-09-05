@@ -8,9 +8,9 @@ using System.Data.Common;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using BEYON.Component.Data.Configurations.Member;
-using BEYON.Component.Data.Configurations.Plot;
+using BEYON.Component.Data.Configurations.App;
 using BEYON.Domain.Model.Member;
-using BEYON.Domain.Model.Plot;
+using BEYON.Domain.Model.App;
 
 namespace BEYON.Component.Data.EF
 {

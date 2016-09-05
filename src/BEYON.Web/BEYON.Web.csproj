@@ -240,7 +240,7 @@
     <Content Include="Content\img\login\title.png" />
     <Content Include="Content\img\login\loginBox3.png" />
     <Content Include="Content\img\login\unitname.png" />
-    <Content Include="Content\img\logo.png" />
+    <Content Include="Content\img\logo2.png" />
     <Content Include="Content\img\main_user25x25.png" />
     <Content Include="Content\img\metro.gif" />
     <Content Include="Content\img\metro.png" />
@@ -263,6 +263,7 @@
     <Content Include="Content\img\terrain\close_0.5X0.5.png" />
     <Content Include="Content\img\terrain\maptype.png" />
     <Content Include="Content\img\terrain\slope_legend_247x322.png" />
+    <Content Include="Content\img\logo.png" />
     <Content Include="Content\img\zTreeStandard.gif" />
     <Content Include="Content\img\zTreeStandard.png" />
     <Content Include="Content\ionicons\2.0.1\css\ionicons.min.css" />

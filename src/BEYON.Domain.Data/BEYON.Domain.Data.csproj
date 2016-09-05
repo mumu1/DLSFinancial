@@ -56,6 +56,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\App\Impl\RefundTypeRepository.generated.cs" />
+    <Compile Include="Repositories\App\IRefundTypeRepository.generated.cs" />
     <Compile Include="Repositories\Member\IModuleRepository.cs" />
     <Compile Include="Repositories\Member\IModuleRepository.generated.cs" />
     <Compile Include="Repositories\Member\Impl\ModuleRepository.cs" />
@@ -124,7 +126,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Interface\" />
-    <Folder Include="Repositories\App\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

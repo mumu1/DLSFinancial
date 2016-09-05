@@ -22,10 +22,10 @@ using System.Data.Entity.ModelConfiguration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BEYON.Domain.Model.Plot;
+using BEYON.Domain.Model.App;
 
 
-namespace BEYON.Component.Data.Configurations.Plot
+namespace BEYON.Component.Data.Configurations.App
 {
 	/// <summary>
     ///   实体类数据表关系配置——角色信息
