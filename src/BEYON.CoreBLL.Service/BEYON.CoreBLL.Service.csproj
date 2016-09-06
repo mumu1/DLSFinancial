@@ -74,7 +74,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App\Interface\IBankService.cs" />
+    <Compile Include="App\Interface\ITitleService.cs" />
     <Compile Include="App\Interface\IRefundTypeService.cs" />
+    <Compile Include="App\BankService.cs" />
+    <Compile Include="App\TitleService.cs" />
     <Compile Include="App\RefundTypeService.cs" />
     <Compile Include="Member\AccountService.cs" />
     <Compile Include="CoreServiceBase.cs" />

@@ -16,16 +16,20 @@ using BEYON.ViewModel;
 using BEYON.ViewModel.Member;
 using BEYON.Web.Extension.Common;
 using BEYON.Web.Extension.Filters;
+using BEYON.Domain.Model.App;
+using BEYON.ViewModel.App;
+using BEYON.CoreBLL.Service.App.Interface;
 
 namespace BEYON.Web.Areas.BasicDataManagement.Controllers
 {
     public class BankAccountController : Controller
     {
-        private readonly IRoleService _roleService;
-        public BankAccountController(IRoleService roleService)
+         private readonly IBankService _bankService;
+         public BankAccountController(IBankService bankService)
         {
-            this._roleService = roleService;
+            this._bankService = bankService;
         }
+
 
         //
         // GET: /BasicDataManagement/BankAccount/Index
@@ -33,6 +37,14 @@ namespace BEYON.Web.Areas.BasicDataManagement.Controllers
         public ActionResult Index()
         {
             return PartialView();
+        }
+
+        // GET: /BasicDataManagement/BankAccount/GetAllData/
+        public ActionResult GetAllData()
+        {
+            var result = this._bankService.Banks.ToList();
+            return Json(new { total = result.Count, rows = result }, JsonRequestBehavior.AllowGet);
+
         }
     }
 }

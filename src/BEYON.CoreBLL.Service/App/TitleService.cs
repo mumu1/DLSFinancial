@@ -13,40 +13,40 @@ using EntityFramework.Extensions;
 
 namespace BEYON.CoreBLL.Service.App
 {
-    public class RefundTypeService : CoreServiceBase, IRefundTypeService
+    public class TitleService : CoreServiceBase, ITitleService
     {
-        private readonly IRefundTypeRepository _RefundTypeRepository;
+        private readonly ITitleRepository _TitleRepository;
 
 
 
-        public RefundTypeService(IRefundTypeRepository refundTypeRepository, IUnitOfWork unitOfWork)
+        public TitleService(ITitleRepository titleRepository, IUnitOfWork unitOfWork)
             : base(unitOfWork)
         {
-            this._RefundTypeRepository = refundTypeRepository;
+            this._TitleRepository = titleRepository;
         }
-        public IQueryable<RefundType> RefundTypes
+        public IQueryable<Title> Titles
         {
-            get { return _RefundTypeRepository.Entities; }
+            get { return _TitleRepository.Entities; }
         }
 
-        public OperationResult Insert(RefundTypeVM model)
+        public OperationResult Insert(TitleVM model)
         {
             try
             {
-                RefundType refund = _RefundTypeRepository.Entities.FirstOrDefault(c => c.RefundTypeCode == model.RefundTypeCode.Trim());
-                if (refund != null)
+                Title title = _TitleRepository.Entities.FirstOrDefault(c => c.TitleCode == model.TitleCode.Trim());
+                if (title != null)
                 {
                     return new OperationResult(OperationResultType.Warning, "数据库中已经存在相同的报销事项，请修改后重新提交！");
                 }
-                if (model.RefundTypeName == null || model.RefundTypeName.Trim() == "")
-                    return new OperationResult(OperationResultType.Warning, "报销事项不能为空，请修改后重新提交！");
-                var entity = new RefundType
+                if (model.TitleName == null || model.TitleName.Trim() == "")
+                    return new OperationResult(OperationResultType.Warning, "职称名称不能为空，请修改后重新提交！");
+                var entity = new Title
                 {
-                    RefundTypeCode = model.RefundTypeCode,
-                    RefundTypeName = model.RefundTypeName,
+                    TitleCode = model.TitleCode,
+                    TitleName = model.TitleName,
                     UpdateDate = DateTime.Now
                 };
-                _RefundTypeRepository.Insert(entity);
+                _TitleRepository.Insert(entity);
 
                 return new OperationResult(OperationResultType.Success, "新增数据成功！");
             }
@@ -55,19 +55,19 @@ namespace BEYON.CoreBLL.Service.App
                 return new OperationResult(OperationResultType.Error, "新增数据失败，数据库插入数据时发生了错误!");
             }
         }
-        public OperationResult Update(RefundTypeVM model)
+        public OperationResult Update(TitleVM model)
         {
             try
             {
-                RefundType refund = _RefundTypeRepository.Entities.FirstOrDefault(c => c.RefundTypeCode == model.RefundTypeCode.Trim());
-                if (refund == null)
+                Title title = _TitleRepository.Entities.FirstOrDefault(c => c.TitleCode == model.TitleCode.Trim());
+                if (title == null)
                 {
                     throw new Exception();
                 }
-                refund.RefundTypeName = model.RefundTypeName;
-                refund.RefundTypeCode = model.RefundTypeCode;
-                refund.UpdateDate = DateTime.Now;
-                _RefundTypeRepository.Update(refund);
+                title.TitleName = model.TitleName;
+                title.TitleCode = model.TitleCode;
+                title.UpdateDate = DateTime.Now;
+                _TitleRepository.Update(title);
                 return new OperationResult(OperationResultType.Success, "更新数据成功！");
             }
             catch
@@ -76,13 +76,13 @@ namespace BEYON.CoreBLL.Service.App
             }
         }
 
-        public OperationResult Delete(List<string> refundTypeCode)
+        public OperationResult Delete(List<string> titleCode)
         {
             try
             {
-                if (refundTypeCode != null)
+                if (titleCode != null)
                 {
-                    int count = _RefundTypeRepository.Delete(_RefundTypeRepository.Entities.Where(c => refundTypeCode.Contains(c.RefundTypeCode)));
+                    int count = _TitleRepository.Delete(_TitleRepository.Entities.Where(c => titleCode.Contains(c.TitleCode)));
                     if (count > 0)
                     {
                         return new OperationResult(OperationResultType.Success, "删除数据成功！");

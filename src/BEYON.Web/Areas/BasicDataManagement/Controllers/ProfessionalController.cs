@@ -12,25 +12,34 @@ using BEYON.Domain.Model.Member;
 using BEYON.ViewModel.Member;
 using BEYON.Web.Extension.Common;
 using BEYON.Web.Extension.Filters;
+using BEYON.Domain.Model.App;
+using BEYON.ViewModel.App;
+using BEYON.CoreBLL.Service.App.Interface;
 
 namespace BEYON.Web.Areas.BasicDataManagement.Controllers
 {
     public class ProfessionalController : Controller
     {
-        private readonly IPermissionService _permissionService;
-        private readonly IModuleService _moduleService;
-        public ProfessionalController(IPermissionService permissionService, IModuleService moduleService)
-        {
-            this._permissionService = permissionService;
-            this._moduleService = moduleService;
+        private readonly ITitleService _titleService;
+        public ProfessionalController(ITitleService titleService)
+        {       
+            this._titleService = titleService;
         }
 
         //
-        // GET: /BasicDataManagement/ProfessionalController/
+        // GET: /BasicDataManagement/Professional/Index
         [Layout]
         public ActionResult Index()
         {
             return PartialView();
+        }
+
+        // GET: /BasicDataManagement/Professional/GetAllData/
+        public ActionResult GetAllData()
+        {
+            var result = this._titleService.Titles.ToList();
+            return Json(new { total = result.Count, rows = result }, JsonRequestBehavior.AllowGet);
+
         }
     }
 }

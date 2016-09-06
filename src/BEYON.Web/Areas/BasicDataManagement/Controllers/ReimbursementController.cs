@@ -44,5 +44,12 @@ namespace BEYON.Web.Areas.BasicDataManagement.Controllers
      
         }
 
+        // POST: /BasicDataManagement/Reimbursement/Create/
+        public ActionResult Create(RefundTypeVM refundTypeVm) {
+            var result = _refundTypeService.Update(refundTypeVm);
+            result.Message = result.Message ?? result.ResultType.GetDescription();
+            return Json(result);
+        }
+
     }
 }

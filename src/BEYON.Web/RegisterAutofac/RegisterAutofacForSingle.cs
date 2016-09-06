@@ -63,7 +63,10 @@ namespace BEYON.Web
             //App services
             builder.RegisterType<RefundTypeService>().As<IRefundTypeService>().InstancePerHttpRequest();
             builder.RegisterType<RefundTypeRepository>().As<IRefundTypeRepository>().InstancePerHttpRequest();
-
+            builder.RegisterType<BankService>().As<IBankService>().InstancePerHttpRequest();
+            builder.RegisterType<BankRepository>().As<IBankRepository>().InstancePerHttpRequest();
+            builder.RegisterType<TitleService>().As<ITitleService>().InstancePerHttpRequest();
+            builder.RegisterType<TitleRepository>().As<ITitleRepository>().InstancePerHttpRequest();
           
             #endregion
             // then

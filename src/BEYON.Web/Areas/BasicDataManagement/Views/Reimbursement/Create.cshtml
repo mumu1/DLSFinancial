@@ -1,0 +1,42 @@
+﻿@using BEYON.ViewModel.App
+@model RefundTypeVM
+@{
+    List<SelectListItem> moduleList = ViewBag.ModuleList;
+}
+
+
+<link href="~/Scripts/AdminLTE2.3.0/plugins/iCheck/square/blue.css" rel="stylesheet" />
+@*@Html.HiddenFor(t => t.RefundTypeCode)*@
+<div class="form-group">
+
+    <div class="col-sm-2 ">
+        <label style="color: red; margin-left: -8px;">*</label>
+        @Html.LabelFor(model => model.RefundTypeCode, new {@class = " control-label"})
+    </div>
+
+    <div class="col-sm-8">
+        @Html.TextBoxFor(model => model.RefundTypeCode, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.RefundTypeCode)
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-sm-2 ">
+        <label style="color: red; margin-left: -8px;">*</label>@Html.LabelFor(model => model.RefundTypeName, new { @class = "control-label" })
+    </div>
+    <div class="col-sm-8">
+        @Html.TextBoxFor(model => model.RefundTypeName,  new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.RefundTypeName)
+    </div>
+</div>
+
+
+
+<script>
+    $(function () {
+        $('input.myCheck').iCheck({
+            checkboxClass: 'icheckbox_square-blue',
+            radioClass: 'iradio_square-blue',
+            increaseArea: '20%' // optional
+        });
+    });
+</script>

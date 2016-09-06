@@ -622,6 +622,7 @@
     <Content Include="Areas\BasicDataManagement\Views\WageBaseTable\Index.cshtml" />
     <Content Include="Areas\BasicDataManagement\Views\Web.config" />
     <Content Include="Areas\BasicDataManagement\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\BasicDataManagement\Views\Reimbursement\Create.cshtml" />
     <None Include="Properties\PublishProfiles\beyondb.pubxml" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Scripts\AdminLTE2.3.0\bootstrap\css\bootstrap.css" />

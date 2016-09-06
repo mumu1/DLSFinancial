@@ -24,6 +24,10 @@ namespace BEYON.Domain.Model.App
         }
 
         [Required]
+        [Display(Name = "职称编码")]
+        [StringLength(10)]
+        public string TitleCode { get; set; }
+
         [Display(Name = "职称名称")]
         [StringLength(36)]
         public string TitleName { get; set; }
