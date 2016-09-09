@@ -111,12 +111,7 @@
                     text: "新增", extend: "create", editor: editor
                 },
                 {
-                    text: "修改", extend: "edit", editor: editor, fn: function (editor, dt)
-                    {
-                        alert('text');
-                        var rowData = dt.row({ selected: true }).data();
-                        alert(rowData.TitleCode);
-                    }
+                    text: "修改", extend: "edit", editor: editor
                 },
                 { text: "删除", extend: "remove", editor: editor },
                 {

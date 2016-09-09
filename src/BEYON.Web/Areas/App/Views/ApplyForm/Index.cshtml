@@ -8,7 +8,7 @@
     <section class="content" id="permissionSection">
         <div class="panel-body" style="padding-bottom:0px;">
             <div class="panel panel-default">
-                <div class="panel-heading">查询条件</div>
+                <div class="panel-heading">申请单查询条件</div>
                 <div class="panel-body">
                     <form id="formSearch" class="form-horizontal">
                         <div class="form-group" style="margin-top: 15px">
@@ -89,11 +89,63 @@
 
         //oSettings.aiDisplay = oSettings.aiDisplayMaster.slice();
         //table.fnDraw();
-        return;
+        //return;
+        //}
+
+        var buttons = [
+            {
+                text: "新增", action: function (e, dt, node, config) {
+
+                }
+            },
+            {
+                text: "修改", action: function (e, dt, node, config) {
+
+                }
+            },
+            {
+                text: "删除", action: function (e, dt, node, config) {
+
+                }
+            },
+            {
+                text: "提交",
+                action: function (e, dt, node, config) {
+                    dt.ajax.reload();
+                }
+            },
+            {
+                text: "撤回",
+                action: function (e, dt, node, config) {
+                    dt.ajax.reload();
+                }
+            }
+        ];
+
+        //如果是管理员
+        //if (true) {
+        //    buttons = [
+        //        {
+        //            text: "审核",
+        //            action: function (e, dt, node, config) {
+        //                dt.ajax.reload();
+        //            }
+        //        },
+        //        {
+        //            extend: 'collection',
+        //            text: '导出',
+        //            buttons: [
+        //                { text: "拷贝", extend: 'copy' },
+        //                { text: "EXCEL表格", extend: 'excel' },
+        //                { text: "CSV表格", extend: 'csv' },
+        //                { text: "PDF文档", extend: 'pdf' }
+        //            ]
+        //        }
+        //    ]
         //}
 
         table = $('#datatable_tabletools').dataTable({
-            //dom: 'Bfrtip',
+            dom: 'Bfrtip',
             ajax: '@Url.Action("GetAllData")',
             searching: true,
             ordering: true,
@@ -106,6 +158,7 @@
             autoWidth: true,
             bProcessing: true,
             paging: false,
+            buttons: buttons,
             columns: [
                 { data: "SerialNumber", title: "申请单流水号" },
                 { data: "ProjectNumber", title: "课题号" },
@@ -136,70 +189,9 @@
             }
         });
 
-        new $.fn.dataTable.Buttons(table, {
-            buttons: [
-                {
-                    text: "新增", action: function (e, dt, node, config) {
+        
 
-                    }
-                },
-                {
-                    text: "修改", action: function (e, dt, node, config) {
-
-                    }
-                },
-                {
-                    text: "删除", action: function (e, dt, node, config) {
-
-                    }
-                },
-                {
-                    extend: 'collection',
-                    text: '导出',
-                    buttons: [
-                        { text: "拷贝", extend: 'copy' },
-                        { text: "EXCEL表格", extend: 'excel' },
-                        { text: "CSV表格", extend: 'csv' },
-                        { text: "PDF文档", extend: 'pdf' },
-                        { text: "打印", extend: 'print' }
-                    ]
-                },
-                {
-                    text: "导入",
-                    action: function (e, dt, node, config) {
-                        var ColumnDatas = [];
-                        var columns = dt.settings().init().columns;
-                        dt.columns().every(function (index) {
-                            ColumnDatas.push({ ColumnName: columns[index].data, TitleName: columns[index].title })
-                        })
-
-                        $.ajax({
-                            url: '../App/Import/ImportData',
-                            type: 'POST',
-                            data: JSON.stringify({ ActionUrl: "@Url.Action("Import")", Columns: ColumnDatas }),
-                            contentType: 'application/json; charset=utf8',
-                            cache: false,
-                            dataType: 'html',
-                            success: function (data) {
-                                $('#importDataDialog').html(data);
-                            },
-                            error: function (xhr) {
-                                alert("出现错误，请稍后再试:" + xhr.responseText);
-                            }
-                        });
-                    }
-                },
-                {
-                    text: "刷新",
-                    action: function (e, dt, node, config) {
-                        dt.ajax.reload();
-                    }
-                }
-            ],
-        });
-
-        table.buttons().container()
-            .appendTo($('Bfrtip', table.table().container()));
+        
     }
 </script>
 @*}*@
