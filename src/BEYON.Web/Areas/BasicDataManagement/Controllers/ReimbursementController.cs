@@ -43,7 +43,7 @@ namespace BEYON.Web.Areas.BasicDataManagement.Controllers
         public ActionResult GetAllData()
         {
             var result = this._refundTypeService.RefundTypes.ToList();
-            return Json(new { total = result.Count, rows = result }, JsonRequestBehavior.AllowGet);
+            return Json(new { total = result.Count, data = result }, JsonRequestBehavior.AllowGet);
      
         }
 

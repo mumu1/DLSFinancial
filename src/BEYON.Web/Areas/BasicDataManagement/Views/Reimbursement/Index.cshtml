@@ -106,6 +106,7 @@
 
         table = $('#datatable_tabletools').dataTable({
             dom: 'Bfrtip',
+            ajax : '@Url.Action("GetAllData")',
             buttons: [
                 {
                     text: "新增", extend: "create", editor: editor
@@ -165,7 +166,7 @@
                                     { data: "RefundTypeCode", title: "科目代码" },
                                     { data: "RefundTypeName", title: "报销事项" }
             ],
-            data: data.rows,
+            //data: data.rows,
             oLanguage: {
                 "sLengthMenu": "每页显示 _MENU_ 条记录",
                 "sZeroRecords": "抱歉， 没有找到",
@@ -184,55 +185,6 @@
 
             }
         });
-
-        //table = $('#datatable_tabletools').dataTable({
-
-        //    // Tabletools options:
-        //    //   https://datatables.net/extensions/tabletools/button_options
-        //    "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-6 hidden-xs'T>r>" +
-        //            "t" +
-        //            "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-sm-6 col-xs-12'p>>",
-        //    "dom": "Bfrtip",
-        //    "oTableTools": {
-        //        "sRowSelect": "multi",
-        //        "aButtons": [
-        //            { "sButtonText": "创建", "sExtends": "editor_create", "editor": editor},
-        //            { "sButtonText": "修改", "sExtends": "editor_edit", "editor": editor, "bSelectedOnly": true },
-        //            { "sButtonText": "删除", "sExtends": "editor_remove", "editor": editor, "bSelectedOnly": true },
-        //            { "sButtonText": "另存为Excel", "sExtends": "xls",}
-        //        ],
-        //        "sSwfPath": "../Scripts/plugin/datatables/swf/copy_csv_xls_pdf.swf"
-        //    },
-        //    "select": true,
-        //    "bPaginate": true, //是否显示（应用）分页器
-        //    "bSort": true, //是否启动各个字段的排序功能
-        //    "autoWidth": true,
-        //    "paging": true,
-        //    "aoColumns": [
-        //                            { "mDataProp": "Id", "sTitle": "编号" },
-        //                            { "mDataProp": "RefundTypeCode", "sTitle": "科目代码" },
-        //                            { "mDataProp": "RefundTypeName", "sTitle": "报销事项" }
-        //    ],
-        //    "data": data.rows,
-        //    "oLanguage": {
-        //        "sLengthMenu": "每页显示 _MENU_ 条记录",
-        //        "sZeroRecords": "抱歉， 没有找到",
-        //        "sInfo": "显示 _START_ 到 _END_ 条记录，总共 _TOTAL_ 条记录",
-        //        "sInfoEmpty": "没有数据",
-        //        "sInfoFiltered": "(从 _MAX_ 条数据中检索)",
-        //        "sZeroRecords": "没有检索到数据",
-        //        "sSearch": "搜索名称:",
-        //        "sSelected": "选中 _TOTAL_ 条记录",
-        //        "oPaginate": {
-        //            "sFirst": "首页",
-        //            "sPrevious": "前一页",
-        //            "sNext": "后一页",
-        //            "sLast": "尾页"
-        //        }
-
-        //    }
-        //});
-
     }
 
 
