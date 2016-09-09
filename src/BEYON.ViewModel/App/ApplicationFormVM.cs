@@ -44,6 +44,10 @@ namespace BEYON.ViewModel.App
         [StringLength(255)]
         public string AuditOpinion { get; set; }
 
+        [Display(Name = "用户Email")]
+        [StringLength(100)]
+        public string UserEmail { get; set; }
+
         [Display(Name = "报销合计")]
         public Double Summation { get; set; }
     }
