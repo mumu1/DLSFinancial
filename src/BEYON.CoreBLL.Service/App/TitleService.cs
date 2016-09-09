@@ -7,9 +7,8 @@ using BEYON.CoreBLL.Service.App.Interface;
 using BEYON.Domain.Data.Repositories.App;
 using BEYON.Domain.Model.App;
 using BEYON.ViewModel.App;
-
+using BEYON.CoreBLL.Service.Excel;
 using EntityFramework.Extensions;
-
 
 namespace BEYON.CoreBLL.Service.App
 {
@@ -100,6 +99,47 @@ namespace BEYON.CoreBLL.Service.App
             catch
             {
                 return new OperationResult(OperationResultType.Error, "删除数据失败!");
+            }
+        }
+        public OperationResult Update(Title model)
+        {
+            try
+            {
+                model.UpdateDate = DateTime.Now;
+                _TitleRepository.Update(model);
+                return new OperationResult(OperationResultType.Success, "更新职称数据成功！");
+            }
+            catch
+            {
+                return new OperationResult(OperationResultType.Error, "更新职称数据失败!");
+            }
+        }
+
+        public OperationResult Delete(Title model)
+        {
+            try
+            {
+                model.UpdateDate = DateTime.Now;
+                _TitleRepository.Delete(model);
+                return new OperationResult(OperationResultType.Success, "更新职称数据成功！");
+            }
+            catch
+            {
+                return new OperationResult(OperationResultType.Error, "更新职称数据失败!");
+            }
+        }
+
+        public OperationResult Import(String fileName, Service.Excel.ColumnMap[] columns)
+        {
+            try
+            {
+                var items = ExcelService.GetObjects<Title>(fileName, columns);
+                _TitleRepository.InsertOrUpdate(items);
+                return new OperationResult(OperationResultType.Success, "导入数据成功！");
+            }
+            catch (Exception ex)
+            {
+                return new OperationResult(OperationResultType.Error, "导入数据失败!");
             }
         }
     }

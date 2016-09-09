@@ -16,5 +16,8 @@ namespace BEYON.CoreBLL.Service.App.Interface
         OperationResult Insert(TitleVM model);
         OperationResult Update(TitleVM model);
         OperationResult Delete(List<string> list);
+        OperationResult Delete(Title model);
+        OperationResult Update(Title model);
+        OperationResult Import(String fileName, Service.Excel.ColumnMap[] columns);
     }
 }
