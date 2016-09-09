@@ -1,64 +1,62 @@
 ﻿@using BEYON.Domain.Model.App
 
-<div id="content" style="overflow-y: auto; height: 100%; opacity: 1;">
-    <div class="content-wrapper">
-        <header role="heading">
-            <h2>报销事项字典表维护</h2>
-        </header>
-        <!-- widget div-->
+        <div id="content" style="overflow-y: auto; height: 100%; opacity: 1;">
+            <div class="content-wrapper">
+                <header role="heading">
+                    <h2>审核意见字典表维护</h2>
+                </header>
+                <!-- widget div-->
 
-        <div class="jarviswidget jarviswidget-color-darken jarviswidget-sortable" id="wid-id-0" data-widget-editbutton="false" role="widget">
-            <!-- widget options:
-            usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+                <div class="jarviswidget jarviswidget-color-darken jarviswidget-sortable" id="wid-id-0" data-widget-editbutton="false" role="widget">
+                    <!-- widget options:
+                usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
 
-            data-widget-colorbutton="false"
-            data-widget-editbutton="false"
-            data-widget-togglebutton="false"
-            data-widget-deletebutton="false"
-            data-widget-fullscreenbutton="false"
-            data-widget-custombutton="false"
-            data-widget-collapsed="true"
-            data-widget-sortable="false"
+                data-widget-colorbutton="false"
+                data-widget-editbutton="false"
+                data-widget-togglebutton="false"
+                data-widget-deletebutton="false"
+                data-widget-fullscreenbutton="false"
+                data-widget-custombutton="false"
+                data-widget-collapsed="true"
+                data-widget-sortable="false"
 
-            -->
-            <!-- widget div-->
-            <div>
+                -->
+                    <!-- widget div-->
+                    <div>
 
-                <!-- widget edit box -->
-                <div class="jarviswidget-editbox">
-                    <!-- This area used as dropdown edit box -->
+                        <!-- widget edit box -->
+                        <div class="jarviswidget-editbox">
+                            <!-- This area used as dropdown edit box -->
 
+                        </div>
+                        <!-- end widget edit box -->
+                        <!-- widget content -->
+                        <div class="widget-body">
+                            <table id="datatable_tabletools" class="table table-striped table-bordered table-hover" width="100%"></table>
+                        </div>
+                        <!-- end widget content -->
+
+                    </div>
+                    <!-- end widget div -->
                 </div>
-                <!-- end widget edit box -->
-                <!-- widget content -->
-                <div class="widget-body">
-                    <table id="datatable_tabletools" class="table table-striped table-bordered table-hover" width="100%"></table>
-                </div>
-                <!-- end widget content -->
-
+                <!-- end widget -->
             </div>
-            <!-- end widget div -->
+
+            <div id="importDataDialog"></div>
         </div>
-        <!-- end widget -->
-    </div>
-
-    <div id="importDataDialog"></div>
-</div>
 
 
-<script type="text/javascript">
+        <script type="text/javascript">
     $(document).ready(function () {
         loadTableData();
 
     });
-    $("#create_btn").click(function () {
 
-    });
-    //加载报销事项列表
+    //加载职称列表
     function loadTableData() {
         $.ajax({
             type: "GET",
-            url: "../BasicDataManagement/Reimbursement/GetAllData",
+            url: "../BasicDataManagement/AuditOption/GetAllData",
             //data: params,
             contentType: "application/json; charset=utf-8",
             datatype: "json",
@@ -66,7 +64,7 @@
                 initTable(data);
             },
             error: function () {
-                toastr.error('获取报销事项数据失败！');
+                toastr.error('获取审核意见数据失败！');
             }
         });
     }
@@ -94,11 +92,11 @@
             },
             "table": "#datatable_tabletools",
             fields: [{
-                label: "科目代码",
-                name: "RefundTypeCode"
+                label: "审核意见代码",
+                name: "AuditOpinionCode"
             }, {
-                label: "报销事项:",
-                name: "RefundTypeName"
+                label: "审核意见描述:",
+                name: "AuditOpinionDesp"
             }
             ]
         });
@@ -112,12 +110,7 @@
                     text: "新增", extend: "create", editor: editor
                 },
                 {
-                    text: "修改", extend: "edit", editor: editor, fn: function (editor, dt)
-                    {
-                        alert('text');
-                        var rowData = dt.row({ selected: true }).data();
-                        alert(rowData.RefundTypeCode);
-                    }
+                    text: "修改", extend: "edit", editor: editor
                 },
                 { text: "删除", extend: "remove", editor: editor },
                 {
@@ -169,7 +162,7 @@
             ordering: true,
             select: true,
             info: true,
-            paginate: false, //是否显示（应用）分页器
+            paginate: true, //是否显示（应用）分页器
             sort: true, //是否启动各个字段的排序功能
             stateSave: false,
             stateDuration: 60 * 60 * 12,
@@ -178,8 +171,8 @@
             paging: false,
             columns: [
                                     { data: "Id", title: "编号" },
-                                    { data: "RefundTypeCode", title: "科目代码" },
-                                    { data: "RefundTypeName", title: "报销事项" }
+                                    { data: "AuditOpinionCode", title: "审核意见代码" },
+                                    { data: "AuditOpinionDesp", title: "审核意见描述" }
             ],
             oLanguage: {
                 "sLengthMenu": "每页显示 _MENU_ 条记录",
@@ -202,4 +195,4 @@
     }
 
 
-</script>
+        </script>

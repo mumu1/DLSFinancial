@@ -67,6 +67,10 @@ namespace BEYON.Web
             builder.RegisterType<BankRepository>().As<IBankRepository>().InstancePerHttpRequest();
             builder.RegisterType<TitleService>().As<ITitleService>().InstancePerHttpRequest();
             builder.RegisterType<TitleRepository>().As<ITitleRepository>().InstancePerHttpRequest();
+            builder.RegisterType<AuditOpinionService>().As<IAuditOpinionService>().InstancePerHttpRequest();
+            builder.RegisterType<AuditOpinionRepository>().As<IAuditOpinionRepository>().InstancePerHttpRequest();
+            builder.RegisterType<ApplicationFormService>().As<IApplicationFormService>().InstancePerHttpRequest();
+            builder.RegisterType<ApplicationFormRepository>().As<IApplicationFormRepository>().InstancePerHttpRequest();
           
             #endregion
             // then

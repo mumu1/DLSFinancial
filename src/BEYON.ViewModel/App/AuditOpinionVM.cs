@@ -3,19 +3,19 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BEYON.ViewModel.App
 {
-    public class AuditStatusVM
+    public class AuditOpinionVM
     {
-        public AuditStatusVM()
+        public AuditOpinionVM()
         {
 
         }
         [Required]
-        [Display(Name = "状态编码")]
+        [Display(Name = "审核意见编码")]
         [StringLength(10)]
-        public string StatusCode { get; set; }
+        public string AuditOpinionCode { get; set; }
 
-        [Display(Name = "审核状态")]
-        [StringLength(20)]
-        public string StatusName { get; set; }
+        [Display(Name = "审核意见描述")]
+        [StringLength(100)]
+        public string AuditOpinionDesp { get; set; }
     }
 }

@@ -10,43 +10,42 @@ using BEYON.ViewModel.App;
 using BEYON.CoreBLL.Service.Excel;
 using EntityFramework.Extensions;
 
-
 namespace BEYON.CoreBLL.Service.App
 {
-    public class BankService : CoreServiceBase, IBankService
+    public class AuditOpinionService : CoreServiceBase, IAuditOpinionService
     {
-        private readonly IBankRepository _BankRepository;
+        private readonly IAuditOpinionRepository _AuditOpinionRepository;
 
 
 
-        public BankService(IBankRepository bankRepository, IUnitOfWork unitOfWork)
+        public AuditOpinionService(IAuditOpinionRepository auditOpinionRepository, IUnitOfWork unitOfWork)
             : base(unitOfWork)
         {
-            this._BankRepository = bankRepository;
+            this._AuditOpinionRepository = auditOpinionRepository;
         }
-        public IQueryable<Bank> Banks
+        public IQueryable<AuditOpinion> AuditOpinions
         {
-            get { return _BankRepository.Entities; }
+            get { return _AuditOpinionRepository.Entities; }
         }
 
-        public OperationResult Insert(BankVM model)
+        public OperationResult Insert(AuditOpinionVM model)
         {
             try
             {
-                Bank bank = _BankRepository.Entities.FirstOrDefault(c => c.BankCode == model.BankCode.Trim());
-                if (bank != null)
+                AuditOpinion auditOpinion = _AuditOpinionRepository.Entities.FirstOrDefault(c => c.AuditOpinionCode == model.AuditOpinionCode.Trim());
+                if (auditOpinion != null)
                 {
                     return new OperationResult(OperationResultType.Warning, "数据库中已经存在相同的报销事项，请修改后重新提交！");
                 }
-                if (model.BankName == null || model.BankName.Trim() == "")
-                    return new OperationResult(OperationResultType.Warning, "开户银行名称不能为空，请修改后重新提交！");
-                var entity = new Bank
+                if (model.AuditOpinionDesp == null || model.AuditOpinionDesp.Trim() == "")
+                    return new OperationResult(OperationResultType.Warning, "审核意见描述不能为空，请修改后重新提交！");
+                var entity = new AuditOpinion
                 {
-                    BankCode = model.BankCode,
-                    BankName = model.BankName,
+                    AuditOpinionCode = model.AuditOpinionCode,
+                    AuditOpinionDesp = model.AuditOpinionDesp,
                     UpdateDate = DateTime.Now
                 };
-                _BankRepository.Insert(entity);
+                _AuditOpinionRepository.Insert(entity);
 
                 return new OperationResult(OperationResultType.Success, "新增数据成功！");
             }
@@ -55,19 +54,19 @@ namespace BEYON.CoreBLL.Service.App
                 return new OperationResult(OperationResultType.Error, "新增数据失败，数据库插入数据时发生了错误!");
             }
         }
-        public OperationResult Update(BankVM model)
+        public OperationResult Update(AuditOpinionVM model)
         {
             try
             {
-                Bank bank = _BankRepository.Entities.FirstOrDefault(c => c.BankCode == model.BankCode.Trim());
-                if (bank == null)
+                AuditOpinion auditOpinion = _AuditOpinionRepository.Entities.FirstOrDefault(c => c.AuditOpinionCode == model.AuditOpinionCode.Trim());
+                if (auditOpinion == null)
                 {
                     throw new Exception();
                 }
-                bank.BankName = model.BankName;
-                bank.BankCode = model.BankCode;
-                bank.UpdateDate = DateTime.Now;
-                _BankRepository.Update(bank);
+                auditOpinion.AuditOpinionDesp = model.AuditOpinionDesp;
+                auditOpinion.AuditOpinionCode = model.AuditOpinionCode;
+                auditOpinion.UpdateDate = DateTime.Now;
+                _AuditOpinionRepository.Update(auditOpinion);
                 return new OperationResult(OperationResultType.Success, "更新数据成功！");
             }
             catch
@@ -76,13 +75,13 @@ namespace BEYON.CoreBLL.Service.App
             }
         }
 
-        public OperationResult Delete(List<string> bankCode)
+        public OperationResult Delete(List<string> auditOpinionCode)
         {
             try
             {
-                if (bankCode != null)
+                if (auditOpinionCode != null)
                 {
-                    int count = _BankRepository.Delete(_BankRepository.Entities.Where(c => bankCode.Contains(c.BankCode)));
+                    int count = _AuditOpinionRepository.Delete(_AuditOpinionRepository.Entities.Where(c => auditOpinionCode.Contains(c.AuditOpinionCode)));
                     if (count > 0)
                     {
                         return new OperationResult(OperationResultType.Success, "删除数据成功！");
@@ -102,31 +101,31 @@ namespace BEYON.CoreBLL.Service.App
                 return new OperationResult(OperationResultType.Error, "删除数据失败!");
             }
         }
-        public OperationResult Update(Bank model)
+        public OperationResult Update(AuditOpinion model)
         {
             try
             {
                 model.UpdateDate = DateTime.Now;
-                _BankRepository.Update(model);
-                return new OperationResult(OperationResultType.Success, "更新开户银行数据成功！");
+                _AuditOpinionRepository.Update(model);
+                return new OperationResult(OperationResultType.Success, "更新审核意见数据成功！");
             }
             catch
             {
-                return new OperationResult(OperationResultType.Error, "更新开户银行数据失败!");
+                return new OperationResult(OperationResultType.Error, "更新审核意见数据失败!");
             }
         }
 
-        public OperationResult Delete(Bank model)
+        public OperationResult Delete(AuditOpinion model)
         {
             try
             {
                 model.UpdateDate = DateTime.Now;
-                _BankRepository.Delete(model);
-                return new OperationResult(OperationResultType.Success, "更新开户银行数据成功！");
+                _AuditOpinionRepository.Delete(model);
+                return new OperationResult(OperationResultType.Success, "更新审核意见数据成功！");
             }
             catch
             {
-                return new OperationResult(OperationResultType.Error, "更新开户银行数据失败!");
+                return new OperationResult(OperationResultType.Error, "更新审核意见数据失败!");
             }
         }
 
@@ -134,8 +133,8 @@ namespace BEYON.CoreBLL.Service.App
         {
             try
             {
-                var items = ExcelService.GetObjects<Bank>(fileName, columns);
-                _BankRepository.InsertOrUpdate(items);
+                var items = ExcelService.GetObjects<AuditOpinion>(fileName, columns);
+                _AuditOpinionRepository.InsertOrUpdate(items);
                 return new OperationResult(OperationResultType.Success, "导入数据成功！");
             }
             catch (Exception ex)

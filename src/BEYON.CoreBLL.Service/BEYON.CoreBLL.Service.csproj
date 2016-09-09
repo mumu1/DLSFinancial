@@ -74,6 +74,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App\Interface\IAuditOpinionService.cs" />
+    <Compile Include="App\AuditOpinionService.cs" />
+    <Compile Include="App\Interface\IApplicationFormService.cs" />
+    <Compile Include="App\ApplicationFormService.cs" />
     <Compile Include="Excel\ColumnMap.cs" />
     <Compile Include="Excel\ExcelService.cs" />
     <Compile Include="App\Interface\IBankService.cs" />

@@ -25,53 +25,53 @@ namespace BEYON.Web.Areas.BasicDataManagement.Controllers
     public class AuditOptionController : Controller
     {
 
-        private readonly IRefundTypeService _refundTypeService;
+        private readonly IAuditOpinionService _auditOpinionService;
 
-        public AuditOptionController(IRefundTypeService refundTypeService)
+        public AuditOptionController(IAuditOpinionService auditOpinionService)
         {
-            this._refundTypeService = refundTypeService;
+            this._auditOpinionService = auditOpinionService;
         }
 
         //
-        // GET: /BasicDataManagement/Reimbursement/
+        // GET: /BasicDataManagement/AuditOption/
         [Layout]
         public ActionResult Index()
         {
             return PartialView();
         }
 
-        // GET: /BasicDataManagement/Reimbursement/GetAllData/
+        // GET: /BasicDataManagement/AuditOption/GetAllData/
         public ActionResult GetAllData()
         {
-            var result = this._refundTypeService.RefundTypes.ToList();
+            var result = this._auditOpinionService.AuditOpinions.ToList();
             return Json(new { total = result.Count, data = result }, JsonRequestBehavior.AllowGet);
      
         }
 
-        // POST: /BasicDataManagement/Reimbursement/Create/
+        // POST: /BasicDataManagement/AuditOption/Create/
         [HttpPost]
         public ActionResult Create()
         {
-            RefundTypeVM[] datas = ClassConvert<RefundTypeVM>.Process(Request.Form);
-            var result = _refundTypeService.Insert(datas[0]);
+            AuditOpinionVM[] datas = ClassConvert<AuditOpinionVM>.Process(Request.Form);
+            var result = _auditOpinionService.Insert(datas[0]);
             if (result.ResultType != OperationResultType.Success)
-                return Json(new { error = result.ResultType.GetDescription(), total = 1, data = this._refundTypeService.RefundTypes.ToArray() });
+                return Json(new { error = result.ResultType.GetDescription(), total = 1, data = this._auditOpinionService.AuditOpinions.ToArray() });
             else
             {
-                RefundType[] results = this._refundTypeService.RefundTypes.ToArray();
+                AuditOpinion[] results = this._auditOpinionService.AuditOpinions.ToArray();
                 return Json(new { total = 1, data = new []{results[results.Length -1]} });
             }
             
         }
 
-        // POST: /BasicDataManagement/Reimbursement/Edit/
+        // POST: /BasicDataManagement/AuditOption/Edit/
         [HttpPost]
         public ActionResult Edit()
         {
-            RefundType[] datas = ClassConvert<RefundType>.Process(Request.Form);
+            AuditOpinion[] datas = ClassConvert<AuditOpinion>.Process(Request.Form);
             foreach(var data in datas)
             {
-                var result = _refundTypeService.Update(data);
+                var result = _auditOpinionService.Update(data);
                 result.Message = result.Message ?? result.ResultType.GetDescription();
                 if(result.ResultType != OperationResultType.Success )
                 {
@@ -82,13 +82,13 @@ namespace BEYON.Web.Areas.BasicDataManagement.Controllers
             return Json(new { total = datas.Length, data = datas }, JsonRequestBehavior.AllowGet);
         }
 
-        // POST: /BasicDataManagement/Reimbursement/Delete/
+        // POST: /BasicDataManagement/AuditOption/Delete/
         public ActionResult Delete()
         {
-            RefundType[] datas = ClassConvert<RefundType>.Process(Request.Form);
+            AuditOpinion[] datas = ClassConvert<AuditOpinion>.Process(Request.Form);
             foreach(var data in datas)
             {
-                var result = _refundTypeService.Delete(data);
+                var result = _auditOpinionService.Delete(data);
                 if (result.ResultType != OperationResultType.Success)
                 {
                     return Json(new { error = result.ResultType.GetDescription(), total = datas.Length, data = datas });
@@ -97,7 +97,7 @@ namespace BEYON.Web.Areas.BasicDataManagement.Controllers
             return Json(new { total = datas.Length, data = datas }, JsonRequestBehavior.AllowGet);
         }
 
-        // POST: /BasicDataManagement/Reimbursement/Import/
+        // POST: /BasicDataManagement/AuditOption/Import/
         [HttpPost]
         public ActionResult Import(System.Web.HttpPostedFileBase upload)
         {
@@ -122,7 +122,7 @@ namespace BEYON.Web.Areas.BasicDataManagement.Controllers
                 }
 
                 //实现文件导入
-                var result = _refundTypeService.Import(path, columns);
+                var result = _auditOpinionService.Import(path, columns);
                 //删除临时创建文件
                 System.IO.File.Delete(path);
 

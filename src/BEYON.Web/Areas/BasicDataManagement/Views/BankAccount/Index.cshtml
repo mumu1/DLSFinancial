@@ -1,42 +1,58 @@
 ﻿@using BEYON.Domain.Model.App
 
-<header role="heading">
-    <span class="widget-icon"> <i class="fa fa-table"></i> </span>
-    <h2>开户银行字典表维护</h2>
-</header>
-<!-- widget div-->
+<div id="content" style="overflow-y: auto; height: 100%; opacity: 1;">
+    <div class="content-wrapper">
+        <header role="heading">
+            <h2>开户银行字典表维护</h2>
+        </header>
+        <!-- widget div-->
 
-<div>
+        <div class="jarviswidget jarviswidget-color-darken jarviswidget-sortable" id="wid-id-0" data-widget-editbutton="false" role="widget">
+            <!-- widget options:
+            usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
 
-    <!-- widget edit box -->
-    <div class="jarviswidget-editbox">
-        <!-- This area used as dropdown edit box -->
+            data-widget-colorbutton="false"
+            data-widget-editbutton="false"
+            data-widget-togglebutton="false"
+            data-widget-deletebutton="false"
+            data-widget-fullscreenbutton="false"
+            data-widget-custombutton="false"
+            data-widget-collapsed="true"
+            data-widget-sortable="false"
 
+            -->
+            <!-- widget div-->
+            <div>
+
+                <!-- widget edit box -->
+                <div class="jarviswidget-editbox">
+                    <!-- This area used as dropdown edit box -->
+
+                </div>
+                <!-- end widget edit box -->
+                <!-- widget content -->
+                <div class="widget-body">
+                    <table id="datatable_tabletools" class="table table-striped table-bordered table-hover" width="100%"></table>
+                </div>
+                <!-- end widget content -->
+
+            </div>
+            <!-- end widget div -->
+        </div>
+        <!-- end widget -->
     </div>
-    <!-- end widget edit box -->
-    <!-- widget content -->
-    <div class="widget-body no-padding">
-        <button id="create_btn" class="btn btn-primary " type="button">新增</button>
-        <button id="edit_btn" class="btn btn-primary" type="button">编辑</button>
-        <button id="delete_btn" class="btn btn-primary" type="button">删除</button>
-        <table id="datatable_tabletools" class="table table-striped table-bordered table-hover"></table>
-    </div>
-    <!-- end widget content -->
 
+    <div id="importDataDialog"></div>
 </div>
-<!-- end widget div -->
-
 
 
 <script type="text/javascript">
-    $(function () {
+    $(document).ready(function () {
         loadTableData();
 
     });
-    $("#create_btn").click(function () {
 
-    });
-    //加载开户银行列表
+    //加载职称列表
     function loadTableData() {
         $.ajax({
             type: "GET",
@@ -68,52 +84,97 @@
             return;
         }
 
+        var editor = new $.fn.dataTable.Editor({
+            "ajaxUrl": {
+                "create": "@Url.Action("Create")",
+                "edit": "@Url.Action("Edit")",
+                "remove": "@Url.Action("Delete")"
+            },
+            "table": "#datatable_tabletools",
+            fields: [{
+                label: "开户银行代码",
+                name: "BankCode"
+            }, {
+                label: "开户银行名称:",
+                name: "BankName"
+            }
+            ]
+        });
+
 
         table = $('#datatable_tabletools').dataTable({
+            dom: 'Bfrtip',
+            ajax : '@Url.Action("GetAllData")',
+            buttons: [
+                {
+                    text: "新增", extend: "create", editor: editor
+                },
+                {
+                    text: "修改", extend: "edit", editor: editor
+                },
+                { text: "删除", extend: "remove", editor: editor },
+                {
+                    extend: 'collection',
+                    text: '导出',
+                    buttons: [
+                        { text: "拷贝", extend: 'copy' },
+                        { text: "EXCEL表格", extend: 'excel' },
+                        { text: "CSV表格", extend: 'csv' },
+                        { text: "PDF文档", extend: 'pdf' },
+                        { text: "打印", extend: 'print' }
+                    ]
+                },
+                {
+                    text: "导入",
+                    action: function (e, dt, node, config) {
+                        var ColumnDatas = [];
+                        var columns = dt.settings().init().columns;
+                        dt.columns().every(function (index) {
+                            ColumnDatas.push({ ColumnName: columns[index].data, TitleName: columns[index].title })
+                        })
 
-            // Tabletools options:
-            //   https://datatables.net/extensions/tabletools/button_options
-            "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-6 hidden-xs'T>r>" +
-                    "t" +
-                    "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-sm-6 col-xs-12'p>>",
-            "oTableTools": {
-                "aButtons": [
-                    {
-                        "sButtonText": "另存为Excel",
-                        "sExtends": "xls",
+                        $.ajax({
+                            url: '../App/Import/ImportData',
+                            type: 'POST',
+                            data: JSON.stringify({ ActionUrl: "@Url.Action("Import")", Columns: ColumnDatas }),
+                            contentType: 'application/json; charset=utf8',
+                            cache: false,
+                            dataType: 'html',
+                            success: function (data) {
+                                $('#importDataDialog').html(data);
+                            },
+                            error: function (xhr) {
+                                alert("出现错误，请稍后再试:" + xhr.responseText);
+                            }
+                        });
 
-                    },
-
-                   //{
-                   //    "sButtonText": "打印",
-                   //    "sExtends": "print",
-                   //    "sMessage": "<i>(点击 Esc 关闭)</i>",
-                   //    "sTitle": "print",
-                   //}
-                ],
-                "sSwfPath": "../Scripts/plugin/datatables/swf/copy_csv_xls_pdf.swf"
-            },
-            "autoWidth": true,
-            "paging": false,
-            "aoColumns": [
-
-                                    { "mDataProp": "Id", "sTitle": "编号" },
-                                    { "mDataProp": "BankCode", "sTitle": "开户银行代码" },
-                                    { "mDataProp": "BankName", "sTitle": "开户银行名称" }
+                        //$('#importDataDialog').load('../App/Import/ImportData', );
+                    }
+                },
+                {
+                    text: "刷新",
+                    action: function (e, dt, node, config) {
+                        dt.ajax.reload();
+                    }
+                }
             ],
-            "data": data.rows,
-            "preDrawCallback": function () {
-                // Initialize the responsive datatables helper once.
-
-            },
-            "rowCallback": function (nRow) {
-
-            },
-            "drawCallback": function (oSettings) {
-
-            },
-            "rowsGroup": [2],
-            "oLanguage": {
+            searching: true,
+            ordering: true,
+            select: true,
+            info: true,
+            paginate: true, //是否显示（应用）分页器
+            sort: true, //是否启动各个字段的排序功能
+            stateSave: false,
+            stateDuration: 60 * 60 * 12,
+            autoWidth: true,
+            bProcessing: true,
+            paging: false,
+            columns: [
+                                    { data: "Id", title: "编号" },
+                                    { data: "BankCode", title: "开户银行代码" },
+                                    { data: "BankName", title: "开户银行名称" }
+            ],
+            oLanguage: {
                 "sLengthMenu": "每页显示 _MENU_ 条记录",
                 "sZeroRecords": "抱歉， 没有找到",
                 "sInfo": "显示 _START_ 到 _END_ 条记录，总共 _TOTAL_ 条记录",
@@ -121,6 +182,7 @@
                 "sInfoFiltered": "(从 _MAX_ 条数据中检索)",
                 "sZeroRecords": "没有检索到数据",
                 "sSearch": "搜索名称:",
+                "sSelected": "选中 _TOTAL_ 条记录",
                 "oPaginate": {
                     "sFirst": "首页",
                     "sPrevious": "前一页",
@@ -130,7 +192,6 @@
 
             }
         });
-
     }
 
 

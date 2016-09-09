@@ -10,14 +10,14 @@ using BEYON.ViewModel.App;
 
 namespace BEYON.CoreBLL.Service.App.Interface
 {
-    public interface IBankService
+    public interface IAuditOpinionService
     {
-        IQueryable<Bank> Banks { get; }
-        OperationResult Insert(BankVM model);
-        OperationResult Update(BankVM model);
+        IQueryable<AuditOpinion> AuditOpinions { get; }
+        OperationResult Insert(AuditOpinionVM model);
+        OperationResult Update(AuditOpinionVM model);
         OperationResult Delete(List<string> list);
-        OperationResult Delete(Bank model);
-        OperationResult Update(Bank model);
+        OperationResult Delete(AuditOpinion model);
+        OperationResult Update(AuditOpinion model);
         OperationResult Import(String fileName, Service.Excel.ColumnMap[] columns);
     }
 }
