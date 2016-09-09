@@ -106,6 +106,7 @@ namespace BEYON.Component.Data.EF.Interface
         /// <returns> 符合编号的记录，不存在返回null </returns>
         TEntity GetByKey(TKey key);
 
+        void InsertOrUpdate(IQueryable<TEntity> items);
         #endregion
     }
 }

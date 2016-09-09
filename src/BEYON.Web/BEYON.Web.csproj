@@ -192,6 +192,7 @@
     <Compile Include="Areas\Member\Controllers\UserController.cs" />
     <Compile Include="Areas\Member\Controllers\UserGroupController.cs" />
     <Compile Include="Areas\Member\MemberAreaRegistration.cs" />
+    <Compile Include="Extension\ClassConvert.cs" />
     <Compile Include="Extension\Common\DataSourceHelper.cs" />
     <Compile Include="Extension\Common\ValidationHelper.cs" />
     <Compile Include="Extension\Filters\IsAjaxAttribute.cs" />
@@ -623,6 +624,7 @@
     <Content Include="Areas\BasicDataManagement\Views\Web.config" />
     <Content Include="Areas\BasicDataManagement\Views\_ViewStart.cshtml" />
     <Content Include="Areas\BasicDataManagement\Views\Reimbursement\Create.cshtml" />
+    <Content Include="Areas\App\Views\Import\ImportData.cshtml" />
     <None Include="Properties\PublishProfiles\beyondb.pubxml" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Scripts\AdminLTE2.3.0\bootstrap\css\bootstrap.css" />
@@ -1506,7 +1508,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>16283</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:5181/</IISUrl>
+          <IISUrl>http://localhost:5182/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

@@ -76,7 +76,7 @@ namespace BEYON.CoreBLL.Service.Member
                 #endregion
             }
             if (result.ResultType != OperationResultType.Success) return result;
-            User userTemp = (User)result.AppendData;
+            User userTemp = (User)result.Data;
             DateTime expiration = loginVM.IsRememberLogin
                 ? DateTime.Now.AddDays(14)
                 : DateTime.Now.Add(FormsAuthentication.Timeout);
@@ -96,7 +96,7 @@ namespace BEYON.CoreBLL.Service.Member
                 cookie.Expires = DateTime.Now.AddDays(14);//此句非常重要，少了的话，就算此 Cookie 在身份验票中指定为持久性 Cookie ，也只是即时型的 Cookie 关闭浏览器后就失效；
             }
             HttpContext.Current.Response.Cookies.Set(cookie); //或Response.Cookies.Add(ck);添加至客户端
-            result.AppendData = null;
+            result.Data = null;
             return result;
         }
 

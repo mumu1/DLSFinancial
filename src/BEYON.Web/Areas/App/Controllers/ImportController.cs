@@ -29,16 +29,9 @@ namespace BEYON.Web.Areas.App.Controllers
 {
     public class ImportController : Controller
     {
-        //private readonly IImportService _importService;
-
-        //public ImportController(IImportService importService)
-        //{
-        //    this._importService = importService;
-        //}
-
-        public ActionResult ImportData()
+        public ActionResult ImportData(string url)
         {
-            return PartialView("ImportData");
+            return PartialView("ImportData", url);
         }
 
         [HttpPost]

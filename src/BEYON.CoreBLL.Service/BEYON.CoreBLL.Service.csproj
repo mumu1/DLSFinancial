@@ -74,6 +74,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Excel\ColumnMap.cs" />
+    <Compile Include="Excel\ExcelService.cs" />
     <Compile Include="App\Interface\IBankService.cs" />
     <Compile Include="App\Interface\ITitleService.cs" />
     <Compile Include="App\Interface\IRefundTypeService.cs" />

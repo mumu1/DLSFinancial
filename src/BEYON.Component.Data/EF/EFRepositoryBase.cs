@@ -217,6 +217,34 @@ namespace BEYON.Component.Data.EF
         }
         #endregion
 
+        public void InsertOrUpdate(IQueryable<TEntity> items)
+        {
+            foreach (var entity in items)
+            {
+                PublicHelper.CheckArgument(entity, "entity");
+                System.Data.Entity.Infrastructure.DbEntityEntry<TEntity> item = Context.Entry(entity);
+                if(item == null)
+                {
+                    Insert(entity);
+                }
+                else
+                {
+                    EntityState state = item.State;
+                    switch(state)
+                    {
+                        case EntityState.Modified:
+                            Update(entity);
+                            break;
+                        case EntityState.Detached:
+                        case EntityState.Added:
+                            Insert(entity);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+        }
         #endregion
 
     }

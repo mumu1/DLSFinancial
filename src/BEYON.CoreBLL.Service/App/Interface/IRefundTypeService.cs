@@ -16,5 +16,11 @@ namespace BEYON.CoreBLL.Service.App.Interface
         OperationResult Insert(RefundTypeVM model);
         OperationResult Update(RefundTypeVM model);
         OperationResult Delete(List<string> list);
+
+        OperationResult Delete(RefundType model);
+        OperationResult Update(RefundType model);
+
+        OperationResult Import(String fileName);
+
     }
 }

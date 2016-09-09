@@ -48,7 +48,7 @@ namespace BEYON.Component.Tools
         public OperationResult(OperationResultType resultType, string message, object appendData)
             : this(resultType, message)
         {
-            AppendData = appendData;
+            Data = appendData;
         }
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace BEYON.Component.Tools
         public OperationResult(OperationResultType resultType, string message, string logMessage, object appendData)
             : this(resultType, message, logMessage)
         {
-            AppendData = appendData;
+            Data = appendData;
         }
 
         #endregion
@@ -98,7 +98,7 @@ namespace BEYON.Component.Tools
         /// <summary>
         ///     获取或设置 操作结果附加信息
         /// </summary>
-        public object AppendData { get; set; }
+        public object Data { get; set; }
 
         #endregion
     }

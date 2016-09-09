@@ -37,5 +37,13 @@ namespace BEYON.Component.Tools
         /// </summary>
         [DataType(DataType.DateTime)]
         public DateTime UpdateDate { get; set; }
+
+        public String DT_RowId
+        {
+            get
+            {
+                return String.Format("row_{0}", Id);
+            }
+        }
     }
 }

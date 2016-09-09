@@ -7,6 +7,7 @@ using BEYON.CoreBLL.Service.App.Interface;
 using BEYON.Domain.Data.Repositories.App;
 using BEYON.Domain.Model.App;
 using BEYON.ViewModel.App;
+using BEYON.CoreBLL.Service.Excel;
 
 using EntityFramework.Extensions;
 
@@ -16,8 +17,6 @@ namespace BEYON.CoreBLL.Service.App
     public class RefundTypeService : CoreServiceBase, IRefundTypeService
     {
         private readonly IRefundTypeRepository _RefundTypeRepository;
-
-
 
         public RefundTypeService(IRefundTypeRepository refundTypeRepository, IUnitOfWork unitOfWork)
             : base(unitOfWork)
@@ -47,10 +46,9 @@ namespace BEYON.CoreBLL.Service.App
                     UpdateDate = DateTime.Now
                 };
                 _RefundTypeRepository.Insert(entity);
-
                 return new OperationResult(OperationResultType.Success, "新增数据成功！");
             }
-            catch
+            catch(Exception ex)
             {
                 return new OperationResult(OperationResultType.Error, "新增数据失败，数据库插入数据时发生了错误!");
             }
@@ -68,6 +66,34 @@ namespace BEYON.CoreBLL.Service.App
                 refund.RefundTypeCode = model.RefundTypeCode;
                 refund.UpdateDate = DateTime.Now;
                 _RefundTypeRepository.Update(refund);
+                return new OperationResult(OperationResultType.Success, "更新数据成功！");
+            }
+            catch
+            {
+                return new OperationResult(OperationResultType.Error, "更新数据失败!");
+            }
+        }
+
+        public OperationResult Update(RefundType model)
+        {
+            try
+            {
+                model.UpdateDate = DateTime.Now;
+                _RefundTypeRepository.Update(model);
+                return new OperationResult(OperationResultType.Success, "更新数据成功！");
+            }
+            catch
+            {
+                return new OperationResult(OperationResultType.Error, "更新数据失败!");
+            }
+        }
+
+        public OperationResult Delete(RefundType model)
+        {
+            try
+            {
+                model.UpdateDate = DateTime.Now;
+                _RefundTypeRepository.Delete(model);
                 return new OperationResult(OperationResultType.Success, "更新数据成功！");
             }
             catch
@@ -100,6 +126,20 @@ namespace BEYON.CoreBLL.Service.App
             catch
             {
                 return new OperationResult(OperationResultType.Error, "删除数据失败!");
+            }
+        }
+
+        public OperationResult Import(String fileName)
+        {
+            try
+            {
+                var items = ExcelService.GetObjects<RefundType>(fileName);
+                _RefundTypeRepository.InsertOrUpdate(items);
+                return new OperationResult(OperationResultType.Success, "导入数据成功！");
+            }
+            catch(Exception ex)
+            {
+                return new OperationResult(OperationResultType.Error, "导入数据失败!");
             }
         }
     }
