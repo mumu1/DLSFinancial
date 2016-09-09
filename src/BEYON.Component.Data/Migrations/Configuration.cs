@@ -32,7 +32,7 @@ namespace BEYON.Component.Data.Migrations
             //      new Person { FullName = "Rowan Miller" }
             //    );
             //
-#if DEBUG1
+#if DEBUG
             #region 模块管理
            List<Module> modules = new List<Module>
             {
@@ -52,7 +52,7 @@ namespace BEYON.Component.Data.Migrations
                 new Module { Id = 14, ParentId = 12, Name = "职称字典表", LinkUrl = "~/BasicDataManagement/Professional/Index",  Code = 402, Description = null, IsMenu = true, Enabled = true,  UpdateDate = DateTime.Now},
                 new Module { Id = 15, ParentId = 12, Name = "开户银行字典表", LinkUrl = "~/BasicDataManagement/BankAccount/Index",  Code = 403, Description = null, IsMenu = true, Enabled = true,  UpdateDate = DateTime.Now},
                 new Module { Id = 16, ParentId = 12, Name = "工资基础表初始化", LinkUrl = "~/BasicDataManagement/WageBaseTable/Index",  Code = 404,Description = null, IsMenu = true, Enabled = true, UpdateDate = DateTime.Now},
-                //~/SysConfig/OperateLog/Index
+                new Module { Id = 17, ParentId = 12, Name = "审核意见字典表", LinkUrl = "~/BasicDataManagement/AuditOption/Index",  Code = 405,Description = null, IsMenu = true, Enabled = true, UpdateDate = DateTime.Now}
             };
             DbSet<Module> moduleSet = context.Set<Module>();
             moduleSet.AddOrUpdate(t => new { t.Code }, modules.ToArray());
@@ -114,6 +114,7 @@ namespace BEYON.Component.Data.Migrations
              new Permission{Id=28, Name="操作",Code=EnumPermissionCode.Audit.ToString(), Description="职称字典表" ,Enabled=true,UpdateDate=DateTime.Now,module=modules[13]},
              new Permission{Id=29, Name="操作",Code=EnumPermissionCode.Audit.ToString(), Description="开户银行字典表" ,Enabled=true,UpdateDate=DateTime.Now,module=modules[14]},
              new Permission{Id=30, Name="操作",Code=EnumPermissionCode.Audit.ToString(), Description="工资基础表初始化" ,Enabled=true,UpdateDate=DateTime.Now,module=modules[15]},
+             new Permission{Id=31, Name="操作",Code=EnumPermissionCode.Audit.ToString(), Description="审核意见字典表" ,Enabled=true,UpdateDate=DateTime.Now,module=modules[16]}
             #endregion
             };
             DbSet<Permission> permissionSet = context.Set<Permission>();
