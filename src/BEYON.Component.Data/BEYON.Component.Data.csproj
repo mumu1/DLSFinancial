@@ -66,6 +66,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configurations\App\AuditOpinionConfiguration.generated.cs" />
+    <Compile Include="Configurations\App\AuditStatusConfiguration.generated.cs" />
     <Compile Include="Configurations\Member\Mapping\ModuleConfiguration.cs" />
     <Compile Include="Configurations\Member\Mapping\PermissionConfiguration.cs" />
     <Compile Include="Configurations\Member\ModuleConfiguration.generated.cs" />

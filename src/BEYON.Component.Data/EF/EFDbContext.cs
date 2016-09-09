@@ -55,6 +55,10 @@ namespace BEYON.Component.Data.EF
 
         public DbSet<Bank> Banks { get; set; }
 
+        public DbSet<AuditStatus> AuditStatuss { get; set; }
+
+        public DbSet<AuditOpinion> AuditOpinions { get; set; }
+
         public DbSet<TaxBaseByMonth> TaxBaseByMonths { get; set; }
 
 
@@ -87,6 +91,8 @@ namespace BEYON.Component.Data.EF
             modelBuilder.Configurations.Add(new RefundTypeConfiguration());
             modelBuilder.Configurations.Add(new BankConfiguration());
             modelBuilder.Configurations.Add(new TaxBaseByMonthConfiguration());
+            modelBuilder.Configurations.Add(new AuditStatusConfiguration());
+            modelBuilder.Configurations.Add(new AuditOpinionConfiguration());
             //if (EntityMappers == null)
             //{
             //    return;
