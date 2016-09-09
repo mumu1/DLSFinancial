@@ -20,7 +20,7 @@ namespace BEYON.CoreBLL.Service.App.Interface
         OperationResult Delete(RefundType model);
         OperationResult Update(RefundType model);
 
-        OperationResult Import(String fileName);
+        OperationResult Import(String fileName, Service.Excel.ColumnMap[] columns);
 
     }
 }

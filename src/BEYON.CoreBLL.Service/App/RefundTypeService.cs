@@ -129,11 +129,11 @@ namespace BEYON.CoreBLL.Service.App
             }
         }
 
-        public OperationResult Import(String fileName)
+        public OperationResult Import(String fileName, Service.Excel.ColumnMap[] columns)
         {
             try
             {
-                var items = ExcelService.GetObjects<RefundType>(fileName);
+                var items = ExcelService.GetObjects<RefundType>(fileName, columns);
                 _RefundTypeRepository.InsertOrUpdate(items);
                 return new OperationResult(OperationResultType.Success, "导入数据成功！");
             }

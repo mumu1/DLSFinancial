@@ -14,7 +14,7 @@ namespace BEYON.CoreBLL.Service.Excel
 
     public class ImportData
     {
-        String ActionUrl { get; set; }
-        ColumnMap[] columns { get; set; }
+        public String ActionUrl { get; set; }
+        public ColumnMap[] Columns { get; set; }
     }
 }

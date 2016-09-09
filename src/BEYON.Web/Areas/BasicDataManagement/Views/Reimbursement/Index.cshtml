@@ -134,13 +134,28 @@
                 {
                     text: "导入",
                     action: function (e, dt, node, config) {
+                        var ColumnDatas = [];
                         var columns = dt.settings().init().columns;
                         dt.columns().every(function (index) {
-                            console.log(columns[index].data);
-                            console.log(columns[index].title);
+                            ColumnDatas.push({ ColumnName: columns[index].data, TitleName: columns[index].title })
                         })
 
-                        $('#importDataDialog').load('../App/Import/ImportData', { url: "@Url.Action("Import")" });
+                        $.ajax({
+                            url: '../App/Import/ImportData',
+                            type: 'POST',
+                            data: JSON.stringify({ ActionUrl: "@Url.Action("Import")", Columns: ColumnDatas }),
+                            contentType: 'application/json; charset=utf8',
+                            cache: false,
+                            dataType: 'html',
+                            success: function (data) {
+                                $('#importDataDialog').html(data);
+                            },
+                            error: function (xhr) {
+                                alert("出现错误，请稍后再试:" + xhr.responseText);
+                            }
+                        });
+
+                        //$('#importDataDialog').load('../App/Import/ImportData', );
                     }
                 },
                 {
