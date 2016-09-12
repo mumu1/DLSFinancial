@@ -71,6 +71,8 @@ namespace BEYON.Web
             builder.RegisterType<AuditOpinionRepository>().As<IAuditOpinionRepository>().InstancePerHttpRequest();
             builder.RegisterType<ApplicationFormService>().As<IApplicationFormService>().InstancePerHttpRequest();
             builder.RegisterType<ApplicationFormRepository>().As<IApplicationFormRepository>().InstancePerHttpRequest();
+            builder.RegisterType<TaxBaseByMonthService>().As<ITaxBaseByMonthService>().InstancePerHttpRequest();
+            builder.RegisterType<TaxBaseByMonthRepository>().As<ITaxBaseByMonthRepository>().InstancePerHttpRequest();
           
             #endregion
             // then

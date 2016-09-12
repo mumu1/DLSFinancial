@@ -59,11 +59,13 @@
     <Compile Include="Repositories\App\Impl\BankRepository.generated.cs" />
     <Compile Include="Repositories\App\Impl\ApplicationFormRepository.generated.cs" />
     <Compile Include="Repositories\App\Impl\AuditOpinionRepository.generated.cs" />
+    <Compile Include="Repositories\App\Impl\TaxBaseByMonthRepository.generated.cs" />
     <Compile Include="Repositories\App\Impl\TitleRepository.generated.cs" />
     <Compile Include="Repositories\App\Impl\RefundTypeRepository.generated.cs" />
     <Compile Include="Repositories\App\IBankRepository.generated.cs" />
     <Compile Include="Repositories\App\IApplicationFormRepository.generated.cs" />
     <Compile Include="Repositories\App\IAuditOpinionRepository.generated.cs" />
+    <Compile Include="Repositories\App\ITaxBaseByMonthRepository.generated.cs" />
     <Compile Include="Repositories\App\ITitleRepository.generated.cs" />
     <Compile Include="Repositories\App\IRefundTypeRepository.generated.cs" />
     <Compile Include="Repositories\Member\IModuleRepository.cs" />
