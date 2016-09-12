@@ -74,6 +74,28 @@ namespace BEYON.Web
                             }
                             
                         }
+                        else if(pi.PropertyType.Equals(typeof(Double)))
+                        {
+                            try
+                            {
+                                pi.SetValue(t, Double.Parse(value.ToString()));
+                            }
+                            catch
+                            {
+
+                            }
+                        }
+                        else if(pi.PropertyType.Equals(typeof(float)))
+                        {
+                            try
+                            {
+                                pi.SetValue(t, float.Parse(value.ToString()));
+                            }
+                            catch
+                            {
+
+                            }
+                        }
                         else
                         {
                             pi.SetValue(t, value);
