@@ -1,63 +1,47 @@
-﻿@using BEYON.Domain.Model.Member
-@{
+﻿@using BEYON.Domain.Model.App
 
-}
+<div id="content" style="overflow-y: auto; height: 100%; opacity: 1;">
+    <div class="content-wrapper">     
+        <!-- widget div-->
 
-<div class="content-wrapper">
-    <!-- Main content -->
-    <section class="content" id="permissionSection">
-        <div class="panel-body" style="padding-bottom:0px;">
-            <div class="panel panel-default">
-                <div class="panel-heading">申请单查询条件</div>
-                <div class="panel-body">
-                    <form id="formSearch" class="form-horizontal">
-                        <div class="form-group" style="margin-top: 15px">
-                            <label class="control-label  col-sm-1" for="txt_search_permissionname">权限名称</label>
-                            <div class=" col-sm-3">
-                                <input type="text" class="form-control" id="txt_search_permissionname">
-                            </div>
-                            <label class="control-label col-sm-1">是否激活</label>
-                            <div class="col-sm-4" style="text-align:right;">
-                                <button type="button" style="margin-right:100px" id="btn_query" class="btn btn-primary">查询</button>
-                            </div>
-                        </div>
-                    </form>
+        <div class="jarviswidget jarviswidget-color-darken jarviswidget-sortable" id="wid-id-0" data-widget-editbutton="false" role="widget">
+            <!-- widget options:
+            usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+            data-widget-colorbutton="false"
+            data-widget-editbutton="false"
+            data-widget-togglebutton="false"
+            data-widget-deletebutton="false"
+            data-widget-fullscreenbutton="false"
+            data-widget-custombutton="false"
+            data-widget-collapsed="true"
+            data-widget-sortable="false"
+
+            -->
+            <!-- widget div-->
+            <div>
+
+                <!-- widget edit box -->
+                <div class="jarviswidget-editbox">
+                    <!-- This area used as dropdown edit box -->
+
                 </div>
-            </div>
-
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <div class="jarviswidget jarviswidget-color-darken jarviswidget-sortable" id="wid-id-0" data-widget-editbutton="false" role="widget">
-                        <div>
-
-                            <!-- widget edit box -->
-                            <div class="jarviswidget-editbox">
-                                <!-- This area used as dropdown edit box -->
-
-                            </div>
-                            <!-- end widget edit box -->
-                            <!-- widget content -->
-                            <div class="widget-body">
-                                <table id="datatable_tabletools" class="table table-striped table-bordered table-hover" width="100%"></table>
-                            </div>
-                            <!-- end widget content -->
-
-                        </div>
-                        <!-- end widget div -->
-                    </div>
-                    <!-- end widget -->
+                <!-- end widget edit box -->
+                <!-- widget content -->
+                <div class="widget-body">
+                    <table id="datatable_tabletools" class="table table-striped table-bordered table-hover" width="100%"></table>
                 </div>
+                <!-- end widget content -->
+
             </div>
+            <!-- end widget div -->
         </div>
-        @Html.Partial("_ModalForm")
-    </section><!-- /.content -->
-</div><!-- /.content-wrapper -->
-@*@section scripts{*@
+        <!-- end widget -->
+    </div>
 
-<script src="@Url.Content("~/Scripts/jquery.validate.min.js")"></script>
-<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")"></script>
-<script src="@Url.Content("~/Scripts/Custom/TableOperation.js")"></script>
-<script src="@Url.Content("~/Scripts/Custom/ModalForm.js")"></script>
+    <div id="importDataDialog"></div>
+</div>
+
 
 <script>
     pageSetUp();
@@ -144,6 +128,7 @@
         //    ]
         //}
 
+
         table = $('#datatable_tabletools').dataTable({
             dom: 'Bfrtip',
             ajax: '@Url.Action("GetAllData")',
@@ -163,13 +148,13 @@
                 { data: "SerialNumber", title: "申请单流水号" },
                 { data: "ProjectNumber", title: "课题号" },
                 { data: "RefundType", title: "报销事由" },
-                { data: "ProjectDirector", title: "课题负责人", visible: false },
-                { data: "Agent", title: "经办人" },
-                { data: "SubmitTime", title: "提交时间" },
+                { data: "ProjectDirector", title: "课题负责人"},
+                { data: "Agent", title: "经办人" },              
+                { data: "Summation", title: "报销合计"},
                 { data: "AuditStatus", title: "审核状态" },
+                { data: "SubmitTime", title: "提交时间" , visible: false},
                 { data: "AuditTime", title: "审核时间", visible: false },
-                { data: "AuditOpinion", title: "审核意见", visible: false },
-                { data: "Summation", title: "报销合计", visible: false }
+                { data: "AuditOpinion", title: "审核意见", visible: false },             
             ],
             oLanguage: {
                 "sLengthMenu": "每页显示 _MENU_ 条记录",

@@ -79,7 +79,9 @@
     <Compile Include="App\Interface\IApplicationFormService.cs" />
     <Compile Include="App\ApplicationFormService.cs" />
     <Compile Include="App\Interface\ITaxBaseByMonthService.cs" />
+    <Compile Include="App\Interface\IPersonalRecordService.cs" />
     <Compile Include="App\TaxBaseByMonthService.cs" />
+    <Compile Include="App\PersonalRecordService.cs" />
     <Compile Include="Excel\ColumnMap.cs" />
     <Compile Include="Excel\ExcelService.cs" />
     <Compile Include="App\Interface\IBankService.cs" />

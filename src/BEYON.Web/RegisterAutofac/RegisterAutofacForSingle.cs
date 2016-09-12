@@ -73,6 +73,8 @@ namespace BEYON.Web
             builder.RegisterType<ApplicationFormRepository>().As<IApplicationFormRepository>().InstancePerHttpRequest();
             builder.RegisterType<TaxBaseByMonthService>().As<ITaxBaseByMonthService>().InstancePerHttpRequest();
             builder.RegisterType<TaxBaseByMonthRepository>().As<ITaxBaseByMonthRepository>().InstancePerHttpRequest();
+            builder.RegisterType<PersonalRecordService>().As<IPersonalRecordService>().InstancePerHttpRequest();
+            builder.RegisterType<PersonalRecordRepository>().As<IPersonalRecordRepository>().InstancePerHttpRequest();
           
             #endregion
             // then
