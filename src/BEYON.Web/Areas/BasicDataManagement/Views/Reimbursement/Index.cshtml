@@ -106,6 +106,7 @@
 
         table = $('#datatable_tabletools').dataTable({
             dom: 'Bfrtip',
+            colReorder: true,
             ajax : '@Url.Action("GetAllData")',
             buttons: [
                 {
@@ -163,7 +164,8 @@
                     action: function (e, dt, node, config) {
                         dt.ajax.reload();
                     }
-                }
+                },
+                { text: "列显示", extend: 'colvis' }
             ],
             searching: true,
             ordering: true,
