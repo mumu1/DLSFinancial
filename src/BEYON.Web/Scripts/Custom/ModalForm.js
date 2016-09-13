@@ -29,6 +29,29 @@ function ShowModal(actionUrl, param, title) {
     });
 }
 
+/*******弹出表单*********/
+function ShowModal2(actionUrl, param, title) {
+    var $content = $("#content");
+    $.ajax({
+        type: "GET",
+        url: actionUrl,
+        data: param,
+        beforeSend: function () {
+            //
+        },
+        success: function (result) {
+            $(".content-wrapper").hide(100);
+            $content.append(result);
+        },
+        error: function () {
+            //
+        },
+        complete: function () {
+            //
+        }
+    });
+}
+
 /*******注册验证脚本，通过Ajax返回的页面原有MVC属性验证将失效，需要重新注册验证脚本*********/
 function RegisterForm() {
     $('#modal-content').removeData('validator');

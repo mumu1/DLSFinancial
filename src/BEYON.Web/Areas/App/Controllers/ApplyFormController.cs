@@ -39,6 +39,7 @@ namespace BEYON.Web.Areas.App.Controllers
         {
             return PartialView();
         }
+
         // GET: /App/ApplyForm/GetAllData/
         public ActionResult GetAllData()
         {
@@ -47,20 +48,41 @@ namespace BEYON.Web.Areas.App.Controllers
 
         }
 
+      
         // POST: /App/ApplyForm/Create/
-        [HttpPost]
         public ActionResult Create()
         {
-            ApplicationFormVM[] datas = ClassConvert<ApplicationFormVM>.Process(Request.Form);
-            var result = _applicationFormService.Insert(datas[0]);
-            if (result.ResultType != OperationResultType.Success)
-                return Json(new { error = result.ResultType.GetDescription(), total = 1, data = this._applicationFormService.ApplicationForms.ToArray() });
-            else
+            //产生流水线号
+            var model = new ApplicationFormVM()
             {
-                ApplicationForm[] results = this._applicationFormService.ApplicationForms.ToArray();
-                return Json(new { total = 1, data = new[] { results[results.Length - 1] } });
-            }
+                SerialNumber = "1"
+            };
+            return PartialView(model);
+        }
 
+        //[HttpPost]
+        //public ActionResult Create(RoleVM roleVm)
+        //{
+        //    if (!ModelState.IsValid) return Json(new OperationResult(OperationResultType.ParamError, "参数错误，请重新检查输入"));
+        //    var result = _roleService.Insert(roleVm);
+        //    result.Message = result.Message ?? result.ResultType.GetDescription();
+        //    return Json(result);
+        //}
+
+
+        //
+        // GET: /Member/Role/Edit/5
+        [IsAjax]
+        public ActionResult Edit(int id = 0)
+        {
+            var application = _applicationFormService.ApplicationForms.FirstOrDefault(c => c.Id == id);
+            if (application == null) 
+                return PartialView("Create", new ApplicationFormVM());
+            var model = new ApplicationFormVM()
+            {
+                //ToDo 传值
+            };
+            return PartialView("Create", model);
         }
 
         // POST: /App/ApplyForm/Edit/
@@ -99,6 +121,16 @@ namespace BEYON.Web.Areas.App.Controllers
             return Json(new { total = datas.Length, data = datas }, JsonRequestBehavior.AllowGet);
         }
 
-      
+
+        #region Personal操作
+
+        // GET: /App/ApplyForm/GetPersonalData/
+        public ActionResult GetPersonalData(String serialNumber)
+        {
+            var result = this._personalRecordService.PersonalRecords.Where(t=>t.SerialNumber == serialNumber).ToList();
+            return Json(new { total = result.Count, data = result }, JsonRequestBehavior.AllowGet);
+
+        }
+        #endregion
     }
 }

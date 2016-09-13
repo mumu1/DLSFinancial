@@ -1,47 +1,14 @@
 ﻿@using BEYON.Domain.Model.App
 
-<div id="content" style="overflow-y: auto; height: 100%; opacity: 1;">
-    <div class="content-wrapper">     
-        <!-- widget div-->
-
-        <div class="jarviswidget jarviswidget-color-darken jarviswidget-sortable" id="wid-id-0" data-widget-editbutton="false" role="widget">
-            <!-- widget options:
-            usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
-
-            data-widget-colorbutton="false"
-            data-widget-editbutton="false"
-            data-widget-togglebutton="false"
-            data-widget-deletebutton="false"
-            data-widget-fullscreenbutton="false"
-            data-widget-custombutton="false"
-            data-widget-collapsed="true"
-            data-widget-sortable="false"
-
-            -->
-            <!-- widget div-->
-            <div>
-
-                <!-- widget edit box -->
-                <div class="jarviswidget-editbox">
-                    <!-- This area used as dropdown edit box -->
-
-                </div>
-                <!-- end widget edit box -->
-                <!-- widget content -->
-                <div class="widget-body">
-                    <table id="datatable_tabletools" class="table table-striped table-bordered table-hover" width="100%"></table>
-                </div>
-                <!-- end widget content -->
-
-            </div>
-            <!-- end widget div -->
-        </div>
-        <!-- end widget -->
+<div class="content-wrapper">
+    <div class="widget-body">
+        <table id="datatable_tabletools" class="table table-striped table-bordered table-hover" width="100%"></table>
     </div>
-
-    <div id="importDataDialog"></div>
 </div>
 
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")"></script>
+<script src="@Url.Content("~/Scripts/Custom/ModalForm.js")"></script>
 
 <script>
     pageSetUp();
@@ -79,7 +46,9 @@
         var buttons = [
             {
                 text: "新增", action: function (e, dt, node, config) {
-
+                    var actionUrl = "@Url.Action("Create")";
+                    var param = {};
+                    ShowModal2(actionUrl, param, "新增申请单");
                 }
             },
             {
@@ -184,7 +153,7 @@
         
     }
 </script>
-@*}*@
+
 
 
 
