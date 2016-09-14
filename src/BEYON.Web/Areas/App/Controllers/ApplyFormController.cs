@@ -57,7 +57,8 @@ namespace BEYON.Web.Areas.App.Controllers
             var serialNumber = String.Format("DLS{0} {1}", timeNow.ToString(), timeNow.Millisecond);
             var model = new ApplicationFormVM()
             {
-                SerialNumber = serialNumber
+                SerialNumber = serialNumber,
+                AuditStatus = "待提交"
             };
             return PartialView(model);
         }
@@ -139,6 +140,7 @@ namespace BEYON.Web.Areas.App.Controllers
             ApplicationForm form = _applicationFormService.ApplicationForms.FirstOrDefault(t => t.SerialNumber == formVM.SerialNumber);
             if (form == null)
             {
+                //formVM.SubmitTime = DateTime.Now;
                 _applicationFormService.Insert(formVM);
             }
             else
