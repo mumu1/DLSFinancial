@@ -140,8 +140,22 @@
                 { data: "Agent", title: "经办人" },              
                 { data: "Summation", title: "报销合计"},
                 { data: "AuditStatus", title: "审核状态" },
-                { data: "SubmitTime", title: "提交时间" , visible: false},
-                { data: "AuditTime", title: "审核时间", visible: false },
+                {
+                    data: "SubmitTime", title: "提交时间", type: "date", visible: false,
+                    "render": function (data, type, full, meta) {
+                        var dtStart = new Date(parseInt(data.substr(6)));
+                        return dtStart.getFullYear() + '-' + dtStart.getMonth() + '-' + dtStart.getDate();
+                        //return dtStart.toString();
+                    }
+                },
+                {
+                    data: "AuditTime", title: "审核时间", type: "date", visible: false,
+                    "render": function (data, type, full, meta) {
+                        var dtStart = new Date(parseInt(data.substr(6)));
+                        return dtStart.getFullYear() + '-' + dtStart.getMonth() + '-' + dtStart.getDate();
+                        //return dtStart.toString();
+                    }
+                },
                 { data: "AuditOpinion", title: "审核意见", visible: false },             
             ],
             oLanguage: {
