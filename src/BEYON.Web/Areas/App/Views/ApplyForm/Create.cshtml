@@ -73,9 +73,9 @@
                             <section class="col col-2">
                                 <label class="label">报销事由</label>
                                 <label class="select">
-                                    <select name="country">
-                                        <option value="0" selected="">劳务</option>
-                                        <option value="1">报告</option>
+                                    <select name="RefundType">
+                                        <option value="劳务" selected="">劳务</option>
+                                        <option value="报告">报告</option>
                                     </select> <i></i>
                                 </label>
                             </section>
@@ -341,7 +341,14 @@
                 data: $('#apply-form').serialize(),
                 success: function (result) {
                     //保存列表信息 
-                    var rowDatas = $('#datatable_create_form').DataTable().rows().data();
+                    var rows = $('#datatable_create_form').DataTable().rows();
+                    if (rows.count() < 1) {
+                        $('#datatable_tabletools').DataTable().ajax.reload();
+                        closeFrom();
+                        return;
+                    }
+
+                    var rowDatas = rows.data();
                     var queryDatas = [];
                     $.each($(rowDatas), function (key, value) {
                         queryDatas.push(value);
