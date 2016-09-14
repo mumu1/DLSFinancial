@@ -53,9 +53,11 @@ namespace BEYON.Web.Areas.App.Controllers
         public ActionResult Create()
         {
             //产生流水线号
+            var timeNow = System.DateTime.Now;
+            var serialNumber = String.Format("DLS{0} {1}", timeNow.ToString(), timeNow.Millisecond);
             var model = new ApplicationFormVM()
             {
-                SerialNumber = "1"
+                SerialNumber = serialNumber
             };
             return PartialView(model);
         }
@@ -131,7 +133,20 @@ namespace BEYON.Web.Areas.App.Controllers
             return Json(new { total = datas.Length, data = datas }, JsonRequestBehavior.AllowGet);
         }
 
-
+        [HttpPost]
+        public ActionResult Save(ApplicationFormVM formVM)
+        {
+            ApplicationForm form = _applicationFormService.ApplicationForms.FirstOrDefault(t => t.SerialNumber == formVM.SerialNumber);
+            if (form == null)
+            {
+                _applicationFormService.Insert(formVM);
+            }
+            else
+            {
+                _applicationFormService.Update(formVM);
+            }
+            return Json(new { }, JsonRequestBehavior.AllowGet);
+        }
         #region Personal操作
 
         // GET: /App/ApplyForm/GetPersonalData/
@@ -141,6 +156,85 @@ namespace BEYON.Web.Areas.App.Controllers
             return Json(new { total = result.Count, data = result }, JsonRequestBehavior.AllowGet);
 
         }
+
+        // POST: /BasicDataManagement/Reimbursement/Create/
+        [HttpPost]
+        public ActionResult CreatePersonal()
+        {
+            PersonalRecordVM[] recordVMs = ClassConvert<PersonalRecordVM>.Process(Request.Form);
+            var result = _personalRecordService.Insert(recordVMs[0], false);
+            var entity = new PersonalRecord
+            {
+                //Id = (int)System.DateTime.Now.Ticks,
+                SerialNumber = recordVMs[0].SerialNumber,
+                Name = recordVMs[0].Name,
+                CertificateID = recordVMs[0].CertificateID,
+                CertificateType = recordVMs[0].CertificateType,
+                Company = recordVMs[0].Company,
+                Tele = recordVMs[0].Tele,
+                PersonType = recordVMs[0].PaymentType,
+                Nationality = recordVMs[0].Nationality,
+                Title = recordVMs[0].Title,
+                Amount = recordVMs[0].Amount,
+                TaxOrNot = recordVMs[0].TaxOrNot,
+                Bank = recordVMs[0].Bank,
+                AccountName = recordVMs[0].AccountName,
+                AccountNumber = recordVMs[0].AccountNumber,
+                PaymentType = recordVMs[0].PaymentType,
+                UpdateDate = DateTime.Now
+            };
+
+            if (result.ResultType != OperationResultType.Success)
+                return Json(new { error = result.Message, total = 1, data = new[] { entity } });
+            else
+            {
+                return Json(new { total = 1, data = new[] { entity } });
+            }
+        }
+
+        [HttpPost]
+        public ActionResult EditPersonal()
+        {
+            PersonalRecord[] datas = ClassConvert<PersonalRecord>.Process(Request.Form);
+            foreach (var data in datas)
+            {
+                var result = _personalRecordService.Update(data, false);
+                result.Message = result.Message ?? result.ResultType.GetDescription();
+                if (result.ResultType != OperationResultType.Success)
+                {
+                    return Json(new { error = result.ResultType.GetDescription(), total = datas.Length, data = datas });
+                }
+            }
+
+            return Json(new { total = datas.Length, data = datas }, JsonRequestBehavior.AllowGet);
+        }
+
+        // POST: /App/ApplyForm/DeletePersonal/
+        public ActionResult DeletePersonal()
+        {
+            List<string> serialNumberList = new List<string>();
+            PersonalRecord[] datas = ClassConvert<PersonalRecord>.Process(Request.Form);
+            foreach (var data in datas)
+            {
+                serialNumberList.Add(data.SerialNumber);
+            }
+            _personalRecordService.Delete(serialNumberList, false);
+            return Json(new { total = datas.Length, data = datas }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult InsertOrUpdatePersonal(PersonalRecordVM[] datas)
+        {
+            _personalRecordService.Delete(new List<String>() { datas[0].SerialNumber });
+
+            foreach (var data in datas)
+            {
+                _personalRecordService.Insert(data);
+            }
+
+            return Json(new { }, JsonRequestBehavior.AllowGet);
+        }
+
         #endregion
     }
 }

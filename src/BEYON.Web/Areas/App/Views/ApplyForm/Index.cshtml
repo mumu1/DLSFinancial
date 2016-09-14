@@ -32,7 +32,6 @@
     function initTable() {
         var editor = new $.fn.dataTable.Editor({
             "ajaxUrl": {
-                "edit": "@Url.Action("Edit")",
                 "remove": "@Url.Action("Delete")"
             },
             "table": "#datatable_tabletools",
@@ -69,9 +68,7 @@
                     var rowData = rows.data();
                     $.each($(rowData), function (key, value) {
                         var param = { SerialNumber: value["SerialNumber"] };
-                        ShowModal2(actionUrl, param, "修改申请单", function () {
-                            //dt.ajax.reload();
-                        });
+                        ShowModal2(actionUrl, param, "修改申请单");
                     });
                 }
             },

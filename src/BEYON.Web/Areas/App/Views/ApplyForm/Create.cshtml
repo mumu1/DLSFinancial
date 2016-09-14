@@ -44,7 +44,7 @@
         <div role="content">
             <!-- widget content -->
             <div class="widget-body no-padding">
-                <form action="" id="apply-form" class="smart-form" style="padding-left:8px;padding-right:8px;">
+                <form action="" id="apply-form" class="smart-form" style="padding-left:8px;padding-right:8px;" onsubmit="return saveApply();">
                     <fieldset>
                         <section>
                             <div class="note" style="padding-left:15px;">
@@ -67,7 +67,7 @@
                                 <label class="label">课题号</label>
                                 <label class="input">
                                     <i class="icon-prepend fa fa-info"></i>
-                                    <input type="text" name="fname" placeholder="课题号" value="@Model.ProjectNumber">
+                                    <input type="text" name="ProjectNumber" placeholder="课题号" value="@Model.ProjectNumber">
                                 </label>
                             </section>
                             <section class="col col-2">
@@ -83,21 +83,21 @@
                                 <label class="label">课题负责人</label>
                                 <label class="input">
                                     <i class="icon-prepend fa fa-user"></i>
-                                    <input type="text" name="email" placeholder="课题负责人" value="@Model.ProjectDirector">
+                                    <input type="text" name="ProjectDirector" placeholder="课题负责人" value="@Model.ProjectDirector">
                                 </label>
                             </section>
                             <section class="col col-2">
                                 <label class="label">经办人</label>
                                 <label class="input">
                                     <i class="icon-prepend fa fa-user"></i>
-                                    <input type="text" name="phone" placeholder="经办人" value="@Model.Agent">
+                                    <input type="text" name="Agent" placeholder="经办人" value="@Model.Agent">
                                 </label>
                             </section>
                             <section class="col col-2">
                                 <label class="label">合计金额</label>
                                 <label class="input">
                                     <i class="icon-prepend fa fa-yen"></i>
-                                    <input type="number" name="total" disabled="disabled" placeholder="" value="@Model.Summation">
+                                    <input type="number" name="Summation" disabled="disabled" placeholder="" value="@Model.Summation">
                                 </label>
                             </section>
                         </div>
@@ -105,10 +105,10 @@
                         <section>
                             <label class="label">关于工作内容、工作时间等的描述(必填)</label>
                             <label class="textarea">
-                                <textarea rows="3" name="info" style="float:left;" placeholder=" 关于工作内容、工作时间等的描述(必填)">@Model.AuditOpinion</textarea>
+                                <textarea rows="3" name="AuditOpinion" style="float:left;" placeholder=" 关于工作内容、工作时间等的描述(必填)">@Model.AuditOpinion</textarea>
                             </label>
                         </section>
-
+                        <input type="text" name="SerialNumber" placeholder="流水账号" style="visibility:hidden" value="@Model.SerialNumber">
                     </fieldset>
                     <fieldset>
                         <section>
@@ -117,7 +117,7 @@
                     </fieldset>
                     <footer>
                         <button type="submit" name="submit" class="btn btn-primary">保存</button>
-                        <button type="button" class="btn btn-default">取消</button>
+                        <button type="button" class="btn btn-default" onclick="closeFrom();">取消</button>
                     </footer>
                 </form>
 
@@ -128,19 +128,18 @@
     <!-- end widget div -->
 </section>
 
-    <script type="text/javascript" src="js/plugin/jquery-form/jquery-form.min.js"></script>
-
     <script>
         pageSetUp();
 
         var editor = new $.fn.dataTable.Editor({
             "ajaxUrl": {
-                "create": "@Url.Action("Create")",
-                "edit": "@Url.Action("Edit")",
-                "remove": "@Url.Action("Delete")"
+                "create": "@Url.Action("CreatePersonal")",
+                "edit": "@Url.Action("EditPersonal")",
+                "remove": "@Url.Action("DeletePersonal")"
             },
             "table": "#datatable_create_form",
             fields: [
+                { name: "Id", label: "编号:", type: "hidden" },
                 { name: "SerialNumber", label: "申请单流水号:", type: "hidden" },
                 { name: "Name", label: "姓名:", type: "text" },
                 { name: "Company", label: "单位:", type: "text" },
@@ -220,7 +219,7 @@
         });
 
         //提交前条件判断
-        editor.on('preSubmit', function (e, o, action) {
+        editor.on('preSubmit', function (e, data, action) {
             if (action !== 'remove') {
                 //var firstName = editor.field('first_name');
                 //if (!firstName.isMultiValue()) {
@@ -239,6 +238,7 @@
                 }
 
                 if (action === 'create') {
+                    data.data[0].SerialNumber = "@Model.SerialNumber";
                     return true;
                 }
 
@@ -284,6 +284,7 @@
                 buttons: buttons,
                 columns: [
                     //{ data: "SerialNumber", title: "申请单流水号", visible: false },
+                    { data: "Id", title: "编号", visible: false },
                     { data: "Name", title: "姓名" },
                     { data: "CertificateType", title: "证件类型" },
                     { data: "CertificateID", title: "证件号码" },
@@ -321,4 +322,46 @@
         }
 
         initTable();
+
+        function closeFrom() {
+            if ($("#widget-grid")[0]) {
+                $("#widget-grid").jarvisWidgets("destroy");
+                $("#widget-grid").remove();
+            }
+
+            if ($(".content-wrapper")[0]) {
+                $(".content-wrapper").show()
+            }
+        }
+
+        function saveApply() {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("Save")",
+                data: $('#apply-form').serialize(),
+                success: function (result) {
+                    //保存列表信息 
+                    var rowDatas = $('#datatable_create_form').DataTable().rows().data();
+                    var queryDatas = [];
+                    $.each($(rowDatas), function (key, value) {
+                        queryDatas.push(value);
+                    });
+                    //var datas = table.rows().data();
+                    $.ajax({
+                        type: "POST",
+                        url: "@Url.Action("InsertOrUpdatePersonal")",
+                        data: JSON.stringify(queryDatas),
+                        contentType: "application/json",
+                        success: function (result) {
+                            $('#datatable_tabletools').DataTable().ajax.reload();
+                            closeFrom();
+                        }
+                    })
+                },
+                error: function (data) {
+                    toastr.error(data.responseText);
+                }
+            });
+            return false;
+        }
     </script>

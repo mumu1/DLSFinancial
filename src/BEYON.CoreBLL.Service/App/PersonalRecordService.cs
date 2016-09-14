@@ -28,7 +28,7 @@ namespace BEYON.CoreBLL.Service.App
             get { return _PersonalRecordRepository.Entities; }
         }
 
-        public OperationResult Insert(PersonalRecordVM model)
+        public OperationResult Insert(PersonalRecordVM model, bool isSave)
         {
             try
             {
@@ -58,16 +58,16 @@ namespace BEYON.CoreBLL.Service.App
                     PaymentType = model.PaymentType,
                     UpdateDate = DateTime.Now
                 };
-                _PersonalRecordRepository.Insert(entity);
+                _PersonalRecordRepository.Insert(entity, isSave);
 
                 return new OperationResult(OperationResultType.Success, "新增数据成功！");
             }
-            catch
+            catch(Exception ex)
             {
-                return new OperationResult(OperationResultType.Error, "新增数据失败，数据库插入数据时发生了错误!");
+                return new OperationResult(OperationResultType.Error, "新增数据失败：" + ex.Message);
             }
         }
-        public OperationResult Update(PersonalRecordVM model)
+        public OperationResult Update(PersonalRecordVM model, bool isSave)
         {
             try
             {
@@ -92,7 +92,7 @@ namespace BEYON.CoreBLL.Service.App
                 personalRecord.AccountNumber = model.AccountNumber;
                 personalRecord.PaymentType = model.PaymentType;
                 personalRecord.UpdateDate = DateTime.Now;
-                _PersonalRecordRepository.Update(personalRecord);
+                _PersonalRecordRepository.Update(personalRecord, isSave);
                 return new OperationResult(OperationResultType.Success, "更新数据成功！");
             }
             catch
@@ -101,13 +101,13 @@ namespace BEYON.CoreBLL.Service.App
             }
         }
 
-        public OperationResult Delete(List<string> serialNumber)
+        public OperationResult Delete(List<string> serialNumber, bool isSave)
         {
             try
             {
                 if (serialNumber != null)
                 {
-                    int count = _PersonalRecordRepository.Delete(_PersonalRecordRepository.Entities.Where(c => serialNumber.Contains(c.SerialNumber)));
+                    int count = _PersonalRecordRepository.Delete(_PersonalRecordRepository.Entities.Where(c => serialNumber.Contains(c.SerialNumber)), isSave);
                     if (count > 0)
                     {
                         return new OperationResult(OperationResultType.Success, "删除数据成功！");
@@ -127,12 +127,12 @@ namespace BEYON.CoreBLL.Service.App
                 return new OperationResult(OperationResultType.Error, "删除数据失败!");
             }
         }
-        public OperationResult Update(PersonalRecord model)
+        public OperationResult Update(PersonalRecord model, bool isSave)
         {
             try
             {
                 model.UpdateDate = DateTime.Now;
-                _PersonalRecordRepository.Update(model);
+                _PersonalRecordRepository.Update(model, isSave);
                 return new OperationResult(OperationResultType.Success, "更新数据成功！");
             }
             catch
@@ -141,12 +141,12 @@ namespace BEYON.CoreBLL.Service.App
             }
         }
 
-        public OperationResult Delete(PersonalRecord model)
+        public OperationResult Delete(PersonalRecord model, bool isSave)
         {
             try
             {
                 model.UpdateDate = DateTime.Now;
-                _PersonalRecordRepository.Delete(model);
+                _PersonalRecordRepository.Delete(model, isSave);
                 return new OperationResult(OperationResultType.Success, "更新数据成功！");
             }
             catch

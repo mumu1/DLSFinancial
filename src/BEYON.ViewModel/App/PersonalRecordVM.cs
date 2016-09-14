@@ -7,8 +7,8 @@ namespace BEYON.ViewModel.App
     {
         public PersonalRecordVM()
         {
-
         }
+
         [Required]
         [Display(Name = "申请单流水号")]
         [StringLength(36)]

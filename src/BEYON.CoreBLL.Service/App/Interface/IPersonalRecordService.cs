@@ -13,11 +13,11 @@ namespace BEYON.CoreBLL.Service.App.Interface
     public interface IPersonalRecordService
     {
         IQueryable<PersonalRecord> PersonalRecords { get; }
-        OperationResult Insert(PersonalRecordVM model);
-        OperationResult Update(PersonalRecordVM model);
-        OperationResult Delete(List<string> list);
-        OperationResult Delete(PersonalRecord model);
-        OperationResult Update(PersonalRecord model);
+        OperationResult Insert(PersonalRecordVM model, bool isSave = true);
+        OperationResult Update(PersonalRecordVM model, bool isSave = true);
+        OperationResult Delete(List<string> list, bool isSave = true);
+        OperationResult Delete(PersonalRecord model, bool isSave = true);
+        OperationResult Update(PersonalRecord model, bool isSave = true);
         OperationResult Import(String fileName, Service.Excel.ColumnMap[] columns);
     }
 }
