@@ -73,14 +73,24 @@ namespace BEYON.Web.Areas.App.Controllers
         //
         // GET: /Member/Role/Edit/5
         [IsAjax]
-        public ActionResult Edit(int id = 0)
+        public ActionResult Edit(String SerialNumber)
         {
-            var application = _applicationFormService.ApplicationForms.FirstOrDefault(c => c.Id == id);
+            var application = _applicationFormService.ApplicationForms.FirstOrDefault(c => c.SerialNumber == SerialNumber);
             if (application == null) 
                 return PartialView("Create", new ApplicationFormVM());
             var model = new ApplicationFormVM()
             {
-                //ToDo 传值
+                SerialNumber = application.SerialNumber,
+                ProjectNumber = application.ProjectNumber,
+                ProjectDirector = application.ProjectDirector,
+                Agent = application.Agent,
+                SubmitTime = application.SubmitTime,
+                AuditStatus = application.AuditStatus,
+                AuditOpinion = application.AuditOpinion,
+                AuditTime = application.AuditTime,
+                Summation = application.Summation,
+                RefundType = application.RefundType,
+                UserEmail = application.UserEmail
             };
             return PartialView("Create", model);
         }

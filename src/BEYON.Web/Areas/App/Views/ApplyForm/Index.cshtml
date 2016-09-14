@@ -30,18 +30,20 @@
     pagefunction();
 
     function initTable() {
-        //更新数据
-        //if ($.fn.dataTable.isDataTable('#datatable_tabletools')) {
-        //var oSettings = table.fnSettings();
-        //table.fnClearTable(this);
-        //for (var i = 0; i < data.rows.length; i++) {
-        //    table.oApi._fnAddData(oSettings, data.rows[i]);
-        //}
+        var editor = new $.fn.dataTable.Editor({
+            "ajaxUrl": {
+                "edit": "@Url.Action("Edit")",
+                "remove": "@Url.Action("Delete")"
+            },
+            "table": "#datatable_tabletools",
+            fields: [
+                { name: "SerialNumber", label: "申请单流水号:", type: "hidden" }
+            ]
+        });
 
-        //oSettings.aiDisplay = oSettings.aiDisplayMaster.slice();
-        //table.fnDraw();
-        //return;
-        //}
+        editor.on('submitSuccess', function () {
+
+        });
 
         var buttons = [
             {
@@ -53,24 +55,39 @@
             },
             {
                 text: "修改", action: function (e, dt, node, config) {
-
+                    var rows = dt.rows({ selected: true });
+                    if (rows.count() < 1)
+                    {
+                        toastr.error('请选中需要编辑的行！');
+                        return;
+                    } else if (rows.count() > 1) {
+                        toastr.error('只能选中一行编辑！');
+                        return;
+                    }
+                   
+                    var actionUrl = "@Url.Action("Edit")";
+                    var rowData = rows.data();
+                    $.each($(rowData), function (key, value) {
+                        var param = { SerialNumber: value["SerialNumber"] };
+                        ShowModal2(actionUrl, param, "修改申请单", function () {
+                            //dt.ajax.reload();
+                        });
+                    });
                 }
             },
             {
-                text: "删除", action: function (e, dt, node, config) {
-
-                }
+                text: "删除", extend: "remove", editor: editor
             },
             {
                 text: "提交",
                 action: function (e, dt, node, config) {
-                    dt.ajax.reload();
+                    //dt.ajax.reload();
                 }
             },
             {
                 text: "撤回",
                 action: function (e, dt, node, config) {
-                    dt.ajax.reload();
+                    
                 }
             },
             {

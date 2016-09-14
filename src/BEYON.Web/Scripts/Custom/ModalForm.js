@@ -30,7 +30,11 @@ function ShowModal(actionUrl, param, title) {
 }
 
 /*******弹出表单*********/
-function ShowModal2(actionUrl, param, title) {
+function isFunction(fn) {
+    return (!!fn && !fn.nodename && fn.constructor != String && fn.constructor != RegExp && fn.constructor != Array && /function/i.test(fn + ""));
+}
+
+function ShowModal2(actionUrl, param, title, callback) {
     var $content = $("#content");
     $.ajax({
         type: "GET",
@@ -42,6 +46,9 @@ function ShowModal2(actionUrl, param, title) {
         success: function (result) {
             $(".content-wrapper").hide(100);
             $content.append(result);
+            if (isFunction(callback)) {
+                callback();
+            }
         },
         error: function () {
             //

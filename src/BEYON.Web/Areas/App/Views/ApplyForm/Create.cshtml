@@ -90,14 +90,14 @@
                                 <label class="label">经办人</label>
                                 <label class="input">
                                     <i class="icon-prepend fa fa-user"></i>
-                                    <input type="text" name="phone" placeholder="经办人" value="@Model.ProjectDirector">
+                                    <input type="text" name="phone" placeholder="经办人" value="@Model.Agent">
                                 </label>
                             </section>
                             <section class="col col-2">
                                 <label class="label">合计金额</label>
                                 <label class="input">
                                     <i class="icon-prepend fa fa-yen"></i>
-                                    <input type="number" name="total" disabled="disabled" placeholder="">
+                                    <input type="number" name="total" disabled="disabled" placeholder="" value="@Model.Summation">
                                 </label>
                             </section>
                         </div>
@@ -105,7 +105,7 @@
                         <section>
                             <label class="label">关于工作内容、工作时间等的描述(必填)</label>
                             <label class="textarea">
-                                <textarea rows="3" name="info" placeholder="关于工作内容、工作时间等的描述(必填)"></textarea>
+                                <textarea rows="3" name="info" style="float:left;" placeholder=" 关于工作内容、工作时间等的描述(必填)">@Model.AuditOpinion</textarea>
                             </label>
                         </section>
 
