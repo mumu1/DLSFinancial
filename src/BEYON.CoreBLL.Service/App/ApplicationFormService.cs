@@ -16,8 +16,6 @@ namespace BEYON.CoreBLL.Service.App
     {
         private readonly IApplicationFormRepository _ApplicationFormRepository;
 
-
-
         public ApplicationFormService(IApplicationFormRepository applicationFormRepository, IUnitOfWork unitOfWork)
             : base(unitOfWork)
         {
@@ -182,5 +180,16 @@ namespace BEYON.CoreBLL.Service.App
                 return new OperationResult(OperationResultType.Error, "导入数据失败!");
             }
         }
+
+        public IList<ApplicationForm> GetApplicationFromByUser(String email)
+        {
+            return _ApplicationFormRepository.GetApplicationFromByUser(email);
+        }
+
+        public IList<ApplicationForm> GetApplicationFromByAdmin()
+        {
+            return _ApplicationFormRepository.GetApplicationFromByAdmin();
+        }
+
     }
 }

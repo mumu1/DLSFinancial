@@ -19,5 +19,9 @@ namespace BEYON.CoreBLL.Service.App.Interface
         OperationResult Delete(ApplicationForm model);
         OperationResult Update(ApplicationForm model);
         OperationResult Import(String fileName, Service.Excel.ColumnMap[] columns);
+
+        IList<ApplicationForm> GetApplicationFromByUser(String email);
+
+        IList<ApplicationForm> GetApplicationFromByAdmin();
     }
 }

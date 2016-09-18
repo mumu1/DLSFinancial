@@ -111,7 +111,9 @@
                         <input type="text" name="SerialNumber" placeholder="流水账号" style="visibility:hidden" value="@Model.SerialNumber">
                         <input type="text" name="SubmitTime" placeholder="提交时间" style="visibility:hidden" value="@Model.SubmitTime">
                         <input type="text" name="AuditTime" placeholder="审核时间" style="visibility:hidden" value="@Model.AuditTime">
+                        <input type="text" name="AuditStatus" placeholder="审核状态" style="visibility:hidden" value="@Model.AuditStatus">
                         <input type="text" name="AuditOpinion" placeholder="审核意见" style="visibility:hidden" value="@Model.AuditOpinion">
+                        <input type="text" name="UserEmail" placeholder="用户邮箱" style="visibility:hidden" value="@Model.UserEmail">
                     </fieldset>
                     <fieldset>
                         <section>
@@ -130,6 +132,8 @@
     </div>
     <!-- end widget div -->
 </section>
+
+<script src="@Url.Content("~/Scripts/Custom/IdentifyCard.js")"></script>
 
     <script>
         pageSetUp();
@@ -218,22 +222,33 @@
 
         //初始化编辑框显示
         editor.on('onInitEdit', function () {
+            var CertificateType = editor.field('CertificateType');
+
             editor.disable('Amount');
         });
 
         //提交前条件判断
         editor.on('preSubmit', function (e, data, action) {
             if (action !== 'remove') {
-                //var firstName = editor.field('first_name');
-                //if (!firstName.isMultiValue()) {
-                //    if (!firstName.val()) {
-                //        firstName.error('A first name must be given');
-                //    }
 
-                //    if (firstName.val().length >= 20) {
-                //       firstName.error('The first name length must be less that 20 characters');
-                //    }
-                // }
+                //1.身份证检查
+                var CertificateType = editor.field('CertificateType');
+                if (action === 'edit' && CertificateType.isMultiValue()) {
+                    toastr.error("只能选取一行编辑");
+                    return false;
+                }
+
+                var CertificateID = editor.field('CertificateID');
+                if (!CertificateID.val()) {
+                    CertificateID.error('证件号码不能为空');
+                }
+
+                if (CertificateType.val() === '身份证') {
+                    var Validator = new IDValidator();
+                    if (!Validator.isValid(CertificateID.val())) {
+                        CertificateID.error('身份证号码不正确');
+                    }
+                }
 
                 // 如果有错误报告，不能提交编辑结果
                 if (this.inError()) {

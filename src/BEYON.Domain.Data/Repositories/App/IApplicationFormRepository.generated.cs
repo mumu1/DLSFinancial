@@ -32,5 +32,8 @@ namespace BEYON.Domain.Data.Repositories.App
     ///   仓储操作层接口——用户信息
     /// </summary>
     public partial interface IApplicationFormRepository : IRepository<ApplicationForm, Int32>
-    { }
+    {
+        IList<ApplicationForm> GetApplicationFromByUser(String email);
+        IList<ApplicationForm> GetApplicationFromByAdmin();
+    }
 }

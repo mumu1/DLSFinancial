@@ -32,7 +32,7 @@ namespace BEYON.CoreBLL.Service.App
         {
             try
             {
-                PersonalRecord personalRecord = _PersonalRecordRepository.Entities.FirstOrDefault(c => c.CertificateID == model.CertificateID.Trim());
+                PersonalRecord personalRecord = _PersonalRecordRepository.Entities.FirstOrDefault(c=>c.SerialNumber == model.SerialNumber && c.SerialNumber == model.CertificateID.Trim());
                 if (personalRecord != null)
                 {
                     return new OperationResult(OperationResultType.Warning, "数据库中已经存在相同的报销事项，请修改后重新提交！");

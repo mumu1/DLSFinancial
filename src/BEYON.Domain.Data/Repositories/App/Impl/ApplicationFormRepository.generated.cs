@@ -36,6 +36,22 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
     {
         public ApplicationFormRepository(IUnitOfWork unitOfWork)
             : base()
-        { }
+        { 
+            
+        }
+
+        public IList<ApplicationForm> GetApplicationFromByUser(String email)
+        {
+            var q = from p in Context.ApplicationForms.Where(w => w.UserEmail == email).OrderByDescending(t => t.UpdateDate)
+                        select p;
+            return q.ToList();
+        }
+
+        public IList<ApplicationForm> GetApplicationFromByAdmin()
+        {
+            var q = from p in Context.ApplicationForms.Where(w => w.AuditStatus == "待审核" || w.AuditStatus == "审核通过").OrderByDescending(t => t.UpdateDate)
+                    select p;
+            return q.ToList();
+        }
      }
 }

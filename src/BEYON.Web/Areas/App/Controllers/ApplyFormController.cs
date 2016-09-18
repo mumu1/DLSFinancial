@@ -26,10 +26,13 @@ namespace BEYON.Web.Areas.App.Controllers
     {
         private readonly IApplicationFormService _applicationFormService;
         private readonly IPersonalRecordService _personalRecordService;
-        public ApplyFormController(IApplicationFormService applicationFormService,  IPersonalRecordService personalRecordService)
+        private readonly IUserService _userService;
+        public ApplyFormController(IApplicationFormService applicationFormService,  IPersonalRecordService personalRecordService,
+            IUserService userService)
         {
             this._applicationFormService = applicationFormService;
             this._personalRecordService = personalRecordService;
+            this._userService = userService;
         }
 
         //
@@ -37,14 +40,32 @@ namespace BEYON.Web.Areas.App.Controllers
         [Layout]
         public ActionResult Index()
         {
-            return PartialView();
+            string userid = ((System.Web.Security.FormsIdentity)(System.Web.HttpContext.Current.User.Identity)).Ticket.UserData;
+            var userID = Int32.Parse(userid);
+            User user = this._userService.Users.FirstOrDefault(t => t.Id == userID);
+            var role = user.Roles.First();
+            return PartialView("Index", role.RoleName);
         }
 
         // GET: /App/ApplyForm/GetAllData/
         public ActionResult GetAllData()
         {
-            var result = this._applicationFormService.ApplicationForms.ToList();
-            return Json(new { total = result.Count, data = result }, JsonRequestBehavior.AllowGet);
+            string userid = ((System.Web.Security.FormsIdentity)(System.Web.HttpContext.Current.User.Identity)).Ticket.UserData;
+            var userID = Int32.Parse(userid);
+            User user = this._userService.Users.FirstOrDefault(t => t.Id == userID);
+            var role = user.Roles.First();
+            if (role.RoleName == "系统管理员")
+            {
+                var result = this._applicationFormService.GetApplicationFromByAdmin();
+                return Json(new { total = result.Count, data = result }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                var result = _applicationFormService.GetApplicationFromByUser(user.Email);
+                //var result = this._applicationFormService.ApplicationForms.ToList();
+                return Json(new { total = result.Count, data = result }, JsonRequestBehavior.AllowGet);
+            }
+            
 
         }
 
@@ -52,13 +73,20 @@ namespace BEYON.Web.Areas.App.Controllers
         // POST: /App/ApplyForm/Create/
         public ActionResult Create()
         {
-            //产生流水线号
+            //申请单流水号
             var timeNow = System.DateTime.Now;
-            var serialNumber = String.Format("DLS{0} {1}", timeNow.ToString(), timeNow.Millisecond);
+            var serialNumber = String.Format("S{0}", timeNow.ToString("yyyyMMddHHmmssffff"));
+
+            //获取登录用户EMail
+            string userid = ((System.Web.Security.FormsIdentity)(System.Web.HttpContext.Current.User.Identity)).Ticket.UserData;
+            var userID = Int32.Parse(userid);
+            User user = this._userService.Users.FirstOrDefault(t => t.Id == userID);
+            
             var model = new ApplicationFormVM()
             {
                 SerialNumber = serialNumber,
-                AuditStatus = "待提交"
+                AuditStatus = "待提交",
+                UserEmail = user.Email
             };
             return PartialView(model);
         }
@@ -149,7 +177,8 @@ namespace BEYON.Web.Areas.App.Controllers
             }
             return Json(new { }, JsonRequestBehavior.AllowGet);
         }
-        #region Personal操作
+
+#region Personal操作
 
         // GET: /App/ApplyForm/GetPersonalData/
         public ActionResult GetPersonalData(String serialNumber)
@@ -237,6 +266,76 @@ namespace BEYON.Web.Areas.App.Controllers
             return Json(new { }, JsonRequestBehavior.AllowGet);
         }
 
-        #endregion
+#endregion
+
+#region 业务流程
+        [HttpPost]
+        public ActionResult ApplySubmit(String[] serialNumbers)
+        {
+            foreach(var serialNumber in serialNumbers)
+            {
+                ApplicationForm form = _applicationFormService.ApplicationForms.FirstOrDefault(t => t.SerialNumber == serialNumber);
+                if (form != null)
+                {
+                    form.AuditStatus = "待审核";
+                    form.UpdateDate = DateTime.Now;
+                    _applicationFormService.Update(form);
+                }
+            }
+            
+            return Json(new { }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult ApplyRevoke(String[] serialNumbers)
+        {
+            foreach (var serialNumber in serialNumbers)
+            {
+                ApplicationForm form = _applicationFormService.ApplicationForms.FirstOrDefault(t => t.SerialNumber == serialNumber);
+                if (form != null)
+                {
+                    form.AuditStatus = "已退回";
+                    form.UpdateDate = DateTime.Now;
+                    _applicationFormService.Update(form);
+                }
+            }
+
+            return Json(new { }, JsonRequestBehavior.AllowGet);
+        }
+
+        //
+        // GET: /App/ApplyForm/Audit
+        [HttpPost]
+        public ActionResult Audit(String[] serialNumbers)
+        {
+            Session["AuditSerials"] = serialNumbers;
+            return PartialView();
+        }
+
+
+        //
+        // GET: /App/ApplyForm/ApplyAudit
+        [HttpPost]
+        public ActionResult ApplyAudit(ApplicationFormVM formVM)
+        {
+            var serialNumbers = Session["AuditSerials"] as String[];
+            foreach (var serialNumber in serialNumbers)
+            {
+                ApplicationForm form = _applicationFormService.ApplicationForms.FirstOrDefault(t => t.SerialNumber == serialNumber);
+                if(form != null)
+                {
+                    form.AuditStatus = formVM.AuditStatus;
+                    if (!string.IsNullOrEmpty(formVM.AuditOpinion))
+                    {
+                        form.AuditOpinion = formVM.AuditOpinion;
+                    }
+                    form.UpdateDate = DateTime.Now;
+                    _applicationFormService.Update(form);
+                }
+            }
+            Session.Remove("AuditSerials");
+            return Json(new { }, JsonRequestBehavior.AllowGet);
+        }
+#endregion
     }
 }

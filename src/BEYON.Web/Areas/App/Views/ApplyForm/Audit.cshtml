@@ -1,0 +1,68 @@
+﻿<style>
+    .ui-dialog .ui-dialog-content{
+        overflow : hidden;
+    }
+</style>
+
+<form action="" class="smart-form" id="apply-audit-form">
+    <fieldset>
+        <section>
+            <div class="inline-group">
+                <div class="row">
+                    <div class="col col-3">
+                        <label class="label"><b>审核状态</b></label>
+                    </div>
+                    <div class="col col-4">
+                        <label class="radio">
+                            <input type="radio" name="AuditStatus" checked="checked" value="审核通过">
+                            <i></i>审核算税
+                        </label>
+                    </div>
+                    <div class="col col-4">
+                        <label class="radio">
+                            <input type="radio" name="AuditStatus" value="已退回">
+                            <i></i>审核驳回
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </fieldset>
+    <fieldset>
+        <section>
+            <label class="label"><b>审核意见</b></label>
+            <label class="select select-multiple">
+                <select multiple="" class="custom-scroll" name="AuditOpinion">
+                    <option value="1" onmouseover="tooltip(this)" onmouseout="nodisplay()">我世间风流事解放路将阿里放假啦使江风了解萨罗夫加辣椒粉垃圾利浪费了涉及法律世间风流事家乐福</option>
+                    <option value="2" onmouseover="tooltip(this)" onmouseout="nodisplay()">Alice</option>
+                    <option value="3" onmouseover="tooltip(this)" onmouseout="nodisplay()">Anastasia</option>
+                    <option value="4" onmouseover="tooltip(this)" onmouseout="nodisplay()">Avelina</option>
+                    <option value="5" onmouseover="tooltip(this)" onmouseout="nodisplay()">Basilia</option>
+                    <option value="6" onmouseover="tooltip(this)" onmouseout="nodisplay()">Beatrice</option>
+                    <option value="7" onmouseover="tooltip(this)" onmouseout="nodisplay()">Cassandra</option>
+                    <option value="8" onmouseover="tooltip(this)" onmouseout="nodisplay()">Clemencia</option>
+                    <option value="9" onmouseover="tooltip(this)" onmouseout="nodisplay()">Desiderata</option>
+                </select>
+            </label>
+        </section>
+    </fieldset>
+</form>
+
+<div class="note">
+    <div id="tooltipBlock" style="display: none;"></div>
+</div>
+
+<script>
+    var tip = document.getElementById("tooltipBlock");
+    function tooltip(obj) {
+        if (obj.innerHTML.length > 27) {
+            tip.style.display = "block";
+            tip.innerHTML = obj.innerHTML;
+        } else {
+            tip.style.display = "none";
+        }
+    }
+    function nodisplay() {
+        tip.style.display = "none";
+    }
+</script>

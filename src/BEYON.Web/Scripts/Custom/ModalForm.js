@@ -11,7 +11,8 @@ function ShowModal(actionUrl, param, title) {
     $.ajax({
         type: "GET",
         url: actionUrl,
-        data: param,
+        contentType: "application/json",
+        data: JSON.stringify(param),
         beforeSend: function () {
             //
         },
