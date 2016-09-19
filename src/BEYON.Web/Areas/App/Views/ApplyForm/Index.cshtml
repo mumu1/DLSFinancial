@@ -10,6 +10,7 @@
     <script src="@Url.Content("~/Scripts/jquery.validate.min.js")"></script>
     <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")"></script>
     <script src="@Url.Content("~/Scripts/Custom/ModalForm.js")"></script>
+    <script src="@Url.Content("~/Scripts/Custom/App/File.js")"></script>
 
     <script>
         pageSetUp();
@@ -124,6 +125,38 @@
                     enabled: false
                 },
                 {
+                    text: "输出打印", action: function (e, dt, node, config) {
+                        var rowData = dt.rows({ selected: true }).data();
+                        $.each($(rowData), function (key, value) {
+                            $.ajax({
+                                type: "POST",
+                                url: "@Url.Action("ExportApplyPersons")",
+                                dataType: "json",
+                                contentType: "application/json; charset=utf-8",
+                                data: JSON.stringify({ SerialNumber: value["SerialNumber"] }),
+                                success: function (result) {
+                                    fileDownload('../App/ApplyForm/DownloadFile', result);
+                                    toastr.success('数据导出完成');
+                                },
+                                error: function () {
+                                    toastr.error('网络错误，请重新提交！');
+                                }
+                            });
+                        });
+                    }
+                },
+                {
+                    text: "查看", action: function (e, dt, node, config) {
+                        var rowData = dt.rows({ selected: true }).data();
+                        var actionUrl = "@Url.Action("Show")";
+                        $.each($(rowData), function (key, value) {
+                            var param = { SerialNumber: value["SerialNumber"] };
+                            ShowModal2(actionUrl, param, "查看申请单");
+                        });
+                    },
+                    enabled: false
+                },
+                {
                     text: "列显示",
                     extend: 'colvis'
                 }
@@ -141,6 +174,17 @@
                                 serialNumbers.push(value["SerialNumber"]);
                             });
                             applyAudit(dt, serialNumbers);
+                        },
+                        enabled: false
+                    },
+                    {
+                        text: "查看", action: function (e, dt, node, config) {
+                            var rowData = dt.rows({ selected: true }).data();
+                            var actionUrl = "@Url.Action("Show")";
+                            $.each($(rowData), function (key, value) {
+                                var param = { SerialNumber: value["SerialNumber"] };
+                                ShowModal2(actionUrl, param, "查看申请单");
+                            });
                         },
                         enabled: false
                     },
@@ -232,17 +276,20 @@
                         }
                     });
                     selectedTable.button(0).enable(selectedCount > 0 && enalbeAudit);       //审核
+                    selectedTable.button(2).enable(selectedCount === 1);                     //查看
                 } else {
                     if (selectedCount < 1) {
                         selectedTable.button(1).enable(false);      //修改
                         selectedTable.button(2).enable(false);      //删除
                         selectedTable.button(3).enable(false);      //提交
                         selectedTable.button(4).enable(false);      //撤回
+                        selectedTable.button(5).enable(false);      //导出
+                        selectedTable.button(6).enable(false);      //查看
                     } else {
-                        var enalbeEidt = true, enableRemove = true, enableSubmit = true, enableRevoke = true;
+                        var enalbeEidt = true, enableRemove = true, enableSubmit = true, enableRevoke = true, enableExport = true;
                         $.each($(selectedRows.data()), function (key, value) {
                             if (value["AuditStatus"] === '待提交' || value["AuditStatus"] === '已退回') {
-                                enableRevoke = false;
+                                enableRevoke = enableExport = false;
                             } else if (value["AuditStatus"] === '待审核') {
                                 enalbeEidt = enableRemove = enableSubmit = false;
                             } else if (value["AuditStatus"] === '审核通过') {
@@ -254,6 +301,8 @@
                         selectedTable.button(2).enable(selectedCount > 0 && enableRemove);     //删除
                         selectedTable.button(3).enable(selectedCount > 0 && enableSubmit);     //审核
                         selectedTable.button(4).enable(selectedCount > 0 && enableRevoke);     //撤回
+                        selectedTable.button(5).enable(selectedCount === 1 && enableExport);   //导出
+                        selectedTable.button(6).enable(selectedCount === 1);                   //查看
                     }
                 }
 

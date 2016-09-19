@@ -17,6 +17,7 @@ using BEYON.ViewModel.Member;
 using BEYON.Web.Extension.Common;
 using BEYON.Web.Extension.Filters;
 using BEYON.CoreBLL.Service.App.Interface;
+using BEYON.CoreBLL.Service.Excel.Interface;
 using BEYON.Domain.Model.App;
 using BEYON.ViewModel.App;
 
@@ -27,12 +28,15 @@ namespace BEYON.Web.Areas.App.Controllers
         private readonly IApplicationFormService _applicationFormService;
         private readonly IPersonalRecordService _personalRecordService;
         private readonly IUserService _userService;
+        private readonly IApplyPrintService _applyPrintService;
+
         public ApplyFormController(IApplicationFormService applicationFormService,  IPersonalRecordService personalRecordService,
-            IUserService userService)
+            IUserService userService, IApplyPrintService applyPrintService)
         {
             this._applicationFormService = applicationFormService;
             this._personalRecordService = personalRecordService;
             this._userService = userService;
+            this._applyPrintService = applyPrintService;
         }
 
         //
@@ -102,7 +106,7 @@ namespace BEYON.Web.Areas.App.Controllers
 
 
         //
-        // GET: /Member/Role/Edit/5
+        // GET: /App/ApplyForm/Edit
         [IsAjax]
         public ActionResult Edit(String SerialNumber)
         {
@@ -160,6 +164,31 @@ namespace BEYON.Web.Areas.App.Controllers
             }
             _personalRecordService.Delete(serialNumberList);
             return Json(new { total = datas.Length, data = datas }, JsonRequestBehavior.AllowGet);
+        }
+
+        //
+        // GET: /App/ApplyForm/Show
+        [IsAjax]
+        public ActionResult Show(String SerialNumber)
+        {
+            var application = _applicationFormService.ApplicationForms.FirstOrDefault(c => c.SerialNumber == SerialNumber);
+            if (application == null)
+                return PartialView("Create", new ApplicationFormVM());
+            var model = new ApplicationFormVM()
+            {
+                SerialNumber = application.SerialNumber,
+                ProjectNumber = application.ProjectNumber,
+                ProjectDirector = application.ProjectDirector,
+                Agent = application.Agent,
+                SubmitTime = application.SubmitTime,
+                AuditStatus = application.AuditStatus,
+                AuditOpinion = application.AuditOpinion,
+                AuditTime = application.AuditTime,
+                Summation = application.Summation,
+                RefundType = application.RefundType,
+                UserEmail = application.UserEmail
+            };
+            return PartialView("Show", model);
         }
 
         [HttpPost]
@@ -335,6 +364,59 @@ namespace BEYON.Web.Areas.App.Controllers
             }
             Session.Remove("AuditSerials");
             return Json(new { }, JsonRequestBehavior.AllowGet);
+        }
+
+        // POST: /App/ApplyForm/ExportApplyPersons
+        [HttpPost]
+        public ActionResult ExportApplyPersons(String SerialNumber)
+        {
+            string fullPath = Server.MapPath("/Exports/");
+             String fileName = this._applyPrintService.ApplyExcel(fullPath, SerialNumber);
+             return Json(fileName);
+             //return Json(new { filename = fileName }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public void DownloadFile(string filePath)
+        {
+            try
+            {
+                if (String.IsNullOrEmpty(filePath))
+                    return;
+
+                var filepath = System.IO.Path.Combine(Server.MapPath("/Exports/"), filePath);
+                System.IO.FileInfo file = new System.IO.FileInfo(filepath);
+                if (file.Exists)//判断文件是否存在
+                {
+                    const long ChunkSize = 102400;//100K 每次读取文件，只读取100Ｋ，这样可以缓解服务器的压力
+                    byte[] buffer = new byte[ChunkSize];
+
+                    Response.Clear();
+                    System.IO.FileStream iStream = System.IO.File.OpenRead(filepath);
+                    long dataLengthToRead = iStream.Length;//获取下载的文件总大小
+                    Response.ContentType = "application/octet-stream";
+                    Response.AddHeader("Content-Disposition", "attachment; filename=" + System.Web.HttpUtility.UrlEncode("申请打印单.xlsx"));
+                    while (dataLengthToRead > 0 && Response.IsClientConnected)
+                    {
+                        int lengthRead = iStream.Read(buffer, 0, Convert.ToInt32(ChunkSize));//读取的大小
+                        Response.OutputStream.Write(buffer, 0, lengthRead);
+                        Response.Flush();
+                        dataLengthToRead = dataLengthToRead - lengthRead;
+                    }
+                    Response.Close();
+                    //Response.End();
+
+                    //if (file.Attributes.ToString().IndexOf("ReadOnly") != -1)
+                    //{
+                    //    file.Attributes = System.IO.FileAttributes.Normal;
+                    //}
+                    // System.IO.File.Delete(file.FullName);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.Write(e.ToString());
+            }
         }
 #endregion
     }

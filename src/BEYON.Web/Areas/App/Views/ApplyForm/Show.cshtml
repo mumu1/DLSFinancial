@@ -1,0 +1,217 @@
+﻿@using BEYON.ViewModel.App
+@model ApplicationFormVM
+
+<style>
+    .modal-dialog {
+        min-width:900px;
+        max-height:900px;
+    }
+
+    div.DTE_Body div.DTE_Body_Content div.DTE_Field {
+        float: left;
+        width: 50%;
+        padding: 5px 20px;
+        clear: none;
+        box-sizing: border-box;
+    }
+
+
+    div.DTE_Body div.DTE_Form_Content:after {
+        content: ' ';
+        display: block;
+        clear: both;
+    }
+    div.DTE_Body div.DTE_Body_Content div.DTE_Field select {
+        float: left;
+        height : 30px;
+        width: 100%;
+    }
+    /*div.DTE_Body div.DTE_Body_Content div.DTE_Field input[type=radio] {
+        float: left;
+        width: 50%;
+        padding: 5px 20px;
+        clear: none;
+    }*/
+</style>
+<!-- widget div-->
+<section id="widget-grid" class="">
+    <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-collapsed="false" data-widget-colorbutton="false">
+        <header>
+            <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+            <h2>申请单 </h2>
+        </header>
+
+        <div role="content">
+            <!-- widget content -->
+            <div class="widget-body no-padding">
+                <form action="" id="apply-form" class="smart-form" style="padding-left:8px;padding-right:8px;" onsubmit="return saveApply();">
+                    <fieldset>
+                        <section>
+                            <div class="note" style="padding-left:15px;">
+                                <div>
+                                    填表说明：
+                                </div>
+                                <div>
+                                    1.各类劳务费应由领款本人签收并经课题负责人、经办人签字。
+                                </div>
+                                <div>
+                                    2.现金和转账发放都可使用该表，如通过银行转账发放，请准确填写收款本人的银行账户、开户银行、账户名称等信息。
+                                </div>
+                                <div>
+                                    3.单位填写分类：所内在职职工、所内注册学生、所内劳务流程。客座学生和外单位人员填写具体工作单位。
+                                </div>
+                            </div>
+                        </section>
+                        <div class="row">
+                            <section class="col col-4">
+                                <label class="label">课题号</label>
+                                <label class="input">
+                                    <i class="icon-prepend fa fa-info"></i>
+                                    <input type="text" disabled="true" name="ProjectNumber" placeholder="课题号" value="@Model.ProjectNumber">
+                                </label>
+                            </section>
+                            <section class="col col-2">
+                                <label class="label">报销事由</label>
+                                <label class="select">
+                                    <select name="RefundType" disabled="true">
+                                        <option value="劳务" selected="">劳务</option>
+                                        <option value="报告">报告</option>
+                                    </select> <i></i>
+                                </label>
+                            </section>
+                            <section class="col col-2">
+                                <label class="label">课题负责人</label>
+                                <label class="input">
+                                    <i class="icon-prepend fa fa-user"></i>
+                                    <input disabled="true" type="text" name="ProjectDirector" placeholder="课题负责人" value="@Model.ProjectDirector">
+                                </label>
+                            </section>
+                            <section class="col col-2">
+                                <label class="label">经办人</label>
+                                <label class="input">
+                                    <i class="icon-prepend fa fa-user"></i>
+                                    <input disabled="true" type="text" name="Agent" placeholder="经办人" value="@Model.Agent">
+                                </label>
+                            </section>
+                            <section class="col col-2">
+                                <label class="label">合计金额</label>
+                                <label class="input">
+                                    <i class="icon-prepend fa fa-yen"></i>
+                                    <input disabled="true" type="number" name="Summation"  placeholder="" value="@Model.Summation">
+                                </label>
+                            </section>
+                        </div>
+
+                        <section>
+                            <label class="label">关于工作内容、工作时间等的描述(必填)</label>
+                            <label class="textarea">
+                                <textarea disabled="true" rows="3" name="AuditOpinion" style="float:left;" placeholder=" 关于工作内容、工作时间等的描述(必填)">@Model.AuditOpinion</textarea>
+                            </label>
+                        </section>
+                        <input type="text" name="SerialNumber" placeholder="流水账号" style="visibility:hidden" value="@Model.SerialNumber">
+                        <input type="text" name="SubmitTime" placeholder="提交时间" style="visibility:hidden" value="@Model.SubmitTime">
+                        <input type="text" name="AuditTime" placeholder="审核时间" style="visibility:hidden" value="@Model.AuditTime">
+                        <input type="text" name="AuditStatus" placeholder="审核状态" style="visibility:hidden" value="@Model.AuditStatus">
+                        <input type="text" name="AuditOpinion" placeholder="审核意见" style="visibility:hidden" value="@Model.AuditOpinion">
+                        <input type="text" name="UserEmail" placeholder="用户邮箱" style="visibility:hidden" value="@Model.UserEmail">
+                    </fieldset>
+                    <fieldset>
+                        <section>
+                            <table id="datatable_create_form" class="table table-striped table-bordered table-hover" width="100%"></table>
+                        </section>
+                    </fieldset>
+                    <footer>
+                        <button type="button" class="btn btn-default" onclick="closeFrom();">取消</button>
+                    </footer>
+                </form>
+
+            </div>
+            <!-- end widget content -->
+        </div>
+    </div>
+    <!-- end widget div -->
+</section>
+
+<script>
+        pageSetUp();
+
+        function initTable() {
+            var buttons = [
+                //{
+                //    text: "列显示",
+                //    extend: 'colvis'
+                //}
+            ];
+
+            table = $('#datatable_create_form').dataTable({
+                dom: 'Bfrtip',
+                colReorder: true,
+                ajax: {
+                    url: '@Url.Action("GetPersonalData")',
+                    type: "POST",
+                     data: { "serialNumber": "@Model.SerialNumber" }
+                },
+                searching: true,
+                ordering: true,
+                select: true,
+                info: true,
+                paginate: false,    //是否显示（应用）分页器
+                sort: true,         //是否启动各个字段的排序功能
+                stateSave: false,
+                stateDuration: 60 * 60 * 12,
+                autoWidth: true,
+                bProcessing: true,
+                paging: false,
+                buttons: buttons,
+                columns: [
+                    { data: "SerialNumber", title: "申请单流水号", visible: false },
+                    { data: "Id", title: "编号", visible: false },
+                    { data: "Name", title: "姓名" },
+                    { data: "CertificateType", title: "证件类型" },
+                    { data: "CertificateID", title: "证件号码" },
+                    { data: "Company", title: "单位" },
+                    { data: "Tele", title: "联系电话" },
+                    { data: "PersonType", title: "人员类型", visible :false },
+                    { data: "Nationality", title: "国籍" },
+                    { data: "Title", title: "职称" },
+                    { data: "TaxOrNot", title: "是否含税", visible: false },
+                    { data: "Amount", title: "金额(元)" },
+                    { data: "AccountNumber", title: "银行账户" },
+                    { data: "Bank", title: "开户银行" },
+                    { data: "AccountName", title: "账户名称", visible: false },
+                    { data: "PaymentType", title: "支付类型", visible: false },
+                    { data: "Signature", title: "领取人签字", visible: false },
+
+                ],
+                oLanguage: {
+                    "sLengthMenu": "每页显示 _MENU_ 条记录",
+                    "sZeroRecords": "抱歉， 没有找到",
+                    "sInfo": "显示 _START_ 到 _END_ 条记录，总共 _TOTAL_ 条记录",
+                    "sInfoEmpty": "没有数据",
+                    "sInfoFiltered": "(从 _MAX_ 条数据中检索)",
+                    "sZeroRecords": "没有检索到数据",
+                    "sSearch": "搜索名称:",
+                    "sSelected": "选中 _TOTAL_ 条记录",
+                    "oPaginate": {
+                        "sFirst": "首页",
+                        "sPrevious": "前一页",
+                        "sNext": "后一页",
+                        "sLast": "尾页"
+                    }
+                }
+            });
+        }
+
+        initTable();
+
+        function closeFrom() {
+            if ($("#widget-grid")[0]) {
+                $("#widget-grid").jarvisWidgets("destroy");
+                $("#widget-grid").remove();
+            }
+
+            if ($(".content-wrapper")[0]) {
+                $(".content-wrapper").show()
+            }
+        }
+    </script>

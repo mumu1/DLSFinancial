@@ -37,5 +37,12 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
         public PersonalRecordRepository(IUnitOfWork unitOfWork)
             : base()
         { }
+
+        public IList<PersonalRecord> GetPersonalRecordBySerialNumber(String serialNumber)
+        {
+            var q = from p in Context.PersonalRecords.Where(w => w.SerialNumber == serialNumber)
+                    select p;
+            return q.ToList();
+        }
      }
 }

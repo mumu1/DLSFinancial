@@ -18,6 +18,8 @@ using BEYON.Domain.Data.Repositories.Member;
 using BEYON.Domain.Data.Repositories.Member.Impl;
 using BEYON.CoreBLL.Service.App;
 using BEYON.CoreBLL.Service.App.Interface;
+using BEYON.CoreBLL.Service.Excel;
+using BEYON.CoreBLL.Service.Excel.Interface;
 using BEYON.Domain.Data.Repositories.App;
 using BEYON.Domain.Data.Repositories.App.Impl;
 
@@ -76,6 +78,8 @@ namespace BEYON.Web
             builder.RegisterType<PersonalRecordService>().As<IPersonalRecordService>().InstancePerHttpRequest();
             builder.RegisterType<PersonalRecordRepository>().As<IPersonalRecordRepository>().InstancePerHttpRequest();
           
+            //Excel services
+            builder.RegisterType<ApplyPrintService>().As<IApplyPrintService>().InstancePerHttpRequest();
             #endregion
             // then
             var container = builder.Build();

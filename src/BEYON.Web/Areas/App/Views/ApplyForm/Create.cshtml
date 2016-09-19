@@ -133,130 +133,131 @@
     <!-- end widget div -->
 </section>
 
-<script src="@Url.Content("~/Scripts/Custom/IdentifyCard.js")"></script>
+<script src="@Url.Content("~/Scripts/Custom/App/IdentifyCard.js")"></script>
+<script src="@Url.Content("~/Scripts/Custom/App/File.js")"></script>
 
     <script>
-        pageSetUp();
+    pageSetUp();
 
-        var editor = new $.fn.dataTable.Editor({
-            "ajaxUrl": {
-                "create": "@Url.Action("CreatePersonal")",
-                "edit": "@Url.Action("EditPersonal")",
-                "remove": "@Url.Action("DeletePersonal")"
+    var editor = new $.fn.dataTable.Editor({
+        "ajaxUrl": {
+            "create": "@Url.Action("CreatePersonal")",
+            "edit": "@Url.Action("EditPersonal")",
+            "remove": "@Url.Action("DeletePersonal")"
+        },
+        "table": "#datatable_create_form",
+        fields: [
+            { name: "Id", label: "编号:", type: "hidden" },
+            { name: "SerialNumber", label: "申请单流水号:", type: "hidden" },
+            { name: "Name", label: "姓名:", type: "text" },
+            { name: "Company", label: "单位:", type: "text" },
+            {
+                name: "CertificateType",
+                label: "证件类型:",
+                type: "select",
+                options: [
+                          { label: "身份证", value: "身份证" },
+                          { label: "护照", value: "护照" },
+                          { label: "军官照", value: "军官照" },
+                ],
+                def: "身份证"
             },
-            "table": "#datatable_create_form",
-            fields: [
-                { name: "Id", label: "编号:", type: "hidden" },
-                { name: "SerialNumber", label: "申请单流水号:", type: "hidden" },
-                { name: "Name", label: "姓名:", type: "text" },
-                { name: "Company", label: "单位:", type: "text" },
-                {
-                    name: "CertificateType",
-                    label: "证件类型:",
-                    type: "select",
-                    options: [
-                              { label: "身份证", value: "身份证" },
-                              { label: "护照", value: "护照" },
-                              { label: "军官照", value: "军官照" },
-                    ],
-                    def: "身份证"
-                },
-                { name: "CertificateID", label: "证件号码:" },
-                { name: "Tele", label: "联系电话:", },
-                { name: "Nationality", label: "国籍:", type: "text" },
-                { name: "Title", label: "职称:", type: "text" },
-                {
-                    name: "PersonType",
-                    label: "人员类型:",
-                    type: "select",
-                    options: [
-                            { label: "所内", value: "所内" },
-                            { label: "所外", value: "所外" }
-                    ],
-                    def: "所内"
-                },
-                {
-                    name: "Bank",
-                    label: "开户银行:",
-                    type: "select",
-                    options: [
-                                { label: "工商银行", value: "工商银行" },
-                                { label: "中国银行", value: "中国银行" },
-                                { label: "建设银行", value: "建设银行" },
-                                { label: "农业银行", value: "农业银行" }
-                    ],
-                    def: "工商银行"
-                },
-                { name: "AccountNumber", label: "银行账户:", type: "text" },
-                { name: "AccountName", label: "账户名称:", type: "text" },
-                {
-                    name: "TaxOrNot",
-                    label: "是否含税:",
-                    type: "radio",
-                    options: [
-                        { label: "含税", value: "含税" },
-                        { label: "不含税", value: "不含税" }
-                    ],
-                    def: "含税"
-                },
-                { name: "Amount", label: "金额(元):", type: "readonly" },
-                {
-                    name: "PaymentType",
-                    label: "支付类型:",
-                    type: "select",
-                    options: [
-                          { label: "银行转账", value: "银行转账" },
-                          { label: "现金支付", value: "现金支付" }
-                    ],
-                    def: "银行转账"
-                },
-                { name: "Signature", label: "领取人签字:", type: "text", type: "hidden" }
-            ]
-        });
+            { name: "CertificateID", label: "证件号码:" },
+            { name: "Tele", label: "联系电话:", },
+            { name: "Nationality", label: "国籍:", type: "text" },
+            { name: "Title", label: "职称:", type: "text" },
+            {
+                name: "PersonType",
+                label: "人员类型:",
+                type: "select",
+                options: [
+                        { label: "所内", value: "所内" },
+                        { label: "所外", value: "所外" }
+                ],
+                def: "所内"
+            },
+            {
+                name: "Bank",
+                label: "开户银行:",
+                type: "select",
+                options: [
+                            { label: "工商银行", value: "工商银行" },
+                            { label: "中国银行", value: "中国银行" },
+                            { label: "建设银行", value: "建设银行" },
+                            { label: "农业银行", value: "农业银行" }
+                ],
+                def: "工商银行"
+            },
+            { name: "AccountNumber", label: "银行账户:", type: "text" },
+            { name: "AccountName", label: "账户名称:", type: "text" },
+            {
+                name: "TaxOrNot",
+                label: "是否含税:",
+                type: "radio",
+                options: [
+                    { label: "含税", value: "含税" },
+                    { label: "不含税", value: "不含税" }
+                ],
+                def: "含税"
+            },
+            { name: "Amount", label: "金额(元):", type: "readonly" },
+            {
+                name: "PaymentType",
+                label: "支付类型:",
+                type: "select",
+                options: [
+                      { label: "银行转账", value: "银行转账" },
+                      { label: "现金支付", value: "现金支付" }
+                ],
+                def: "银行转账"
+            },
+            { name: "Signature", label: "领取人签字:", type: "text", type: "hidden" }
+        ]
+    });
 
-        //初始化创建框显示
-        editor.on('onInitCreate', function () {
-            editor.disable('Amount');
-            return true;
-        });
+    //初始化创建框显示
+    editor.on('onInitCreate', function () {
+        editor.disable('Amount');
+        return true;
+    });
 
-        //初始化编辑框显示
-        editor.on('onInitEdit', function () {
+    //初始化编辑框显示
+    editor.on('onInitEdit', function () {
+        var CertificateType = editor.field('CertificateType');
+
+        editor.disable('Amount');
+    });
+
+    //提交前条件判断
+    editor.on('preSubmit', function (e, data, action) {
+        if (action !== 'remove') {
+
+            //1.身份证检查
             var CertificateType = editor.field('CertificateType');
+            if (action === 'edit' && CertificateType.isMultiValue()) {
+                toastr.error("只能选取一行编辑");
+                return false;
+            }
 
-            editor.disable('Amount');
-        });
+            var CertificateID = editor.field('CertificateID');
+            if (!CertificateID.val()) {
+                CertificateID.error('证件号码不能为空');
+            }
 
-        //提交前条件判断
-        editor.on('preSubmit', function (e, data, action) {
-            if (action !== 'remove') {
-
-                //1.身份证检查
-                var CertificateType = editor.field('CertificateType');
-                if (action === 'edit' && CertificateType.isMultiValue()) {
-                    toastr.error("只能选取一行编辑");
-                    return false;
+            if (CertificateType.val() === '身份证') {
+                var Validator = new IDValidator();
+                if (!Validator.isValid(CertificateID.val())) {
+                    CertificateID.error('身份证号码不正确');
                 }
+            }
 
-                var CertificateID = editor.field('CertificateID');
-                if (!CertificateID.val()) {
-                    CertificateID.error('证件号码不能为空');
-                }
+            // 如果有错误报告，不能提交编辑结果
+            if (this.inError()) {
+                return false;
+            }
 
-                if (CertificateType.val() === '身份证') {
-                    var Validator = new IDValidator();
-                    if (!Validator.isValid(CertificateID.val())) {
-                        CertificateID.error('身份证号码不正确');
-                    }
-                }
-
-                // 如果有错误报告，不能提交编辑结果
-                if (this.inError()) {
-                    return false;
-                }
-
-                if (action === 'create') {
-                    data.data[0].SerialNumber = "@Model.SerialNumber";
+            if (action === 'create') {
+                data.data[0].SerialNumber = "@Model.SerialNumber";
                     return true;
                 }
 
@@ -274,6 +275,27 @@
                 {
                     text: "删除", extend: "remove", editor: editor
                 },
+                @*{
+                    text: "输出打印", action: function (e, dt, node, config) {
+                        var rowData = dt.rows({ selected: true }).data();
+                        $.each($(rowData), function (key, value) {
+                            $.ajax({
+                                type: "POST",
+                                url: "@Url.Action("ExportApplyPersons")",
+                                dataType: "json",
+                                contentType: "application/json; charset=utf-8",
+                                data: JSON.stringify({ SerialNumber: value["SerialNumber"] }),
+                                success: function (result) {
+                                    fileDownload('../App/ApplyForm/DownloadFile', result);
+                                    toastr.success('数据导出完成');
+                                },
+                                error: function () {
+                                    toastr.error('网络错误，请重新提交！');
+                                }
+                            });
+                        });
+                    }
+                },*@
                 {
                     text: "列显示",
                     extend: 'colvis'
@@ -285,108 +307,109 @@
                 colReorder: true,
                 ajax: {
                     url: '@Url.Action("GetPersonalData")',
-                    type: "POST",
-                    data: { "serialNumber": "@Model.SerialNumber" }
-                },
-                searching: true,
-                ordering: true,
-                select: true,
-                info: true,
-                paginate: false,    //是否显示（应用）分页器
-                sort: true,         //是否启动各个字段的排序功能
-                stateSave: false,
-                stateDuration: 60 * 60 * 12,
-                autoWidth: true,
-                bProcessing: true,
-                paging: false,
-                buttons: buttons,
-                columns: [
-                    //{ data: "SerialNumber", title: "申请单流水号", visible: false },
-                    { data: "Id", title: "编号", visible: false },
-                    { data: "Name", title: "姓名" },
-                    { data: "CertificateType", title: "证件类型" },
-                    { data: "CertificateID", title: "证件号码" },
-                    { data: "Company", title: "单位" },
-                    { data: "Tele", title: "联系电话" },
-                    //{ data: "PersonType", title: "人员类型", visible :false },
-                    { data: "Nationality", title: "国籍" },
-                    { data: "Title", title: "职称" },
-                    //{ data: "TaxOrNot", title: "是否含税", visible: false },
-                    { data: "Amount", title: "金额(元)" },
-                    { data: "AccountNumber", title: "银行账户" },
-                    { data: "Bank", title: "开户银行" },
-                    //{ data: "AccountName", title: "账户名称", visible: false },
-                    //{ data: "PaymentType", title: "支付类型", visible: false },
-                    //{ data: "Signature", title: "领取人签字", visible: false },
+            type: "POST",
+            data: { "serialNumber": "@Model.SerialNumber" }
+        },
+        searching: true,
+        ordering: true,
+        select: true,
+        info: true,
+        paginate: false,    //是否显示（应用）分页器
+        sort: true,         //是否启动各个字段的排序功能
+        stateSave: false,
+        stateDuration: 60 * 60 * 12,
+        autoWidth: true,
+        bProcessing: true,
+        paging: false,
+        buttons: buttons,
+        columns: [
+            //{ data: "SerialNumber", title: "申请单流水号", visible: false },
+            { data: "Id", title: "编号", visible: false },
+            { data: "Name", title: "姓名" },
+            { data: "CertificateType", title: "证件类型" },
+            { data: "CertificateID", title: "证件号码" },
+            { data: "Company", title: "单位" },
+            { data: "Tele", title: "联系电话" },
+            //{ data: "PersonType", title: "人员类型", visible :false },
+            { data: "Nationality", title: "国籍" },
+            { data: "Title", title: "职称" },
+            //{ data: "TaxOrNot", title: "是否含税", visible: false },
+            { data: "Amount", title: "金额(元)" },
+            { data: "AccountNumber", title: "银行账户" },
+            { data: "Bank", title: "开户银行" },
+            //{ data: "AccountName", title: "账户名称", visible: false },
+            //{ data: "PaymentType", title: "支付类型", visible: false },
+            //{ data: "Signature", title: "领取人签字", visible: false },
 
-                ],
-                oLanguage: {
-                    "sLengthMenu": "每页显示 _MENU_ 条记录",
-                    "sZeroRecords": "抱歉， 没有找到",
-                    "sInfo": "显示 _START_ 到 _END_ 条记录，总共 _TOTAL_ 条记录",
-                    "sInfoEmpty": "没有数据",
-                    "sInfoFiltered": "(从 _MAX_ 条数据中检索)",
-                    "sZeroRecords": "没有检索到数据",
-                    "sSearch": "搜索名称:",
-                    "sSelected": "选中 _TOTAL_ 条记录",
-                    "oPaginate": {
-                        "sFirst": "首页",
-                        "sPrevious": "前一页",
-                        "sNext": "后一页",
-                        "sLast": "尾页"
-                    }
+        ],
+        oLanguage: {
+            "sLengthMenu": "每页显示 _MENU_ 条记录",
+            "sZeroRecords": "抱歉， 没有找到",
+            "sInfo": "显示 _START_ 到 _END_ 条记录，总共 _TOTAL_ 条记录",
+            "sInfoEmpty": "没有数据",
+            "sInfoFiltered": "(从 _MAX_ 条数据中检索)",
+            "sZeroRecords": "没有检索到数据",
+            "sSearch": "搜索名称:",
+            "sSelected": "选中 _TOTAL_ 条记录",
+            "oPaginate": {
+                "sFirst": "首页",
+                "sPrevious": "前一页",
+                "sNext": "后一页",
+                "sLast": "尾页"
+            }
+        }
+    });
+    }
+
+    initTable();
+
+    function closeFrom() {
+        if ($("#widget-grid")[0]) {
+            $("#widget-grid").jarvisWidgets("destroy");
+            $("#widget-grid").remove();
+        }
+
+        if ($(".content-wrapper")[0]) {
+            $(".content-wrapper").show()
+        }
+    }
+
+    function saveApply() {
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("Save")",
+            data: $('#apply-form').serialize(),
+            success: function (result) {
+                //保存列表信息
+                var rows = $('#datatable_create_form').DataTable().rows();
+                if (rows.count() < 1) {
+                    $('#datatable_tabletools').DataTable().ajax.reload();
+                    closeFrom();
+                    return;
                 }
-            });
-        }
 
-        initTable();
-
-        function closeFrom() {
-            if ($("#widget-grid")[0]) {
-                $("#widget-grid").jarvisWidgets("destroy");
-                $("#widget-grid").remove();
-            }
-
-            if ($(".content-wrapper")[0]) {
-                $(".content-wrapper").show()
-            }
-        }
-
-        function saveApply() {
-            $.ajax({
-                type: "POST",
-                url: "@Url.Action("Save")",
-                data: $('#apply-form').serialize(),
-                success: function (result) {
-                    //保存列表信息 
-                    var rows = $('#datatable_create_form').DataTable().rows();
-                    if (rows.count() < 1) {
+                var rowDatas = rows.data();
+                var queryDatas = [];
+                $.each($(rowDatas), function (key, value) {
+                    queryDatas.push(value);
+                });
+                //var datas = table.rows().data();
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("InsertOrUpdatePersonal")",
+                    data: JSON.stringify(queryDatas),
+                    contentType: "application/json",
+                    success: function (result) {
                         $('#datatable_tabletools').DataTable().ajax.reload();
                         closeFrom();
-                        return;
                     }
+                })
+            },
+            error: function (data) {
+                toastr.error(data.responseText);
+            }
+        });
+        return false;
+    }
 
-                    var rowDatas = rows.data();
-                    var queryDatas = [];
-                    $.each($(rowDatas), function (key, value) {
-                        queryDatas.push(value);
-                    });
-                    //var datas = table.rows().data();
-                    $.ajax({
-                        type: "POST",
-                        url: "@Url.Action("InsertOrUpdatePersonal")",
-                        data: JSON.stringify(queryDatas),
-                        contentType: "application/json",
-                        success: function (result) {
-                            $('#datatable_tabletools').DataTable().ajax.reload();
-                            closeFrom();
-                        }
-                    })
-                },
-                error: function (data) {
-                    toastr.error(data.responseText);
-                }
-            });
-            return false;
-        }
     </script>
