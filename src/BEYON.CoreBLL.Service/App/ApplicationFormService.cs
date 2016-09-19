@@ -48,6 +48,7 @@ namespace BEYON.CoreBLL.Service.App
                     SubmitTime = model.SubmitTime,
                     AuditTime = model.AuditTime,
                     AuditOpinion = model.AuditOpinion,
+                    ApplyDesp = model.ApplyDesp,
                     Summation = model.Summation,
                     UserEmail = model.UserEmail,
                     UpdateDate = DateTime.Now
@@ -79,6 +80,7 @@ namespace BEYON.CoreBLL.Service.App
                 applicationForm.SubmitTime = model.SubmitTime;
                 applicationForm.AuditTime = model.AuditTime;
                 applicationForm.AuditOpinion = model.AuditOpinion;
+                applicationForm.ApplyDesp = model.ApplyDesp;
                 applicationForm.Summation = model.Summation;
                 applicationForm.UserEmail = model.UserEmail;             
                 applicationForm.UpdateDate = DateTime.Now;
@@ -130,6 +132,7 @@ namespace BEYON.CoreBLL.Service.App
                 model.SubmitTime = model.SubmitTime;
                 model.AuditTime = model.AuditTime;
                 model.AuditOpinion = model.AuditOpinion;
+                model.ApplyDesp = model.ApplyDesp;
                 model.Summation = model.Summation;
                 model.UserEmail = model.UserEmail;             
                 model.UpdateDate = DateTime.Now;
@@ -155,6 +158,7 @@ namespace BEYON.CoreBLL.Service.App
                 model.SubmitTime = model.SubmitTime;
                 model.AuditTime = model.AuditTime;
                 model.AuditOpinion = model.AuditOpinion;
+                model.ApplyDesp = model.ApplyDesp;
                 model.Summation = model.Summation;
                 model.UserEmail = model.UserEmail;                          
                 model.UpdateDate = DateTime.Now;
