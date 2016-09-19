@@ -137,6 +137,19 @@
                                 success: function (result) {
                                     fileDownload('../App/ApplyForm/DownloadFile', result);
                                     toastr.success('数据导出完成');
+                                    @*$.ajax({
+                                        type: "POST",
+                                        url: "@Url.Action("DeleteFile")",
+                                        dataType: "json",
+                                        contentType: "application/json; charset=utf-8",
+                                        data: JSON.stringify({ fileName: result }),
+                                        success: function (result) {
+                                            
+                                        },
+                                        error: function () {
+                                            toastr.error('无法删除导出文件！');
+                                        }
+                                    });*@
                                 },
                                 error: function () {
                                     toastr.error('网络错误，请重新提交！');
@@ -276,7 +289,7 @@
                         }
                     });
                     selectedTable.button(0).enable(selectedCount > 0 && enalbeAudit);       //审核
-                    selectedTable.button(2).enable(selectedCount === 1);                     //查看
+                    selectedTable.button(1).enable(selectedCount === 1);                     //查看
                 } else {
                     if (selectedCount < 1) {
                         selectedTable.button(1).enable(false);      //修改

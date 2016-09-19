@@ -388,7 +388,7 @@ namespace BEYON.Web.Areas.App.Controllers
                 System.IO.FileInfo file = new System.IO.FileInfo(filepath);
                 if (file.Exists)//判断文件是否存在
                 {
-                    const long ChunkSize = 102400;//100K 每次读取文件，只读取100Ｋ，这样可以缓解服务器的压力
+                    const long ChunkSize = 1048576;//1024K 每次读取文件，只读取100Ｋ，这样可以缓解服务器的压力
                     byte[] buffer = new byte[ChunkSize];
 
                     Response.Clear();
@@ -404,13 +404,11 @@ namespace BEYON.Web.Areas.App.Controllers
                         dataLengthToRead = dataLengthToRead - lengthRead;
                     }
                     Response.Close();
-                    //Response.End();
+                    Response.End();
+                    iStream.Close();
 
-                    //if (file.Attributes.ToString().IndexOf("ReadOnly") != -1)
-                    //{
-                    //    file.Attributes = System.IO.FileAttributes.Normal;
-                    //}
-                    // System.IO.File.Delete(file.FullName);
+                    System.IO.File.SetAttributes(filepath, System.IO.FileAttributes.Normal);
+                    System.IO.File.Delete(filepath);
                 }
             }
             catch (Exception e)
@@ -418,6 +416,26 @@ namespace BEYON.Web.Areas.App.Controllers
                 Console.Write(e.ToString());
             }
         }
+
+        [HttpPost]
+        public ActionResult DeleteFile(string fileName)
+        {
+            if (String.IsNullOrEmpty(fileName))
+                return Json(new{});
+            var filepath = System.IO.Path.Combine(Server.MapPath("/Exports/"), fileName);
+            System.IO.FileInfo file = new System.IO.FileInfo(filepath);
+            if(file.Exists)
+            {
+                if (file.Attributes.ToString().IndexOf("ReadOnly") != -1)
+                {
+                    file.Attributes = System.IO.FileAttributes.Normal;
+                }
+                System.IO.File.Delete(file.FullName);
+            }
+
+            return Json(new { });
+        }
+        
 #endregion
     }
 }

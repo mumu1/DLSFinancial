@@ -50,8 +50,32 @@ namespace BEYON.CoreBLL.Service.Excel
             return tableFile;
         }
 
+        private void RemoveOldFile(String filePath)
+        {
+            string userid = ((System.Web.Security.FormsIdentity)(System.Web.HttpContext.Current.User.Identity)).Ticket.UserData;
+            var list = System.IO.Directory.GetFiles(filePath, "*.xlsx").Where(t => t.Contains(string.Format("DLS_{0}", userid))).ToList();
+            foreach(var file in list)
+            {
+                if (System.IO.File.Exists(file))
+                {
+                    try
+                    {
+                        System.IO.File.SetAttributes(file, System.IO.FileAttributes.Normal);
+                        System.IO.File.Delete(file);
+                    }
+                    catch
+                    {
+
+                    }
+                }
+            }
+        }
+
         private String SaveExcel(String  filePath, ApplicationForm applicationForm, IList<PersonalRecord> persons)
         {
+            ////1.删除已有文件
+            //RemoveOldFile(filePath);
+
             var fileName = GetFileName();
             var fullPath = GetFilePath(filePath, fileName);
             if (System.IO.File.Exists(fullPath))
