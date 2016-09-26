@@ -29,14 +29,15 @@ namespace BEYON.Web.Areas.App.Controllers
         private readonly IPersonalRecordService _personalRecordService;
         private readonly IUserService _userService;
         private readonly IApplyPrintService _applyPrintService;
-
+        private readonly IAuditOpinionService _auditOpinionService;
         public ApplyFormController(IApplicationFormService applicationFormService,  IPersonalRecordService personalRecordService,
-            IUserService userService, IApplyPrintService applyPrintService)
+            IUserService userService, IApplyPrintService applyPrintService, IAuditOpinionService auditOpinionService)
         {
             this._applicationFormService = applicationFormService;
             this._personalRecordService = personalRecordService;
             this._userService = userService;
             this._applyPrintService = applyPrintService;
+            this._auditOpinionService = auditOpinionService;
         }
 
         //
@@ -310,6 +311,7 @@ namespace BEYON.Web.Areas.App.Controllers
                 {
                     form.AuditStatus = "待审核";
                     form.UpdateDate = DateTime.Now;
+                    form.SubmitTime = DateTime.Now;
                     _applicationFormService.Update(form);
                 }
             }
@@ -340,7 +342,9 @@ namespace BEYON.Web.Areas.App.Controllers
         public ActionResult Audit(String[] serialNumbers)
         {
             Session["AuditSerials"] = serialNumbers;
-            return PartialView();
+            //1.获取审核意见表
+            var result = this._auditOpinionService.AuditOpinions.ToList();
+            return PartialView(result);
         }
 
 
@@ -359,6 +363,7 @@ namespace BEYON.Web.Areas.App.Controllers
                     if (!string.IsNullOrEmpty(formVM.AuditOpinion))
                     {
                         form.AuditOpinion = formVM.AuditOpinion;
+                        form.AuditTime = DateTime.Now;
                     }
                     form.UpdateDate = DateTime.Now;
                     _applicationFormService.Update(form);

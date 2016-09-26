@@ -33,15 +33,12 @@
             <label class="label"><b>审核意见</b></label>
             <label class="select select-multiple">
                 <select multiple="" class="custom-scroll" name="AuditOpinion">
-                    <option value="1" onmouseover="tooltip(this)" onmouseout="nodisplay()">我世间风流事解放路将阿里放假啦使江风了解萨罗夫加辣椒粉垃圾利浪费了涉及法律世间风流事家乐福</option>
-                    <option value="2" onmouseover="tooltip(this)" onmouseout="nodisplay()">Alice</option>
-                    <option value="3" onmouseover="tooltip(this)" onmouseout="nodisplay()">Anastasia</option>
-                    <option value="4" onmouseover="tooltip(this)" onmouseout="nodisplay()">Avelina</option>
-                    <option value="5" onmouseover="tooltip(this)" onmouseout="nodisplay()">Basilia</option>
-                    <option value="6" onmouseover="tooltip(this)" onmouseout="nodisplay()">Beatrice</option>
-                    <option value="7" onmouseover="tooltip(this)" onmouseout="nodisplay()">Cassandra</option>
-                    <option value="8" onmouseover="tooltip(this)" onmouseout="nodisplay()">Clemencia</option>
-                    <option value="9" onmouseover="tooltip(this)" onmouseout="nodisplay()">Desiderata</option>
+                    @{
+                        foreach (var auditOption in Model)
+                        {
+                            <option value=@auditOption.AuditOpinionDesp onmouseover="tooltip(this)" onmouseout="nodisplay()">@auditOption.AuditOpinionDesp</option>
+                        }
+                    }
                 </select>
             </label>
         </section>
