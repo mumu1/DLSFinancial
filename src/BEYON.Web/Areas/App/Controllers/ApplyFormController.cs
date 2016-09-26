@@ -70,8 +70,6 @@ namespace BEYON.Web.Areas.App.Controllers
                 //var result = this._applicationFormService.ApplicationForms.ToList();
                 return Json(new { total = result.Count, data = result }, JsonRequestBehavior.AllowGet);
             }
-            
-
         }
 
       
@@ -198,6 +196,7 @@ namespace BEYON.Web.Areas.App.Controllers
         public ActionResult Save(ApplicationFormVM formVM)
         {
             ApplicationForm form = _applicationFormService.ApplicationForms.FirstOrDefault(t => t.SerialNumber == formVM.SerialNumber);
+            form.UpdateDate = DateTime.Now;
             if (form == null)
             {
                 //formVM.SubmitTime = DateTime.Now;
