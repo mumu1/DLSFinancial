@@ -71,6 +71,10 @@ namespace BEYON.Domain.Model.App
         [StringLength(100)]
         public string Bank { get; set; }
 
+        [Display(Name = "开户银行名称")]
+        [StringLength(100)]
+        public string BankDetailName { get; set; }
+
         [Display(Name = "银行存折账号")]
         [StringLength(36)]
         public string AccountNumber { get; set; }

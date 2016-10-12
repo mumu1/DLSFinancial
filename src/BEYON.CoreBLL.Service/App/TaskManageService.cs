@@ -10,42 +10,44 @@ using BEYON.ViewModel.App;
 using BEYON.CoreBLL.Service.Excel;
 using EntityFramework.Extensions;
 
+
 namespace BEYON.CoreBLL.Service.App
 {
-    public class TitleService : CoreServiceBase, ITitleService
+    public class TaskManageService : CoreServiceBase, ITaskManageService
     {
-        private readonly ITitleRepository _TitleRepository;
+        private readonly ITaskManageRepository _TaskManageRepository;
 
 
 
-        public TitleService(ITitleRepository titleRepository, IUnitOfWork unitOfWork)
+        public TaskManageService(ITaskManageRepository taskManageRepository, IUnitOfWork unitOfWork)
             : base(unitOfWork)
         {
-            this._TitleRepository = titleRepository;
+            this._TaskManageRepository = taskManageRepository;
         }
-        public IQueryable<Title> Titles
+        public IQueryable<TaskManage> TaskManages
         {
-            get { return _TitleRepository.Entities; }
+            get { return _TaskManageRepository.Entities; }
         }
 
-        public OperationResult Insert(TitleVM model)
+        public OperationResult Insert(TaskManageVM model)
         {
             try
             {
-                Title title = _TitleRepository.Entities.FirstOrDefault(c => c.TitleCode == model.TitleCode.Trim());
-                if (title != null)
+                TaskManage task = _TaskManageRepository.Entities.FirstOrDefault(c => c.TaskID == model.TaskID.Trim());
+                if (task != null)
                 {
-                    return new OperationResult(OperationResultType.Warning, "数据库中已经存在相同的职称信息，请修改后重新提交！");
+                    return new OperationResult(OperationResultType.Warning, "数据库中已经存在相同的课题信息，请修改后重新提交！");
                 }
-                if (model.TitleName == null || model.TitleName.Trim() == "")
-                    return new OperationResult(OperationResultType.Warning, "职称名称不能为空，请修改后重新提交！");
-                var entity = new Title
+                if (model.TaskName == null || model.TaskName.Trim() == "")
+                    return new OperationResult(OperationResultType.Warning, "课题名称不能为空，请修改后重新提交！");
+                var entity = new TaskManage
                 {
-                    TitleCode = model.TitleCode,
-                    TitleName = model.TitleName,
+                    TaskID = model.TaskID,
+                    TaskName = model.TaskName,
+                    TaskLeader = model.TaskLeader,
                     UpdateDate = DateTime.Now
                 };
-                _TitleRepository.Insert(entity);
+                _TaskManageRepository.Insert(entity);
 
                 return new OperationResult(OperationResultType.Success, "新增数据成功！");
             }
@@ -54,19 +56,20 @@ namespace BEYON.CoreBLL.Service.App
                 return new OperationResult(OperationResultType.Error, "新增数据失败，数据库插入数据时发生了错误!");
             }
         }
-        public OperationResult Update(TitleVM model)
+        public OperationResult Update(TaskManageVM model)
         {
             try
             {
-                Title title = _TitleRepository.Entities.FirstOrDefault(c => c.TitleCode == model.TitleCode.Trim());
-                if (title == null)
+                TaskManage task = _TaskManageRepository.Entities.FirstOrDefault(c => c.TaskID == model.TaskID.Trim());
+                if (task == null)
                 {
                     throw new Exception();
                 }
-                title.TitleName = model.TitleName;
-                title.TitleCode = model.TitleCode;
-                title.UpdateDate = DateTime.Now;
-                _TitleRepository.Update(title);
+                task.TaskID = model.TaskID;
+                task.TaskName = model.TaskName;
+                task.TaskLeader = model.TaskLeader;
+                task.UpdateDate = DateTime.Now;
+                _TaskManageRepository.Update(task);
                 return new OperationResult(OperationResultType.Success, "更新数据成功！");
             }
             catch
@@ -75,13 +78,13 @@ namespace BEYON.CoreBLL.Service.App
             }
         }
 
-        public OperationResult Delete(List<string> titleCode)
+        public OperationResult Delete(List<string> taskManageID)
         {
             try
             {
-                if (titleCode != null)
+                if (taskManageID != null)
                 {
-                    int count = _TitleRepository.Delete(_TitleRepository.Entities.Where(c => titleCode.Contains(c.TitleCode)));
+                    int count = _TaskManageRepository.Delete(_TaskManageRepository.Entities.Where(c => taskManageID.Contains(c.TaskID)));
                     if (count > 0)
                     {
                         return new OperationResult(OperationResultType.Success, "删除数据成功！");
@@ -101,31 +104,31 @@ namespace BEYON.CoreBLL.Service.App
                 return new OperationResult(OperationResultType.Error, "删除数据失败!");
             }
         }
-        public OperationResult Update(Title model)
+        public OperationResult Update(TaskManage model)
         {
             try
             {
                 model.UpdateDate = DateTime.Now;
-                _TitleRepository.Update(model);
-                return new OperationResult(OperationResultType.Success, "更新职称数据成功！");
+                _TaskManageRepository.Update(model);
+                return new OperationResult(OperationResultType.Success, "更新课题数据成功！");
             }
             catch
             {
-                return new OperationResult(OperationResultType.Error, "更新职称数据失败!");
+                return new OperationResult(OperationResultType.Error, "更新课题数据失败!");
             }
         }
 
-        public OperationResult Delete(Title model)
+        public OperationResult Delete(TaskManage model)
         {
             try
             {
                 model.UpdateDate = DateTime.Now;
-                _TitleRepository.Delete(model);
-                return new OperationResult(OperationResultType.Success, "更新职称数据成功！");
+                _TaskManageRepository.Delete(model);
+                return new OperationResult(OperationResultType.Success, "更新课题数据成功！");
             }
             catch
             {
-                return new OperationResult(OperationResultType.Error, "更新职称数据失败!");
+                return new OperationResult(OperationResultType.Error, "更新课题数据失败!");
             }
         }
 
@@ -133,8 +136,8 @@ namespace BEYON.CoreBLL.Service.App
         {
             try
             {
-                var items = ExcelService.GetObjects<Title>(fileName, columns);
-                _TitleRepository.InsertOrUpdate(items);
+                var items = ExcelService.GetObjects<TaskManage>(fileName, columns);
+                _TaskManageRepository.InsertOrUpdate(items);
                 return new OperationResult(OperationResultType.Success, "导入数据成功！");
             }
             catch (Exception ex)

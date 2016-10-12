@@ -35,12 +35,13 @@ namespace BEYON.CoreBLL.Service.App
                 TaxBaseByMonth taxBaseByMonth = _TaxBaseByMonthRepository.Entities.FirstOrDefault(c => c.CertificateID == model.CertificateID.Trim());
                 if (taxBaseByMonth != null)
                 {
-                    return new OperationResult(OperationResultType.Warning, "数据库中已经存在相同的报销事项，请修改后重新提交！");
+                    return new OperationResult(OperationResultType.Warning, "数据库中已经存在相同的基本工资信息，请修改后重新提交！");
                 }
                 if (model.Name == null || model.Name.Trim() == "")
                     return new OperationResult(OperationResultType.Warning, "姓名不能为空，请修改后重新提交！");
                 var entity = new TaxBaseByMonth
                 {
+                    Period = model.Period,
                     Name = model.Name,
                     CertificateType = model.CertificateType,
                     CertificateID = model.CertificateID,
@@ -49,8 +50,8 @@ namespace BEYON.CoreBLL.Service.App
                     AmountDeducted = model.AmountDeducted,
                     InitialTaxPayable = model.InitialTaxPayable,
                     InitialTax = model.InitialTax,
-                    PersonType = model.PersonType,
-                    Title = model.Title,
+                    //PersonType = model.PersonType,
+                    //Title = model.Title,
                     UpdateDate = DateTime.Now
                 };
                 _TaxBaseByMonthRepository.Insert(entity);
@@ -71,6 +72,7 @@ namespace BEYON.CoreBLL.Service.App
                 {
                     throw new Exception();
                 }
+                taxBaseByMonth.Period = model.Period;
                 taxBaseByMonth.Name = model.Name;
                 taxBaseByMonth.CertificateType = model.CertificateType;
                 taxBaseByMonth.CertificateID = model.CertificateID;
@@ -78,9 +80,9 @@ namespace BEYON.CoreBLL.Service.App
                 taxBaseByMonth.InitialTax = model.InitialTax;
                 taxBaseByMonth.InitialTaxPayable = model.InitialTaxPayable;
                 taxBaseByMonth.AmountDeducted = model.AmountDeducted;
-                taxBaseByMonth.PersonType = model.PersonType;
+                //taxBaseByMonth.PersonType = model.PersonType;
                 taxBaseByMonth.TaxFree = model.TaxFree;
-                taxBaseByMonth.Title = model.Title;
+                //taxBaseByMonth.Title = model.Title;
                 taxBaseByMonth.UpdateDate = DateTime.Now;
                 _TaxBaseByMonthRepository.Update(taxBaseByMonth);
                 return new OperationResult(OperationResultType.Success, "更新数据成功！");

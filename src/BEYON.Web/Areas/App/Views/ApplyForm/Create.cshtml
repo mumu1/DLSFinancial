@@ -137,7 +137,17 @@
 <script src="@Url.Content("~/Scripts/Custom/App/File.js")"></script>
 
     <script>
-    pageSetUp();
+        pageSetUp();
+
+        var bankListOpt = [];      //开户银行下拉菜单对应数组
+        var titleListOpt = [];        //职称下拉菜单对应数组
+        registerBankAccount();     //从数据库读取开户银行下拉菜单对应数组
+        registerTitle();                //从数据库读取职称下拉菜单对应数组
+        //  console.log(bankListOpt);
+
+
+       
+
 
     var editor = new $.fn.dataTable.Editor({
         "ajaxUrl": {
@@ -156,16 +166,30 @@
                 label: "证件类型:",
                 type: "select",
                 options: [
-                          { label: "身份证", value: "身份证" },
-                          { label: "护照", value: "护照" },
-                          { label: "军官照", value: "军官照" },
+                          { label: "居民身份证", value: "居民身份证" },
+                          { label: "中国护照", value: "中国护照" },
+                          { label: "外国护照", value: "外国护照" },
+                          { label: "军官证", value: "军官证" },
+                          { label: "士兵证", value: "士兵证" },
+                          { label: "武警警官证", value: "武警警官证" },
+                          { label: "港澳居民来往内地通行证", value: "港澳居民来往内地通行证" },
+                          { label: "台湾居民来往大陆通行证", value: "台湾居民来往大陆通行证" },
+                          { label: "香港身份证", value: "香港身份证" },
+                          { label: "台湾身份证", value: "台湾身份证" },
+                          { label: "澳门身份证", value: "澳门身份证" },
+                          { label: "外国人永久居留证", value: "外国人永久居留证" },
                 ],
-                def: "身份证"
+                def: "居民身份证"
             },
             { name: "CertificateID", label: "证件号码:" },
             { name: "Tele", label: "联系电话:", },
-            { name: "Nationality", label: "国籍:", type: "text" },
-            { name: "Title", label: "职称:", type: "text" },
+            { name: "Nationality", label: "国籍:", type: "text",def:"中国" },
+            {
+                  name: "Title",
+                  label: "职称:",
+                  type: "select",
+                  options: titleListOpt,              
+            },
             {
                 name: "PersonType",
                 label: "人员类型:",
@@ -180,12 +204,7 @@
                 name: "Bank",
                 label: "开户银行:",
                 type: "select",
-                options: [
-                            { label: "工商银行", value: "工商银行" },
-                            { label: "中国银行", value: "中国银行" },
-                            { label: "建设银行", value: "建设银行" },
-                            { label: "农业银行", value: "农业银行" }
-                ],
+                options: bankListOpt,
                 def: "工商银行"
             },
             { name: "AccountNumber", label: "银行账户:", type: "text" },
@@ -200,7 +219,7 @@
                 ],
                 def: "含税"
             },
-            { name: "Amount", label: "金额(元):", type: "readonly" },
+            { name: "Amount", label: "金额(元):", type: "text"},
             {
                 name: "PaymentType",
                 label: "支付类型:",
@@ -217,15 +236,18 @@
 
     //初始化创建框显示
     editor.on('onInitCreate', function () {
-        editor.disable('Amount');
+        //      editor.disable('Summation');
+
         return true;
     });
+
+   
 
     //初始化编辑框显示
     editor.on('onInitEdit', function () {
         var CertificateType = editor.field('CertificateType');
-
-        editor.disable('Amount');
+        
+    //    editor.disable('Amount');
     });
 
     //提交前条件判断
@@ -250,7 +272,14 @@
                     CertificateID.error('身份证号码不正确');
                 }
             }
-
+          
+            //2.金额为数值的验证
+            var Amount = editor.field('Amount');
+            //如果不是数值
+            if( isNaN(new Number(Amount.val()))){
+                Amount.error("金额格式错误，请填写数值型");
+            }
+          
             // 如果有错误报告，不能提交编辑结果
             if (this.inError()) {
                 return false;
@@ -412,4 +441,41 @@
         return false;
     }
 
+        function registerBankAccount() {      
+            $.ajax({
+                type: "GET", 
+                async: false,
+                url: "../BasicDataManagement/BankAccount/GetAllData",
+                //data: params,
+                contentType: "application/json; charset=utf-8",
+                datatype: "json",
+                success: function (data) {
+                    $.each(data.data, function (k, v) {
+                        bankListOpt.push({ label: v.BankName, value: v.BankName });
+                    })                      
+                },
+                error: function () {
+                    toastr.error('获取开户银行数据失败！');
+                }
+            });       
+        }
+
+        function registerTitle() {
+            $.ajax({
+                type: "GET",
+                async: false,
+                url: "../BasicDataManagement/Professional/GetAllData",
+                //data: params,
+                contentType: "application/json; charset=utf-8",
+                datatype: "json",
+                success: function (data) {
+                    $.each(data.data, function (k, v) {
+                        titleListOpt.push({ label: v.TitleName, value: v.TitleName });
+                    })
+                },
+                error: function () {
+                    toastr.error('获取职称数据失败！');
+                }
+            });
+        }
     </script>

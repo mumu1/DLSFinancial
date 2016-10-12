@@ -37,6 +37,10 @@ namespace BEYON.ViewModel.App
         [Display(Name = "初始税额")]
         public Double InitialTax { get; set; }
 
+        [Display(Name = "期间")]
+        [StringLength(50)]
+        public String Period { get; set; }
+/*
         [Display(Name = "人员类型")]
         [StringLength(36)]
         public string PersonType { get; set; }
@@ -44,5 +48,6 @@ namespace BEYON.ViewModel.App
         [Display(Name = "职称")]
         [StringLength(36)]
         public string Title { get; set; }
+ * */
     }
 }

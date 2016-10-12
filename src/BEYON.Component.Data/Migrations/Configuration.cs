@@ -52,7 +52,8 @@ namespace BEYON.Component.Data.Migrations
                 new Module { Id = 14, ParentId = 12, Name = "职称字典表", LinkUrl = "~/BasicDataManagement/Professional/Index",  Code = 402, Description = null, IsMenu = true, Enabled = true,  UpdateDate = DateTime.Now},
                 new Module { Id = 15, ParentId = 12, Name = "开户银行字典表", LinkUrl = "~/BasicDataManagement/BankAccount/Index",  Code = 403, Description = null, IsMenu = true, Enabled = true,  UpdateDate = DateTime.Now},
                 new Module { Id = 16, ParentId = 12, Name = "工资基础表初始化", LinkUrl = "~/BasicDataManagement/WageBaseTable/Index",  Code = 404,Description = null, IsMenu = true, Enabled = true, UpdateDate = DateTime.Now},
-                new Module { Id = 17, ParentId = 12, Name = "审核意见字典表", LinkUrl = "~/BasicDataManagement/AuditOption/Index",  Code = 405,Description = null, IsMenu = true, Enabled = true, UpdateDate = DateTime.Now}
+                new Module { Id = 17, ParentId = 12, Name = "审核意见字典表", LinkUrl = "~/BasicDataManagement/AuditOption/Index",  Code = 405,Description = null, IsMenu = true, Enabled = true, UpdateDate = DateTime.Now},
+                new Module { Id = 18, ParentId = 12, Name = "课题字典表", LinkUrl = "~/BasicDataManagement/TaskManage/Index",  Code = 406,Description = null, IsMenu = true, Enabled = true, UpdateDate = DateTime.Now}
             };
             DbSet<Module> moduleSet = context.Set<Module>();
             moduleSet.AddOrUpdate(t => new { t.Code }, modules.ToArray());
@@ -114,7 +115,8 @@ namespace BEYON.Component.Data.Migrations
              new Permission{Id=28, Name="操作",Code=EnumPermissionCode.Audit.ToString(), Description="职称字典表" ,Enabled=true,UpdateDate=DateTime.Now,module=modules[13]},
              new Permission{Id=29, Name="操作",Code=EnumPermissionCode.Audit.ToString(), Description="开户银行字典表" ,Enabled=true,UpdateDate=DateTime.Now,module=modules[14]},
              new Permission{Id=30, Name="操作",Code=EnumPermissionCode.Audit.ToString(), Description="工资基础表初始化" ,Enabled=true,UpdateDate=DateTime.Now,module=modules[15]},
-             new Permission{Id=31, Name="操作",Code=EnumPermissionCode.Audit.ToString(), Description="审核意见字典表" ,Enabled=true,UpdateDate=DateTime.Now,module=modules[16]}
+             new Permission{Id=31, Name="操作",Code=EnumPermissionCode.Audit.ToString(), Description="审核意见字典表" ,Enabled=true,UpdateDate=DateTime.Now,module=modules[16]},
+             new Permission{Id=32, Name="操作",Code=EnumPermissionCode.Audit.ToString(), Description="课题字典表" ,Enabled=true,UpdateDate=DateTime.Now,module=modules[17]}           
             #endregion
             };
             DbSet<Permission> permissionSet = context.Set<Permission>();
@@ -152,6 +154,28 @@ namespace BEYON.Component.Data.Migrations
             };
             DbSet<UserGroup> userGroupsSet = context.Set<UserGroup>();
             userGroupsSet.AddOrUpdate(m => new { m.GroupName }, userGroups.ToArray());
+            context.SaveChanges();
+            #endregion
+
+            #region 职称--title
+            List<Title> titles = new List<Title>
+            {
+                new Title { TitleCode="1000", TitleName = "研究员" },
+                new Title { TitleCode="1001", TitleName = "副研究员" },
+                new Title { TitleCode="1002", TitleName = "高工" },
+                new Title { TitleCode="1003", TitleName = "工程师" },
+                new Title { TitleCode="1004", TitleName = "助理工程师" },
+                new Title { TitleCode="1005", TitleName = "职员" },
+                new Title { TitleCode="1006", TitleName = "教授" },
+                new Title { TitleCode="1007", TitleName = "副教授" },
+                new Title { TitleCode="1008", TitleName = "讲师" },
+                new Title { TitleCode="1009", TitleName = "博士后" },
+                new Title { TitleCode="1010", TitleName = "博士" },
+                new Title { TitleCode="1011", TitleName = "研究生" },
+                new Title { TitleCode="1012", TitleName = "其他" }
+            };
+            DbSet<Title> titlesSet = context.Set<Title>();
+            titlesSet.AddOrUpdate(m => new { m.TitleCode }, titles.ToArray());
             context.SaveChanges();
             #endregion
 
@@ -215,15 +239,7 @@ namespace BEYON.Component.Data.Migrations
             //context.SaveChanges();
             //#endregion
 
-            //#region 标绘--drafts
-            //List<Drafts> drafts = new List<Drafts>
-            //{
-            //    new Drafts { UmrID="1000", Name = "山体图纸", UserID = "00001" }
-            //};
-            //DbSet<Drafts> draftsSet = context.Set<Drafts>();
-            //draftsSet.AddOrUpdate(m => new { m.DraftID }, drafts.ToArray());
-            //context.SaveChanges();
-            //#endregion
+         
 
             //#region 标绘--audit
             //List<Audit> audits = new List<Audit>

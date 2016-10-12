@@ -36,7 +36,7 @@ namespace BEYON.CoreBLL.Service.App
                 Bank bank = _BankRepository.Entities.FirstOrDefault(c => c.BankCode == model.BankCode.Trim());
                 if (bank != null)
                 {
-                    return new OperationResult(OperationResultType.Warning, "数据库中已经存在相同的报销事项，请修改后重新提交！");
+                    return new OperationResult(OperationResultType.Warning, "数据库中已经存在相同的银行信息，请修改后重新提交！");
                 }
                 if (model.BankName == null || model.BankName.Trim() == "")
                     return new OperationResult(OperationResultType.Warning, "开户银行名称不能为空，请修改后重新提交！");

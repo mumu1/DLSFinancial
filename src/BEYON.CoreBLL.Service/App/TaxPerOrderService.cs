@@ -12,55 +12,56 @@ using EntityFramework.Extensions;
 
 namespace BEYON.CoreBLL.Service.App
 {
-    public class PersonalRecordService : CoreServiceBase, IPersonalRecordService
+    public class TaxPerOrderService : CoreServiceBase, ITaxPerOrderService
     {
-        private readonly IPersonalRecordRepository _PersonalRecordRepository;
+        private readonly ITaxPerOrderRepository _TaxPerOrderRepository;
 
 
 
-        public PersonalRecordService(IPersonalRecordRepository personalRecordRepository, IUnitOfWork unitOfWork)
+        public TaxPerOrderService(ITaxPerOrderRepository taxPerOrderRepository, IUnitOfWork unitOfWork)
             : base(unitOfWork)
         {
-            this._PersonalRecordRepository = personalRecordRepository;
+            this._TaxPerOrderRepository = taxPerOrderRepository;
         }
-        public IQueryable<PersonalRecord> PersonalRecords
+        public IQueryable<TaxPerOrder> TaxPerOrders
         {
-            get { return _PersonalRecordRepository.Entities; }
+            get { return _TaxPerOrderRepository.Entities; }
         }
 
-        public OperationResult Insert(PersonalRecordVM model, bool isSave)
+        public OperationResult Insert(TaxPerOrderVM model, bool isSave)
         {
             try
             {
-              //  PersonalRecord personalRecord = _PersonalRecordRepository.Entities.FirstOrDefault(c => c.SerialNumber == model.SerialNumber && c.CertificateID == model.CertificateID.Trim());
-                PersonalRecord[] personalRecords = _PersonalRecordRepository.Entities.Where(w => w.SerialNumber == model.SerialNumber && w.CertificateID == model.CertificateID.Trim()).ToArray();
-                if (personalRecords != null && personalRecords.Length > 0)
+                TaxPerOrder taxPerOrder = _TaxPerOrderRepository.Entities.FirstOrDefault(c => c.SerialNumber == model.SerialNumber && c.SerialNumber == model.CertificateID.Trim());
+                if (taxPerOrder != null)
                 {
-                    return new OperationResult(OperationResultType.Warning, "该申请单中已经存在相同的人员信息，请修改后重新提交！");
+                    return new OperationResult(OperationResultType.Warning, "数据库中已经存在相同的税单纪录，请修改后重新提交！");
                 }
                 if (model.CertificateID == null || model.CertificateID.Trim() == "")
                     return new OperationResult(OperationResultType.Warning, "证件号码不能为空，请修改后重新提交！");
-                var entity = new PersonalRecord
+                var entity = new TaxPerOrder
                 {
                     SerialNumber = model.SerialNumber,
-                    Name = model.Name,
-                    CertificateID = model.CertificateID,
+                    ProjectNumber = model.ProjectNumber,
+                    RefundType = model.RefundType,
+                    ProjectDirector = model.ProjectDirector,
+                    Agent = model.Agent,
+                    PersonType = model.PersonType,
                     CertificateType = model.CertificateType,
-                    Company = model.Company,
-                    Tele = model.Tele,
-                    PersonType = model.PaymentType,
-                    Nationality = model.Nationality,
-                    Title = model.Title,
+                    CertificateID = model.CertificateID,
                     Amount = model.Amount,
                     TaxOrNot = model.TaxOrNot,
+                    Tax = model.Tax,
                     Bank = model.Bank,
                     BankDetailName = model.BankDetailName,
                     AccountName = model.AccountName,
                     AccountNumber = model.AccountNumber,
                     PaymentType = model.PaymentType,
+                    AmountY = model.AmountY,
+                    AmountX = model.AmountX, 
                     UpdateDate = DateTime.Now
                 };
-                _PersonalRecordRepository.Insert(entity, isSave);
+                _TaxPerOrderRepository.Insert(entity, isSave);
 
                 return new OperationResult(OperationResultType.Success, "新增数据成功！");
             }
@@ -69,33 +70,34 @@ namespace BEYON.CoreBLL.Service.App
                 return new OperationResult(OperationResultType.Error, "新增数据失败：" + ex.Message);
             }
         }
-        public OperationResult Update(PersonalRecordVM model, bool isSave)
+        public OperationResult Update(TaxPerOrderVM model, bool isSave)
         {
             try
             {
-                PersonalRecord personalRecord = _PersonalRecordRepository.Entities.FirstOrDefault(c => c.SerialNumber == model.SerialNumber &&  c.CertificateID == model.CertificateID.Trim());
-                if (personalRecord == null)
+                TaxPerOrder taxPerOrder = _TaxPerOrderRepository.Entities.FirstOrDefault(c => c.CertificateID == model.CertificateID.Trim());
+                if (taxPerOrder == null)
                 {
                     throw new Exception();
-                }
-                personalRecord.SerialNumber = model.SerialNumber;
-                personalRecord.Name = model.Name;
-                personalRecord.CertificateID = model.CertificateID;
-                personalRecord.CertificateType = model.CertificateType;
-                personalRecord.Company = model.Company;
-                personalRecord.Tele = model.Tele;
-                personalRecord.PersonType = model.PaymentType;
-                personalRecord.Nationality = model.Nationality;
-                personalRecord.Title = model.Title;
-                personalRecord.Amount = model.Amount;
-                personalRecord.TaxOrNot = model.TaxOrNot;
-                personalRecord.Bank = model.Bank;
-                personalRecord.BankDetailName = model.BankDetailName;
-                personalRecord.AccountName = model.AccountName;
-                personalRecord.AccountNumber = model.AccountNumber;
-                personalRecord.PaymentType = model.PaymentType;
-                personalRecord.UpdateDate = DateTime.Now;
-                _PersonalRecordRepository.Update(personalRecord, isSave);
+                }      
+                taxPerOrder.SerialNumber = model.SerialNumber;
+                taxPerOrder.ProjectNumber = model.ProjectNumber;
+                taxPerOrder.RefundType = model.RefundType;
+                taxPerOrder.ProjectDirector = model.ProjectDirector;
+                taxPerOrder.Agent = model.Agent;
+                taxPerOrder.PersonType = model.PersonType;
+                taxPerOrder.CertificateType = model.CertificateType;
+                taxPerOrder.CertificateID = model.CertificateID;
+                taxPerOrder.Amount = model.Amount;
+                taxPerOrder.TaxOrNot = model.TaxOrNot;
+                taxPerOrder.Tax = model.Tax;
+                taxPerOrder.Bank = model.Bank;
+                taxPerOrder.BankDetailName = model.BankDetailName;
+                taxPerOrder.AccountName = model.AccountName;
+                taxPerOrder.AccountNumber = model.AccountNumber;
+                taxPerOrder.AmountY = model.AmountY;
+                taxPerOrder.AmountX = model.AmountX; 
+                taxPerOrder.UpdateDate = DateTime.Now;
+                _TaxPerOrderRepository.Update(taxPerOrder, isSave);
                 return new OperationResult(OperationResultType.Success, "更新数据成功！");
             }
             catch
@@ -110,7 +112,7 @@ namespace BEYON.CoreBLL.Service.App
             {
                 if (serialNumber != null)
                 {
-                    int count = _PersonalRecordRepository.Delete(_PersonalRecordRepository.Entities.Where(c => serialNumber.Contains(c.SerialNumber)), isSave);
+                    int count = _TaxPerOrderRepository.Delete(_TaxPerOrderRepository.Entities.Where(c => serialNumber.Contains(c.SerialNumber)), isSave);
                     if (count > 0)
                     {
                         return new OperationResult(OperationResultType.Success, "删除数据成功！");
@@ -130,12 +132,12 @@ namespace BEYON.CoreBLL.Service.App
                 return new OperationResult(OperationResultType.Error, "删除数据失败!");
             }
         }
-        public OperationResult Update(PersonalRecord model, bool isSave)
+        public OperationResult Update(TaxPerOrder model, bool isSave)
         {
             try
             {
                 model.UpdateDate = DateTime.Now;
-                _PersonalRecordRepository.Update(model, isSave);
+                _TaxPerOrderRepository.Update(model, isSave);
                 return new OperationResult(OperationResultType.Success, "更新数据成功！");
             }
             catch
@@ -144,12 +146,12 @@ namespace BEYON.CoreBLL.Service.App
             }
         }
 
-        public OperationResult Delete(PersonalRecord model, bool isSave)
+        public OperationResult Delete(TaxPerOrder model, bool isSave)
         {
             try
             {
                 model.UpdateDate = DateTime.Now;
-                _PersonalRecordRepository.Delete(model, isSave);
+                _TaxPerOrderRepository.Delete(model, isSave);
                 return new OperationResult(OperationResultType.Success, "更新数据成功！");
             }
             catch
@@ -162,8 +164,8 @@ namespace BEYON.CoreBLL.Service.App
         {
             try
             {
-                var items = ExcelService.GetObjects<PersonalRecord>(fileName, columns);
-                _PersonalRecordRepository.InsertOrUpdate(items);
+                var items = ExcelService.GetObjects<TaxPerOrder>(fileName, columns);
+                _TaxPerOrderRepository.InsertOrUpdate(items);
                 return new OperationResult(OperationResultType.Success, "导入数据成功！");
             }
             catch (Exception ex)

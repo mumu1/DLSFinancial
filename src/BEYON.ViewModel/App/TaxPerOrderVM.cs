@@ -52,9 +52,19 @@ namespace BEYON.ViewModel.App
         [Display(Name = "税金")]
         public Double Tax { get; set; }
 
+        [Display(Name = "税前金额Y")]
+        public Double AmountY { get; set; }
+
+        [Display(Name = "税后金额X")]
+        public Double AmountX { get; set; }
+
         [Display(Name = "开户银行")]
         [StringLength(100)]
         public string Bank { get; set; }
+
+        [Display(Name = "开户银行名称")]
+        [StringLength(100)]
+        public string BankDetailName { get; set; }
 
         [Display(Name = "银行存折账号")]
         [StringLength(36)]

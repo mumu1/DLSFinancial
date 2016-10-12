@@ -35,7 +35,7 @@ namespace BEYON.CoreBLL.Service.App
                 AuditOpinion auditOpinion = _AuditOpinionRepository.Entities.FirstOrDefault(c => c.AuditOpinionCode == model.AuditOpinionCode.Trim());
                 if (auditOpinion != null)
                 {
-                    return new OperationResult(OperationResultType.Warning, "数据库中已经存在相同的报销事项，请修改后重新提交！");
+                    return new OperationResult(OperationResultType.Warning, "数据库中已经存在相同的审核意见，请修改后重新提交！");
                 }
                 if (model.AuditOpinionDesp == null || model.AuditOpinionDesp.Trim() == "")
                     return new OperationResult(OperationResultType.Warning, "审核意见描述不能为空，请修改后重新提交！");

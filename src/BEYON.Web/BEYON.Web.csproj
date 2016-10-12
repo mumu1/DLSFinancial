@@ -180,6 +180,7 @@
     <Compile Include="Areas\App\Controllers\StatisticsController.cs" />
     <Compile Include="Areas\BasicDataManagement\BasicDataManagementRegistration.cs" />
     <Compile Include="Areas\BasicDataManagement\Controllers\AuditOptionController.cs" />
+    <Compile Include="Areas\BasicDataManagement\Controllers\TaskManageController.cs" />
     <Compile Include="Areas\BasicDataManagement\Controllers\BankAccountController.cs" />
     <Compile Include="Areas\BasicDataManagement\Controllers\ProfessionalController.cs" />
     <Compile Include="Areas\BasicDataManagement\Controllers\ReimbursementController.cs" />
@@ -630,6 +631,7 @@
     <Content Include="Areas\App\Views\ApplyForm\Create.cshtml" />
     <Content Include="Areas\App\Views\ApplyForm\Audit.cshtml" />
     <Content Include="Areas\App\Views\ApplyForm\Show.cshtml" />
+    <Content Include="Areas\BasicDataManagement\Views\TaskManage\Index.cshtml" />
     <None Include="Properties\PublishProfiles\beyondb.pubxml" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Scripts\AdminLTE2.3.0\bootstrap\css\bootstrap.css" />

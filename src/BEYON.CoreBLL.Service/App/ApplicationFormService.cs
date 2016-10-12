@@ -33,7 +33,7 @@ namespace BEYON.CoreBLL.Service.App
                 ApplicationForm applicationForm = _ApplicationFormRepository.Entities.FirstOrDefault(c => c.SerialNumber == model.SerialNumber.Trim());
                 if (applicationForm != null)
                 {
-                    return new OperationResult(OperationResultType.Warning, "数据库中已经存在相同的报销事项，请修改后重新提交！");
+                    return new OperationResult(OperationResultType.Warning, "数据库中已经存在相同的申请单，请修改后重新提交！");
                 }
                 if (model.ProjectNumber == null || model.ProjectNumber.Trim() == "")
                     return new OperationResult(OperationResultType.Warning, "课题编号不能为空，请修改后重新提交！");

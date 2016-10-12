@@ -67,6 +67,8 @@ namespace BEYON.Web
             builder.RegisterType<RefundTypeRepository>().As<IRefundTypeRepository>().InstancePerHttpRequest();
             builder.RegisterType<BankService>().As<IBankService>().InstancePerHttpRequest();
             builder.RegisterType<BankRepository>().As<IBankRepository>().InstancePerHttpRequest();
+            builder.RegisterType<TaskManageService>().As<ITaskManageService>().InstancePerHttpRequest();
+            builder.RegisterType<TaskManageRepository>().As<ITaskManageRepository>().InstancePerHttpRequest();
             builder.RegisterType<TitleService>().As<ITitleService>().InstancePerHttpRequest();
             builder.RegisterType<TitleRepository>().As<ITitleRepository>().InstancePerHttpRequest();
             builder.RegisterType<AuditOpinionService>().As<IAuditOpinionService>().InstancePerHttpRequest();
@@ -77,6 +79,8 @@ namespace BEYON.Web
             builder.RegisterType<TaxBaseByMonthRepository>().As<ITaxBaseByMonthRepository>().InstancePerHttpRequest();
             builder.RegisterType<PersonalRecordService>().As<IPersonalRecordService>().InstancePerHttpRequest();
             builder.RegisterType<PersonalRecordRepository>().As<IPersonalRecordRepository>().InstancePerHttpRequest();
+            builder.RegisterType<TaxPerOrderService>().As<ITaxPerOrderService>().InstancePerHttpRequest();
+            builder.RegisterType<TaxPerOrderRepository>().As<ITaxPerOrderRepository>().InstancePerHttpRequest();
           
             //Excel services
             builder.RegisterType<ApplyPrintService>().As<IApplyPrintService>().InstancePerHttpRequest();

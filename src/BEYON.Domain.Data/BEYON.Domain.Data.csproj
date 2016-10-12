@@ -56,6 +56,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\App\Impl\TaxPerOrderRepository.generated.cs" />
+    <Compile Include="Repositories\App\Impl\TaskManageRepository.generated.cs" />
+    <Compile Include="Repositories\App\ITaxPerOrderRepository.generated.cs" />
+    <Compile Include="Repositories\App\ITaskManageRepository.generated.cs" />
     <Compile Include="Repositories\App\Impl\PersonalRecordRepository.generated.cs" />
     <Compile Include="Repositories\App\IPersonalRecordRepository.generated.cs" />
     <Compile Include="Repositories\App\Impl\BankRepository.generated.cs" />
