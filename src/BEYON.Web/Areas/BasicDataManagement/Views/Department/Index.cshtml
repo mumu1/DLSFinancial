@@ -3,7 +3,7 @@
 <div id="content" style="overflow-y: auto; height: 100%; opacity: 1;">
     <div class="content-wrapper">
         <header role="heading">
-            <h2>开户银行字典表维护</h2>
+            <h2>部门字典表维护</h2>
         </header>
         <!-- widget div-->
 
@@ -56,7 +56,7 @@
     function loadTableData() {
         $.ajax({
             type: "GET",
-            url: "../BasicDataManagement/BankAccount/GetAllData",
+            url: "../BasicDataManagement/Department/GetAllData",
             //data: params,
             contentType: "application/json; charset=utf-8",
             datatype: "json",
@@ -64,7 +64,7 @@
                 initTable(data);
             },
             error: function () {
-                toastr.error('获取开户银行数据失败！');
+                toastr.error('获取部门数据失败！');
             }
         });
     }
@@ -92,11 +92,11 @@
             },
             "table": "#datatable_tabletools",
             fields: [{
-                label: "开户银行代码",
-                name: "BankCode"
+                label: "部门代码",
+                name: "DepartmentCode"
             }, {
-                label: "开户银行名称:",
-                name: "BankName"
+                label: "部门名称:",
+                name: "DepartmentName"
             }
             ]
         });
@@ -171,8 +171,8 @@
             paging: false,
             columns: [
                                     { data: "Id", title: "编号" },
-                                    { data: "BankCode", title: "开户银行代码" },
-                                    { data: "BankName", title: "开户银行名称" }
+                                    { data: "DepartmentCode", title: "部门代码" },
+                                    { data: "DepartmentName", title: "部门名称" }
             ],
             oLanguage: {
                 "sLengthMenu": "每页显示 _MENU_ 条记录",

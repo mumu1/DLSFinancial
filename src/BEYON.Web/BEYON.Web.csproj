@@ -180,8 +180,9 @@
     <Compile Include="Areas\App\Controllers\StatisticsController.cs" />
     <Compile Include="Areas\BasicDataManagement\BasicDataManagementRegistration.cs" />
     <Compile Include="Areas\BasicDataManagement\Controllers\AuditOptionController.cs" />
-    <Compile Include="Areas\BasicDataManagement\Controllers\TaskManageController.cs" />
     <Compile Include="Areas\BasicDataManagement\Controllers\BankAccountController.cs" />
+    <Compile Include="Areas\BasicDataManagement\Controllers\TaskManageController.cs" />
+    <Compile Include="Areas\BasicDataManagement\Controllers\DepartmentController.cs" />
     <Compile Include="Areas\BasicDataManagement\Controllers\ProfessionalController.cs" />
     <Compile Include="Areas\BasicDataManagement\Controllers\ReimbursementController.cs" />
     <Compile Include="Areas\BasicDataManagement\Controllers\WageBaseTableController.cs" />
