@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="App\AuditStatusVM.cs" />
     <Compile Include="App\AuditOpinionVM.cs" />
+    <Compile Include="App\DepartmentVM.cs" />
     <Compile Include="App\TaskManageVM.cs" />
     <Compile Include="CheckBoxVM.cs" />
     <Compile Include="LoginVM.cs" />

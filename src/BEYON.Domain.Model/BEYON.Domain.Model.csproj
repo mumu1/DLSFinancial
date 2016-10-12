@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="App\AuditOpinion.cs" />
     <Compile Include="App\AuditStatus.cs" />
+    <Compile Include="App\Department.cs" />
     <Compile Include="App\TaskManage.cs" />
     <Compile Include="Member\Module.cs" />
     <Compile Include="Member\Permission.cs" />
