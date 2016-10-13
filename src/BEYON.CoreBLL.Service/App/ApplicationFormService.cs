@@ -40,7 +40,9 @@ namespace BEYON.CoreBLL.Service.App
                 var entity = new ApplicationForm
                 {
                     SerialNumber = model.SerialNumber,
+                    DepartmentName = model.DepartmentName,
                     ProjectNumber = model.ProjectNumber,
+                    TaskName = model.TaskName,
                     RefundType = model.RefundType,
                     ProjectDirector = model.ProjectDirector,
                     Agent = model.Agent,
@@ -73,6 +75,8 @@ namespace BEYON.CoreBLL.Service.App
                 }
                 applicationForm.SerialNumber = model.SerialNumber;
                 applicationForm.ProjectNumber = model.ProjectNumber;
+                applicationForm.TaskName = model.TaskName;
+                applicationForm.DepartmentName = model.DepartmentName;
                 applicationForm.RefundType = model.RefundType;
                 applicationForm.ProjectDirector = model.ProjectDirector;
                 applicationForm.Agent = model.Agent;
@@ -125,8 +129,10 @@ namespace BEYON.CoreBLL.Service.App
             {
                 model.SerialNumber = model.SerialNumber;
                 model.ProjectNumber = model.ProjectNumber;
+                model.TaskName = model.TaskName;
                 model.RefundType = model.RefundType;
                 model.ProjectDirector = model.ProjectDirector;
+                model.DepartmentName = model.DepartmentName;
                 model.Agent = model.Agent;
                 model.AuditStatus = model.AuditStatus;
                 model.SubmitTime = model.SubmitTime;
@@ -151,6 +157,8 @@ namespace BEYON.CoreBLL.Service.App
             {
                 model.SerialNumber = model.SerialNumber;
                 model.ProjectNumber = model.ProjectNumber;
+                model.TaskName = model.TaskName;
+                model.DepartmentName = model.DepartmentName;
                 model.RefundType = model.RefundType;
                 model.ProjectDirector = model.ProjectDirector;
                 model.Agent = model.Agent;

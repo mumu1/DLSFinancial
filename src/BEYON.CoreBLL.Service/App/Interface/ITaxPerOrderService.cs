@@ -13,11 +13,15 @@ namespace BEYON.CoreBLL.Service.App.Interface
     public interface ITaxPerOrderService
     {
         IQueryable<TaxPerOrder> TaxPerOrders { get; }
-        OperationResult Insert(TaxPerOrderVM model, bool isSave = true);
+        OperationResult Insert(TaxPerOrder model, bool isSave = true);
         OperationResult Update(TaxPerOrderVM model, bool isSave = true);
         OperationResult Delete(List<string> list, bool isSave = true);
         OperationResult Delete(TaxPerOrder model, bool isSave = true);
         OperationResult Update(TaxPerOrder model, bool isSave = true);
         OperationResult Import(String fileName, Service.Excel.ColumnMap[] columns);
+
+        Double GetPayTaxAmount(String certificateID, String taxOrNot);
+
+
     }
 }

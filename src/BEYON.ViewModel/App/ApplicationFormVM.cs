@@ -18,9 +18,17 @@ namespace BEYON.ViewModel.App
         [StringLength(36)]
         public string ProjectNumber { get; set; }
 
+        [Display(Name = "课题名称")]
+        [StringLength(100)]
+        public string TaskName { get; set; }
+
         [Display(Name = "报销事由")]
         [StringLength(100)]
         public String RefundType { get; set; }
+
+        [Display(Name = "部门")]
+        [StringLength(100)]
+        public String DepartmentName { get; set; }
 
         [Display(Name = "课题负责人")]
         [StringLength(36)]

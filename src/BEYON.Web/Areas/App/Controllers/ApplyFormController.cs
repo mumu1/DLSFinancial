@@ -30,14 +30,16 @@ namespace BEYON.Web.Areas.App.Controllers
         private readonly IUserService _userService;
         private readonly IApplyPrintService _applyPrintService;
         private readonly IAuditOpinionService _auditOpinionService;
+        private readonly ITaxPerOrderService _taxPerOrderService;
         public ApplyFormController(IApplicationFormService applicationFormService,  IPersonalRecordService personalRecordService,
-            IUserService userService, IApplyPrintService applyPrintService, IAuditOpinionService auditOpinionService)
+            IUserService userService, IApplyPrintService applyPrintService, IAuditOpinionService auditOpinionService, ITaxPerOrderService taxPerOrderService)
         {
             this._applicationFormService = applicationFormService;
             this._personalRecordService = personalRecordService;
             this._userService = userService;
             this._applyPrintService = applyPrintService;
             this._auditOpinionService = auditOpinionService;
+            this._taxPerOrderService = taxPerOrderService;
         }
 
         //
@@ -116,7 +118,9 @@ namespace BEYON.Web.Areas.App.Controllers
             {
                 SerialNumber = application.SerialNumber,
                 ProjectNumber = application.ProjectNumber,
+                TaskName = application.TaskName,
                 ProjectDirector = application.ProjectDirector,
+                DepartmentName = application.DepartmentName,
                 Agent = application.Agent,
                 SubmitTime = application.SubmitTime,
                 AuditStatus = application.AuditStatus,
@@ -178,7 +182,9 @@ namespace BEYON.Web.Areas.App.Controllers
             {
                 SerialNumber = application.SerialNumber,
                 ProjectNumber = application.ProjectNumber,
+                TaskName = application.TaskName,
                 ProjectDirector = application.ProjectDirector,
+                DepartmentName = application.DepartmentName,
                 Agent = application.Agent,
                 SubmitTime = application.SubmitTime,
                 AuditStatus = application.AuditStatus,
@@ -196,14 +202,16 @@ namespace BEYON.Web.Areas.App.Controllers
         public ActionResult Save(ApplicationFormVM formVM)
         {
             ApplicationForm form = _applicationFormService.ApplicationForms.FirstOrDefault(t => t.SerialNumber == formVM.SerialNumber);
-            form.UpdateDate = DateTime.Now;
+           
             if (form == null)
             {
-                //formVM.SubmitTime = DateTime.Now;
+                //formVM.SubmitTime = DateTime.Now;              
                 _applicationFormService.Insert(formVM);
             }
             else
             {
+                form.UpdateDate = DateTime.Now;
+                
                 _applicationFormService.Update(formVM);
             }
             return Json(new { }, JsonRequestBehavior.AllowGet);
@@ -216,7 +224,11 @@ namespace BEYON.Web.Areas.App.Controllers
         {
             var result = this._personalRecordService.PersonalRecords.Where(t=>t.SerialNumber == serialNumber).ToList();
             return Json(new { total = result.Count, data = result }, JsonRequestBehavior.AllowGet);
+        }
 
+        List<PersonalRecord> GetPersonalDatas(String serialNumber)
+        {
+            return this._personalRecordService.PersonalRecords.Where(t => t.SerialNumber == serialNumber).ToList();        
         }
 
         // POST: /BasicDataManagement/Reimbursement/Create/
@@ -366,6 +378,37 @@ namespace BEYON.Web.Areas.App.Controllers
                     }
                     form.UpdateDate = DateTime.Now;
                     _applicationFormService.Update(form);
+
+                    //若审核通过，开始算税，单笔税保存在TaxPerOrder表
+                    if (formVM.AuditStatus.Equals("审核通过")) {
+                        //PersonalRecord[] records = ClassConvert<PersonalRecord>.Process(Request.Form);
+                        List<PersonalRecord> records = GetPersonalDatas(serialNumber);
+                        
+                        TaxPerOrder taxPerOrder=null;
+                        if(records != null)
+                            for (int i = 0; i < records.Count; i++)
+                        {
+                            taxPerOrder = new TaxPerOrder();
+                            taxPerOrder.SerialNumber = formVM.SerialNumber;
+                            taxPerOrder.ProjectNumber = formVM.ProjectNumber;
+                            taxPerOrder.TaskName = formVM.TaskName;
+                            taxPerOrder.RefundType = formVM.RefundType;
+                            taxPerOrder.ProjectDirector = formVM.ProjectDirector;
+                            taxPerOrder.Agent = formVM.Agent;
+                            taxPerOrder.PersonType = records[i].PersonType;
+                            taxPerOrder.CertificateType = records[i].CertificateType;
+                            taxPerOrder.CertificateID = records[i].CertificateID;
+                            taxPerOrder.Amount = records[i].Amount;
+                            taxPerOrder.TaxOrNot = records[i].TaxOrNot;
+                            taxPerOrder.Bank = records[i].Bank;
+                            taxPerOrder.BankDetailName = records[i].BankDetailName;
+                            taxPerOrder.AccountName = records[i].AccountName;
+                            taxPerOrder.AccountNumber = records[i].AccountNumber;
+                            taxPerOrder.PaymentType = records[i].PaymentType;
+                            _taxPerOrderService.Insert(taxPerOrder);
+                        }
+                    }
+
                 }
             }
             Session.Remove("AuditSerials");

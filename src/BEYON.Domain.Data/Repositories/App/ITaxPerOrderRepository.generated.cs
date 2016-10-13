@@ -34,5 +34,7 @@ namespace BEYON.Domain.Data.Repositories.App
     public partial interface ITaxPerOrderRepository : IRepository<TaxPerOrder, Int32>
     {
         IList<TaxPerOrder> GetTaxPerOrderBySerialNumber(String serialNumber);
+
+        Double GetPayTaxAmount(String certificateID, String taxOrNot);
     }
 }

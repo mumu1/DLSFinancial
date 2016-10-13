@@ -23,5 +23,6 @@ namespace BEYON.CoreBLL.Service.App.Interface
         IList<ApplicationForm> GetApplicationFromByUser(String email);
 
         IList<ApplicationForm> GetApplicationFromByAdmin();
+
     }
 }

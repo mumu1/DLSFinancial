@@ -28,21 +28,38 @@ namespace BEYON.CoreBLL.Service.App
             get { return _TaxPerOrderRepository.Entities; }
         }
 
-        public OperationResult Insert(TaxPerOrderVM model, bool isSave)
+        public OperationResult Insert(TaxPerOrder model, bool isSave)
         {
             try
             {
-                TaxPerOrder taxPerOrder = _TaxPerOrderRepository.Entities.FirstOrDefault(c => c.SerialNumber == model.SerialNumber && c.SerialNumber == model.CertificateID.Trim());
-                if (taxPerOrder != null)
+                //TaxPerOrder taxPerOrder = _TaxPerOrderRepository.Entities.FirstOrDefault(c => c.SerialNumber == model.SerialNumber && c.SerialNumber == model.CertificateID.Trim());
+                //if (taxPerOrder != null)
+                //{
+                //    return new OperationResult(OperationResultType.Warning, "数据库中已经存在相同的税单纪录，请修改后重新提交！");
+                //}
+                //if (model.CertificateID == null || model.CertificateID.Trim() == "")
+                //    return new OperationResult(OperationResultType.Warning, "证件号码不能为空，请修改后重新提交！");
+                //计算税金，并存储
+                if (model.PersonType.Equals("所内"))
                 {
-                    return new OperationResult(OperationResultType.Warning, "数据库中已经存在相同的税单纪录，请修改后重新提交！");
+                    //按照工资进行算税
+                    //1.查询已发放总金额
+                    //2.根据已发放总金额，判断算税公式
+                    //3.计算Tax(税额),AmountX(税后),AmountY(税前)
+                    //4.存储该纪录
                 }
-                if (model.CertificateID == null || model.CertificateID.Trim() == "")
-                    return new OperationResult(OperationResultType.Warning, "证件号码不能为空，请修改后重新提交！");
+                else if(model.PersonType.Equals("所外")){ 
+                    //按照劳务进行算税
+                    //1.查询已发放总金额
+                    //2.根据已发放总金额，判断算税公式
+                    //3.计算Tax(税额),AmountX(税后),AmountY(税前)
+                    //4.存储该纪录
+                }
                 var entity = new TaxPerOrder
                 {
                     SerialNumber = model.SerialNumber,
                     ProjectNumber = model.ProjectNumber,
+                    TaskName = model.TaskName,
                     RefundType = model.RefundType,
                     ProjectDirector = model.ProjectDirector,
                     Agent = model.Agent,
@@ -81,6 +98,7 @@ namespace BEYON.CoreBLL.Service.App
                 }      
                 taxPerOrder.SerialNumber = model.SerialNumber;
                 taxPerOrder.ProjectNumber = model.ProjectNumber;
+                taxPerOrder.TaskName = model.TaskName;
                 taxPerOrder.RefundType = model.RefundType;
                 taxPerOrder.ProjectDirector = model.ProjectDirector;
                 taxPerOrder.Agent = model.Agent;
@@ -172,6 +190,10 @@ namespace BEYON.CoreBLL.Service.App
             {
                 return new OperationResult(OperationResultType.Error, "导入数据失败!");
             }
+        }
+        public Double GetPayTaxAmount(String certificateID, String taxOrNot)
+        {
+            return _TaxPerOrderRepository.GetPayTaxAmount(certificateID, taxOrNot);
         }
     }
 }

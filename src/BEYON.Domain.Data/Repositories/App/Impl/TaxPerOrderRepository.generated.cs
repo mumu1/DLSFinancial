@@ -44,5 +44,15 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                     select p;
             return q.ToList();
         }
+
+        public Double GetPayTaxAmount(String certificateID, String taxOrNot) {
+            //根据证件号码查询已发放总金额
+            //若taxOrNot=='含税'，即sum(select amountY from TaxPerOrders where CertificateID = certificateID)
+            //若taxOrNot=='不含税'，即sum(select amountX from TaxPerOrders where CertificateID = certificateID)
+            Double amount = 0.0;
+            var q = from p in Context.TaxPerOrders.Where(w => w.CertificateID == certificateID)
+                    select p;
+            return amount;
+        }
      }
 }
