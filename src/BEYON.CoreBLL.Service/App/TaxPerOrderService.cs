@@ -51,6 +51,7 @@ namespace BEYON.CoreBLL.Service.App
                 else if(model.PersonType.Equals("所外")){ 
                     //按照劳务进行算税
                     //1.查询已发放总金额
+                    double amount = GetPayTaxAmount(model.CertificateID, model.TaxOrNot);
                     //2.根据已发放总金额，判断算税公式
                     //3.计算Tax(税额),AmountX(税后),AmountY(税前)
                     //4.存储该纪录

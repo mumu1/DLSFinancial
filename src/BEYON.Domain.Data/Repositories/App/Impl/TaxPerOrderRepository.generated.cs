@@ -50,8 +50,14 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
             //若taxOrNot=='含税'，即sum(select amountY from TaxPerOrders where CertificateID = certificateID)
             //若taxOrNot=='不含税'，即sum(select amountX from TaxPerOrders where CertificateID = certificateID)
             Double amount = 0.0;
-            var q = from p in Context.TaxPerOrders.Where(w => w.CertificateID == certificateID)
-                    select p;
+            if (taxOrNot.Equals("含税")) { 
+                amount = (from p in Context.TaxPerOrders.Where(w => w.CertificateID == certificateID)
+                            select p.AmountY).Sum();
+            }
+            else if (taxOrNot.Equals("不含税")) {
+                amount = (from p in Context.TaxPerOrders.Where(w => w.CertificateID == certificateID)
+                          select p.AmountX).Sum();
+            }
             return amount;
         }
      }
