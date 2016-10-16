@@ -16,12 +16,15 @@ namespace BEYON.CoreBLL.Service.App
     {
         private readonly ITaxPerOrderRepository _TaxPerOrderRepository;
 
+        private readonly ITaxBaseByMonthRepository _TaxBaseByMonthRepository;
 
 
-        public TaxPerOrderService(ITaxPerOrderRepository taxPerOrderRepository, IUnitOfWork unitOfWork)
+
+        public TaxPerOrderService(ITaxPerOrderRepository taxPerOrderRepository,  ITaxBaseByMonthRepository taxBaseByMonthRepository, IUnitOfWork unitOfWork)
             : base(unitOfWork)
         {
             this._TaxPerOrderRepository = taxPerOrderRepository;
+            this._TaxBaseByMonthRepository = taxBaseByMonthRepository;
         }
         public IQueryable<TaxPerOrder> TaxPerOrders
         {
@@ -39,23 +42,186 @@ namespace BEYON.CoreBLL.Service.App
                 //}
                 //if (model.CertificateID == null || model.CertificateID.Trim() == "")
                 //    return new OperationResult(OperationResultType.Warning, "证件号码不能为空，请修改后重新提交！");
+                double tax = 0.0;          //最终税额
+                double amountX = 0.0;     //最终税后数（不含税）
+                double amountY =0.0;       //最终税前数（含税）
                 //计算税金，并存储
                 if (model.PersonType.Equals("所内"))
                 {
                     //按照工资进行算税
-                    //1.查询已发放总金额
-                    //2.根据已发放总金额，判断算税公式
-                    //3.计算Tax(税额),AmountX(税后),AmountY(税前)
-                    //4.存储该纪录
+                    //1.查询已发放总金额，查询已计税总额【Tax和】
+                    double amount = GetPayTaxAmount(model.CertificateID, model.TaxOrNot);
+                    //double amount = 0.0;
+                    double deductTaxSum = GetDeductTaxSum(model.CertificateID);
+                    //double deductTaxSum = 0.0;
+                    //2.从基本工资表TaxBaseByMonth中查询（初始应发工资-免税额-基本扣除）
+                    double baseSalary = _TaxBaseByMonthRepository.GetBaseSalary(model.CertificateID);
+                    //double baseSalary = 4000;
+                    //3.根据已发放总金额，判断算税公式 
+                    //含税与不含税的税率区间不同，分开判断
+                    //含税公式：T=【Y+(初始应发工资-免税额-基本扣除数)】*税率-速算扣除数-前几次税额总数
+                    double interval = model.Amount + amount + baseSalary;
+                    //4.计算Tax(税额),AmountX(税后),AmountY(税前)
+                    if (model.TaxOrNot.Equals("含税")) 
+                    {                      
+                        if (interval <= 0) {
+                            tax = 0.0;                         
+                        }
+                        //不超过1500元，税率3%，速算扣除数0
+                        else if(interval > 0 && interval <= 1500){
+                           tax = interval * 0.03 - deductTaxSum;                           
+                        }
+                        //超过1500至4500元，税率10%，速算扣除数105
+                        else if (interval > 1500 && interval <= 4500)
+                        {
+                            tax = interval * 0.1 -105 - deductTaxSum;                        
+                        }
+                        //超过4500至9000元，税率20%，速算扣除数555
+                        else if (interval > 4500 && interval <= 9000)
+                        {
+                            tax = interval * 0.2 - 555 - deductTaxSum;
+                        }
+                        //超过9000至35000元，税率25%，速算扣除数1005
+                        else if (interval > 9000 && interval <= 35000)
+                        {
+                            tax = interval * 0.25 - 1005 - deductTaxSum;
+                        }
+                        //超过35000至55000元，税率30%，速算扣除数2755
+                        else if (interval > 35000 && interval <= 55000)
+                        {
+                            tax = interval * 0.3 - 2755 - deductTaxSum;
+                        }
+                        //超过55000至80000元，税率35%，速算扣除数5505
+                        else if (interval > 55000 && interval <= 80000)
+                        {
+                            tax = interval * 0.35 - 5505 - deductTaxSum;
+                        }
+                        //超过80000元，税率45%，速算扣除数13505
+                        else if (interval > 80000 )
+                        {
+                            tax = interval * 0.45 - 13505 - deductTaxSum;
+                        }
+                        amountX = model.Amount - tax;
+                        amountY = model.Amount;
+                    }
+                    else if (model.TaxOrNot.Equals("不含税"))
+                    {
+                        if (interval <= 0)
+                        {
+                            tax = 0.0;
+                        }
+                        //不超过1455元，税率3%，速算扣除数0
+                        else if (interval > 0 && interval <= 1455)
+                        {
+                            tax = (interval * 0.03)/(1-0.03) - deductTaxSum;
+                        }
+                        //超过1455至4155元，税率10%，速算扣除数105
+                        else if (interval > 1455 && interval <= 4155)
+                        {
+                            tax = (interval * 0.1 - 105)/(1-0.1) - deductTaxSum;
+                        }
+                        //超过4155至7755元，税率20%，速算扣除数555
+                        else if (interval > 4155 && interval <= 7755)
+                        {
+                            tax = (interval * 0.2 - 555)/(1-0.2) - deductTaxSum;
+                        }
+                        //超过7755至27255元，税率25%，速算扣除数1005
+                        else if (interval > 7755 && interval <= 27255)
+                        {
+                            tax = (interval * 0.25 - 1005)/(1-0.25) - deductTaxSum;
+                        }
+                        //超过27255至41255元，税率30%，速算扣除数2755
+                        else if (interval > 27255 && interval <= 41255)
+                        {
+                            tax = (interval * 0.3 - 2755)/(1-0.3) - deductTaxSum;
+                        }
+                        //超过41255至57505元，税率35%，速算扣除数5505
+                        else if (interval > 41255 && interval <= 57505)
+                        {
+                            tax = (interval * 0.35 - 5505)/(1-0.35) - deductTaxSum;
+                        }
+                        //超过57505元，税率45%，速算扣除数13505
+                        else if (interval > 57505)
+                        {
+                            tax = (interval * 0.45 - 13505)/(1-0.45) - deductTaxSum;
+                        }                       
+                        amountX = model.Amount;
+                        amountY = model.Amount + tax;
+                    }                                    
                 }
                 else if(model.PersonType.Equals("所外")){ 
                     //按照劳务进行算税
                     //1.查询已发放总金额
                     double amount = GetPayTaxAmount(model.CertificateID, model.TaxOrNot);
+                   // double amount = 0.0;
+                    double deductTaxSum = GetDeductTaxSum(model.CertificateID);
+                   // double deductTaxSum = 0.0;
                     //2.根据已发放总金额，判断算税公式
+                    double baseSalary = 800;
+                    double interval = model.Amount + amount;
                     //3.计算Tax(税额),AmountX(税后),AmountY(税前)
-                    //4.存储该纪录
+                    if (model.TaxOrNot.Equals("含税"))
+                    {
+                        if (interval <= 800)
+                        {
+                            tax = 0.0;
+                        }                  
+                        //超过800至4000元，税率20%，速算扣除数0
+                        else if (interval > 800 && interval <= 4000)
+                        {
+                            tax = (interval-baseSalary) * 0.2 -  deductTaxSum;
+                        }
+                        //超过4000至25000元，税率20%，速算扣除数0
+                        else if (interval > 4000 && interval <= 25000)
+                        {
+                            tax = (interval-interval*0.2) * 0.2 - deductTaxSum;
+                        }
+                        //超过25000至62500元，税率30%，速算扣除数2000
+                        else if (interval > 25000 && interval <= 62500)
+                        {
+                            tax = (interval-interval*0.2) * 0.3 - 2000 - deductTaxSum;
+                        }
+                        //超过62500元，税率40%，速算扣除数7000
+                        else if (interval > 62500)
+                        {
+                            tax = (interval-interval*0.2) * 0.4 - 7000 - deductTaxSum;
+                        }
+                        amountX = model.Amount - tax;
+                        amountY = model.Amount;
+                    }
+                    else if (model.TaxOrNot.Equals("不含税"))
+                    {
+                        if (interval <= 800)
+                        {
+                            tax = 0.0;
+                        }
+                        //超过800至4000元，税率20%，速算扣除数0
+                        else if (interval > 800 && interval <= 4000)
+                        {
+                            tax = ((interval-baseSalary)/(1-0.2)) * 0.2 - deductTaxSum;
+                        }
+                        //超过4000至25000元，税率20%，速算扣除数0
+                        else if (interval > 4000 && interval <= 25000)
+                        {
+                            tax = (interval*(1-0.2)*0.2)/(1-(1-0.2)*0.2) - deductTaxSum;
+                        }
+                        //超过25000至62500元，税率30%，速算扣除数2000
+                        else if (interval > 25000 && interval <= 62500)
+                        {
+                            tax = (interval * (1 - 0.2) * 0.3-2000) / (1 - (1 - 0.2) * 0.3) - deductTaxSum;
+                        }
+                        //超过62500元，税率40%，速算扣除数7000
+                        else if (interval > 62500)
+                        {
+                            tax = (interval * (1 - 0.2) * 0.4 - 7000) / (1 - (1 - 0.2) * 0.4) - deductTaxSum;
+                        }
+                        amountX = model.Amount;
+                        amountY = model.Amount + tax;
+                    }                            
+                   
                 }
+
+                //5.存储该纪录
                 var entity = new TaxPerOrder
                 {
                     SerialNumber = model.SerialNumber,
@@ -69,14 +235,14 @@ namespace BEYON.CoreBLL.Service.App
                     CertificateID = model.CertificateID,
                     Amount = model.Amount,
                     TaxOrNot = model.TaxOrNot,
-                    Tax = model.Tax,
+                    Tax = tax,
                     Bank = model.Bank,
                     BankDetailName = model.BankDetailName,
                     AccountName = model.AccountName,
                     AccountNumber = model.AccountNumber,
                     PaymentType = model.PaymentType,
-                    AmountY = model.AmountY,
-                    AmountX = model.AmountX, 
+                    AmountY = amountY,
+                    AmountX = amountX, 
                     UpdateDate = DateTime.Now
                 };
                 _TaxPerOrderRepository.Insert(entity, isSave);
@@ -195,6 +361,11 @@ namespace BEYON.CoreBLL.Service.App
         public Double GetPayTaxAmount(String certificateID, String taxOrNot)
         {
             return _TaxPerOrderRepository.GetPayTaxAmount(certificateID, taxOrNot);
+        }
+
+        public Double GetDeductTaxSum(String certificateID)
+        {
+            return _TaxPerOrderRepository.GetDeductTaxSum(certificateID);
         }
     }
 }

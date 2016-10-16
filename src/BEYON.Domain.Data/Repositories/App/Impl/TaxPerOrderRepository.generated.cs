@@ -49,15 +49,27 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
             //根据证件号码查询已发放总金额
             //若taxOrNot=='含税'，即sum(select amountY from TaxPerOrders where CertificateID = certificateID)
             //若taxOrNot=='不含税'，即sum(select amountX from TaxPerOrders where CertificateID = certificateID)
-            Double amount = 0.0;
-            if (taxOrNot.Equals("含税")) { 
+            Double amount = 0.0;          
+            if (taxOrNot.Equals("含税"))
+            { 
+                //amount = (from p in Context.TaxPerOrders.Where(w => w.CertificateID == certificateID)
+                //            select p.AmountY).Sum();
                 amount = (from p in Context.TaxPerOrders.Where(w => w.CertificateID == certificateID)
-                            select p.AmountY).Sum();
+                          select p).Sum(g => g.AmountY);
+               
             }
-            else if (taxOrNot.Equals("不含税")) {
+            else if (taxOrNot.Equals("不含税"))
+            {
                 amount = (from p in Context.TaxPerOrders.Where(w => w.CertificateID == certificateID)
-                          select p.AmountX).Sum();
+                          select p).Sum(g => g.AmountX);
             }
+            return amount;
+        }
+
+        public Double GetDeductTaxSum(String certificateID) {
+            Double amount = 0.0;          
+            amount = (from p in Context.TaxPerOrders.Where(w => w.CertificateID == certificateID)
+                      select p).Sum(g => g.Tax);        
             return amount;
         }
      }

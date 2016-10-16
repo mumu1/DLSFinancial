@@ -160,5 +160,10 @@ namespace BEYON.CoreBLL.Service.App
                 return new OperationResult(OperationResultType.Error, "导入数据失败!");
             }
         }
+
+        public Double GetBaseSalary(String certificateID) {
+            Double baseSalary = _TaxBaseByMonthRepository.GetBaseSalary(certificateID);
+            return baseSalary;
+        }
     }
 }

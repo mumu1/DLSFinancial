@@ -246,7 +246,7 @@ namespace BEYON.Web.Areas.App.Controllers
                 CertificateType = recordVMs[0].CertificateType,
                 Company = recordVMs[0].Company,
                 Tele = recordVMs[0].Tele,
-                PersonType = recordVMs[0].PaymentType,
+                PersonType = recordVMs[0].PersonType,
                 Nationality = recordVMs[0].Nationality,
                 Title = recordVMs[0].Title,
                 Amount = recordVMs[0].Amount,
@@ -389,12 +389,12 @@ namespace BEYON.Web.Areas.App.Controllers
                             for (int i = 0; i < records.Count; i++)
                         {
                             taxPerOrder = new TaxPerOrder();
-                            taxPerOrder.SerialNumber = formVM.SerialNumber;
-                            taxPerOrder.ProjectNumber = formVM.ProjectNumber;
-                            taxPerOrder.TaskName = formVM.TaskName;
-                            taxPerOrder.RefundType = formVM.RefundType;
-                            taxPerOrder.ProjectDirector = formVM.ProjectDirector;
-                            taxPerOrder.Agent = formVM.Agent;
+                            taxPerOrder.SerialNumber = form.SerialNumber;
+                            taxPerOrder.ProjectNumber = form.ProjectNumber;
+                            taxPerOrder.TaskName = form.TaskName;
+                            taxPerOrder.RefundType = form.RefundType;
+                            taxPerOrder.ProjectDirector = form.ProjectDirector;
+                            taxPerOrder.Agent = form.Agent;
                             taxPerOrder.PersonType = records[i].PersonType;
                             taxPerOrder.CertificateType = records[i].CertificateType;
                             taxPerOrder.CertificateID = records[i].CertificateID;

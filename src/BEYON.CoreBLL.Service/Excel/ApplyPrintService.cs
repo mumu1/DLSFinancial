@@ -85,7 +85,7 @@ namespace BEYON.CoreBLL.Service.Excel
 
             int rowCount = persons.Count();//总行数
             int nMax = rowCount + 5 - 1;
-            const int columnCount = 12;//总列数
+            const int columnCount = 16;//总列数
              
             //创建Excel对象
             Application excelApp = new ApplicationClass();
@@ -115,11 +115,11 @@ namespace BEYON.CoreBLL.Service.Excel
             tipRange.VerticalAlignment = XlVAlign.xlVAlignCenter;//垂直居中
 
             Range Range1 = worksheet.get_Range(worksheet.Cells[1, 1], worksheet.Cells[3, columnCount]);//选取单元格
-            Range1.Merge(true);
+            Range1.Merge(true);          
 
             //2.设置表头
-            string[] strHead = new string[columnCount] { "序号", "姓名", "证件类型", "身份证件号码", "单位", "联系电话", "国籍", "职称", "金额(元)", "银行存折帐号", "开户银行", "领取人签字" };
-            int[] columnWidth = new int[columnCount] { 4, 8, 8, 20, 20, 12, 8, 8, 8, 20, 8, 10 };
+            string[] strHead = new string[columnCount] { "序号", "姓名", "证件类型", "身份证件号码", "单位", "联系电话", "国籍", "职称", "人员类型", "金额(元)", "是否含税", "支付类型","开户银行", "银行存折帐号", "开户银行详细名称","领取人签字" };
+            int[] columnWidth = new int[columnCount] { 4, 8, 8, 20, 20, 12, 8, 8, 8, 8, 8, 8, 8, 20, 20, 10 };
             for (int i = 0; i < columnCount; i++)
             {
                 Range headRange = worksheet.Cells[4, i + 1] as Range;//获取表头单元格,不用标题则从1开始
@@ -144,9 +144,13 @@ namespace BEYON.CoreBLL.Service.Excel
                 excelApp.Cells[k + 4, 6] = person.Tele;
                 excelApp.Cells[k + 4, 7] = person.Nationality;
                 excelApp.Cells[k + 4, 8] = person.Title;
-                excelApp.Cells[k + 4, 9] = person.Amount;
-                excelApp.Cells[k + 4, 10] = person.AccountNumber;
-                excelApp.Cells[k + 4, 11] = person.Bank;
+                excelApp.Cells[k + 4, 9] = person.PersonType;
+                excelApp.Cells[k + 4, 10] = person.Amount;
+                excelApp.Cells[k + 4, 11] = person.TaxOrNot;
+                excelApp.Cells[k + 4, 12] = person.PaymentType;
+                excelApp.Cells[k + 4, 13] = person.Bank;            
+                excelApp.Cells[k + 4, 14] = person.AccountNumber;
+                excelApp.Cells[k + 4, 15] = person.BankDetailName;             
             }
 
             //4.设置表尾格式
@@ -156,13 +160,16 @@ namespace BEYON.CoreBLL.Service.Excel
             worksheet.Cells[nMax + 1, 6] = applicationForm.ProjectNumber;
             worksheet.Cells[nMax + 1, 7] = "课题负责人";
             worksheet.Cells[nMax + 1, 8] = applicationForm.ProjectDirector;
-            worksheet.Cells[nMax + 1, 9] = "显示合计金额";
-            worksheet.Cells[nMax + 1, 12] = "所内/所外(选项)";
+            worksheet.Cells[nMax + 1, 9] = "流水号";
+            worksheet.Cells[nMax + 1, 10] = applicationForm.SerialNumber;
+            worksheet.Cells[nMax + 1, 11] = "合计金额";
+            worksheet.Cells[nMax + 1, 12] = applicationForm.Summation;
             Range range = worksheet.get_Range(worksheet.Cells[nMax + 1, 3], worksheet.Cells[nMax + 1, 4]);//选取单元格
             range.Merge(true);
-            Range tailRange = worksheet.Cells[nMax + 1, 11] as Range;
-            tailRange.ColumnWidth = 10;
-            tailRange.Value2 = "人员类型";
+          
+            //Range tailRange = worksheet.Cells[nMax + 1, 11] as Range;
+            //tailRange.ColumnWidth = 10;
+            //tailRange.Value2 = "";
 
             //// Get ole objects and add new one
             //OLEObjects objs = worksheet.OLEObjects() as OLEObjects;
@@ -217,12 +224,12 @@ namespace BEYON.CoreBLL.Service.Excel
             noteRange.Font.Name = "宋体";//设置字体
             noteRange.Font.Size = 9;//字体大小
             noteRange.Font.Bold = false;//加粗显示
-            noteRange.Value = "填表说明:1.各类劳务费应由领款本人签收并经课题负责人、经办人签字。\n     2.现金和转账发放都可使用该表，如通过银行转账发放，请准确填写收款本人的银行账户、开户银行、账户名称等信息。\n     3.单位填写分类：所内在职职工、所内注册学生、所内劳务流程。客座学生和外单位人员填写具体工作单位。";
+            noteRange.Value = "填表说明:1.各类劳务费应由领款本人签收并经课题负责人、部门负责人、单位负责人、经办人签字。\n     2.现金和转账发放都可使用该表，如通过银行转账发放，请准确填写收款本人的银行账户、开户银行、账户名称等信息。\n     3.单位填写分类：所内在职职工、所内注册学生、所内劳务流程。客座学生和外单位人员填写具体工作单位。";
 
             Range signRange = worksheet.get_Range(worksheet.Cells[nMax + 10, 1], worksheet.Cells[nMax + 11, columnCount]);//选取单元格
             signRange.MergeCells = true;
             signRange.VerticalAlignment = XlVAlign.xlVAlignTop;//垂直居中
-            signRange.Value = "                                                        课题负责人:               经办人:          ";
+            signRange.Value = " 课题负责人:                                  部门负责人:                                  单位负责人:                                  经办人:                                  ";
             try
             {
                 //long XlFileFormat;

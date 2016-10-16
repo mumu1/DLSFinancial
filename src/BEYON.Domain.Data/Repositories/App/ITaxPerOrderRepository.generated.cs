@@ -36,5 +36,7 @@ namespace BEYON.Domain.Data.Repositories.App
         IList<TaxPerOrder> GetTaxPerOrderBySerialNumber(String serialNumber);
 
         Double GetPayTaxAmount(String certificateID, String taxOrNot);
+
+        Double GetDeductTaxSum(String certificateID);
     }
 }

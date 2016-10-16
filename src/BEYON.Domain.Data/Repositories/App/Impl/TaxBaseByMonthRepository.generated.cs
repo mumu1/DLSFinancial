@@ -37,5 +37,15 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
         public TaxBaseByMonthRepository(IUnitOfWork unitOfWork)
             : base()
         { }
-     }
+
+        public Double GetBaseSalary(String certificateID)
+        {
+            TaxBaseByMonth record = (TaxBaseByMonth)from p in Context.TaxBaseByMonths.Where(w => w.CertificateID == certificateID)
+                    select p;
+             Double baseSalary =0.0; 
+            if(record != null)
+                baseSalary = record.InitialEaring - record.TaxFree - record.AmountDeducted;
+            return baseSalary;
+        }
+    }
 }
