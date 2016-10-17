@@ -98,7 +98,7 @@ namespace BEYON.CoreBLL.Service.Excel
             //1.设置标题
             Range titleRange = worksheet.get_Range(worksheet.Cells[1, 1], worksheet.Cells[1, columnCount]);//选取单元格
             titleRange.Merge(true);//合并单元格
-            titleRange.Value = "发放______“+applicationForm.RefundType+”______明细表"; //设置单元格内文本
+            titleRange.Value = String.Format("发放______{0}______明细表", applicationForm.RefundType); //设置单元格内文本
             titleRange.Font.Name = "宋体";//设置字体
             titleRange.Font.Size = 14;//字体大小
             titleRange.Font.Bold = true;//加粗显示
@@ -152,7 +152,8 @@ namespace BEYON.CoreBLL.Service.Excel
                 excelApp.Cells[k + 4, 14] = person.AccountNumber;
                 excelApp.Cells[k + 4, 15] = person.BankDetailName;             
             }
-
+            Range Range2 = worksheet.get_Range(worksheet.Cells[1, 1], worksheet.Cells[3, columnCount]);//选取单元格
+            Range2.Merge(true);         
             //4.设置表尾格式
             worksheet.Cells[nMax + 1, 2] = "报销事由";
             worksheet.Cells[nMax + 1, 3] = applicationForm.RefundType; 
@@ -166,6 +167,10 @@ namespace BEYON.CoreBLL.Service.Excel
             worksheet.Cells[nMax + 1, 12] = applicationForm.Summation;
             Range range = worksheet.get_Range(worksheet.Cells[nMax + 1, 3], worksheet.Cells[nMax + 1, 4]);//选取单元格
             range.Merge(true);
+            Range rangeTask = worksheet.get_Range(worksheet.Cells[nMax + 3, 3], worksheet.Cells[nMax + 1, 4]);//选取单元格
+            rangeTask.Merge(true);
+            Range rangeSer = worksheet.get_Range(worksheet.Cells[nMax + 6, 6], worksheet.Cells[nMax + 1, 4]);//选取单元格
+            rangeSer.Merge(true);
           
             //Range tailRange = worksheet.Cells[nMax + 1, 11] as Range;
             //tailRange.ColumnWidth = 10;

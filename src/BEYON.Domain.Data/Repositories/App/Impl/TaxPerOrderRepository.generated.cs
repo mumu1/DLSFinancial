@@ -54,17 +54,30 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
             { 
                 //amount = (from p in Context.TaxPerOrders.Where(w => w.CertificateID == certificateID)
                 //            select p.AmountY).Sum();
-                var amountTemp = (from p in Context.TaxPerOrders.Where(w => w.CertificateID == certificateID)
-                                  select p);
+
+                var amountTemp = (from p in Context.TaxPerOrders.Where(w => w.CertificateID == certificateID && w.AmountY != null)
+                                                  group p by p.CertificateID into g
+                                                  select new
+                                                  {
+                                                      TotalAmountY = g.Sum(t => t.AmountY)
+                                                  }).SingleOrDefault();
                 if (amountTemp != null)
-                    amount = amountTemp.Sum(g => g.AmountY);
+                {
+                    amount = amountTemp.TotalAmountY;
+                }
             }
             else if (taxOrNot.Equals("不含税"))
             {
-                var amountTemp = (from p in Context.TaxPerOrders.Where(w => w.CertificateID == certificateID)
-                                  select p);
+                var amountTemp = (from p in Context.TaxPerOrders.Where(w => w.CertificateID == certificateID && w.AmountX != null)
+                                                    group  p  by p.CertificateID into g
+                                                        select new
+                                                        {
+                                                            TotalAmountX = g.Sum(t=>t.AmountX)
+                                                        }).SingleOrDefault();
                 if (amountTemp != null)
-                    amount = amountTemp.Sum(g => g.AmountX);
+                {
+                    amount = amountTemp.TotalAmountX;
+                }
             }
             return amount;
         }
@@ -73,10 +86,18 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
             Double amount = 0.0;          
             //amount = (from p in Context.TaxPerOrders.Where(w => w.CertificateID == certificateID)
             //          select p).Sum(g => g.Tax);
-            var amountTemp = (from p in Context.TaxPerOrders.Where(w => w.CertificateID == certificateID)
-                                       select p);
+
+            var amountTemp = (from p in Context.TaxPerOrders.Where(w => w.CertificateID == certificateID && w.Tax != null)
+                              group p by p.CertificateID into g
+                              select new
+                              {
+                                  TotalTax = g.Sum(t => t.Tax)
+                              }).SingleOrDefault();
             if (amountTemp != null)
-                amount = amountTemp.Sum(g => g.Tax);
+            {
+                amount = amountTemp.TotalTax;
+            }
+
             return amount;
         }
      }

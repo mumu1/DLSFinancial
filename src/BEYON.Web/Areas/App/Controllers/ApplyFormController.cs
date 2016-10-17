@@ -91,6 +91,7 @@ namespace BEYON.Web.Areas.App.Controllers
             {
                 SerialNumber = serialNumber,
                 AuditStatus = "待提交",
+                SubmitTime = DateTime.Now,
                 UserEmail = user.Email
             };
             return PartialView(model);
@@ -205,7 +206,7 @@ namespace BEYON.Web.Areas.App.Controllers
            
             if (form == null)
             {
-                //formVM.SubmitTime = DateTime.Now;              
+                formVM.SubmitTime = DateTime.Now;              
                 _applicationFormService.Insert(formVM);
             }
             else
@@ -252,6 +253,7 @@ namespace BEYON.Web.Areas.App.Controllers
                 Amount = recordVMs[0].Amount,
                 TaxOrNot = recordVMs[0].TaxOrNot,
                 Bank = recordVMs[0].Bank,
+                BankDetailName = recordVMs[0].BankDetailName,
                 AccountName = recordVMs[0].AccountName,
                 AccountNumber = recordVMs[0].AccountNumber,
                 PaymentType = recordVMs[0].PaymentType,

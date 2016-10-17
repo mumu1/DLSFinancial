@@ -48,7 +48,7 @@ namespace BEYON.CoreBLL.Service.App
                     CertificateType = model.CertificateType,
                     Company = model.Company,
                     Tele = model.Tele,
-                    PersonType = model.PaymentType,
+                    PersonType = model.PersonType,
                     Nationality = model.Nationality,
                     Title = model.Title,
                     Amount = model.Amount,
@@ -84,7 +84,7 @@ namespace BEYON.CoreBLL.Service.App
                 personalRecord.CertificateType = model.CertificateType;
                 personalRecord.Company = model.Company;
                 personalRecord.Tele = model.Tele;
-                personalRecord.PersonType = model.PaymentType;
+                personalRecord.PersonType = model.PersonType;
                 personalRecord.Nationality = model.Nationality;
                 personalRecord.Title = model.Title;
                 personalRecord.Amount = model.Amount;
