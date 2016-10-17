@@ -54,22 +54,29 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
             { 
                 //amount = (from p in Context.TaxPerOrders.Where(w => w.CertificateID == certificateID)
                 //            select p.AmountY).Sum();
-                amount = (from p in Context.TaxPerOrders.Where(w => w.CertificateID == certificateID)
-                          select p).Sum(g => g.AmountY);
-               
+                var amountTemp = (from p in Context.TaxPerOrders.Where(w => w.CertificateID == certificateID)
+                                  select p);
+                if (amountTemp != null)
+                    amount = amountTemp.Sum(g => g.AmountY);
             }
             else if (taxOrNot.Equals("不含税"))
             {
-                amount = (from p in Context.TaxPerOrders.Where(w => w.CertificateID == certificateID)
-                          select p).Sum(g => g.AmountX);
+                var amountTemp = (from p in Context.TaxPerOrders.Where(w => w.CertificateID == certificateID)
+                                  select p);
+                if (amountTemp != null)
+                    amount = amountTemp.Sum(g => g.AmountX);
             }
             return amount;
         }
 
         public Double GetDeductTaxSum(String certificateID) {
             Double amount = 0.0;          
-            amount = (from p in Context.TaxPerOrders.Where(w => w.CertificateID == certificateID)
-                      select p).Sum(g => g.Tax);        
+            //amount = (from p in Context.TaxPerOrders.Where(w => w.CertificateID == certificateID)
+            //          select p).Sum(g => g.Tax);
+            var amountTemp = (from p in Context.TaxPerOrders.Where(w => w.CertificateID == certificateID)
+                                       select p);
+            if (amountTemp != null)
+                amount = amountTemp.Sum(g => g.Tax);
             return amount;
         }
      }
