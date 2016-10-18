@@ -77,7 +77,7 @@
                                 <label class="label">课题号</label>
                                 <label class="input">
                                     <i class="icon-prepend fa fa-info"></i>
-                                    <input type="text" name="ProjectNumber" placeholder="课题号" value="@Model.ProjectNumber">
+                                    <input type="text" id="ProjectNumber" name="ProjectNumber" placeholder="课题号" value="@Model.ProjectNumber">
                                 </label>
                             </section>
                             <section class="col col-2">
@@ -94,7 +94,7 @@
                                 <label class="label">课题负责人</label>
                                 <label class="input">
                                     <i class="icon-prepend fa fa-user"></i>
-                                    <input type="text" name="ProjectDirector" placeholder="课题负责人" value="@Model.ProjectDirector">
+                                    <input type="text" id="projectDirector" name="ProjectDirector" placeholder="课题负责人" value="@Model.ProjectDirector">
                                 </label>
                             </section>
                             <section class="col col-2">
@@ -165,6 +165,30 @@
     registerRefundType();   //从数据库读取报销事由下拉菜单对应数组
     registerDepartment();   //从数据库读取部门下拉菜单对应数组
 
+        //根据输入课题号，提示用户课题名称是否正确
+    $("#ProjectNumber").blur(function () {
+        var projectNumber = $('#ProjectNumber').val();
+        $.ajax({
+            type: "GET",
+            async: false,
+            url: "../BasicDataManagement/TaskManage/GetDataByID?projectNumber=" + projectNumber,
+            //data: params,
+            contentType: "application/json; charset=utf-8",
+            datatype: "text",
+            success: function (data) {                
+                if (data == "该课题号不存在。") {
+                   alert(data + "请重新填写正确的课题号。", '课题确认');
+                } else {
+                    var taskArray = data.split(",");
+                    alert('您填写的课题号对应的课题名称为：' + taskArray[0] + ',若有误请重新填写正确的课题号。', '课题确认');
+                    $('#projectDirector').val(taskArray[1]);
+                }
+            },
+            error: function () {
+                toastr.error('获取课题数据失败！');
+            }
+        });
+    });
 
     var editor = new $.fn.dataTable.Editor({
         "ajaxUrl": {
@@ -296,6 +320,27 @@
                 Amount.error("金额格式错误，请填写数值型");
             }
 
+            //3.验证现金支付是否大于3次
+            var PaymentType = editor.field('PaymentType');
+            if (PaymentType.val() == "现金支付") {
+                $.ajax({
+                    type: "GET",
+                    async: false,
+                    url: "../App/ApplyForm/GetCashCount?certificateID=" + CertificateID.val(),
+                    //data: params,
+                    contentType: "application/json; charset=utf-8",
+                    datatype: "text",
+                    success: function (data) {
+                        if (data != "") {
+                            PaymentType.error(data);
+                        }
+                    },
+                    error: function () {
+                        toastr.error('获取支付类型统计数据失败！');
+                    }
+                });
+            }
+
             // 如果有错误报告，不能提交编辑结果
             if (this.inError()) {
                 return false;
@@ -366,7 +411,8 @@
             sort: true,         //是否启动各个字段的排序功能
             stateSave: false,
             stateDuration: 60 * 60 * 12,
-            autoWidth: true,
+            scrollX: true,
+            autoWidth: true,           
             bProcessing: true,
             paging: false,
             buttons: buttons,
@@ -378,16 +424,16 @@
                 { data: "CertificateID", title: "证件号码" },
                 { data: "Company", title: "单位" },
                 { data: "Tele", title: "联系电话" },
-                { data: "PersonType", title: "人员类型", visible :false },
+                { data: "PersonType", title: "人员类型" },
                 { data: "Nationality", title: "国籍" },
                 { data: "Title", title: "职称" },
-                { data: "TaxOrNot", title: "是否含税", visible: false },
+                { data: "TaxOrNot", title: "是否含税" },
                 { data: "Amount", title: "金额(元)" },             
                 { data: "Bank", title: "开户银行" },
                 { data: "AccountNumber", title: "银行账号" },
                 { data: "BankDetailName", title: "开户行详细名称" },
                 //{ data: "AccountName", title: "账户名称", visible: false },
-                { data: "PaymentType", title: "支付类型", visible: false },
+                { data: "PaymentType", title: "支付类型" },
                 //{ data: "Signature", title: "领取人签字", visible: false },
 
             ],

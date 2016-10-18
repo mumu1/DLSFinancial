@@ -152,8 +152,8 @@ namespace BEYON.CoreBLL.Service.Excel
                 excelApp.Cells[k + 4, 14] = person.AccountNumber;
                 excelApp.Cells[k + 4, 15] = person.BankDetailName;             
             }
-            Range Range2 = worksheet.get_Range(worksheet.Cells[1, 1], worksheet.Cells[3, columnCount]);//选取单元格
-            Range2.Merge(true);         
+            //Range Range2 = worksheet.get_Range(worksheet.Cells[nMax + 1, 1], worksheet.Cells[3, columnCount]);//选取单元格
+            //Range2.Merge(true);         
             //4.设置表尾格式
             worksheet.Cells[nMax + 1, 2] = "报销事由";
             worksheet.Cells[nMax + 1, 3] = applicationForm.RefundType; 
@@ -167,10 +167,12 @@ namespace BEYON.CoreBLL.Service.Excel
             worksheet.Cells[nMax + 1, 12] = applicationForm.Summation;
             Range range = worksheet.get_Range(worksheet.Cells[nMax + 1, 3], worksheet.Cells[nMax + 1, 4]);//选取单元格
             range.Merge(true);
-            Range rangeTask = worksheet.get_Range(worksheet.Cells[nMax + 3, 3], worksheet.Cells[nMax + 1, 4]);//选取单元格
+            Range rangeTask = worksheet.get_Range(worksheet.Cells[nMax + 1, 6], worksheet.Cells[nMax + 1, 8]);//选取单元格
             rangeTask.Merge(true);
-            Range rangeSer = worksheet.get_Range(worksheet.Cells[nMax + 6, 6], worksheet.Cells[nMax + 1, 4]);//选取单元格
+            Range rangeSer = worksheet.get_Range(worksheet.Cells[nMax + 1, 8], worksheet.Cells[nMax + 1, 10]);//选取单元格
             rangeSer.Merge(true);
+            Range rangeSum = worksheet.get_Range(worksheet.Cells[nMax + 1, 12], worksheet.Cells[nMax + 1, 14]);//选取单元格
+            rangeSum.Merge(true);
           
             //Range tailRange = worksheet.Cells[nMax + 1, 11] as Range;
             //tailRange.ColumnWidth = 10;

@@ -100,5 +100,21 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
 
             return amount;
         }
+
+        public int GetCashCount(String certificateID)
+        {
+            int count = 0;
+            var temp = from p in Context.TaxPerOrders.Where(w => w.CertificateID == certificateID)
+                       select p;
+            if (temp != null) {
+                List<TaxPerOrder> list = temp.ToList();
+                for (int i = 0; i < list.Count;  i++) {
+                    if (list[i].PaymentType.Equals("现金支付")) {
+                        count++;
+                    }
+                }
+            }
+            return count;
+        }
      }
 }

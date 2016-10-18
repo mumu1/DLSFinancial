@@ -22,6 +22,8 @@ namespace BEYON.CoreBLL.Service.App.Interface
 
         Double GetPayTaxAmount(String certificateID, String taxOrNot);
 
+        int GetCashCount(String certificateID);
+
 
     }
 }

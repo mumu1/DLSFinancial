@@ -32,5 +32,8 @@ namespace BEYON.Domain.Data.Repositories.App
     ///   仓储操作层接口——用户信息
     /// </summary>
     public partial interface ITaskManageRepository : IRepository<TaskManage, Int32>
-    { }
+    {
+        TaskManage GetTaskByNumber(String projectNumber);
+    }
+   
 }

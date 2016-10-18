@@ -40,12 +40,14 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
 
         public Double GetBaseSalary(String certificateID)
         {
-            TaxBaseByMonth record = (TaxBaseByMonth)from p in Context.TaxBaseByMonths.Where(w => w.CertificateID == certificateID)
-                    select p;
-             Double baseSalary =0.0; 
-            if(record != null)
-                baseSalary = record.InitialEaring - record.TaxFree - record.AmountDeducted;
-            return baseSalary;
+            var record = from p in Context.TaxBaseByMonths.Where(w => w.CertificateID == certificateID)
+                         select p;
+            var lists = record.ToList();
+            Double baseSalary = 0.0;
+            if (lists.Count > 0) {
+                baseSalary = lists[0].InitialEaring - lists[0].TaxFree - lists[0].AmountDeducted;
+            }
+            return baseSalary;  
         }
     }
 }

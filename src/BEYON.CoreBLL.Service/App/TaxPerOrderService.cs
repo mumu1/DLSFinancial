@@ -367,5 +367,9 @@ namespace BEYON.CoreBLL.Service.App
         {
             return _TaxPerOrderRepository.GetDeductTaxSum(certificateID);
         }
+
+        public int GetCashCount(String certificateID) {
+            return _TaxPerOrderRepository.GetCashCount(certificateID);
+        }
     }
 }

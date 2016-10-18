@@ -19,5 +19,7 @@ namespace BEYON.CoreBLL.Service.App.Interface
         OperationResult Delete(TaskManage model);
         OperationResult Update(TaskManage model);
         OperationResult Import(String fileName, Service.Excel.ColumnMap[] columns);
+
+        TaskManage GetTaskByNumber(String projectNumber);
     }
 }

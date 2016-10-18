@@ -37,5 +37,23 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
         public TaskManageRepository(IUnitOfWork unitOfWork)
             : base()
         { }
+
+        public TaskManage GetTaskByNumber(String projectNumber) {
+            //TaskManage taskManage = null;
+            var taskManage = from p in Context.TaskManages.Where(w => w.TaskID == projectNumber)
+                                    select new   { TaskID = p.TaskID, TaskName = p.TaskName, TaskLeader = p.TaskLeader };
+            var lists = taskManage.ToList();
+
+            if (lists.Count > 0)
+                return new TaskManage()
+                {
+                    TaskID = lists[0].TaskID,
+                    TaskName = lists[0].TaskName,
+                    TaskLeader = lists[0].TaskLeader
+                };
+            else
+                return null;
+        }
+    
      }
 }

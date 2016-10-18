@@ -48,6 +48,21 @@ namespace BEYON.Web.Areas.BasicDataManagement.Controllers
             return Json(new { total = result.Count, data = result }, JsonRequestBehavior.AllowGet);
 
         }
+
+        // GET: /BasicDataManagement/TaskManage/GetDataByID/
+        public String GetDataByID(String projectNumber) {
+            TaskManage result = this._taskManageService.GetTaskByNumber(projectNumber);
+            String str = "";
+            if (result != null)
+            {
+                str = result.TaskName + "," + result.TaskLeader;
+            }
+            else {
+                str = "该课题号不存在。";
+            } 
+            return str;
+        }
+
         // POST: /BasicDataManagement/TaskManage/Create/
         [HttpPost]
         public ActionResult Create()

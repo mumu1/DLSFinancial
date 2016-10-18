@@ -145,5 +145,10 @@ namespace BEYON.CoreBLL.Service.App
                 return new OperationResult(OperationResultType.Error, "导入数据失败!");
             }
         }
+
+        public TaskManage GetTaskByNumber(String projectNumber)
+        {           
+           return  _TaskManageRepository.GetTaskByNumber(projectNumber);           
+        }
     }
 }
