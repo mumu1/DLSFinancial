@@ -49,5 +49,16 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
             }
             return baseSalary;  
         }
+
+        public String GetNameByCerID(String certificateID) {
+            String name = "";
+            var record = from p in Context.TaxBaseByMonths.Where(w => w.CertificateID == certificateID)
+                         select p;
+            var lists = record.ToList();
+            if (lists.Count > 0) {
+                name = lists[0].Name;
+            }
+            return name;
+        }
     }
 }

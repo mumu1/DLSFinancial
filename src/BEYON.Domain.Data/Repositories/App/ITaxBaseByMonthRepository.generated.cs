@@ -34,5 +34,6 @@ namespace BEYON.Domain.Data.Repositories.App
     public partial interface ITaxBaseByMonthRepository : IRepository<TaxBaseByMonth, Int32>
     {
         Double GetBaseSalary(String certificateID);
+        String GetNameByCerID(String certificateID);
     }
 }

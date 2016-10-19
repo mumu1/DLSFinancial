@@ -165,5 +165,10 @@ namespace BEYON.CoreBLL.Service.App
             Double baseSalary = _TaxBaseByMonthRepository.GetBaseSalary(certificateID);
             return baseSalary;
         }
+
+        public String GetNameByCerID(String certificateID) {
+            String name = _TaxBaseByMonthRepository.GetNameByCerID(certificateID);
+            return name;
+        }
     }
 }

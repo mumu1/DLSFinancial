@@ -45,6 +45,15 @@ namespace BEYON.Web.Areas.BasicDataManagement.Controllers
             return Json(new { total = result.Count, data = result }, JsonRequestBehavior.AllowGet);
 
         }
+
+        // GET: /BasicDataManagement/WageBaseTable/GetNameByCerID/
+        public String GetNameByCerID(String certificateID)
+        {
+            String result = this._taxBaseByMonthService.GetNameByCerID(certificateID);
+            return result;
+
+        }
+
         // POST: /BasicDataManagement/WageBaseTable/Create/
         [HttpPost]
         public ActionResult Create()

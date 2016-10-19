@@ -21,5 +21,7 @@ namespace BEYON.CoreBLL.Service.App.Interface
         OperationResult Import(String fileName, Service.Excel.ColumnMap[] columns);
 
         Double GetBaseSalary(String certificateID);
+
+        String GetNameByCerID(String certificateID);
     }
 }
