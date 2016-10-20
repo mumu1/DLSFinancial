@@ -364,7 +364,28 @@
                     contentType: "application/json",
                     data: JSON.stringify(serialNumbers),
                     beforeSend: function () {
-                        //
+                        //审核前再次检查现金发放次数是否已满三次 
+                        $.ajax({
+                            type: "GET",
+                            async: false,
+                            url: "../App/ApplyForm/CashCountCheckBeforeAudit?serialNumbers=" + serialNumbers,
+                            //data: $('#apply-audit-form').serialize(),
+                            contentType: "application/json; charset=utf-8",
+                            datatype: "json",
+                            success: function (data) {
+                                if (data.length > 0) {
+                                    var msgCheck = "";
+                                    $.each(data, function(i,val){  
+                                        msgCheck += val+",";
+                                    });
+                                    msgCheck += "以上人员当月现金发放次数已经达到3次，请审核驳回修改支付方式为银行转账。";
+                                    toastr.error(msgCheck);
+                                }                               
+                            },
+                            error: function () {
+                                toastr.error('审核前再次检查现金发放次数失败！');
+                            }
+                        });
                     },
                     success: function (result) {
                         $("#modal-content").html(result);
@@ -382,7 +403,7 @@
                                         type: "POST",
                                         url: "@Url.Action("ApplyAudit")",
                                         data: $('#apply-audit-form').serialize(),
-                                        success: function (result) {
+                                        success: function (result) {                                            
                                             $('#datatable_tabletools').DataTable().ajax.reload();
                                         },
                                         error: function (data) {

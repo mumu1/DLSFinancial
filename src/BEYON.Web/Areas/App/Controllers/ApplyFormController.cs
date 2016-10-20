@@ -377,44 +377,72 @@ namespace BEYON.Web.Areas.App.Controllers
                     {
                         form.AuditOpinion = formVM.AuditOpinion;
                         form.AuditTime = DateTime.Now;
+                    }                 
+                    //若审核通过，开始算税，单笔税保存在TaxPerOrder表
+                    if (formVM.AuditStatus.Equals("审核通过")) {                      
+                        List<PersonalRecord> records = GetPersonalDatas(serialNumber);                       
+                        TaxPerOrder taxPerOrder=null;
+                        if (records != null )
+                        {
+                            for (int i = 0; i < records.Count; i++)
+                            {
+                                taxPerOrder = new TaxPerOrder();
+                                taxPerOrder.SerialNumber = form.SerialNumber;
+                                taxPerOrder.ProjectNumber = form.ProjectNumber;
+                                taxPerOrder.TaskName = form.TaskName;
+                                taxPerOrder.RefundType = form.RefundType;
+                                taxPerOrder.ProjectDirector = form.ProjectDirector;
+                                taxPerOrder.Agent = form.Agent;
+                                taxPerOrder.PersonType = records[i].PersonType;
+                                taxPerOrder.CertificateType = records[i].CertificateType;
+                                taxPerOrder.CertificateID = records[i].CertificateID;
+                                taxPerOrder.Amount = records[i].Amount;
+                                taxPerOrder.TaxOrNot = records[i].TaxOrNot;
+                                taxPerOrder.Bank = records[i].Bank;
+                                taxPerOrder.BankDetailName = records[i].BankDetailName;
+                                taxPerOrder.AccountName = records[i].AccountName;
+                                taxPerOrder.AccountNumber = records[i].AccountNumber;
+                                taxPerOrder.PaymentType = records[i].PaymentType;
+                                _taxPerOrderService.Insert(taxPerOrder);
+                            }
+                        }                        
                     }
                     form.UpdateDate = DateTime.Now;
                     _applicationFormService.Update(form);
-
-                    //若审核通过，开始算税，单笔税保存在TaxPerOrder表
-                    if (formVM.AuditStatus.Equals("审核通过")) {
-                        //PersonalRecord[] records = ClassConvert<PersonalRecord>.Process(Request.Form);
-                        List<PersonalRecord> records = GetPersonalDatas(serialNumber);
-                        
-                        TaxPerOrder taxPerOrder=null;
-                        if(records != null)
-                            for (int i = 0; i < records.Count; i++)
-                        {
-                            taxPerOrder = new TaxPerOrder();
-                            taxPerOrder.SerialNumber = form.SerialNumber;
-                            taxPerOrder.ProjectNumber = form.ProjectNumber;
-                            taxPerOrder.TaskName = form.TaskName;
-                            taxPerOrder.RefundType = form.RefundType;
-                            taxPerOrder.ProjectDirector = form.ProjectDirector;
-                            taxPerOrder.Agent = form.Agent;
-                            taxPerOrder.PersonType = records[i].PersonType;
-                            taxPerOrder.CertificateType = records[i].CertificateType;
-                            taxPerOrder.CertificateID = records[i].CertificateID;
-                            taxPerOrder.Amount = records[i].Amount;
-                            taxPerOrder.TaxOrNot = records[i].TaxOrNot;
-                            taxPerOrder.Bank = records[i].Bank;
-                            taxPerOrder.BankDetailName = records[i].BankDetailName;
-                            taxPerOrder.AccountName = records[i].AccountName;
-                            taxPerOrder.AccountNumber = records[i].AccountNumber;
-                            taxPerOrder.PaymentType = records[i].PaymentType;
-                            _taxPerOrderService.Insert(taxPerOrder);
-                        }
-                    }
-
                 }
             }
             Session.Remove("AuditSerials");
             return Json(new { }, JsonRequestBehavior.AllowGet);
+        }
+
+        // GET: /App/ApplyForm/CashCountCheckBeforeAudit
+        public ActionResult CashCountCheckBeforeAudit(String[] serialNumbers)
+        {
+            //var serialNumbers = Session["AuditSerials"] as String[];
+            List<string> notQualify = new List<string>();
+            foreach (var serialNumber in serialNumbers)
+            {
+                ApplicationForm form = _applicationFormService.ApplicationForms.FirstOrDefault(t => t.SerialNumber == serialNumber);
+                if (form != null)
+                {                              
+                        //再次检查现金发放次数是否已满三次                       
+                        List<PersonalRecord> records = GetPersonalDatas(serialNumber);
+                        if (records != null)
+                            for (int k = 0; k < records.Count; k++)
+                            {
+                                if (records[k].PaymentType.Equals("现金支付"))
+                                {
+                                    String str = GetCashCount(records[k].CertificateID);
+                                    if (!str.Equals(""))
+                                    {
+                                        notQualify.Add(records[k].Name);                                    
+                                    }
+                                }
+
+                            }                                                              
+                }
+            }
+            return Json(notQualify, JsonRequestBehavior.AllowGet);
         }
 
         // GET: /App/ApplyForm/GetCashCount

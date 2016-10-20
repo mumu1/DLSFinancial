@@ -14,13 +14,13 @@
                     </div>
                     <div class="col col-4">
                         <label class="radio">
-                            <input type="radio" name="AuditStatus" checked="checked" value="审核通过">
+                            <input type="radio" class="AuditStatus" name="AuditStatus" checked="checked" value="审核通过">
                             <i></i>审核算税
                         </label>
                     </div>
                     <div class="col col-4">
                         <label class="radio">
-                            <input type="radio" name="AuditStatus" value="已退回">
+                            <input type="radio" class="AuditStatus" name="AuditStatus" value="已退回">
                             <i></i>审核驳回
                         </label>
                     </div>
@@ -28,7 +28,7 @@
             </div>
         </section>
     </fieldset>
-    <fieldset>
+    <fieldset id="auditOpinionField">
         <section>
             <label class="label"><b>审核意见</b></label>
             <label class="select select-multiple">
@@ -50,6 +50,16 @@
 </div>
 
 <script>
+    $("#auditOpinionField").hide();       //默认选中审核算税，则不显示审核意见框
+    //审核通过，不显示审核意见框
+    $(".AuditStatus").change(function () {
+        var selectedvalue = $("input[name='AuditStatus']:checked").val();
+        if (selectedvalue == "审核通过")
+            $("#auditOpinionField").hide();
+        else {
+            $("#auditOpinionField").show();
+        }
+    });
     var tip = document.getElementById("tooltipBlock");
     function tooltip(obj) {
         if (obj.innerHTML.length > 27) {

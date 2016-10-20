@@ -212,6 +212,7 @@
     <Content Include="Content\css\bootstrap.min.css" />
     <Content Include="Content\css\demo.min.css" />
     <Content Include="Content\css\font-awesome.min.css" />
+    <Content Include="Content\css\jAlert-v3.css" />
     <Content Include="Content\css\screen_preview.css" />
     <Content Include="Content\css\smartadmin-production-plugins.min.css" />
     <Content Include="Content\css\smartadmin-production.min.css" />
@@ -369,6 +370,8 @@
     <Content Include="Areas\Member\Views\Web.config" />
     <Content Include="Areas\Common\Views\Login\Index.cshtml" />
     <Content Include="Areas\Common\Views\Web.config" />
+    <Content Include="Scripts\alert\jAlert-functions.min.js" />
+    <Content Include="Scripts\alert\jAlert-v3.min.js" />
     <Content Include="Scripts\app.config.js" />
     <Content Include="Scripts\app.js" />
     <Content Include="Scripts\app.min.js" />
