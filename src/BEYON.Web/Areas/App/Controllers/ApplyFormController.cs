@@ -232,12 +232,12 @@ namespace BEYON.Web.Areas.App.Controllers
             return this._personalRecordService.PersonalRecords.Where(t => t.SerialNumber == serialNumber).ToList();        
         }
 
-        // POST: /BasicDataManagement/Reimbursement/Create/
+        // POST: /App/ApplyForm/CreatePersonal/
         [HttpPost]
         public ActionResult CreatePersonal()
         {
             PersonalRecordVM[] recordVMs = ClassConvert<PersonalRecordVM>.Process(Request.Form);
-            var result = _personalRecordService.Insert(recordVMs[0], false);
+            var result = _personalRecordService.Insert(recordVMs[0], true);
             var entity = new PersonalRecord
             {
                 //Id = (int)System.DateTime.Now.Ticks,
@@ -268,13 +268,14 @@ namespace BEYON.Web.Areas.App.Controllers
             }
         }
 
+        // POST: /App/ApplyForm/EditPersonal/
         [HttpPost]
         public ActionResult EditPersonal()
         {
             PersonalRecord[] datas = ClassConvert<PersonalRecord>.Process(Request.Form);
             foreach (var data in datas)
             {
-                var result = _personalRecordService.Update(data, false);
+                var result = _personalRecordService.Update(data, true);
                 result.Message = result.Message ?? result.ResultType.GetDescription();
                 if (result.ResultType != OperationResultType.Success)
                 {
@@ -294,7 +295,7 @@ namespace BEYON.Web.Areas.App.Controllers
             {
                 serialNumberList.Add(data.SerialNumber);
             }
-            _personalRecordService.Delete(serialNumberList, false);
+            _personalRecordService.Delete(serialNumberList, true);
             return Json(new { total = datas.Length, data = datas }, JsonRequestBehavior.AllowGet);
         }
 
