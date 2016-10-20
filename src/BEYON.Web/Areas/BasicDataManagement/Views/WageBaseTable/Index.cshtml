@@ -91,7 +91,12 @@
                 "remove": "@Url.Action("Delete")"
             },
             "table": "#datatable_tabletools",
-            fields: [{
+            fields: [
+            {
+                    label: "期间:",
+                    name: "Period"
+            },
+            {
                 label: "姓名",
                 name: "Name"
             }, {
@@ -121,15 +126,7 @@
              {
                  label: "初始税额:",
                  name: "InitialTax"
-             },
-              {
-                  label: "人员类型:",
-                  name: "PersonType"
-              },
-               {
-                   label: "职称:",
-                   name: "Title"
-               }
+             }                    
             ]
         });
 
@@ -203,6 +200,7 @@
             paging: false,
             columns: [
                                     //{ data: "Id", title: "序号" },
+                                    { data: "Period", title: "期间" },
                                     { data: "Name", title: "姓名" },
                                     { data: "CertificateType", title: "证件类型" },
                                     { data: "CertificateID", title: "证件号码" },
@@ -211,8 +209,8 @@
                                     { data: "AmountDeducted", title: "基本扣除" },
                                     { data: "InitialTaxPayable", title: "初始应纳税所得额" },
                                     { data: "InitialTax", title: "初始税额" },
-                                    { data: "PersonType", title: "人员类型" },
-                                    { data: "Title", title: "职称" }                              
+                                   // { data: "PersonType", title: "人员类型" },
+                                    //{ data: "Title", title: "职称" }                              
             ],
             oLanguage: {
                 "sLengthMenu": "每页显示 _MENU_ 条记录",
