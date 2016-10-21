@@ -141,7 +141,7 @@ namespace BEYON.Component.Data.Migrations
             #region 用户管理
             List<User> members = new List<User>
             {
-                new User { Id=1, UserName = "admin", Password = "e10adc3949ba59abbe56e057f20f883e",  TrueName = "管理员" ,Enabled=true,Roles=new List<Role>{roles[0]} },
+                new User { Id=1, UserName = "admin", Password = "e10adc3949ba59abbe56e057f20f883e",  TrueName = "系统管理员" ,Enabled=true,Roles=new List<Role>{roles[0]} },
                 new User { Id=2, UserName = "zhangs", Password = "e10adc3949ba59abbe56e057f20f883e", TrueName = "张硕",Enabled=true,Roles=new List<Role>{roles[1]} }
             };
             DbSet<User> memberSet = context.Set<User>();
