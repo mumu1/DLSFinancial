@@ -12,12 +12,12 @@ namespace BEYON.Component.Data.Migrations
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        UserName = c.String(nullable: false, maxLength: 20),
+                        UserName = c.String(nullable: false, maxLength: 50),
                         Password = c.String(nullable: false, maxLength: 32),
-                        NickName = c.String(nullable: false, maxLength: 20),
-                        Email = c.String(nullable: false, maxLength: 50),
-                        Phone = c.String(maxLength: 50),
-                        Address = c.String(maxLength: 300),
+                        //NickName = c.String(nullable: false, maxLength: 20),
+                        //Email = c.String(nullable: false, maxLength: 50),
+                        //Phone = c.String(maxLength: 50),
+                        //Address = c.String(maxLength: 300),
                         IsDeleted = c.Boolean(nullable: false),
                         UpdateDate = c.DateTime(nullable: false),
                     })

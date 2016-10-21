@@ -141,8 +141,8 @@ namespace BEYON.Component.Data.Migrations
             #region 用户管理
             List<User> members = new List<User>
             {
-                new User { Id=1, UserName = "admin", Password = "e10adc3949ba59abbe56e057f20f883e", Email = "375368093@qq.com", TrueName = "管理员",Phone="18181818181",Address="吉林省" ,Enabled=true,Roles=new List<Role>{roles[0]} },
-                new User { Id=2, UserName = "zhangs", Password = "e10adc3949ba59abbe56e057f20f883e", Email = "zhangsuo@beyondb.com.cn", TrueName = "张硕",Phone="18181818181",Address="中南海",Enabled=true,Roles=new List<Role>{roles[1]} }
+                new User { Id=1, UserName = "admin", Password = "e10adc3949ba59abbe56e057f20f883e",  TrueName = "管理员" ,Enabled=true,Roles=new List<Role>{roles[0]} },
+                new User { Id=2, UserName = "zhangs", Password = "e10adc3949ba59abbe56e057f20f883e", TrueName = "张硕",Enabled=true,Roles=new List<Role>{roles[1]} }
             };
             DbSet<User> memberSet = context.Set<User>();
             memberSet.AddOrUpdate(m => new { m.UserName }, members.ToArray());
