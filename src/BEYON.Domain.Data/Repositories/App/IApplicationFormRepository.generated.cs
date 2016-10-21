@@ -33,7 +33,7 @@ namespace BEYON.Domain.Data.Repositories.App
     /// </summary>
     public partial interface IApplicationFormRepository : IRepository<ApplicationForm, Int32>
     {
-        IList<ApplicationForm> GetApplicationFromByUser(String email);
+        IList<ApplicationForm> GetApplicationFromByUser(String userName);
         IList<ApplicationForm> GetApplicationFromByAdmin();
     }
 }

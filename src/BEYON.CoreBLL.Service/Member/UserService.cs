@@ -18,6 +18,7 @@ using BEYON.CoreBLL.Service.Member.Interface;
 using BEYON.Domain.Data.Repositories.Member;
 using BEYON.Domain.Model.Member;
 using BEYON.ViewModel.Member;
+using BEYON.CoreBLL.Service.Excel;
 
 namespace BEYON.CoreBLL.Service.Member
 {
@@ -53,9 +54,13 @@ namespace BEYON.CoreBLL.Service.Member
                     UserName = model.UserName.Trim(),
                     TrueName = model.TrueName.Trim(),
                     Password = model.Password,
-                    Phone = model.Phone,
-                    Email = model.Email,
-                    Address = model.Address,
+                    //Phone = model.Phone,
+                    //Email = model.Email,
+                    //Address = model.Address,
+                    CertificateID = model.CertificateID,
+                    Department = model.Department,
+                    Gender =model.Gender,
+                    Title = model.Title,
                     Enabled = model.Enabled,
                     UpdateDate = DateTime.Now
                 };
@@ -84,9 +89,13 @@ namespace BEYON.CoreBLL.Service.Member
                 }
                 user.TrueName = model.TrueName.Trim();
                 user.UserName = model.UserName.Trim();
-                user.Address = model.Address;
-                user.Phone = model.Phone;
-                user.Email = model.Email;
+                //user.Address = model.Address;
+                user.CertificateID = model.CertificateID;
+                user.Gender = model.Gender;
+                user.Department = model.Department;
+                user.Title = model.Title;
+                //user.Phone = model.Phone;
+                //user.Email = model.Email;
                 user.UpdateDate = DateTime.Now;
                 _userRepository.Update(user);
                 return new OperationResult(OperationResultType.Success, "更新数据成功！");
@@ -183,6 +192,47 @@ namespace BEYON.CoreBLL.Service.Member
             {
                 return new OperationResult(OperationResultType.Error, "设置用户角色失败!");
             }
+        }
+
+        public OperationResult Import(String fileName, Service.Excel.ColumnMap[] columns)
+        {
+            try
+            {
+                var items = ExcelService.GetObjects<User>(fileName, columns).ToList();
+               // _userRepository.InsertOrUpdate(items);
+                //逐一将导入的数据插入并将密码重置为123456，同时设定为普通用户权限
+                UserVM userVm = null;
+                for (int i = 0; i < items.Count; i++)
+                { 
+                    userVm = new UserVM();
+                    userVm.UserName = items[i].UserName;
+                    userVm.TrueName = items[i].TrueName;
+                    //userVm.Email = items[i].Email;
+                    userVm.CertificateID = items[i].CertificateID;
+                    userVm.Department = items[i].Department;
+                    userVm.Gender = items[i].Gender;
+                    userVm.Title = items[i].Title;
+                    userVm.Password = EncryptionHelper.GetMd5Hash("123456");
+                    //向User表插入该数据
+                    Insert(userVm);
+                    //获取插入用户的userID
+                    int userID = GetUserIDByUserName(userVm.UserName);
+                    String[] roles = { "2" };    //导入的用户设为普通用户角色
+                    //为用户设置角色
+                    UpdateUserRoles(userID, roles);
+                }
+                    
+
+                return new OperationResult(OperationResultType.Success, "导入数据成功！");
+            }
+            catch (Exception ex)
+            {
+                return new OperationResult(OperationResultType.Error, "导入数据失败!");
+            }
+        }
+
+        public int GetUserIDByUserName(String userName) {
+            return _userRepository.GetUserIDByUserName(userName);
         }
 
         public OperationResult UpdateUserGroups(int userId, string[] chkUserGroups)

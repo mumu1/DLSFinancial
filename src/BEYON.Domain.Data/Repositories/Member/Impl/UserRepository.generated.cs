@@ -36,6 +36,19 @@ namespace BEYON.Domain.Data.Repositories.Member.Impl
     { 
         public UserRepository(IUnitOfWork unitOfWork)
             : base()
-        { }
+        {         
+        }
+        public int GetUserIDByUserName(String userName)
+        {
+            int userID = -1;
+            var record = from p in Context.Users.Where(w => w.UserName == userName)
+                         select p;
+            var lists = record.ToList();           
+            if (lists.Count > 0)
+            {
+                userID = lists[0].Id;
+            } 
+            return userID;
+        }
      }
 }

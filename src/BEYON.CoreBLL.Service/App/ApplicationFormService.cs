@@ -52,7 +52,7 @@ namespace BEYON.CoreBLL.Service.App
                     AuditOpinion = model.AuditOpinion,
                     ApplyDesp = model.ApplyDesp,
                     Summation = model.Summation,
-                    UserEmail = model.UserEmail,
+                    UserName = model.UserName,
                     UpdateDate = DateTime.Now
                 };
                 _ApplicationFormRepository.Insert(entity);
@@ -86,7 +86,7 @@ namespace BEYON.CoreBLL.Service.App
                 applicationForm.AuditOpinion = model.AuditOpinion;
                 applicationForm.ApplyDesp = model.ApplyDesp;
                 applicationForm.Summation = model.Summation;
-                applicationForm.UserEmail = model.UserEmail;             
+                applicationForm.UserName = model.UserName;             
                 applicationForm.UpdateDate = DateTime.Now;
                 _ApplicationFormRepository.Update(applicationForm);
                 return new OperationResult(OperationResultType.Success, "更新数据成功！");
@@ -140,7 +140,7 @@ namespace BEYON.CoreBLL.Service.App
                 model.AuditOpinion = model.AuditOpinion;
                 model.ApplyDesp = model.ApplyDesp;
                 model.Summation = model.Summation;
-                model.UserEmail = model.UserEmail;             
+                model.UserName = model.UserName;             
                 model.UpdateDate = DateTime.Now;
                 _ApplicationFormRepository.Update(model);
                 return new OperationResult(OperationResultType.Success, "更新申请单数据成功！");
@@ -168,7 +168,7 @@ namespace BEYON.CoreBLL.Service.App
                 model.AuditOpinion = model.AuditOpinion;
                 model.ApplyDesp = model.ApplyDesp;
                 model.Summation = model.Summation;
-                model.UserEmail = model.UserEmail;                          
+                model.UserName = model.UserName;                          
                 model.UpdateDate = DateTime.Now;
                 _ApplicationFormRepository.Delete(model);
                 return new OperationResult(OperationResultType.Success, "更新申请单数据成功！");
@@ -193,9 +193,9 @@ namespace BEYON.CoreBLL.Service.App
             }
         }
 
-        public IList<ApplicationForm> GetApplicationFromByUser(String email)
+        public IList<ApplicationForm> GetApplicationFromByUser(String userName)
         {
-            return _ApplicationFormRepository.GetApplicationFromByUser(email);
+            return _ApplicationFormRepository.GetApplicationFromByUser(userName);
         }
 
         public IList<ApplicationForm> GetApplicationFromByAdmin()

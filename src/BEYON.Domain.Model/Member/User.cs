@@ -25,8 +25,8 @@ namespace BEYON.Domain.Model.Member
         }
 
         [Required]
-        [Description("用户名")]
-        [StringLength(20)]
+        [Description("登录名称")]
+        [StringLength(50)]
         public string UserName { get; set; }
 
         [Required]
@@ -39,18 +39,33 @@ namespace BEYON.Domain.Model.Member
         [StringLength(20)]
         public string TrueName { get; set; }
 
-        [Required]
-        [Description("邮箱")]
-        [StringLength(50)]
-        public string Email { get; set; }
+        //[Description("邮箱")]
+        //[StringLength(50)]
+        //public string Email { get; set; }
 
-        [Description("电话")]
-        [StringLength(50)]
-        public string Phone { get; set; }
+        //[Description("电话")]
+        //[StringLength(50)]
+        //public string Phone { get; set; }
 
-        [Description("地址")]
-        [StringLength(300)]
-        public string Address { get; set; }
+        //[Description("地址")]
+        //[StringLength(300)]
+        //public string Address { get; set; }
+
+        [Description("性别")]
+        [StringLength(10)]
+        public string Gender { get; set; }
+
+        [Description("部门")]
+        [StringLength(100)]
+        public string Department { get; set; }
+
+        [Description("员工职称")]
+        [StringLength(50)]
+        public string Title { get; set; }
+
+        [Description("证件号码")]
+        [StringLength(50)]
+        public string CertificateID { get; set; }
 
         [Display(Name = "是否激活")]
         public bool Enabled { get; set; }

@@ -64,6 +64,10 @@ namespace BEYON.Component.Data.Enum
         /// </summary>
         ResetPwdUser = 512,
         /// <summary>
+        /// 导入用户按钮（用户管理）
+        /// </summary>
+        ImportUser = 513,
+        /// <summary>
         /// 设置用户组按钮（用户管理）
         /// </summary>
         SetGroupUser = 1024,

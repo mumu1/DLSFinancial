@@ -32,5 +32,7 @@ namespace BEYON.Domain.Data.Repositories.Member
     ///   仓储操作层接口——用户信息
     /// </summary>
     public partial interface IUserRepository : IRepository<User, Int32>
-    { }
+    {
+        int GetUserIDByUserName(String userName);
+    }
 }

@@ -5,6 +5,7 @@
     Permission UpdatePermission = ViewBag.UpdateUserButton;
     Permission DeletePermission = ViewBag.DeleteUserButton;
     Permission ResetPwdPermission = ViewBag.ResetPwdUserButton;
+    Permission ImportPermission = ViewBag.ImportUserButton;
     Permission SetGroupPermission = ViewBag.SetGroupUserButton;
     Permission SetRolesPermission = ViewBag.SetRolesUserButton;
 
@@ -61,6 +62,10 @@
                         <button id="btn_reset" type="button" class="btn btn-info">
                             <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span>@ResetPwdPermission.Name
                         </button>
+                        //导入Excel
+                        <button id="btn_import" type="button" class="btn btn-info">
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>@ImportPermission.Name
+                        </button>
                     }
                 }
             </div>
@@ -70,6 +75,7 @@
         @Html.Partial("_ModalForm")
         @Html.Partial("_SettingModal")
     </section><!-- /.content -->
+    <div id="importDataDialog"></div>
 </div><!-- /.content-wrapper -->
 
 <script src="@Url.Content("~/Scripts/jquery.validate.min.js")"></script>
@@ -128,28 +134,49 @@
                 },
                 {
                     field: 'UserName',
-                    title: '登陆名称'
+                    title: '登录名称'
                 },
                 {
                     field: 'TrueName',
                     title: '真实姓名'
-                }, {
-                    field: 'Email',
-                    title: '邮箱'
                 },
-                {
-                    field: 'Phone',
-                    title: '电话'
-                },
-                {
-                    field: 'Address',
-                    title: '居住地址&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'
-                },
+                 {
+                     field: 'CertificateID',
+                     title: '证件号码'
+                 },
+                   {
+                       field: 'Gender',
+                       title: '性别'
+                   },
+                     {
+                         field: 'Department',
+                         title: '部门'
+                     },
+                       {
+                           field: 'Title',
+                           title: '职称'
+                       },
+                //{
+                //    field: 'Email',
+                //    title: '邮箱',
+                //    visible: false
+                //},
+                //{
+                //    field: 'Phone',
+                //    title: '电话',
+                //    visible: false
+                //},
+                //{
+                //    field: 'Address',
+                //    title: '居住地址&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp',
+                //    visible: false
+                //},
                 {
                     field: 'StrUpdateDate',
                     title: '更新时间'
                 }, {
                     field: 'StrEnabled',
+                   // visible: false,
                     title: '是否激活',
                     align: 'center',
                     cellStyle: function (value, row, index) {
@@ -163,6 +190,7 @@
                     }
                 }, {
                     field: 'operate',
+                    //visible: false,
                     title: '&nbsp&nbsp&nbsp&nbsp设置&nbsp&nbsp&nbsp&nbsp',
                     align: 'center',
                     events: operateEvents,
@@ -187,7 +215,7 @@
             InitTable($("#tb_users"), actionUrl, dbQueryParams, tbColumns);
         });
         var $settingModal = $("#settingModal");
-    
+
 
         //查询用户
         $("#btn_query", $userSection).click(function () {
@@ -229,6 +257,39 @@
             var actionUrl = "@Url.Action("ResetPassword")";
             MultReset($tb, actionUrl);
         });
+        //导入用户Excel表
+        $("#btn_import", $userSection).click(function () {
+            var $tb = $("#tb_users");
+            var columns = $("#tb_users").bootstrapTable('getVisibleColumns');
+            var ColumnDatas = [];
+            // var columns = $tb.settings().init().columns;
+            //var columns = $tb.init().columns;
+            //$tb.init().columns.every(function (index) {
+            //    ColumnDatas.push({ ColumnName: columns[index].data, TitleName: columns[index].title })
+            //})
+            for (var index = 0; index < columns.length; index++) {
+                ColumnDatas.push({ ColumnName: columns[index].field, TitleName: columns[index].title })
+            }
+
+            $.ajax({
+                url: '../App/Import/ImportData',
+                type: 'POST',
+                data: JSON.stringify({ ActionUrl: "@Url.Action("Import")", Columns: ColumnDatas }),
+                contentType: 'application/json; charset=utf8',
+                cache: false,
+                dataType: 'html',
+                success: function (data) {
+                    $('#importDataDialog').html(data);
+                    toastr.alert("用户导入成功");
+                },
+                error: function (xhr) {
+                    alert("出现错误，请稍后再试:" + xhr.responseText);
+                }
+            });
+            
+            //var actionUrl = "@Url.Action("Import")";
+           // MultReset($tb, actionUrl);
+        });
 
         //模态框中“新增编辑用户”保存
         var $formmodal = $("#modal-form");
@@ -264,7 +325,3 @@
     //    });
     //});
 </script>
-
-
-
-

@@ -14,6 +14,8 @@ using BEYON.ViewModel;
 using BEYON.ViewModel.Member;
 using BEYON.Web.Extension.Common;
 using BEYON.Web.Extension.Filters;
+using BEYON.CoreBLL.Service.Excel;
+using System.IO;
 
 namespace BEYON.Web.Areas.Member.Controllers
 {
@@ -65,9 +67,13 @@ namespace BEYON.Web.Areas.Member.Controllers
                     Id = t.Id,
                     UserName = t.UserName,
                     TrueName = t.TrueName,
-                    Email = t.Email,
-                    Phone = t.Phone,
-                    Address = t.Address,
+                    //Email = t.Email,
+                    //Phone = t.Phone,
+                    //Address = t.Address,
+                    CertificateID = t.CertificateID,
+                    Gender = t.Gender,
+                    Department = t.Department,
+                    Title = t.Title,
                     Enabled = t.Enabled,
                     UpdateDate = t.UpdateDate
                 }).ToList();
@@ -105,9 +111,13 @@ namespace BEYON.Web.Areas.Member.Controllers
                 Id = user.Id,
                 UserName = user.UserName,
                 TrueName = user.TrueName,
-                Address = user.Address,
-                Phone = user.Phone,
-                Email = user.Email,
+                //Address = user.Address,
+                CertificateID = user.CertificateID,
+                Title = user.Title,
+                Department = user.Department,
+                Gender = user.Gender,
+                //Phone = user.Phone,
+                //Email = user.Email,
                 Enabled = user.Enabled,
             };
             return PartialView("Create", model);
@@ -148,6 +158,44 @@ namespace BEYON.Web.Areas.Member.Controllers
             result.Message = result.Message ?? result.ResultType.GetDescription();
             return Json(result);
         }
+
+        // POST: /Member/User/Import/
+        [HttpPost]
+        public ActionResult Import(System.Web.HttpPostedFileBase upload)
+        {
+            string fileName = "";
+            String filePath = Server.MapPath("~/Imports");
+            if (!Directory.Exists(filePath))
+            {
+                Directory.CreateDirectory(filePath);
+            }
+
+            string tempName = DateTime.Now.ToString("yyyyMMddHHMMss") + DateTime.Now.Millisecond;
+            if (upload.ContentLength > 0)
+            {
+                fileName = tempName + Path.GetFileName(upload.FileName);
+                var path = Path.Combine(filePath, fileName);
+                upload.SaveAs(path);
+                //获取映射文件
+                ColumnMap[] columns;
+                if (!ExcelService.Get(Request.Path, out columns))
+                {
+                    columns = null;
+                }
+
+                //实现文件导入
+                var result = _userService.Import(path, columns);
+                //删除临时创建文件
+                System.IO.File.Delete(path);
+
+                result.Message = result.Message ?? result.ResultType.GetDescription();
+
+                return Json(new { erro = result.Message });
+            }
+
+            return Json(new { erro = "上传数据失败！" });
+        }
+    
 
 
         #region 设置角色
@@ -253,6 +301,10 @@ namespace BEYON.Web.Areas.Member.Controllers
             Permission resetPwdUserButton =
                 permissionCache.FirstOrDefault(c => c.Enabled == true && c.Code == EnumPermissionCode.ResetPwdUser.ToString());
             ViewBag.ResetPwdUserButton = resetPwdUserButton;
+            //导入用户按钮
+            Permission importUserButton =
+                permissionCache.FirstOrDefault(c => c.Enabled == true && c.Code == EnumPermissionCode.ImportUser.ToString());
+            ViewBag.ImportUserButton = importUserButton;
             //设置用户组
             Permission setGroupUserButton =
            permissionCache.FirstOrDefault(c => c.Enabled == true && c.Code == EnumPermissionCode.SetGroupUser.ToString());

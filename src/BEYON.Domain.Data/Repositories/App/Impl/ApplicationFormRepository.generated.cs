@@ -40,9 +40,9 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
             
         }
 
-        public IList<ApplicationForm> GetApplicationFromByUser(String email)
+        public IList<ApplicationForm> GetApplicationFromByUser(String userName)
         {
-            var q = from p in Context.ApplicationForms.Where(w => w.UserEmail == email).OrderByDescending(t => t.UpdateDate)
+            var q = from p in Context.ApplicationForms.Where(w => w.UserName == userName).OrderByDescending(t => t.UpdateDate)
                         select p;
             return q.ToList();
         }

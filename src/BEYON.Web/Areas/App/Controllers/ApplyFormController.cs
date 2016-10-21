@@ -68,7 +68,7 @@ namespace BEYON.Web.Areas.App.Controllers
             }
             else
             {
-                var result = _applicationFormService.GetApplicationFromByUser(user.Email);
+                var result = _applicationFormService.GetApplicationFromByUser(user.UserName);
                 //var result = this._applicationFormService.ApplicationForms.ToList();
                 return Json(new { total = result.Count, data = result }, JsonRequestBehavior.AllowGet);
             }
@@ -82,7 +82,7 @@ namespace BEYON.Web.Areas.App.Controllers
             var timeNow = System.DateTime.Now;
             var serialNumber = String.Format("S{0}", timeNow.ToString("yyyyMMddHHmmssffff"));
 
-            //获取登录用户EMail
+            //获取登录用户名
             string userid = ((System.Web.Security.FormsIdentity)(System.Web.HttpContext.Current.User.Identity)).Ticket.UserData;
             var userID = Int32.Parse(userid);
             User user = this._userService.Users.FirstOrDefault(t => t.Id == userID);
@@ -92,7 +92,7 @@ namespace BEYON.Web.Areas.App.Controllers
                 SerialNumber = serialNumber,
                 AuditStatus = "待提交",
                 SubmitTime = DateTime.Now,
-                UserEmail = user.Email
+                UserName = user.UserName
             };
             return PartialView(model);
         }
@@ -130,7 +130,7 @@ namespace BEYON.Web.Areas.App.Controllers
                 AuditTime = application.AuditTime,
                 Summation = application.Summation,
                 RefundType = application.RefundType,
-                UserEmail = application.UserEmail
+                UserName = application.UserName
             };
             return PartialView("Create", model);
         }
@@ -194,7 +194,7 @@ namespace BEYON.Web.Areas.App.Controllers
                 AuditTime = application.AuditTime,
                 Summation = application.Summation,
                 RefundType = application.RefundType,
-                UserEmail = application.UserEmail
+                UserName = application.UserName
             };
             return PartialView("Show", model);
         }

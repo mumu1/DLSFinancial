@@ -119,14 +119,14 @@ namespace BEYON.CoreBLL.Service.Excel
 
             //2.设置表头
             string[] strHead = new string[columnCount] { "序号", "姓名", "证件类型", "身份证件号码", "单位", "联系电话", "国籍", "职称", "人员类型", "金额(元)", "是否含税", "支付类型","开户银行", "银行存折帐号", "开户银行详细名称","领取人签字" };
-            int[] columnWidth = new int[columnCount] { 4, 8, 8, 20, 20, 12, 8, 8, 8, 8, 8, 8, 8, 20, 20, 10 };
+            int[] columnWidth = new int[columnCount] { 4, 10, 10, 20, 20, 12, 10, 10, 10, 10, 10, 10, 10, 20, 20, 12 };
             for (int i = 0; i < columnCount; i++)
             {
                 Range headRange = worksheet.Cells[4, i + 1] as Range;//获取表头单元格,不用标题则从1开始
                 headRange.Value2 = strHead[i];//设置单元格文本
                 headRange.Font.Name = "宋体";//设置字体
                 headRange.Font.Size = 12;//字体大小
-                headRange.Font.Bold = false;//加粗显示
+                headRange.Font.Bold = true;//加粗显示
                 headRange.HorizontalAlignment = XlHAlign.xlHAlignCenter;//水平居中
                 headRange.VerticalAlignment = XlVAlign.xlVAlignCenter;//垂直居中
                 headRange.ColumnWidth = columnWidth[i];//设置列宽
@@ -152,27 +152,39 @@ namespace BEYON.CoreBLL.Service.Excel
                 excelApp.Cells[k + 4, 14] = person.AccountNumber;
                 excelApp.Cells[k + 4, 15] = person.BankDetailName;             
             }
-            //Range Range2 = worksheet.get_Range(worksheet.Cells[nMax + 1, 1], worksheet.Cells[3, columnCount]);//选取单元格
-            //Range2.Merge(true);         
+            Range Range2 = worksheet.get_Range(worksheet.Cells[rowCount + 5, 1], worksheet.Cells[rowCount + 5, columnCount]);//选取单元格
+            Range2.Merge(true);         
             //4.设置表尾格式
-            worksheet.Cells[nMax + 1, 2] = "报销事由";
-            worksheet.Cells[nMax + 1, 3] = applicationForm.RefundType; 
-            worksheet.Cells[nMax + 1, 5] = "课题号";
-            worksheet.Cells[nMax + 1, 6] = applicationForm.ProjectNumber;
-            worksheet.Cells[nMax + 1, 7] = "课题负责人";
-            worksheet.Cells[nMax + 1, 8] = applicationForm.ProjectDirector;
-            worksheet.Cells[nMax + 1, 9] = "流水号";
-            worksheet.Cells[nMax + 1, 10] = applicationForm.SerialNumber;
-            worksheet.Cells[nMax + 1, 11] = "合计金额";
-            worksheet.Cells[nMax + 1, 12] = applicationForm.Summation;
-            Range range = worksheet.get_Range(worksheet.Cells[nMax + 1, 3], worksheet.Cells[nMax + 1, 4]);//选取单元格
-            range.Merge(true);
-            Range rangeTask = worksheet.get_Range(worksheet.Cells[nMax + 1, 6], worksheet.Cells[nMax + 1, 8]);//选取单元格
+            Range rangeRefund = worksheet.get_Range(worksheet.Cells[rowCount + 5 + 1, 3], worksheet.Cells[rowCount + 5 + 1, 4]);//选取单元格
+            rangeRefund.Merge(true);
+            Range rangeTask = worksheet.get_Range(worksheet.Cells[rowCount + 5 + 1, 6], worksheet.Cells[rowCount + 5 + 1, 7]);//选取单元格
             rangeTask.Merge(true);
-            Range rangeSer = worksheet.get_Range(worksheet.Cells[nMax + 1, 8], worksheet.Cells[nMax + 1, 10]);//选取单元格
-            rangeSer.Merge(true);
-            Range rangeSum = worksheet.get_Range(worksheet.Cells[nMax + 1, 12], worksheet.Cells[nMax + 1, 14]);//选取单元格
+            Range rangeLeader = worksheet.get_Range(worksheet.Cells[rowCount + 5 + 1, 9], worksheet.Cells[rowCount + 5 + 1, 10]);//选取单元格
+            rangeLeader.Merge(true);
+            Range rangeSum = worksheet.get_Range(worksheet.Cells[rowCount + 5 + 1, 12], worksheet.Cells[rowCount + 5 + 1, 13]);//选取单元格
             rangeSum.Merge(true);
+            Range rangeSer = worksheet.get_Range(worksheet.Cells[rowCount + 5 + 1, 15], worksheet.Cells[rowCount + 5 + 1, columnCount]);//选取单元格
+            rangeSer.Merge(true);
+    
+            worksheet.Cells[rowCount + 5 + 1, 2] = "报销事由";
+            worksheet.Cells[rowCount + 5 + 1, 3] = applicationForm.RefundType;
+            worksheet.Cells[rowCount + 5 + 1, 5] = "课题号";
+            worksheet.Cells[rowCount + 5 + 1, 6] = applicationForm.ProjectNumber;
+            worksheet.Cells[rowCount + 5 + 1, 8] = "课题负责人";
+            worksheet.Cells[rowCount + 5 + 1, 9] = applicationForm.ProjectDirector;
+            worksheet.Cells[rowCount + 5 + 1, 11] = "合计金额";
+            worksheet.Cells[rowCount + 5 + 1, 12] = applicationForm.Summation;
+            worksheet.Cells[rowCount + 5 + 1, 14] = "流水号";
+            worksheet.Cells[rowCount + 5 + 1, 15] = applicationForm.SerialNumber;
+
+            Range info = worksheet.get_Range(worksheet.Cells[rowCount + 5 + 1, 1], worksheet.Cells[rowCount + 5 + 1, columnCount]);//选取单元格           
+            info.Borders.LineStyle = XlLineStyle.xlContinuous;//设置边框
+            info.Borders.Weight = XlBorderWeight.xlThin;//边框常规粗细
+            info.HorizontalAlignment = XlHAlign.xlHAlignLeft;//水平居中
+            info.VerticalAlignment = XlVAlign.xlVAlignTop;//垂直居中
+            info.Font.Name = "宋体";//设置字体
+            info.Font.Size = 12;//字体大小
+            info.Font.Bold = true;//加粗显示
           
             //Range tailRange = worksheet.Cells[nMax + 1, 11] as Range;
             //tailRange.ColumnWidth = 10;
@@ -194,7 +206,7 @@ namespace BEYON.CoreBLL.Service.Excel
             contentRange.VerticalAlignment = XlVAlign.xlVAlignCenter;//垂直居中
             contentRange.WrapText = true;
 
-            Range work = worksheet.get_Range(worksheet.Cells[nMax + 2, 1], worksheet.Cells[nMax + 6, columnCount]);//选取单元格
+            Range work = worksheet.get_Range(worksheet.Cells[nMax + 3, 1], worksheet.Cells[nMax + 7, columnCount]);//选取单元格
             work.MergeCells = true;
             work.Borders.LineStyle = XlLineStyle.xlContinuous;//设置边框
             work.Borders.Weight = XlBorderWeight.xlThin;//边框常规粗细
@@ -205,7 +217,7 @@ namespace BEYON.CoreBLL.Service.Excel
             work.Font.Bold = false;//加粗显示
             StringBuilder sb = new StringBuilder();
             sb.Append("关于工作内容、工作时间等的描述（必填）：\n");
-            string content = String.Format("    {0}", applicationForm.AuditOpinion);
+            string content = String.Format("    {0}", applicationForm.ApplyDesp);
             int padlen = 130;
             sb.Append(content);
             if (content.Length < 76)
@@ -216,13 +228,13 @@ namespace BEYON.CoreBLL.Service.Excel
                 sb.Append("\n");
             else
                 padlen = padlen - (content.Length - 225) * 2;
-            String time = applicationForm.AuditTime.ToString("yyyy年MM月dd日");
+            String time = applicationForm.SubmitTime.ToString("yyyy年MM月dd日");
             if(padlen > 0)
                 time = time.PadLeft(padlen,' ');
             sb.Append(time);  
             work.Value = sb.ToString();
 
-            Range noteRange = worksheet.get_Range(worksheet.Cells[nMax + 7, 1], worksheet.Cells[nMax + 9, columnCount]);//选取单元格
+            Range noteRange = worksheet.get_Range(worksheet.Cells[nMax +8, 1], worksheet.Cells[nMax + 10, columnCount]);//选取单元格
             noteRange.MergeCells = true;
             noteRange.Borders.LineStyle = XlLineStyle.xlContinuous;//设置边框
             noteRange.Borders.Weight = XlBorderWeight.xlThin;//边框常规粗细
@@ -233,7 +245,7 @@ namespace BEYON.CoreBLL.Service.Excel
             noteRange.Font.Bold = false;//加粗显示
             noteRange.Value = "填表说明:1.各类劳务费应由领款本人签收并经课题负责人、部门负责人、单位负责人、经办人签字。\n     2.现金和转账发放都可使用该表，如通过银行转账发放，请准确填写收款本人的银行账户、开户银行、账户名称等信息。\n     3.单位填写分类：所内在职职工、所内注册学生、所内劳务流程。客座学生和外单位人员填写具体工作单位。";
 
-            Range signRange = worksheet.get_Range(worksheet.Cells[nMax + 10, 1], worksheet.Cells[nMax + 11, columnCount]);//选取单元格
+            Range signRange = worksheet.get_Range(worksheet.Cells[nMax + 11, 1], worksheet.Cells[nMax + 12, columnCount]);//选取单元格
             signRange.MergeCells = true;
             signRange.VerticalAlignment = XlVAlign.xlVAlignTop;//垂直居中
             signRange.Value = " 课题负责人:                                  部门负责人:                                  单位负责人:                                  经办人:                                  ";

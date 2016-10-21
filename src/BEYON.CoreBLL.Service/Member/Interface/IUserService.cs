@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using BEYON.Component.Tools;
 using BEYON.Domain.Model.Member;
 using BEYON.ViewModel.Member;
+
 
 namespace BEYON.CoreBLL.Service.Member.Interface
 {
@@ -15,5 +18,7 @@ namespace BEYON.CoreBLL.Service.Member.Interface
         OperationResult ResetPassword(IEnumerable<UserVM> list);
         OperationResult UpdateUserRoles(int roleId, string[] chkRoles);
         OperationResult UpdateUserGroups(int userId, string[] chkUserGroups);
+
+        OperationResult Import(String fileName, Service.Excel.ColumnMap[] columns);
     }
 }

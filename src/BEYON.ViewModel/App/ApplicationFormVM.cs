@@ -56,9 +56,9 @@ namespace BEYON.ViewModel.App
         [StringLength(1024)]
         public string ApplyDesp { get; set; }
 
-        [Display(Name = "用户Email")]
+        [Display(Name = "用户登录名称")]
         [StringLength(100)]
-        public string UserEmail { get; set; }
+        public string UserName { get; set; }
 
         [Display(Name = "报销合计")]
         public Double Summation { get; set; }
