@@ -503,14 +503,9 @@
     <Content Include="Scripts\bootstraptable\dist\locale\bootstrap-table-zh-TW.js" />
     <Content Include="Scripts\bootstraptable\dist\locale\bootstrap-table-zh-TW.min.js" />
     <Content Include="Scripts\bootstrap\bootstrap.min.js" />
-    <Content Include="Scripts\Custom\App\Map.js" />
-    <Content Include="Scripts\Custom\App\MapTool.js" />
     <Content Include="Scripts\Custom\App\Menu.js" />
     <Content Include="Scripts\Custom\App\Navigation.js" />
-    <Content Include="Scripts\Custom\App\Plot.js" />
-    <Content Include="Scripts\Custom\App\PointModel.js" />
     <Content Include="Scripts\Custom\App\Query.js" />
-    <Content Include="Scripts\Custom\App\TerrainAnalysis.js" />
     <Content Include="Scripts\Custom\bootstrap-datetimepicker.fr.js" />
     <Content Include="Scripts\Custom\bootstrap-datetimepicker.js" />
     <Content Include="Scripts\Custom\bootstrap-datetimepicker.zh-CN.js" />

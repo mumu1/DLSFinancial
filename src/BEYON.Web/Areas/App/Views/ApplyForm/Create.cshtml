@@ -154,7 +154,7 @@
 
 <script>
     pageSetUp();
-
+    var table;
     var bankListOpt = [];      //开户银行下拉菜单对应数组
     var titleListOpt = [];        //职称下拉菜单对应数组
     registerBankAccount();     //从数据库读取开户银行下拉菜单对应数组
@@ -334,6 +334,18 @@
                 CertificateID.error('证件号码不能为空');
             }
 
+            if (table !== undefined)
+            {
+                var rowData = $('#datatable_create_form').DataTable().rows().data();
+                $.each($(rowData), function (key, value) {
+                    if(value["CertificateID"] === CertificateID.val())
+                    {
+                        CertificateID.error('该申请单中已经存在相同的人员信息，请修改后重新提交!');
+                        return;
+                    }
+                });
+            }
+            
             if (CertificateType.val() === '身份证') {
                 var Validator = new IDValidator();
                 if (!Validator.isValid(CertificateID.val())) {
