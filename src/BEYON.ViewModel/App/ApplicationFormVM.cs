@@ -38,6 +38,10 @@ namespace BEYON.ViewModel.App
         [StringLength(36)]
         public string Agent { get; set; }
 
+        [Display(Name = "支付类型")]
+        [StringLength(36)]
+        public string PaymentType { get; set; }
+
         [Display(Name = "审核状态")]
         [StringLength(36)]
         public string AuditStatus { get; set; }

@@ -45,6 +45,7 @@ namespace BEYON.CoreBLL.Service.App
                     TaskName = model.TaskName,
                     RefundType = model.RefundType,
                     ProjectDirector = model.ProjectDirector,
+                    PaymentType = model.PaymentType,
                     Agent = model.Agent,
                     AuditStatus = model.AuditStatus,
                     SubmitTime = model.SubmitTime,
@@ -80,6 +81,7 @@ namespace BEYON.CoreBLL.Service.App
                 applicationForm.RefundType = model.RefundType;
                 applicationForm.ProjectDirector = model.ProjectDirector;
                 applicationForm.Agent = model.Agent;
+                applicationForm.PaymentType = model.PaymentType;
                 applicationForm.AuditStatus = model.AuditStatus;
                 applicationForm.SubmitTime = model.SubmitTime;
                 applicationForm.AuditTime = model.AuditTime;
@@ -134,6 +136,7 @@ namespace BEYON.CoreBLL.Service.App
                 model.ProjectDirector = model.ProjectDirector;
                 model.DepartmentName = model.DepartmentName;
                 model.Agent = model.Agent;
+                model.PaymentType = model.PaymentType;
                 model.AuditStatus = model.AuditStatus;
                 model.SubmitTime = model.SubmitTime;
                 model.AuditTime = model.AuditTime;
@@ -162,6 +165,7 @@ namespace BEYON.CoreBLL.Service.App
                 model.RefundType = model.RefundType;
                 model.ProjectDirector = model.ProjectDirector;
                 model.Agent = model.Agent;
+                model.PaymentType = model.PaymentType;
                 model.AuditStatus = model.AuditStatus;
                 model.SubmitTime = model.SubmitTime;
                 model.AuditTime = model.AuditTime;
