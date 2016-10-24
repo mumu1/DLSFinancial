@@ -64,7 +64,7 @@
                             </div>
                         </section>
                         <div class="row">
-                            <section class="col col-2">
+                            <section class="col col-3">
                                 <label class="label">部门</label>
                                 <label class="select">
                                     <select id="dept" name="DepartmentName">
@@ -74,7 +74,7 @@
                                     </select> <i></i>
                                 </label>
                             </section>
-                            <section class="col col-2">
+                            <section class="col col-3">
                                 <label class="label">报销事由</label>
 
                                 <label class="select">
@@ -84,7 +84,7 @@
                                     </select> <i></i>
                                 </label>
                             </section>
-                            <section class="col col-2">
+                            <section class="col col-3">
                                 <label class="label">课题号</label>
                                 <label class="input">
                                     <i class="icon-prepend fa fa-info"></i>
@@ -97,6 +97,24 @@
                                     <i class="icon-prepend fa fa-user"></i>
                                     <input type="text" id="projectDirector" name="ProjectDirector" placeholder="课题负责人" value="@Model.ProjectDirector">
                                 </label>
+                            </section>                         
+                        </div>
+                        <div class="row">
+                            <section class="col col-3">
+                                <label class="label">支付类型</label>
+                                <label class="select">
+                                    <select id="paymentType" name="PaymentType">
+                                        <option value="银行转账" selected="">银行转账</option>
+                                        <option value="现金支付">现金支付</option>
+                                    </select> <i></i>
+                                </label>
+                            </section>
+                            <section class="col col-3">
+                                <label class="label">合计金额</label>
+                                <label class="input">
+                                    <i class="icon-prepend fa fa-yen"></i>
+                                    <input type="number" id="summation" name="Summation" readonly="readonly" placeholder="" value="@Model.Summation">
+                                </label>
                             </section>
                             <section class="col col-2">
                                 <label class="label">经办人</label>
@@ -104,28 +122,20 @@
                                     <i class="icon-prepend fa fa-user"></i>
                                     <input type="text" name="Agent" placeholder="经办人" value="@Model.Agent">
                                 </label>
-                            </section>
-                            <section class="col col-2">
-                                <label class="label">合计金额</label>
-                                <label class="input">
-                                    <i class="icon-prepend fa fa-yen"></i>
-                                    <input type="number" id="summation" name="Summation" readonly="readonly" placeholder="" value="@Model.Summation">
+                            </section>                        
+                            </div>
+                            <section>
+                                <label class="label">关于工作内容、工作时间等的描述(必填)</label>
+                                <label class="textarea">
+                                    <textarea rows="2" name="ApplyDesp" style="float:left;" placeholder=" 关于工作内容、工作时间等的描述(必填)">@Model.ApplyDesp</textarea>
                                 </label>
                             </section>
-                        </div>
-
-                        <section>
-                            <label class="label">关于工作内容、工作时间等的描述(必填)</label>
-                            <label class="textarea">
-                                <textarea rows="3" name="ApplyDesp" style="float:left;" placeholder=" 关于工作内容、工作时间等的描述(必填)">@Model.ApplyDesp</textarea>
-                            </label>
-                        </section>
-                        <input type="text" name="SerialNumber" placeholder="流水账号" style="visibility:hidden" value="@Model.SerialNumber">
-                        <input type="text" name="SubmitTime" placeholder="提交时间" style="visibility:hidden" value="@Model.SubmitTime">
-                        <input type="text" name="AuditTime" placeholder="审核时间" style="visibility:hidden" value="@Model.AuditTime">
-                        <input type="text" name="AuditStatus" placeholder="审核状态" style="visibility:hidden" value="@Model.AuditStatus">
-                        <input type="text" name="UserName" placeholder="用户邮箱" style="visibility:hidden" value="@Model.UserName">
-                    </fieldset>
+                            <input type="text" name="SerialNumber" placeholder="流水账号" style="visibility:hidden" value="@Model.SerialNumber">
+                            <input type="text" name="SubmitTime" placeholder="提交时间" style="visibility:hidden" value="@Model.SubmitTime">
+                            <input type="text" name="AuditTime" placeholder="审核时间" style="visibility:hidden" value="@Model.AuditTime">
+                            <input type="text" name="AuditStatus" placeholder="审核状态" style="visibility:hidden" value="@Model.AuditStatus">
+                            <input type="text" name="UserName" placeholder="用户邮箱" style="visibility:hidden" value="@Model.UserName">
+</fieldset>
                     <fieldset>
                         <section>
                             <table id="datatable_create_form" class="table table-striped table-bordered table-hover" width="100%"></table>
@@ -198,7 +208,7 @@
             }
         });
     });
-
+  
     var editor = new $.fn.dataTable.Editor({
         "ajaxUrl": {
             "create": "@Url.Action("CreatePersonal")",
@@ -251,36 +261,31 @@
                 def: "所内"
             },
              { name: "Amount", label: "金额(元):", type: "text" },
-            {
-                name: "PaymentType",
-                label: "支付类型:",
-                type: "select",
-                options: [
-                      { label: "银行转账", value: "银行转账" },
-                      { label: "现金支付", value: "现金支付" }
-                ],
-                def: "银行转账"
-            },
+              {
+                  name: "TaxOrNot",
+                  label: "是否含税:",
+                  type: "radio",
+                  options: [
+                      { label: "含税", value: "含税" },
+                      { label: "不含税", value: "不含税" }
+                  ],
+                  def: "含税"
+              },           
             {
                 name: "Bank",
                 label: "开户银行:",
-                type: "select",
+                type: "select",             
                 options: bankListOpt,
                 def: "工商银行"
             },
             { name: "AccountNumber", label: "银行账户:", type: "text" },
             { name: "BankDetailName", label: "开户行详细名称:", type: "text", fieldInfo: "除工商银行外，选择其他银行转账均需填写该项" },
-            {
-                name: "TaxOrNot",
-                label: "是否含税:",
-                type: "radio",
-                options: [
-                    { label: "含税", value: "含税" },
-                    { label: "不含税", value: "不含税" }
-                ],
-                def: "含税"
+             {
+                name: "PaymentType",
+                label: "支付类型:",
+                type: "text",
+                type: "hidden"
             },
-           
             { name: "Signature", label: "领取人签字:", type: "text", type: "hidden" }
         ]
     });
@@ -309,7 +314,9 @@
             var Amount = editor.field('Amount');
             var PersonType = editor.field('PersonType');
             var personName = editor.field('Name');
-            var PaymentType = editor.field('PaymentType');
+            //var PaymentType = editor.field('PaymentType');
+            var paymentType = $('#paymentType').val();
+            editor.field('PaymentType').val(paymentType);
             var Bank = editor.field('Bank');
             var AccountNumber = editor.field('AccountNumber');
             var BankDetailName = editor.field('BankDetailName');
@@ -317,7 +324,7 @@
             if (personName.val().trim() == "") {
                 personName.error("请填写人员姓名");
             }
-            if (PaymentType.val()=="银行转账" && AccountNumber.val().trim() == "") {
+            if (paymentType == "银行转账" && AccountNumber.val().trim() == "") {
                 AccountNumber.error("请填写银行账号");
             }
             if (Bank.val() != "工商银行" && BankDetailName.val().trim == "") {
@@ -389,7 +396,7 @@
             });
 
             //4.验证现金支付是否大于3次
-            if (PaymentType.val() == "现金支付") {
+            if (paymentType == "现金支付") {
                 $.ajax({
                     type: "GET",
                     async: false,
@@ -399,7 +406,7 @@
                     datatype: "text",
                     success: function (data) {
                         if (data != "") {
-                            PaymentType.error(data);
+                            Amount.error(data);
                         }
                     },
                     error: function () {
@@ -425,6 +432,7 @@
     });
 
     function initTable() {
+
         var buttons = [
             {
                 text: "新增", extend: "create", editor: editor
@@ -498,9 +506,9 @@
                 { data: "Amount", title: "金额(元)" },
                 { data: "Bank", title: "开户银行" },
                 { data: "AccountNumber", title: "银行账号" },
-                { data: "BankDetailName", title: "开户行详细名称" },
+                { data: "BankDetailName", title: "开户行详细名称" }
                 //{ data: "AccountName", title: "账户名称", visible: false },
-                { data: "PaymentType", title: "支付类型" },
+                //{ data: "PaymentType", title: "支付类型" },
                 //{ data: "Signature", title: "领取人签字", visible: false },
 
             ],
