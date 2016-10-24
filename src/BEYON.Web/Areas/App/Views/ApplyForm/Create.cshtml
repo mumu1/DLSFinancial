@@ -209,6 +209,7 @@
         });
     });
   
+    
     var editor = new $.fn.dataTable.Editor({
         "ajaxUrl": {
             "create": "@Url.Action("CreatePersonal")",
@@ -290,9 +291,26 @@
         ]
     });
 
+    //支付类型切换事件
+    $("#paymentType").change(function () {
+        var paymentType = $('#paymentType').val();
+        if (table !== undefined) {
+            if (paymentType == "现金支付") {
+                editor.field('Bank').hide();
+                editor.field('AccountNumber').hide();
+                editor.field('BankDetailName').hide();
+            } else if (paymentType == "银行转账") {
+                editor.field('Bank').show();
+                editor.field('AccountNumber').show();
+                editor.field('BankDetailName').show();
+            }
+        }
+     
+    });
     //初始化创建框显示
     editor.on('onInitCreate', function () {
         //      editor.disable('Amount');
+      
 
         return true;
     });
