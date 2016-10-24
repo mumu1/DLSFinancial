@@ -32,14 +32,16 @@ namespace BEYON.CoreBLL.Service.App
         {
             try
             {
-              //  PersonalRecord personalRecord = _PersonalRecordRepository.Entities.FirstOrDefault(c => c.SerialNumber == model.SerialNumber && c.CertificateID == model.CertificateID.Trim());
+                //1.检查是否有重复字段
                 PersonalRecord[] personalRecords = _PersonalRecordRepository.Entities.Where(w => w.SerialNumber == model.SerialNumber && w.CertificateID == model.CertificateID.Trim()).ToArray();
                 if (personalRecords != null && personalRecords.Length > 0)
                 {
                     return new OperationResult(OperationResultType.Warning, "该申请单中已经存在相同的人员信息，请修改后重新提交！");
                 }
-                if (model.CertificateID == null || model.CertificateID.Trim() == "")
+
+                if (String.IsNullOrEmpty(model.CertificateID))
                     return new OperationResult(OperationResultType.Warning, "证件号码不能为空，请修改后重新提交！");
+
                 var entity = new PersonalRecord
                 {
                     SerialNumber = model.SerialNumber,
@@ -61,7 +63,7 @@ namespace BEYON.CoreBLL.Service.App
                     UpdateDate = DateTime.Now
                 };
                 _PersonalRecordRepository.Insert(entity, isSave);
-
+                
                 return new OperationResult(OperationResultType.Success, "新增数据成功！");
             }
             catch(Exception ex)
