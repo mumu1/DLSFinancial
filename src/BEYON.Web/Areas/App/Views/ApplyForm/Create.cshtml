@@ -296,13 +296,19 @@
         var paymentType = $('#paymentType').val();
         if (table !== undefined) {
             if (paymentType == "现金支付") {
-                editor.field('Bank').hide();
+                editor.field('Bank').hide();                                 
                 editor.field('AccountNumber').hide();
                 editor.field('BankDetailName').hide();
+                $('#datatable_create_form').DataTable().column(11).visible(false);   //开户银行列隐藏
+                $('#datatable_create_form').DataTable().column(12).visible(false);  //银行账号列隐藏
+                $('#datatable_create_form').DataTable().column(13).visible(false);  //开户行详细名称列隐藏
             } else if (paymentType == "银行转账") {
                 editor.field('Bank').show();
                 editor.field('AccountNumber').show();
                 editor.field('BankDetailName').show();
+                $('#datatable_create_form').DataTable().column(11).visible(true);
+                $('#datatable_create_form').DataTable().column(12).visible(true);
+                $('#datatable_create_form').DataTable().column(13).visible(true);
             }
         }
      
@@ -522,7 +528,7 @@
                 { data: "Title", title: "职称" },
                 { data: "TaxOrNot", title: "是否含税" },
                 { data: "Amount", title: "金额(元)" },
-                { data: "Bank", title: "开户银行" },
+                { data: "Bank", title: "开户银行", attribute: "开户银行" },
                 { data: "AccountNumber", title: "银行账号" },
                 { data: "BankDetailName", title: "开户行详细名称" }
                 //{ data: "AccountName", title: "账户名称", visible: false },

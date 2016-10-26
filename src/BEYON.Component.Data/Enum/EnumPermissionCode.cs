@@ -66,7 +66,7 @@ namespace BEYON.Component.Data.Enum
         /// <summary>
         /// 导入用户按钮（用户管理）
         /// </summary>
-        ImportUser = 513,
+        ImportUser = 268435456,
         /// <summary>
         /// 设置用户组按钮（用户管理）
         /// </summary>
