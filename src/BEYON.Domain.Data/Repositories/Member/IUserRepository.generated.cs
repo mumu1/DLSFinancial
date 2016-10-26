@@ -34,5 +34,7 @@ namespace BEYON.Domain.Data.Repositories.Member
     public partial interface IUserRepository : IRepository<User, Int32>
     {
         int GetUserIDByUserName(String userName);
+
+        User GetUserByUserName(String userName);
     }
 }

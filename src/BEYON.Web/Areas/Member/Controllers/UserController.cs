@@ -48,7 +48,7 @@ namespace BEYON.Web.Areas.Member.Controllers
             Expression<Func<User, bool>> wh = c => true;
             if (!string.IsNullOrEmpty(userName))
             {
-                wh = wh.And(c => c.TrueName.Contains(userName.Trim()));
+                wh = wh.And(c => c.UserName.Contains(userName.Trim()));
             }
             if (enable >= 0)
             {
@@ -89,6 +89,15 @@ namespace BEYON.Web.Areas.Member.Controllers
             return PartialView(model);
         }
 
+        // GET: /Member/User/GetUserByName
+
+        public ActionResult GetUserByName(String userName)
+        {
+            var user = new User();
+            user = _userService.GetUserByUserName(userName);
+            return Json(user, JsonRequestBehavior.AllowGet);
+        }
+
         [HttpPost]
         public ActionResult Create(UserVM userVm)
         {
@@ -100,8 +109,8 @@ namespace BEYON.Web.Areas.Member.Controllers
             return Json(result);
         }
         //
-        // GET: /Member/User/Edit/5
-        [IsAjax]
+        // GET: /Member/User/Edit
+       [IsAjax]
         public ActionResult Edit(int id = 0)
         {
             var user = _userService.Users.FirstOrDefault(c => c.Id == id);
@@ -128,7 +137,7 @@ namespace BEYON.Web.Areas.Member.Controllers
 
         [HttpPost]
         public ActionResult Edit(UserVM userVM)
-        {
+        {          
             ValidationHelper.RemoveValidationError(ModelState, "Password");//移除Modle中不需要验证的属性Password
             if (!ModelState.IsValid) return Json(new OperationResult(OperationResultType.ParamError, "参数错误，请重新检查输入"));
             var result = _userService.Update(userVM);

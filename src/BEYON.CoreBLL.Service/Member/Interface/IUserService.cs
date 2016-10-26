@@ -20,5 +20,9 @@ namespace BEYON.CoreBLL.Service.Member.Interface
         OperationResult UpdateUserGroups(int userId, string[] chkUserGroups);
 
         OperationResult Import(String fileName, Service.Excel.ColumnMap[] columns);
+
+        int GetUserIDByUserName(String userName);
+
+        User GetUserByUserName(String userName);
     }
 }

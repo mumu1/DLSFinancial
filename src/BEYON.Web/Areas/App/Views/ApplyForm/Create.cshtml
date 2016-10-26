@@ -88,7 +88,7 @@
                                 <label class="label">课题号</label>
                                 <label class="input">
                                     <i class="icon-prepend fa fa-info"></i>
-                                    <input type="text" id="ProjectNumber" name="ProjectNumber" placeholder="课题号" value="@Model.ProjectNumber">
+                                    <input type="text" id="ProjectNumber" required="required" name="ProjectNumber" placeholder="课题号" value="@Model.ProjectNumber">
                                 </label>
                             </section>                            
                             <section class="col col-2">
@@ -120,14 +120,14 @@
                                 <label class="label">经办人</label>
                                 <label class="input">
                                     <i class="icon-prepend fa fa-user"></i>
-                                    <input type="text" name="Agent" placeholder="经办人" value="@Model.Agent">
+                                    <input type="text"  id="agent" name="Agent" placeholder="经办人" value="@Model.Agent">
                                 </label>
                             </section>                        
                             </div>
                             <section>
                                 <label class="label">关于工作内容、工作时间等的描述(必填)</label>
                                 <label class="textarea">
-                                    <textarea rows="2" name="ApplyDesp" style="float:left;" placeholder=" 关于工作内容、工作时间等的描述(必填)">@Model.ApplyDesp</textarea>
+                                    <textarea rows="2" name="ApplyDesp" required="required" style="float:left;" placeholder=" 关于工作内容、工作时间等的描述(必填)">@Model.ApplyDesp</textarea>
                                 </label>
                             </section>
                             <input type="text" name="SerialNumber" placeholder="流水账号" style="visibility:hidden" value="@Model.SerialNumber">
@@ -171,6 +171,30 @@
     registerTitle();                //从数据库读取职称下拉菜单对应数组
     registerRefundType();   //从数据库读取报销事由下拉菜单对应数组
     registerDepartment();   //从数据库读取部门下拉菜单对应数组
+
+    var userName = "@Model.UserName";
+    //获取用户信息
+    $.ajax({
+        type: "GET",
+        async: false,
+        url: "../Member/User/GetUserByName?userName=" + userName,
+        //data: params,
+        contentType: "application/json; charset=utf-8",
+        datatype: "json",
+        success: function (data) {
+            //alert(data);
+            if (data.TrueName != null) {
+                $('#agent').val(data.TrueName);    //经办人默认为用户本人
+            }
+            if (data.Department != null) {          //获取用户部门设为初始值
+                var d = data.Department;
+                $("#dept").val(d);
+            }
+        },
+        error: function () {
+            toastr.error('获取用户数据失败！');
+        }
+    }); 
 
     //根据输入课题号，提示用户课题名称是否正确
     $("#ProjectNumber").blur(function () {

@@ -235,6 +235,11 @@ namespace BEYON.CoreBLL.Service.Member
             return _userRepository.GetUserIDByUserName(userName);
         }
 
+        public User GetUserByUserName(String userName)
+        {
+            return _userRepository.GetUserByUserName(userName);
+        }
+
         public OperationResult UpdateUserGroups(int userId, string[] chkUserGroups)
         {
             try

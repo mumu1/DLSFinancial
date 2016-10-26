@@ -14,7 +14,7 @@ namespace BEYON.Component.Data.Migrations
                         Id = c.Int(nullable: false, identity: true),
                         UserName = c.String(nullable: false, maxLength: 50),
                         Password = c.String(nullable: false, maxLength: 32),
-                        TrueName = c.String(nullable: false, maxLength: 20),
+                        TrueName = c.String(nullable: false, maxLength: 50),
                         Gender = c.String(nullable: true, maxLength: 10),
                         Department = c.String(nullable: true, maxLength: 100),
                         Title = c.String(nullable: true, maxLength: 50),

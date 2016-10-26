@@ -36,7 +36,7 @@ namespace BEYON.Domain.Model.Member
 
         [Required]
         [Description("真实姓名")]
-        [StringLength(20)]
+        [StringLength(50)]
         public string TrueName { get; set; }
 
         //[Description("邮箱")]

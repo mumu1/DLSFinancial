@@ -35,7 +35,7 @@ namespace BEYON.ViewModel.Member
         public string Password { get; set; }
         [Required]
         [Display(Name = "真实姓名")]
-        [StringLength(20)]
+        [StringLength(50)]
         public string TrueName { get; set; }
 
         //[Display(Name = "电子邮件")]
