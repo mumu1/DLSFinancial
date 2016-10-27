@@ -24,6 +24,8 @@ namespace BEYON.CoreBLL.Service.App.Interface
 
         int GetCashCount(String certificateID);
 
+        int DeleteBySerialNumber(String serialNumber);
+
 
     }
 }

@@ -238,7 +238,9 @@
         "ajaxUrl": {
             "create": "@Url.Action("CreatePersonal")",
             "edit": "@Url.Action("EditPersonal")",
-            "remove": "@Url.Action("DeletePersonal")"
+            "remove": "@Url.Action("DeletePersonal")",
+          //  "export": "@Url.Action("ExportPersonal")",
+          //  "import":"@Url.Action("ImportPersonal")"
         },
         "table": "#datatable_create_form",
         fields: [
@@ -476,8 +478,27 @@
                 return true;
             }
 
+        } else if (action === 'remove') {
+            //合计金额需减去
+            var sumBefore = $('#summation').val();
+            var sum = new Number(sumBefore);
+            if (sumBefore >= 0) {
+                var selectRow = $('#datatable_create_form').DataTable().rows('.selected').data();
+                for(var i =0 ;i < selectRow.length; i++){
+                    sum -= new Number(selectRow[i].Amount);                 
+                }
+                $('#summation').val(sum);
+            }
+        }
+        else if (action === 'edit') {
+            //合计金额需更新
+            var sumBefore = $('#summation').val();
+            var amountBefore = $('#datatable_create_form').DataTable().rows('.selected').data()[0].Amount;
+            $('#summation').val(new Number(sumBefore) - new Number(amountBefore) + new Number(Amount.val()));
         }
     });
+
+    
 
     function initTable() {
 
@@ -491,31 +512,29 @@
             {
                 text: "删除", extend: "remove", editor: editor
             },
-            @*{
-                    text: "输出打印", action: function (e, dt, node, config) {
-                        var rowData = dt.rows({ selected: true }).data();
-                        $.each($(rowData), function (key, value) {
-                            $.ajax({
-                                type: "POST",
-                                url: "@Url.Action("ExportApplyPersons")",
-                                dataType: "json",
-                                contentType: "application/json; charset=utf-8",
-                                data: JSON.stringify({ SerialNumber: value["SerialNumber"] }),
-                                success: function (result) {
-                                    fileDownload('../App/ApplyForm/DownloadFile', result);
-                                    toastr.success('数据导出完成');
-                                },
-                                error: function () {
-                                    toastr.error('网络错误，请重新提交！');
-                                }
-                            });
-                        });
-                    }
-                },*@
-            //{
-            //    text: "列显示",
-            //    extend: 'colvis'
-            //}
+            {
+                text: "导出", extend: 'excel', exportOptions: {                                 
+                    columns: ':visible'                
+                }
+            },
+            {
+                text: "导入", action: function (e, dt, node, config) {
+                    $.ajax({
+                        type: "POST",
+                        url: "@Url.Action("ImportPersonal")",
+                        dataType: "json",
+                        contentType: "application/json; charset=utf-8",
+                        data: JSON.stringify({ SerialNumber: "@Model.SerialNumber" }),
+                        success: function (result) {
+                            //   fileDownload('../App/ApplyForm/DownloadFile', result);
+                            toastr.success('数据导入完成');
+                        },
+                        error: function () {
+                            toastr.error('网络错误，请重新提交！');
+                        }
+                    });
+                }
+            }
         ];
 
         table = $('#datatable_create_form').dataTable({
@@ -559,7 +578,7 @@
                 //{ data: "PaymentType", title: "支付类型" },
                 //{ data: "Signature", title: "领取人签字", visible: false },
 
-            ],
+            ],          
             oLanguage: {
                 "sLengthMenu": "每页显示 _MENU_ 条记录",
                 "sZeroRecords": "抱歉， 没有找到",
@@ -580,7 +599,7 @@
     }
 
     initTable();
-
+    
     function closeFrom() {
         if ($("#widget-grid")[0]) {
             $("#widget-grid").jarvisWidgets("destroy");

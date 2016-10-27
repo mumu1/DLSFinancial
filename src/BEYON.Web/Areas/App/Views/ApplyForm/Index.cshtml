@@ -7,156 +7,189 @@
 </div>
 <div id="modal-content"></div>
 
-    <script src="@Url.Content("~/Scripts/jquery.validate.min.js")"></script>
-    <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")"></script>
-    <script src="@Url.Content("~/Scripts/Custom/ModalForm.js")"></script>
-    <script src="@Url.Content("~/Scripts/Custom/App/File.js")"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")"></script>
+<script src="@Url.Content("~/Scripts/Custom/ModalForm.js")"></script>
+<script src="@Url.Content("~/Scripts/Custom/App/File.js")"></script>
 
-    <script>
-        pageSetUp();
+<script>
+    pageSetUp();
 
-        // pagefunction
-        var pagefunction = function () {
-            $(document).ready(function () {
-                initTable();
-            });
-        };
-        // end pagefunction
+    // pagefunction
+    var pagefunction = function () {
+        $(document).ready(function () {
+            initTable();
+        });
+    };
+    // end pagefunction
 
-        // destroy generated instances
-        // pagedestroy is called automatically before loading a new page
-        // only usable in AJAX version!
-        var pagedestroy = function () {
+    // destroy generated instances
+    // pagedestroy is called automatically before loading a new page
+    // only usable in AJAX version!
+    var pagedestroy = function () {
 
-        }
-        // end destroy
+    }
+    // end destroy
 
-        pagefunction();
+    pagefunction();
 
-        function initTable() {
-            var editor = new $.fn.dataTable.Editor({
-                "ajaxUrl": {
-                    "remove": "@Url.Action("Delete")"
+    function initTable() {
+        var editor = new $.fn.dataTable.Editor({
+            "ajaxUrl": {
+                "remove": "@Url.Action("Delete")"
+            },
+            "table": "#datatable_tabletools",
+            fields: [
+                { name: "SerialNumber", label: "申请单流水号:", type: "hidden" },
+                { name: "AuditStatus", label: "审核状态:", type: "hidden" }
+            ]
+        });
+
+        editor.on('submitSuccess', function () {
+
+        });
+
+        ////初始化编辑框显示
+        //editor.on('onInitRemove', function () {
+        //    var table = $('#datatable_tabletools').DataTable();
+        //    var rowData = table.rows({ selected: true }).data();
+        //    var init = true;
+        //    $.each($(rowData), function (key, value) {
+        //        if (value["AuditStatus"] !== "待提交" && value["AuditStatus"] !== "已退回") {
+        //            init = false;
+        //        }
+        //    });
+
+        //    if (!init) {
+        //        toastr.error('不能删除已提交行');
+        //    }
+
+        //    var buttons = table.buttons(['.delete']);
+        //    if (init) {
+        //        buttons.enalbe();
+        //    } else {
+        //        buttons.disable();
+        //    }
+        //});
+
+        var buttons = [
+            {
+                text: "新增", action: function (e, dt, node, config) {
+                    var actionUrl = "@Url.Action("Create")";
+                    var param = {};
+                    ShowModal2(actionUrl, param, "新增申请单");
+                }
+            },
+            {
+                text: "修改", action: function (e, dt, node, config) {
+                    var rowData = dt.rows({ selected: true }).data();
+                    var actionUrl = "@Url.Action("Edit")";
+                    $.each($(rowData), function (key, value) {
+                        var param = { SerialNumber: value["SerialNumber"] };
+                        if (value["AuditStatus"] === "待提交" || value["AuditStatus"] === "已退回")
+                            ShowModal2(actionUrl, param, "修改申请单");
+                        else {
+                            toastr.error("已提交记录，不可修改！");
+                        }
+                    });
                 },
-                "table": "#datatable_tabletools",
-                fields: [
-                    { name: "SerialNumber", label: "申请单流水号:", type: "hidden" },
-                    { name: "AuditStatus", label: "审核状态:", type: "hidden" }
-                ]
-            });
-
-            editor.on('submitSuccess', function () {
-
-            });
-
-            ////初始化编辑框显示
-            //editor.on('onInitRemove', function () {
-            //    var table = $('#datatable_tabletools').DataTable();
-            //    var rowData = table.rows({ selected: true }).data();
-            //    var init = true;
-            //    $.each($(rowData), function (key, value) {
-            //        if (value["AuditStatus"] !== "待提交" && value["AuditStatus"] !== "已退回") {
-            //            init = false;
-            //        }
-            //    });
-
-            //    if (!init) {
-            //        toastr.error('不能删除已提交行');
-            //    }
-
-            //    var buttons = table.buttons(['.delete']);
-            //    if (init) {
-            //        buttons.enalbe();
-            //    } else {
-            //        buttons.disable();
-            //    }
-            //});
-
-            var buttons = [
-                {
-                    text: "新增", action: function (e, dt, node, config) {
-                        var actionUrl = "@Url.Action("Create")";
-                        var param = {};
-                        ShowModal2(actionUrl, param, "新增申请单");
-                    }
+                enabled: false
+            },
+            {
+                text: "删除", extend: "remove", editor: editor, enabled: false
+            },
+            {
+                text: "提交",
+                action: function (e, dt, node, config) {
+                    var rowData = dt.rows({ selected: true }).data();
+                    var actionUrl = "@Url.Action("Submit")";
+                    var serialNumbers = [];
+                    $.each($(rowData), function (key, value) {
+                        serialNumbers.push(value["SerialNumber"]);
+                    });
+                    applySubmit(dt, serialNumbers);
                 },
-                {
-                    text: "修改", action: function (e, dt, node, config) {
-                        var rowData = dt.rows({ selected: true }).data();
-                        var actionUrl = "@Url.Action("Edit")";
-                        $.each($(rowData), function (key, value) {
-                            var param = { SerialNumber: value["SerialNumber"] };
-                            if (value["AuditStatus"] === "待提交" || value["AuditStatus"] === "已退回")
-                                ShowModal2(actionUrl, param, "修改申请单");
-                            else {
-                                toastr.error("已提交记录，不可修改！");
-                            }
-                        });
-                    },
-                    enabled: false
+                enabled: false
+            },
+            {
+                text: "撤回",
+                action: function (e, dt, node, config) {
+                    var rowData = dt.rows({ selected: true }).data();
+                    var actionUrl = "@Url.Action("Submit")";
+                    var serialNumbers = [];
+                    $.each($(rowData), function (key, value) {
+                        serialNumbers.push(value["SerialNumber"]);
+                    });
+                    applyRevoke(dt, serialNumbers);
                 },
-                {
-                    text: "删除", extend: "remove", editor: editor, enabled: false
-                },
-                {
-                    text: "提交",
-                    action: function (e, dt, node, config) {
-                        var rowData = dt.rows({ selected: true }).data();
-                        var actionUrl = "@Url.Action("Submit")";
-                        var serialNumbers = [];
-                        $.each($(rowData), function (key, value) {
-                            serialNumbers.push(value["SerialNumber"]);
-                        });
-                        applySubmit(dt, serialNumbers);
-                    },
-                    enabled: false
-                },
-                {
-                    text: "撤回",
-                    action: function (e, dt, node, config) {
-                        var rowData = dt.rows({ selected: true }).data();
-                        var actionUrl = "@Url.Action("Submit")";
-                        var serialNumbers = [];
-                        $.each($(rowData), function (key, value) {
-                            serialNumbers.push(value["SerialNumber"]);
-                        });
-                        applyRevoke(dt, serialNumbers);
-                    },
-                    enabled: false
-                },
-                {
-                    text: "输出打印", action: function (e, dt, node, config) {
-                        var rowData = dt.rows({ selected: true }).data();
-                        $.each($(rowData), function (key, value) {
-                            $.ajax({
-                                type: "POST",
-                                url: "@Url.Action("ExportApplyPersons")",
-                                dataType: "json",
-                                contentType: "application/json; charset=utf-8",
-                                data: JSON.stringify({ SerialNumber: value["SerialNumber"] }),
-                                success: function (result) {
-                                    fileDownload('../App/ApplyForm/DownloadFile', result);
-                                    toastr.success('数据导出完成');
-                                    @*$.ajax({
+                enabled: false
+            },
+            {
+                text: "输出打印", action: function (e, dt, node, config) {
+                    var rowData = dt.rows({ selected: true }).data();
+                    $.each($(rowData), function (key, value) {
+                        $.ajax({
+                            type: "POST",
+                            url: "@Url.Action("ExportApplyPersons")",
+                            dataType: "json",
+                            contentType: "application/json; charset=utf-8",
+                            data: JSON.stringify({ SerialNumber: value["SerialNumber"] }),
+                            success: function (result) {
+                                fileDownload('../App/ApplyForm/DownloadFile', result);
+                                toastr.success('数据导出完成');
+                                @*$.ajax({
                                         type: "POST",
                                         url: "@Url.Action("DeleteFile")",
                                         dataType: "json",
                                         contentType: "application/json; charset=utf-8",
                                         data: JSON.stringify({ fileName: result }),
                                         success: function (result) {
-                                            
+
                                         },
                                         error: function () {
                                             toastr.error('无法删除导出文件！');
                                         }
                                     });*@
-                                },
-                                error: function () {
-                                    toastr.error('网络错误，请重新提交！');
-                                }
-                            });
+                            },
+                            error: function () {
+                                toastr.error('网络错误，请重新提交！');
+                            }
                         });
-                    }
+                    });
+                },
+                enabled: false
+            },
+            {
+                text: "查看", action: function (e, dt, node, config) {
+                    var rowData = dt.rows({ selected: true }).data();
+                    var actionUrl = "@Url.Action("Show")";
+                    $.each($(rowData), function (key, value) {
+                        var param = { SerialNumber: value["SerialNumber"] };
+                        ShowModal2(actionUrl, param, "查看申请单");
+                    });
+                },
+                enabled: false
+            },
+            {
+                text: "列显示",
+                extend: 'colvis'
+            }
+        ];
+
+        //如果是管理员
+        if ('@Model' === '系统管理员') {
+            buttons = [
+                {
+                    text: "审核",
+                    action: function (e, dt, node, config) {
+                        var rowData = dt.rows({ selected: true }).data();
+                        var serialNumbers = [];
+                        $.each($(rowData), function (key, value) {
+                            serialNumbers.push(value["SerialNumber"]);
+                        });
+                        applyAudit(dt, serialNumbers);
+                    },
+                    enabled: false
                 },
                 {
                     text: "查看", action: function (e, dt, node, config) {
@@ -169,270 +202,303 @@
                     },
                     enabled: false
                 },
+                 {
+                     text: "修改", action: function (e, dt, node, config) {
+                         var rowData = dt.rows({ selected: true }).data();
+                         var actionUrl = "@Url.Action("Edit")";
+                         $.each($(rowData), function (key, value) {
+                             var param = { SerialNumber: value["SerialNumber"] };
+                             if (value["AuditStatus"] === "待审核" || value["AuditStatus"] === "已退回")
+                                 ShowModal2(actionUrl, param, "修改申请单");
+                             else {
+                                 toastr.error("审核通过记录，不可修改！");
+                             }
+                         });
+                     },
+                     enabled: false
+                 },
+            {
+                text: "删除", extend: "remove", editor: editor, enabled: false
+            },
+              {
+                  text: "输出打印", action: function (e, dt, node, config) {
+                      var rowData = dt.rows({ selected: true }).data();
+                      $.each($(rowData), function (key, value) {
+                          $.ajax({
+                              type: "POST",
+                              url: "@Url.Action("ExportApplyPersons")",
+                              dataType: "json",
+                              contentType: "application/json; charset=utf-8",
+                              data: JSON.stringify({ SerialNumber: value["SerialNumber"] }),
+                              success: function (result) {
+                                  fileDownload('../App/ApplyForm/DownloadFile', result);
+                                  toastr.success('数据导出完成');
+                                  @*$.ajax({
+                                      type: "POST",
+                                      url: "@Url.Action("DeleteFile")",
+                                      dataType: "json",
+                                  contentType: "application/json; charset=utf-8",
+                                  data: JSON.stringify({ fileName: result }),
+                                  success: function (result) {
+
+                                  },
+                                  error: function () {
+                                      toastr.error('无法删除导出文件！');
+                                  }
+                              });*@
+                              },
+                              error: function () {
+                                  toastr.error('网络错误，请重新提交！');
+                              }
+                          });
+                      });
+                  },
+                  enabled: false
+              },
                 {
-                    text: "列显示",
-                    extend: 'colvis'
-                }
-            ];
+                    extend: 'collection',
+                    text: '导出',
+                    buttons: [
+                      //  { text: "拷贝", extend: 'copy' },
+                        { text: "EXCEL表格", extend: 'excel' },
+                       // { text: "CSV表格", extend: 'csv' },
+                       // { text: "PDF文档", extend: 'pdf' }
+                    ]
+                },
+                  {
+                      text: "列显示",
+                      extend: 'colvis'
+                  }
+            ]
+        }
 
-            //如果是管理员
-            if ('@Model' === '系统管理员') {
-                buttons = [
-                    {
-                        text: "审核",
-                        action: function (e, dt, node, config) {
-                            var rowData = dt.rows({ selected: true }).data();
-                            var serialNumbers = [];
-                            $.each($(rowData), function (key, value) {
-                                serialNumbers.push(value["SerialNumber"]);
-                            });
-                            applyAudit(dt, serialNumbers);
-                        },
-                        enabled: false
-                    },
-                    {
-                        text: "查看", action: function (e, dt, node, config) {
-                            var rowData = dt.rows({ selected: true }).data();
-                            var actionUrl = "@Url.Action("Show")";
-                            $.each($(rowData), function (key, value) {
-                                var param = { SerialNumber: value["SerialNumber"] };
-                                ShowModal2(actionUrl, param, "查看申请单");
-                            });
-                        },
-                        enabled: false
-                    },
-                    {
-                        extend: 'collection',
-                        text: '导出',
-                        buttons: [
-                            { text: "拷贝", extend: 'copy' },
-                            { text: "EXCEL表格", extend: 'excel' },
-                            { text: "CSV表格", extend: 'csv' },
-                            { text: "PDF文档", extend: 'pdf' }
-                        ]
+
+        var table = $('#datatable_tabletools').dataTable({
+            dom: 'Bfrtip',
+            colReorder: true,
+            ajax: '@Url.Action("GetAllData")',
+            searching: true,
+            ordering: true,
+            select: true,
+            info: true,
+            paginate: false, //是否显示（应用）分页器
+            sort: true, //是否启动各个字段的排序功能
+            stateSave: false,
+            stateDuration: 60 * 60 * 12,
+            autoWidth: true,
+            bProcessing: true,
+            paging: false,
+            order: [[10, "desc"]],
+            buttons: buttons,
+            columns: [
+                { data: "SerialNumber", title: "申请单流水号" },
+                { data: "ProjectNumber", title: "课题号" },
+                { data: "RefundType", title: "报销事由" },
+                { data: "ProjectDirector", title: "课题负责人" },
+                { data: "Agent", title: "经办人" },
+                { data: "Summation", title: "报销合计" },
+                { data: "PaymentType", title: "支付类型" },
+                {
+                    data: "SubmitTime", title: "提交时间", type: "date",
+                    "render": function (data, type, full, meta) {
+                        var dtStart = new Date(parseInt(data.substr(6)));
+                        return dtStart.getFullYear() + '-' + (dtStart.getMonth() +1)+ '-' + dtStart.getDate();
+                        //return dtStart.toString();
                     }
-                ]
+                },
+                { data: "AuditStatus", title: "审核状态" },
+                {
+                    data: "AuditTime", title: "审核时间", type: "date", visible: false,
+                    "render": function (data, type, full, meta) {
+                        var dtStart = new Date(parseInt(data.substr(6)));
+                        return dtStart.getFullYear() + '-' + (dtStart.getMonth()+1) + '-' + dtStart.getDate();
+                        //return dtStart.toString();
+                    }
+                },
+                { data: "AuditOpinion", title: "审核意见", visible: false },
+                { data: "UpdateDate", title: "更新时间", visible: false }
+            ],
+            oLanguage: {
+                "sLengthMenu": "每页显示 _MENU_ 条记录",
+                "sZeroRecords": "抱歉， 没有找到",
+                "sInfo": "显示 _START_ 到 _END_ 条记录，总共 _TOTAL_ 条记录",
+                "sInfoEmpty": "没有数据",
+                "sInfoFiltered": "(从 _MAX_ 条数据中检索)",
+                "sZeroRecords": "没有检索到数据",
+                "sSearch": "搜索名称:",
+                "sSelected": "选中 _TOTAL_ 条记录",
+                "oPaginate": {
+                    "sFirst": "首页",
+                    "sPrevious": "前一页",
+                    "sNext": "后一页",
+                    "sLast": "尾页"
+                }
             }
+        });
 
-
-            var table = $('#datatable_tabletools').dataTable({
-                dom: 'Bfrtip',
-                colReorder: true,
-                ajax: '@Url.Action("GetAllData")',
-                searching: true,
-                ordering: true,
-                select: true,
-                info: true,
-                paginate: false, //是否显示（应用）分页器
-                sort: true, //是否启动各个字段的排序功能
-                stateSave: false,
-                stateDuration: 60 * 60 * 12,
-                autoWidth: true,
-                bProcessing: true,
-                paging: false,
-                order: [[10, "desc"]],
-                buttons: buttons,
-                columns: [
-                    { data: "SerialNumber", title: "申请单流水号" },
-                    { data: "ProjectNumber", title: "课题号" },
-                    { data: "RefundType", title: "报销事由" },
-                    { data: "ProjectDirector", title: "课题负责人" },
-                    { data: "Agent", title: "经办人" },
-                    { data: "Summation", title: "报销合计" },
-                    {
-                        data: "SubmitTime", title: "提交时间", type: "date",
-                        "render": function (data, type, full, meta) {
-                            var dtStart = new Date(parseInt(data.substr(6)));
-                            return dtStart.getFullYear() + '-' + dtStart.getMonth() + '-' + dtStart.getDate();
-                            //return dtStart.toString();
-                        }
-                    },
-                    { data: "AuditStatus", title: "审核状态" },
-                    {
-                        data: "AuditTime", title: "审核时间", type: "date", visible: false,
-                        "render": function (data, type, full, meta) {
-                            var dtStart = new Date(parseInt(data.substr(6)));
-                            return dtStart.getFullYear() + '-' + dtStart.getMonth() + '-' + dtStart.getDate();
-                            //return dtStart.toString();
-                        }
-                    },
-                    { data: "AuditOpinion", title: "审核意见", visible: false },
-                    { data: "UpdateDate", title: "更新时间", visible: false }
-                ],
-                oLanguage: {
-                    "sLengthMenu": "每页显示 _MENU_ 条记录",
-                    "sZeroRecords": "抱歉， 没有找到",
-                    "sInfo": "显示 _START_ 到 _END_ 条记录，总共 _TOTAL_ 条记录",
-                    "sInfoEmpty": "没有数据",
-                    "sInfoFiltered": "(从 _MAX_ 条数据中检索)",
-                    "sZeroRecords": "没有检索到数据",
-                    "sSearch": "搜索名称:",
-                    "sSelected": "选中 _TOTAL_ 条记录",
-                    "oPaginate": {
-                        "sFirst": "首页",
-                        "sPrevious": "前一页",
-                        "sNext": "后一页",
-                        "sLast": "尾页"
+        $('#datatable_tabletools').DataTable().on('select', function (e, dt, type, indexes) {
+            var selectedTable = $('#datatable_tabletools').DataTable();
+            var selectedRows = selectedTable.rows({ selected: true });
+            var selectedCount = selectedRows.count();
+            if ('@Model' === '系统管理员') {
+                var enalbeAudit = true
+                $.each($(selectedRows.data()), function (key, value) {
+                    //if (value["AuditStatus"] !== '待审核') {
+                    //    enalbeAudit = false;
+                    //}
+                    if (value["AuditStatus"] !== '审核通过') {
+                        enalbeEidt = true;
                     }
-                }
-            });
-
-            $('#datatable_tabletools').DataTable().on('select', function (e, dt, type, indexes) {
-                var selectedTable = $('#datatable_tabletools').DataTable();
-                var selectedRows = selectedTable.rows({ selected: true });
-                var selectedCount = selectedRows.count();
-                if ('@Model' === '系统管理员') {
-                    var enalbeAudit = true
+                });
+                selectedTable.button(0).enable(selectedCount > 0 && enalbeAudit);       //审核
+                selectedTable.button(1).enable(selectedCount === 1);                     //查看
+                selectedTable.button(2).enable(selectedCount === 1);      //修改
+                selectedTable.button(3).enable(true);      //删除
+                selectedTable.button(4).enable(true);      //输出打印
+                selectedTable.button(5).enable(true);      //导出
+            } else {
+                if (selectedCount < 1) {
+                    selectedTable.button(1).enable(false);      //修改
+                    selectedTable.button(2).enable(false);      //删除
+                    selectedTable.button(3).enable(false);      //提交
+                    selectedTable.button(4).enable(false);      //撤回
+                    selectedTable.button(5).enable(false);      //输出打印
+                    selectedTable.button(6).enable(false);      //查看
+                } else {
+                    var enalbeEidt = true, enableRemove = true, enableSubmit = true, enableRevoke = true, enableExport = true;
                     $.each($(selectedRows.data()), function (key, value) {
-                        if (value["AuditStatus"] !== '待审核') {
-                            enalbeAudit = false;
+                        if (value["AuditStatus"] === '待提交' || value["AuditStatus"] === '已退回') {
+                            enableRevoke = enableExport = false;
+                        } else if (value["AuditStatus"] === '待审核') {
+                            enalbeEidt = enableRemove = enableSubmit = false;
+                        } else if (value["AuditStatus"] === '审核通过') {
+                            enalbeEidt = enableRemove = enableSubmit = enableRevoke = false;
                         }
                     });
-                    selectedTable.button(0).enable(selectedCount > 0 && enalbeAudit);       //审核
-                    selectedTable.button(1).enable(selectedCount === 1);                     //查看
-                } else {
-                    if (selectedCount < 1) {
-                        selectedTable.button(1).enable(false);      //修改
-                        selectedTable.button(2).enable(false);      //删除
-                        selectedTable.button(3).enable(false);      //提交
-                        selectedTable.button(4).enable(false);      //撤回
-                        selectedTable.button(5).enable(false);      //导出
-                        selectedTable.button(6).enable(false);      //查看
-                    } else {
-                        var enalbeEidt = true, enableRemove = true, enableSubmit = true, enableRevoke = true, enableExport = true;
-                        $.each($(selectedRows.data()), function (key, value) {
-                            if (value["AuditStatus"] === '待提交' || value["AuditStatus"] === '已退回') {
-                                enableRevoke = enableExport = false;
-                            } else if (value["AuditStatus"] === '待审核') {
-                                enalbeEidt = enableRemove = enableSubmit = false;
-                            } else if (value["AuditStatus"] === '审核通过') {
-                                enalbeEidt = enableRemove = enableSubmit = enableRevoke = false;
-                            }
-                        });
 
-                        selectedTable.button(1).enable(selectedCount === 1 && enalbeEidt);     //修改
-                        selectedTable.button(2).enable(selectedCount > 0 && enableRemove);     //删除
-                        selectedTable.button(3).enable(selectedCount > 0 && enableSubmit);     //审核
-                        selectedTable.button(4).enable(selectedCount > 0 && enableRevoke);     //撤回
-                        selectedTable.button(5).enable(selectedCount === 1 && enableExport);   //导出
-                        selectedTable.button(6).enable(selectedCount === 1);                   //查看
-                    }
+                    selectedTable.button(1).enable(selectedCount === 1 && enalbeEidt);     //修改
+                    selectedTable.button(2).enable(selectedCount > 0 && enableRemove);     //删除
+                    selectedTable.button(3).enable(selectedCount > 0 && enableSubmit);     //审核
+                    selectedTable.button(4).enable(selectedCount > 0 && enableRevoke);     //撤回
+                    selectedTable.button(5).enable(selectedCount === 1 && enableExport);   //导出
+                    selectedTable.button(6).enable(selectedCount === 1);                   //查看
                 }
+            }
 
+        });
+
+        //提交申请单
+        function applySubmit(datatable, serialNumbers) {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("ApplySubmit")",
+                contentType: "application/json",
+                data: JSON.stringify(serialNumbers),
+                success: function (result) {
+                    //更新列表信息
+                    datatable.ajax.reload();
+                },
+                error: function (data) {
+                    toastr.error(data.responseText);
+                }
+            });
+        }
+
+        //撤回申请单
+        function applyRevoke(datatable, serialNumbers) {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("ApplyRevoke")",
+                contentType: "application/json",
+                data: JSON.stringify(serialNumbers),
+                success: function (result) {
+                    //更新列表信息
+                    datatable.ajax.reload();
+                },
+                error: function (data) {
+                    toastr.error(data.responseText);
+                }
+            });
+        }
+
+        //审核
+        function applyAudit(datatable, serialNumbers) {
+            var actionUrl = "@Url.Action("Audit")";
+            $.ajax({
+                type: "POST",
+                url: actionUrl,
+                contentType: "application/json",
+                data: JSON.stringify(serialNumbers),
+                beforeSend: function () {
+                    //审核前再次检查现金发放次数是否已满三次
+                    $.ajax({
+                        type: "GET",
+                        async: false,
+                        url: "../App/ApplyForm/CashCountCheckBeforeAudit?serialNumbers=" + serialNumbers,
+                        //data: $('#apply-audit-form').serialize(),
+                        contentType: "application/json; charset=utf-8",
+                        datatype: "json",
+                        success: function (data) {
+                            if (data.length > 0) {
+                                var msgCheck = "";
+                                $.each(data, function (i, val) {
+                                    msgCheck += val + ",";
+                                });
+                                msgCheck += "以上人员当月现金发放次数已经达到3次，请审核驳回修改支付方式为银行转账。";
+                                toastr.error(msgCheck);
+                            }
+                        },
+                        error: function () {
+                            toastr.error('审核前再次检查现金发放次数失败！');
+                        }
+                    });
+                },
+                success: function (result) {
+                    $("#modal-content").html(result);
+                    $('#modal-content').dialog({
+                        autoOpen: true,
+                        resizable: false,
+                        width: 430,
+                        modal: true,
+                        title: "审核",
+                        buttons: [{
+                            html: "<i class='fa fa-check'></i>&nbsp; 审核",
+                            "class": "btn btn-primary",
+                            click: function () {
+                                $.ajax({
+                                    type: "POST",
+                                    url: "@Url.Action("ApplyAudit")",
+                                    data: $('#apply-audit-form').serialize(),
+                                    success: function (result) {
+                                        $('#datatable_tabletools').DataTable().ajax.reload();
+                                    },
+                                    error: function (data) {
+                                        toastr.error(data.responseText);
+                                    }
+                                });
+                                $(this).dialog("close");
+                            }
+                        }, {
+                            html: "<i class='fa fa-times'></i>&nbsp; 取消",
+                            "class": "btn btn-default",
+                            click: function () {
+                                $(this).dialog("close");
+                            }
+                        }]
+                    });
+                },
+                error: function () {
+                    //
+                },
+                complete: function () {
+                    //
+                }
             });
 
-            //提交申请单
-            function applySubmit(datatable, serialNumbers) {
-                $.ajax({
-                    type: "POST",
-                    url: "@Url.Action("ApplySubmit")",
-                    contentType: "application/json",
-                    data: JSON.stringify(serialNumbers),
-                    success: function (result) {
-                        //更新列表信息
-                        datatable.ajax.reload();
-                    },
-                    error: function (data) {
-                        toastr.error(data.responseText);
-                    }
-                });
-            }
-
-            //撤回申请单
-            function applyRevoke(datatable, serialNumbers) {
-                $.ajax({
-                    type: "POST",
-                    url: "@Url.Action("ApplyRevoke")",
-                    contentType: "application/json",
-                    data: JSON.stringify(serialNumbers),
-                    success: function (result) {
-                        //更新列表信息
-                        datatable.ajax.reload();
-                    },
-                    error: function (data) {
-                        toastr.error(data.responseText);
-                    }
-                });
-            }
-
-            //审核
-            function applyAudit(datatable, serialNumbers) {
-                var actionUrl = "@Url.Action("Audit")";
-                $.ajax({
-                    type: "POST",
-                    url: actionUrl,
-                    contentType: "application/json",
-                    data: JSON.stringify(serialNumbers),
-                    beforeSend: function () {
-                        //审核前再次检查现金发放次数是否已满三次 
-                        $.ajax({
-                            type: "GET",
-                            async: false,
-                            url: "../App/ApplyForm/CashCountCheckBeforeAudit?serialNumbers=" + serialNumbers,
-                            //data: $('#apply-audit-form').serialize(),
-                            contentType: "application/json; charset=utf-8",
-                            datatype: "json",
-                            success: function (data) {
-                                if (data.length > 0) {
-                                    var msgCheck = "";
-                                    $.each(data, function(i,val){  
-                                        msgCheck += val+",";
-                                    });
-                                    msgCheck += "以上人员当月现金发放次数已经达到3次，请审核驳回修改支付方式为银行转账。";
-                                    toastr.error(msgCheck);
-                                }                               
-                            },
-                            error: function () {
-                                toastr.error('审核前再次检查现金发放次数失败！');
-                            }
-                        });
-                    },
-                    success: function (result) {
-                        $("#modal-content").html(result);
-                        $('#modal-content').dialog({
-                            autoOpen: true,
-                            resizable: false,
-                            width: 430,
-                            modal: true,
-                            title: "审核",
-                            buttons: [{
-                                html: "<i class='fa fa-check'></i>&nbsp; 审核",
-                                "class": "btn btn-primary",
-                                click: function () {
-                                    $.ajax({
-                                        type: "POST",
-                                        url: "@Url.Action("ApplyAudit")",
-                                        data: $('#apply-audit-form').serialize(),
-                                        success: function (result) {                                            
-                                            $('#datatable_tabletools').DataTable().ajax.reload();
-                                        },
-                                        error: function (data) {
-                                            toastr.error(data.responseText);
-                                        }
-                                     });
-                                    $(this).dialog("close");
-                                }
-                            }, {
-                                html: "<i class='fa fa-times'></i>&nbsp; 取消",
-                                "class": "btn btn-default",
-                                click: function () {
-                                    $(this).dialog("close");
-                                }
-                            }]
-                        });
-                    },
-                    error: function () {
-                        //
-                    },
-                    complete: function () {
-                        //
-                    }
-                });
-
-                ShowModal(actionUrl, serialNumbers, "审核申请单");
-            }
+            ShowModal(actionUrl, serialNumbers, "审核申请单");
         }
-    </script>
+    }
+</script>
 
 
 

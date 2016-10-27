@@ -311,6 +311,25 @@ namespace BEYON.Web.Areas.App.Controllers
 
             return Json(new { }, JsonRequestBehavior.AllowGet);
         }
+   
+
+        // POST: /App/ApplyForm/ImportPersonal/
+        [HttpPost]
+        public ActionResult ImportPersonal()
+        {
+            PersonalRecord[] datas = ClassConvert<PersonalRecord>.Process(Request.Form);
+            foreach (var data in datas)
+            {
+                var result = _personalRecordService.Update(data, true);
+                result.Message = result.Message ?? result.ResultType.GetDescription();
+                if (result.ResultType != OperationResultType.Success)
+                {
+                    return Json(new { error = result.ResultType.GetDescription(), total = datas.Length, data = datas });
+                }
+            }
+
+            return Json(new { total = datas.Length, data = datas }, JsonRequestBehavior.AllowGet);
+        }
 
 #endregion
 
@@ -406,7 +425,11 @@ namespace BEYON.Web.Areas.App.Controllers
                                 taxPerOrder.PaymentType = records[i].PaymentType;
                                 _taxPerOrderService.Insert(taxPerOrder);
                             }
-                        }                        
+                        }
+                    }
+                    else if (formVM.AuditStatus.Equals("已退回")) {
+                        //删除TaxPerOrder表中审核通过时的记录（主要是保证多次审核的情况，如第一次审核通过，发现问题，重新审核为退回）
+                        _taxPerOrderService.DeleteBySerialNumber(serialNumber);
                     }
                     form.UpdateDate = DateTime.Now;
                     _applicationFormService.Update(form);

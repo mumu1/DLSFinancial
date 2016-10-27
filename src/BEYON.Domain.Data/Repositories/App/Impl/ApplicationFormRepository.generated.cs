@@ -49,7 +49,7 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
 
         public IList<ApplicationForm> GetApplicationFromByAdmin()
         {
-            var q = from p in Context.ApplicationForms.Where(w => w.AuditStatus == "待审核" || w.AuditStatus == "审核通过").OrderByDescending(t => t.UpdateDate)
+            var q = from p in Context.ApplicationForms.Where(w => w.AuditStatus == "待审核" || w.AuditStatus == "审核通过" || w.AuditStatus == "已退回").OrderByDescending(t => t.UpdateDate)
                     select p;
             return q.ToList();
         }
