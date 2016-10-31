@@ -88,6 +88,8 @@ namespace BEYON.Component.Data.Migrations
                new Permission{Id=11, Name="修改",Code=EnumPermissionCode.UpdateUser.ToString(), Description="描述" ,Enabled=true,UpdateDate=DateTime.Now,module=modules[7]},
                new Permission{Id=12, Name="删除",Code=EnumPermissionCode.DeleteUser.ToString(), Description="描述" ,Enabled=true,UpdateDate=DateTime.Now,module=modules[7]},
                new Permission{Id=13, Name="重置密码",Code=EnumPermissionCode.ResetPwdUser.ToString(), Description="描述" ,Enabled=true,UpdateDate=DateTime.Now,module=modules[7]},
+               new Permission{Id=34, Name="导入用户",Code=EnumPermissionCode.ImportUser.ToString(), Description="描述" ,Enabled=true,UpdateDate=DateTime.Now,module=modules[7]},
+
                new Permission{Id=14, Name="设置用户组",Code=EnumPermissionCode.SetGroupUser.ToString(), Description="描述" ,Enabled=true,UpdateDate=DateTime.Now,module=modules[7]},
                new Permission{Id=15, Name="设置角色",Code=EnumPermissionCode.SetRolesUser.ToString(), Description="描述" ,Enabled=true,UpdateDate=DateTime.Now,module=modules[7]}, 
             #endregion
@@ -141,8 +143,8 @@ namespace BEYON.Component.Data.Migrations
             #region 用户管理
             List<User> members = new List<User>
             {
-                new User { Id=1, UserName = "admin", Password = "e10adc3949ba59abbe56e057f20f883e",  TrueName = "系统管理员" ,Enabled=true,Roles=new List<Role>{roles[0]} },
-                new User { Id=2, UserName = "zhangs", Password = "e10adc3949ba59abbe56e057f20f883e", TrueName = "张硕",Enabled=true,Roles=new List<Role>{roles[1]} }
+                new User { Id=1, UserName = "admin", Password = "e10adc3949ba59abbe56e057f20f883e", TrueName = "管理员", Enabled=true,Roles=new List<Role>{roles[0]} },
+                new User { Id=2, UserName = "zhangs", Password = "e10adc3949ba59abbe56e057f20f883e",TrueName = "张硕", Enabled=true,Roles=new List<Role>{roles[1]} }
             };
             DbSet<User> memberSet = context.Set<User>();
             memberSet.AddOrUpdate(m => new { m.UserName }, members.ToArray());

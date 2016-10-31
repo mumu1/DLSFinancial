@@ -60,7 +60,7 @@ namespace BEYON.Domain.Model.App
         [StringLength(36)]
         public string Title { get; set; }
 
-        [Display(Name = "金额（元）")]
+        [Display(Name = "金额(元)")]
         public Double Amount { get; set; }
 
         [Display(Name = "是否含税")]
@@ -71,11 +71,11 @@ namespace BEYON.Domain.Model.App
         [StringLength(100)]
         public string Bank { get; set; }
 
-        [Display(Name = "开户银行名称")]
+        [Display(Name = "开户行详细名称")]
         [StringLength(100)]
         public string BankDetailName { get; set; }
 
-        [Display(Name = "银行存折账号")]
+        [Display(Name = "银行账号")]
         [StringLength(36)]
         public string AccountNumber { get; set; }
 

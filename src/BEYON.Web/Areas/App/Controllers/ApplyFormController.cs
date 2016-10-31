@@ -20,6 +20,8 @@ using BEYON.CoreBLL.Service.App.Interface;
 using BEYON.CoreBLL.Service.Excel.Interface;
 using BEYON.Domain.Model.App;
 using BEYON.ViewModel.App;
+using System.IO;
+using BEYON.CoreBLL.Service.Excel;
 
 namespace BEYON.Web.Areas.App.Controllers
 {
@@ -315,20 +317,39 @@ namespace BEYON.Web.Areas.App.Controllers
 
         // POST: /App/ApplyForm/ImportPersonal/
         [HttpPost]
-        public ActionResult ImportPersonal()
+        public ActionResult ImportPersonal(System.Web.HttpPostedFileBase upload)
         {
-            PersonalRecord[] datas = ClassConvert<PersonalRecord>.Process(Request.Form);
-            foreach (var data in datas)
+            string fileName = "";
+            String filePath = Server.MapPath("~/Imports");
+            if (!Directory.Exists(filePath))
             {
-                var result = _personalRecordService.Update(data, true);
-                result.Message = result.Message ?? result.ResultType.GetDescription();
-                if (result.ResultType != OperationResultType.Success)
-                {
-                    return Json(new { error = result.ResultType.GetDescription(), total = datas.Length, data = datas });
-                }
+                Directory.CreateDirectory(filePath);
             }
 
-            return Json(new { total = datas.Length, data = datas }, JsonRequestBehavior.AllowGet);
+            string tempName = DateTime.Now.ToString("yyyyMMddHHMMss") + DateTime.Now.Millisecond;
+            if (upload.ContentLength > 0)
+            {
+                fileName = tempName + Path.GetFileName(upload.FileName);
+                var path = Path.Combine(filePath, fileName);
+                upload.SaveAs(path);
+                //获取映射文件
+                ColumnMap[] columns;
+                if (!ExcelService.Get(Request.Path, out columns))
+                {
+                    columns = null;
+                }
+
+                //实现文件导入
+                var result = _personalRecordService.Import(path, columns);
+                //删除临时创建文件
+                System.IO.File.Delete(path);
+
+                result.Message = result.Message ?? result.ResultType.GetDescription();
+
+                return Json(new { erro = result.Message });
+            }
+
+            return Json(new { erro = "上传数据失败！" });
         }
 
 #endregion
