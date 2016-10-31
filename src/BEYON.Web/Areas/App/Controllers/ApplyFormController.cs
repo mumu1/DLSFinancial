@@ -381,7 +381,7 @@ namespace BEYON.Web.Areas.App.Controllers
                 ApplicationForm form = _applicationFormService.ApplicationForms.FirstOrDefault(t => t.SerialNumber == serialNumber);
                 if (form != null)
                 {
-                    form.AuditStatus = "已退回";
+                    form.AuditStatus = "待提交";
                     form.UpdateDate = DateTime.Now;
                     _applicationFormService.Update(form);
                 }
