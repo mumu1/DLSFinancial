@@ -63,9 +63,27 @@ namespace BEYON.CoreBLL.Service.Member
             }
             else
             {
+                var roleIdsByUser = user.Roles.Select(r => r.Id).ToList();
+
+                //判断周一到周五系统维护，普通用户无法登陆
+                var now = DateTime.Now;
+                var startTime = new DateTime(now.Year, now.Month, 1);
+                var endTime = new DateTime(now.Year, now.Month, 6);
+                if(now >= startTime && now < endTime)
+                {
+                    foreach (var roleId in roleIdsByUser)
+                    {
+                        Role role = _RoleService.Roles.FirstOrDefault(r => r.Id == roleId);
+                        if (role != null && role.RoleName == "普通用户")
+                        {
+                            return new OperationResult(OperationResultType.Warning, "系统维护状态中。。。");
+                        }
+                    }
+                }
+                
                 result = new OperationResult(OperationResultType.Success, "登录成功。", user);
                 #region 设置用户权限缓存
-                var roleIdsByUser = user.Roles.Select(r => r.Id).ToList();
+                
                 var roleIdsByUserGroup = user.UserGroups.SelectMany(g => g.Roles).Select(r => r.Id).ToList();
                 roleIdsByUser.AddRange(roleIdsByUserGroup);
                 var roleIds = roleIdsByUser.Distinct().ToList();
