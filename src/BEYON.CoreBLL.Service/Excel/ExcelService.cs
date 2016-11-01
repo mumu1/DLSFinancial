@@ -10,7 +10,7 @@ namespace BEYON.CoreBLL.Service.Excel
 {
     public class ExcelService
     {
-        private static ConcurrentDictionary<string, ColumnMap[]> excelColumnMaps = new ConcurrentDictionary<string, ColumnMap[]>();
+        private static ConcurrentDictionary<string, ImportData> excelColumnMaps = new ConcurrentDictionary<string, ImportData>();
 
         public static IQueryable<T> GetObjects<T>(string filePath, ColumnMap[] maps = null)
         {
@@ -29,15 +29,15 @@ namespace BEYON.CoreBLL.Service.Excel
         {
             if(!excelColumnMaps.ContainsKey(importData.ActionUrl))
             {
-                excelColumnMaps.TryAdd(importData.ActionUrl, importData.Columns);
+                excelColumnMaps.TryAdd(importData.ActionUrl, importData);
             }
             else
             {
-                excelColumnMaps[importData.ActionUrl] = importData.Columns;
+                excelColumnMaps[importData.ActionUrl] = importData;
             }
         }
 
-        public static bool Get(string url, out ColumnMap[] columns)
+        public static bool Get(string url, out ImportData columns)
         {
             return excelColumnMaps.TryGetValue(url, out columns);
         }

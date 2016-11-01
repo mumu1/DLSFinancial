@@ -187,9 +187,14 @@ namespace BEYON.Web.Areas.Member.Controllers
                 upload.SaveAs(path);
                 //获取映射文件
                 ColumnMap[] columns;
-                if (!ExcelService.Get(Request.Path, out columns))
+                ImportData importData;
+                if (!ExcelService.Get(Request.Path, out importData))
                 {
                     columns = null;
+                }
+                else
+                {
+                    columns = importData.Columns;
                 }
 
                 //实现文件导入
