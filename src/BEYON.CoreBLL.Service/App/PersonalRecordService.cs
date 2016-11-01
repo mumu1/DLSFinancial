@@ -14,6 +14,7 @@ namespace BEYON.CoreBLL.Service.App
 {
     public class PersonalRecordService : CoreServiceBase, IPersonalRecordService
     {
+        private readonly log4net.ILog _log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private readonly IPersonalRecordRepository _PersonalRecordRepository;
 
 
@@ -63,11 +64,12 @@ namespace BEYON.CoreBLL.Service.App
                     UpdateDate = DateTime.Now
                 };
                 _PersonalRecordRepository.Insert(entity, isSave);
-                
-                return new OperationResult(OperationResultType.Success, "新增数据成功！");
+
+                return new OperationResult(OperationResultType.Success, "新增数据成功！", entity);
             }
             catch(Exception ex)
             {
+                _log.Error(ex);
                 return new OperationResult(OperationResultType.Error, "新增数据失败：" + ex.Message);
             }
         }
@@ -100,8 +102,9 @@ namespace BEYON.CoreBLL.Service.App
                 _PersonalRecordRepository.Update(personalRecord, isSave);
                 return new OperationResult(OperationResultType.Success, "更新数据成功！");
             }
-            catch
+            catch(Exception ex)
             {
+                _log.Error(ex);
                 return new OperationResult(OperationResultType.Error, "更新数据失败!");
             }
         }
@@ -127,8 +130,9 @@ namespace BEYON.CoreBLL.Service.App
                     return new OperationResult(OperationResultType.ParamError, "参数错误，请选择需要删除的数据!");
                 }
             }
-            catch
+            catch(Exception ex)
             {
+                _log.Error(ex);
                 return new OperationResult(OperationResultType.Error, "删除数据失败!");
             }
         }
@@ -140,8 +144,9 @@ namespace BEYON.CoreBLL.Service.App
                 _PersonalRecordRepository.Update(model, isSave);
                 return new OperationResult(OperationResultType.Success, "更新数据成功！");
             }
-            catch
+            catch(Exception ex)
             {
+                _log.Error(ex);
                 return new OperationResult(OperationResultType.Error, "更新数据失败!");
             }
         }
@@ -154,8 +159,9 @@ namespace BEYON.CoreBLL.Service.App
                 _PersonalRecordRepository.Delete(model, isSave);
                 return new OperationResult(OperationResultType.Success, "更新数据成功！");
             }
-            catch
+            catch(Exception ex)
             {
+                _log.Error(ex);
                 return new OperationResult(OperationResultType.Error, "更新数据失败!");
             }
         }
@@ -181,6 +187,7 @@ namespace BEYON.CoreBLL.Service.App
             }
             catch (Exception ex)
             {
+                _log.Error(ex);
                 return new OperationResult(OperationResultType.Error, "导入数据失败!");
             }
         }

@@ -393,8 +393,11 @@
 
             if (table !== undefined) {
                 var rowData = $('#datatable_create_form').DataTable().rows().data();
+                var count = 0;
                 $.each($(rowData), function (key, value) {
-                    if (value["CertificateID"] === CertificateID.val()) {
+                    if (value["CertificateID"] === CertificateID.val() && (action === 'create' ||
+                        (action === 'edit' && count > 0))) {
+                        count++;
                         CertificateID.error('该申请单中已经存在相同的人员信息，请修改后重新提交!');
                         return;
                     }
@@ -604,7 +607,7 @@
             buttons: buttons,
             columns: [
                 //{ data: "SerialNumber", title: "申请单流水号", visible: false },
-                //{ data: "Id", title: "编号", visible: false },
+                { data: "Id", title: "编号", visible: false },
                 { data: "Name", title: "姓名" },
                 { data: "CertificateType", title: "证件类型" },
                 { data: "CertificateID", title: "证件号码" },

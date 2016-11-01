@@ -266,7 +266,7 @@ namespace BEYON.Web.Areas.App.Controllers
                 return Json(new { error = result.Message, total = 1, data = new[] { entity } });
             else
             {
-                return Json(new { total = 1, data = new[] { entity } });
+                return Json(new { total = 1, data = new[] { result.Data } });
             }
         }
 
@@ -281,7 +281,7 @@ namespace BEYON.Web.Areas.App.Controllers
                 result.Message = result.Message ?? result.ResultType.GetDescription();
                 if (result.ResultType != OperationResultType.Success)
                 {
-                    return Json(new { error = result.ResultType.GetDescription(), total = datas.Length, data = datas });
+                    return Json(new { error = result.Message, total = datas.Length, data = datas });
                 }
             }
 
