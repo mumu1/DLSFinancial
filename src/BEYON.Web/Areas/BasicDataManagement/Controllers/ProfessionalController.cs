@@ -111,13 +111,14 @@ namespace BEYON.Web.Areas.BasicDataManagement.Controllers
                 var path = Path.Combine(filePath, fileName);
                 upload.SaveAs(path);
                 //获取映射文件
-                ColumnMap[] columns;
-                if (!ExcelService.Get(Request.Path, out columns))
+                ImportData importData;
+                if (!ExcelService.Get(Request.Path, out importData))
                 {
-                    columns = null;
+                    
                 }
 
                 //实现文件导入
+                var columns = importData == null ? null : importData.Columns;
                 var result = _titleService.Import(path, columns);
                 //删除临时创建文件
                 System.IO.File.Delete(path);
