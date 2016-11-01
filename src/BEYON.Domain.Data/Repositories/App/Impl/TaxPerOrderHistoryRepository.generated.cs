@@ -32,34 +32,10 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
 	/// <summary>
     ///   仓储操作层实现——用户信息
     /// </summary>
-    public partial class TaxBaseByMonthRepository : EFRepositoryBase<TaxBaseByMonth, Int32>, ITaxBaseByMonthRepository
+    public partial class TaxPerOrderHistoryRepository : EFRepositoryBase<TaxPerOrderHistory, Int32>, ITaxPerOrderHistoryRepository
     {
-        public TaxBaseByMonthRepository(IUnitOfWork unitOfWork)
+        public TaxPerOrderHistoryRepository(IUnitOfWork unitOfWork)
             : base()
         { }
-
-        public Double GetBaseSalary(String certificateID)
-        {
-            var record = from p in Context.TaxBaseByMonths.Where(w => w.CertificateID == certificateID)
-                         select p;
-            var lists = record.ToList();
-            Double baseSalary = 0.0;
-            if (lists.Count > 0) {
-                baseSalary = lists[0].InitialEaring - lists[0].TaxFree - lists[0].AmountDeducted;
-            }
-            return baseSalary;  
-        }
-
-        public String GetNameByCerID(String certificateID) {
-            String name = "";
-            var record = from p in Context.TaxBaseByMonths.Where(w => w.CertificateID == certificateID)
-                         select p;
-            var lists = record.ToList();
-            if (lists.Count > 0) {
-                name = lists[0].Name;
-            }
-            return name;
-        }
-
-    }
+     }
 }

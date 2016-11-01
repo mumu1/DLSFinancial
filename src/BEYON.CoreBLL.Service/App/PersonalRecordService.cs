@@ -9,6 +9,9 @@ using BEYON.Domain.Model.App;
 using BEYON.ViewModel.App;
 using BEYON.CoreBLL.Service.Excel;
 using EntityFramework.Extensions;
+using System.Web.SessionState;
+using System.Web;
+
 
 namespace BEYON.CoreBLL.Service.App
 {
@@ -166,7 +169,7 @@ namespace BEYON.CoreBLL.Service.App
             }
         }
 
-        public OperationResult Import(String fileName, ImportData importData)
+        public OperationResult Import(String fileName, Service.Excel.ImportData importData)
         {
             try
             {
@@ -176,7 +179,7 @@ namespace BEYON.CoreBLL.Service.App
                 {
                     String serialNumber = importData.Parameters[0].Value;
                     String paymentType = importData.Parameters[1].Value;
-                    foreach(var item in items)
+                    foreach (var item in items)
                     {
                         item.SerialNumber = serialNumber;
                         item.PaymentType = paymentType;
@@ -185,6 +188,7 @@ namespace BEYON.CoreBLL.Service.App
                 _PersonalRecordRepository.InsertOrUpdate(items);
                 return new OperationResult(OperationResultType.Success, "导入数据成功！");
             }
+
             catch (Exception ex)
             {
                 _log.Error(ex);

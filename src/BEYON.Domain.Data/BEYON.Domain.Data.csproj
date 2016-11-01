@@ -60,6 +60,7 @@
     <Compile Include="Repositories\App\Impl\DepartmentRepository.generated.cs" />
     <Compile Include="Repositories\App\Impl\TaxPerOrderRepository.generated.cs" />
     <Compile Include="Repositories\App\Impl\TaskManageRepository.generated.cs" />
+    <Compile Include="Repositories\App\Impl\TaxPerOrderHistoryRepository.generated.cs" />
     <Compile Include="Repositories\App\ITaxPerOrderRepository.generated.cs" />
     <Compile Include="Repositories\App\ITaskManageRepository.generated.cs" />
     <Compile Include="Repositories\App\Impl\PersonalRecordRepository.generated.cs" />
@@ -74,6 +75,7 @@
     <Compile Include="Repositories\App\IApplicationFormRepository.generated.cs" />
     <Compile Include="Repositories\App\IAuditOpinionRepository.generated.cs" />
     <Compile Include="Repositories\App\ITaxBaseByMonthRepository.generated.cs" />
+    <Compile Include="Repositories\App\ITaxPerOrderHistoryRepository.generated.cs" />
     <Compile Include="Repositories\App\ITitleRepository.generated.cs" />
     <Compile Include="Repositories\App\IRefundTypeRepository.generated.cs" />
     <Compile Include="Repositories\Member\IModuleRepository.cs" />

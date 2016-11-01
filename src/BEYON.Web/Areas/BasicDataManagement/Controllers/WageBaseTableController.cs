@@ -25,9 +25,14 @@ namespace BEYON.Web.Areas.BasicDataManagement.Controllers
     public class WageBaseTableController : Controller
     {
          private readonly ITaxBaseByMonthService _taxBaseByMonthService;
-         public WageBaseTableController(ITaxBaseByMonthService taxBaseByMonthService)
+         private readonly ITaxPerOrderHistoryService _taxPerOrderHistoryService;
+         private readonly ITaxPerOrderService _taxPerOrderService;
+
+         public WageBaseTableController(ITaxBaseByMonthService taxBaseByMonthService, ITaxPerOrderHistoryService taxPerOrderHistoryService, ITaxPerOrderService taxPerOrderService)
         {
             this._taxBaseByMonthService = taxBaseByMonthService;
+            this._taxPerOrderHistoryService = taxPerOrderHistoryService;
+            this._taxPerOrderService = taxPerOrderService;
         }
 
 
@@ -101,6 +106,60 @@ namespace BEYON.Web.Areas.BasicDataManagement.Controllers
                 }
             }
             return Json(new { total = datas.Length, data = datas }, JsonRequestBehavior.AllowGet);
+        }
+
+        // POST: /BasicDataManagement/WageBaseTable/DeleteAll/
+        public ActionResult DeleteAll()
+        {
+           
+                var result = _taxBaseByMonthService.DeleteAll();
+                if (result.ResultType != OperationResultType.Success)
+                {
+                    return Json(new { error = result.ResultType.GetDescription()});
+                }
+                return Json( JsonRequestBehavior.AllowGet);
+           
+        }
+
+        // POST: /BasicDataManagement/WageBaseTable/TaxPerOrderBackUp/
+        public ActionResult TaxPerOrderBackUp()
+        {
+            var modelList = _taxPerOrderService.TaxPerOrders;
+            String period = _taxBaseByMonthService.TaxBaseByMonths.First().Period;
+            TaxPerOrderHistory history = null;
+            foreach(var model in modelList){
+                history = new TaxPerOrderHistory();
+                history.Id = model.Id;
+                history.PaymentType = model.PaymentType;
+                history.Period = period;
+                history.PersonType = model.PersonType;
+                history.ProjectDirector = model.ProjectDirector;
+                history.ProjectNumber = model.ProjectNumber;
+                history.RefundType = model.RefundType;
+                history.SerialNumber = model.SerialNumber;
+                history.TaskName = model.TaskName;
+                history.Tax = model.Tax;
+                history.TaxOrNot = model.TaxOrNot;
+                history.UpdateDate = model.UpdateDate;
+                history.AccountName = model.AccountName;
+                history.AccountNumber = model.AccountNumber;
+                history.Agent = model.Agent;
+                history.Amount = model.Amount;
+                history.AmountX = model.AmountX;
+                history.AmountY = model.AmountY;
+                history.Bank = model.Bank;
+                history.BankDetailName = model.BankDetailName;
+                history.CertificateID = model.CertificateID;
+                history.CertificateType = model.CertificateType;
+                _taxPerOrderHistoryService.Insert(history,true);
+            }
+            var result = _taxPerOrderService.DeleteAll();
+            if (result.ResultType != OperationResultType.Success)
+            {
+                return Json(new { error = result.ResultType.GetDescription() });
+            }
+            return Json(JsonRequestBehavior.AllowGet);
+
         }
 
         // POST: /BasicDataManagement/WageBaseTable/Import/

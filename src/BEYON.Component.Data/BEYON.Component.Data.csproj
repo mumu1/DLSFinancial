@@ -70,6 +70,7 @@
     <Compile Include="Configurations\App\AuditStatusConfiguration.generated.cs" />
     <Compile Include="Configurations\App\DepartmentConfiguration.generated.cs" />
     <Compile Include="Configurations\App\TaskManageConfiguration.generated.cs" />
+    <Compile Include="Configurations\App\TaxPerOrderHistoryConfiguration.generated.cs" />
     <Compile Include="Configurations\Member\Mapping\ModuleConfiguration.cs" />
     <Compile Include="Configurations\Member\Mapping\PermissionConfiguration.cs" />
     <Compile Include="Configurations\Member\ModuleConfiguration.generated.cs" />
