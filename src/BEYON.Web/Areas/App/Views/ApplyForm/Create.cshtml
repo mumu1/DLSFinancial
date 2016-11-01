@@ -130,7 +130,7 @@
                                 <textarea rows="2" name="ApplyDesp" required="required" style="float:left;" placeholder=" 关于工作内容、工作时间等的描述(必填)">@Model.ApplyDesp</textarea>
                             </label>
                         </section>
-                        <input type="text" name="SerialNumber" placeholder="流水账号" style="visibility:hidden" value="@Model.SerialNumber">
+                        <input type="text" id="serialNumber" name="SerialNumber" placeholder="流水账号" style="visibility:hidden" value="@Model.SerialNumber">
                         <input type="text" name="SubmitTime" placeholder="提交时间" style="visibility:hidden" value="@Model.SubmitTime">
                         <input type="text" name="AuditTime" placeholder="审核时间" style="visibility:hidden" value="@Model.AuditTime">
                         <input type="text" name="AuditStatus" placeholder="审核状态" style="visibility:hidden" value="@Model.AuditStatus">
@@ -519,15 +519,44 @@
             {
                 text: "导入", action: function (e, dt, node, config) {
                     var ColumnDatas = [];
-                    var columns = dt.settings().init().columns;
-                    dt.columns().every(function (index) {
-                        ColumnDatas.push({ ColumnName: columns[index].data, TitleName: columns[index].title })
-                    })
-
+                    //var columns = dt.settings().init().columns;
+                    //dt.columns().every(function (index) {
+                    //    ColumnDatas.push({ ColumnName: columns[index].data, TitleName: columns[index].title })
+                    //})
+                    //$.session.set("serNum", $('#serialNumber').val());
+                    //$.session.set("payType", $('#paymentType').val());
+                   
+                    if ($('#paymentType').val() === "现金支付") {
+                        ColumnDatas.push({ ColumnName: 'Name', TitleName: '姓名' });
+                        ColumnDatas.push({ ColumnName: 'CertificateType', TitleName: '证件类型' });
+                        ColumnDatas.push({ ColumnName: 'CertificateID', TitleName: '证件号码' });
+                        ColumnDatas.push({ ColumnName: 'Company', TitleName: '单位' });
+                        ColumnDatas.push({ ColumnName: 'Tele', TitleName: '联系电话' });
+                        ColumnDatas.push({ ColumnName: 'PersonType', TitleName: '人员类型' });
+                        ColumnDatas.push({ ColumnName: 'Nationality', TitleName: '国籍' });
+                        ColumnDatas.push({ ColumnName: 'Title', TitleName: '职称' });
+                        ColumnDatas.push({ ColumnName: 'TaxOrNot', TitleName: '是否含税' });
+                        ColumnDatas.push({ ColumnName: 'Amount', TitleName: '金额(元)' });                                       
+                    } else if ($('#paymentType').val() === "银行转账") {
+                        ColumnDatas.push({ ColumnName: 'Name', TitleName: '姓名' });
+                        ColumnDatas.push({ ColumnName: 'CertificateType', TitleName: '证件类型' });
+                        ColumnDatas.push({ ColumnName: 'CertificateID', TitleName: '证件号码' });
+                        ColumnDatas.push({ ColumnName: 'Company', TitleName: '单位' });
+                        ColumnDatas.push({ ColumnName: 'Tele', TitleName: '联系电话' });
+                        ColumnDatas.push({ ColumnName: 'PersonType', TitleName: '人员类型' });
+                        ColumnDatas.push({ ColumnName: 'Nationality', TitleName: '国籍' });
+                        ColumnDatas.push({ ColumnName: 'Title', TitleName: '职称' });
+                        ColumnDatas.push({ ColumnName: 'TaxOrNot', TitleName: '是否含税' });
+                        ColumnDatas.push({ ColumnName: 'Amount', TitleName: '金额(元)' });
+                        ColumnDatas.push({ ColumnName: 'Bank', TitleName: '开户银行' });
+                        ColumnDatas.push({ ColumnName: 'AccountNumber', TitleName: '银行账号' });
+                        ColumnDatas.push({ ColumnName: 'BankDetailName', TitleName: '开户行详细名称' });
+                    }
+                    
                     $.ajax({
                         url: '../App/Import/ImportData',
                         type: 'POST',
-                        data: JSON.stringify({ ActionUrl: "@Url.Action("ImportPersonal")", Columns: ColumnDatas }),
+                        data: JSON.stringify({ ActionUrl: "@Url.Action("ImportPersonal")", Columns: ColumnDatas}),
                         contentType: 'application/json; charset=utf8',
                         cache: false,
                         dataType: 'html',
@@ -572,7 +601,7 @@
             buttons: buttons,
             columns: [
                 //{ data: "SerialNumber", title: "申请单流水号", visible: false },
-                { data: "Id", title: "编号", visible: false },
+                //{ data: "Id", title: "编号", visible: false },
                 { data: "Name", title: "姓名" },
                 { data: "CertificateType", title: "证件类型" },
                 { data: "CertificateID", title: "证件号码" },
