@@ -31,12 +31,12 @@ namespace BEYON.CoreBLL.Service.App
 
             try
             {
-                TaxPerOrderHistory history = _TaxPerOrderHistoryRepository.Entities.FirstOrDefault(c => c.Id == model.Id);
-                if (history != null)
-                {
-                    _TaxPerOrderHistoryRepository.Update(model, true);
-                }
-                _TaxPerOrderHistoryRepository.Insert(model);
+                //TaxPerOrderHistory history = _TaxPerOrderHistoryRepository.Entities.FirstOrDefault(c => c.Id == model.Id);
+                //if (history != null)
+                //{
+                    //_TaxPerOrderHistoryRepository.Update(model, true);
+                //}
+                _TaxPerOrderHistoryRepository.Insert(model,true);
 
                 return new OperationResult(OperationResultType.Success, "新增数据成功！");
             }

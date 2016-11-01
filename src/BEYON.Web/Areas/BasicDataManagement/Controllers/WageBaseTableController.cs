@@ -151,7 +151,7 @@ namespace BEYON.Web.Areas.BasicDataManagement.Controllers
                 history.BankDetailName = model.BankDetailName;
                 history.CertificateID = model.CertificateID;
                 history.CertificateType = model.CertificateType;
-                _taxPerOrderHistoryService.Insert(history);
+                _taxPerOrderHistoryService.Insert(history,true);
             }
             var result = _taxPerOrderService.DeleteAll();
             if (result.ResultType != OperationResultType.Success)

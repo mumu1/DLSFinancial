@@ -163,17 +163,26 @@ namespace BEYON.CoreBLL.Service.App
             }
         }
 
-        public OperationResult Import(String fileName, Service.Excel.ColumnMap[] columns)
+        public OperationResult Import(String fileName, Service.Excel.ImportData importData)
         {
             try
             {
+                var columns = importData == null ? null : importData.Columns;
                 var items = ExcelService.GetObjects<PersonalRecord>(fileName, columns);
-                //var serNum = HttpContext.Current.Session["serNum"];
-                //var payType = HttpContext.Current.Session["payType"];
-                
-                    _PersonalRecordRepository.InsertOrUpdate(items);
+                if (importData != null)
+                {
+                    String serialNumber = importData.Parameters[0].Value;
+                    String paymentType = importData.Parameters[1].Value;
+                    foreach (var item in items)
+                    {
+                        item.SerialNumber = serialNumber;
+                        item.PaymentType = paymentType;
+                    }
+                }
+                _PersonalRecordRepository.InsertOrUpdate(items);
                 return new OperationResult(OperationResultType.Success, "导入数据成功！");
             }
+
             catch (Exception ex)
             {
                 return new OperationResult(OperationResultType.Error, "导入数据失败!");
