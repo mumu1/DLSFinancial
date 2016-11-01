@@ -170,5 +170,17 @@ namespace BEYON.CoreBLL.Service.App
             String name = _TaxBaseByMonthRepository.GetNameByCerID(certificateID);
             return name;
         }
+
+        public OperationResult DeleteAll() {
+            try
+            {               
+                _TaxBaseByMonthRepository.Delete(_TaxBaseByMonthRepository.Entities);
+                return new OperationResult(OperationResultType.Success, "清空数据成功！");
+            }
+            catch
+            {
+                return new OperationResult(OperationResultType.Error, "清空数据失败!");
+            }
+        }
     }
 }

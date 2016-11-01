@@ -385,5 +385,18 @@ namespace BEYON.CoreBLL.Service.App
             }
             return count;
         }
+
+        public OperationResult DeleteAll()
+        {
+            try
+            {
+                _TaxPerOrderRepository.Delete(_TaxPerOrderRepository.Entities);
+                return new OperationResult(OperationResultType.Success, "清空数据成功！");
+            }
+            catch
+            {
+                return new OperationResult(OperationResultType.Error, "清空数据失败!");
+            }
+        }
     }
 }

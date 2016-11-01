@@ -23,5 +23,7 @@ namespace BEYON.CoreBLL.Service.App.Interface
         Double GetBaseSalary(String certificateID);
 
         String GetNameByCerID(String certificateID);
+
+        OperationResult DeleteAll();
     }
 }

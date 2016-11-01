@@ -43,6 +43,8 @@ namespace BEYON.Component.Data.EF
 
         public DbSet<TaxPerOrder> TaxPerOrders { get; set; }
 
+        public DbSet<TaxPerOrderHistory> TaxPerOrderHistorys { get; set; }
+
         public DbSet<PersonalSalary> PersonalSalarys { get; set; }
 
         public DbSet<PersonalLabour> PersonalLabours { get; set; }
@@ -88,6 +90,7 @@ namespace BEYON.Component.Data.EF
             modelBuilder.Configurations.Add(new ApplicationFormConfiguration());
             modelBuilder.Configurations.Add(new PersonalRecordConfiguration());
             modelBuilder.Configurations.Add(new TaxPerOrderConfiguration());
+            modelBuilder.Configurations.Add(new TaxPerOrderHistoryConfiguration());
             modelBuilder.Configurations.Add(new PersonalSalaryConfiguration());
             modelBuilder.Configurations.Add(new PersonalLabourConfiguration());
             modelBuilder.Configurations.Add(new ProjectCostConfiguration());

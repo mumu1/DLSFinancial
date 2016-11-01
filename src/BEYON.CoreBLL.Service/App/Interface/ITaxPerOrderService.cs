@@ -17,6 +17,7 @@ namespace BEYON.CoreBLL.Service.App.Interface
         OperationResult Update(TaxPerOrderVM model, bool isSave = true);
         OperationResult Delete(List<string> list, bool isSave = true);
         OperationResult Delete(TaxPerOrder model, bool isSave = true);
+        OperationResult DeleteAll();
         OperationResult Update(TaxPerOrder model, bool isSave = true);
         OperationResult Import(String fileName, Service.Excel.ColumnMap[] columns);
 

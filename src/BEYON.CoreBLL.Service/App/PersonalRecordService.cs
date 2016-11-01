@@ -9,6 +9,9 @@ using BEYON.Domain.Model.App;
 using BEYON.ViewModel.App;
 using BEYON.CoreBLL.Service.Excel;
 using EntityFramework.Extensions;
+using System.Web.SessionState;
+using System.Web;
+
 
 namespace BEYON.CoreBLL.Service.App
 {
@@ -165,7 +168,10 @@ namespace BEYON.CoreBLL.Service.App
             try
             {
                 var items = ExcelService.GetObjects<PersonalRecord>(fileName, columns);
-                _PersonalRecordRepository.InsertOrUpdate(items);
+                //var serNum = HttpContext.Current.Session["serNum"];
+                //var payType = HttpContext.Current.Session["payType"];
+                
+                    _PersonalRecordRepository.InsertOrUpdate(items);
                 return new OperationResult(OperationResultType.Success, "导入数据成功！");
             }
             catch (Exception ex)

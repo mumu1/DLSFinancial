@@ -146,11 +146,11 @@
                     extend: 'collection',
                     text: '导出',
                     buttons: [
-                        { text: "拷贝", extend: 'copy' },
+                      //  { text: "拷贝", extend: 'copy' },
                         { text: "EXCEL表格", extend: 'excel' },
-                        { text: "CSV表格", extend: 'csv' },
-                        { text: "PDF文档", extend: 'pdf' },
-                        { text: "打印", extend: 'print' }
+                      //  { text: "CSV表格", extend: 'csv' },
+                       // { text: "PDF文档", extend: 'pdf' },
+                    //    { text: "打印", extend: 'print' }
                     ]
                 },
                 {
@@ -169,8 +169,10 @@
                             contentType: 'application/json; charset=utf8',
                             cache: false,
                             dataType: 'html',
-                            success: function (data) {
+                            success: function (data) {                           
                                 $('#importDataDialog').html(data);
+                                dt.ajax.reload();
+                                
                             },
                             error: function (xhr) {
                                 alert("出现错误，请稍后再试:" + xhr.responseText);
@@ -184,6 +186,45 @@
                     text: "刷新",
                     action: function (e, dt, node, config) {
                         dt.ajax.reload();
+                    }
+                },
+                {
+                    text: "清空",
+                    action: function (e, dt, node, config) {
+                        $.ajax({
+                            type: "POST",
+                            async: false,
+                            url: "../BasicDataManagement/WageBaseTable/DeleteAll",
+                            //data: params,
+                            contentType: "application/json; charset=utf-8",
+                            datatype: "json",
+                            success: function (data) {
+                                dt.ajax.reload();
+                                toastr.info("工资基础表清空成功");
+                            },
+                            error: function () {
+                                toastr.error('工资基础表清空失败！');
+                            }
+                        });                        
+                    }
+                },
+                {
+                    text: "备份计税数据",
+                    action: function (e, dt, node, config) {
+                        $.ajax({
+                            type: "POST",
+                            async: false,
+                            url: "../BasicDataManagement/WageBaseTable/TaxPerOrderBackUp",
+                            //data: params,
+                            contentType: "application/json; charset=utf-8",
+                            datatype: "json",
+                            success: function (data) {
+                                toastr.info("计税数据备份成功");
+                            },
+                            error: function () {
+                                toastr.error('计税数据备份失败！');
+                            }
+                        });
                     }
                 }
             ],
