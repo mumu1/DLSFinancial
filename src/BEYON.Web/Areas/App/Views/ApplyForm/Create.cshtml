@@ -519,6 +519,9 @@
             {
                 text: "导入", action: function (e, dt, node, config) {
                     var ColumnDatas = [];
+                    var ParameterDatas = [];
+                    ParameterDatas.push({ Key: 'serialNumber', Value: $('#serialNumber').val() });
+                    ParameterDatas.push({ Key: 'paymentType', Value: $('#paymentType').val() });
                     //var columns = dt.settings().init().columns;
                     //dt.columns().every(function (index) {
                     //    ColumnDatas.push({ ColumnName: columns[index].data, TitleName: columns[index].title })
@@ -556,7 +559,7 @@
                     $.ajax({
                         url: '../App/Import/ImportData',
                         type: 'POST',
-                        data: JSON.stringify({ ActionUrl: "@Url.Action("ImportPersonal")", Columns: ColumnDatas}),
+                        data: JSON.stringify({ ActionUrl: "@Url.Action("ImportPersonal")", Columns: ColumnDatas, Parameters: ParameterDatas }),
                         contentType: 'application/json; charset=utf8',
                         cache: false,
                         dataType: 'html',

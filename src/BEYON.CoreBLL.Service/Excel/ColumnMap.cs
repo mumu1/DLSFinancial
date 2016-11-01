@@ -12,9 +12,17 @@ namespace BEYON.CoreBLL.Service.Excel
         public string TitleName { get; set; }
     }
 
+    public class Parameter
+    {
+        public string Key { get; set; }
+        public string Value { get; set; }
+    }
+
     public class ImportData
     {
         public String ActionUrl { get; set; }
         public ColumnMap[] Columns { get; set; }
+
+        public Parameter[] Parameters { get; set; }
     }
 }
