@@ -160,11 +160,22 @@ namespace BEYON.CoreBLL.Service.App
             }
         }
 
-        public OperationResult Import(String fileName, Service.Excel.ColumnMap[] columns)
+        public OperationResult Import(String fileName, ImportData importData)
         {
             try
             {
+                var columns = importData == null ? null : importData.Columns;
                 var items = ExcelService.GetObjects<PersonalRecord>(fileName, columns);
+                if (importData != null)
+                {
+                    String serialNumber = importData.Parameters[0].Value;
+                    String paymentType = importData.Parameters[1].Value;
+                    foreach(var item in items)
+                    {
+                        item.SerialNumber = serialNumber;
+                        item.PaymentType = paymentType;
+                    }
+                }
                 _PersonalRecordRepository.InsertOrUpdate(items);
                 return new OperationResult(OperationResultType.Success, "导入数据成功！");
             }

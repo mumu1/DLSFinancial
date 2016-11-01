@@ -18,6 +18,6 @@ namespace BEYON.CoreBLL.Service.App.Interface
         OperationResult Delete(List<string> list, bool isSave = true);
         OperationResult Delete(PersonalRecord model, bool isSave = true);
         OperationResult Update(PersonalRecord model, bool isSave = true);
-        OperationResult Import(String fileName, Service.Excel.ColumnMap[] columns);
+        OperationResult Import(String fileName, Service.Excel.ImportData importData);
     }
 }
