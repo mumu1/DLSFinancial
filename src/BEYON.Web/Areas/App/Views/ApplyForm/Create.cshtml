@@ -131,7 +131,8 @@
                             </label>
                         </section>
                         <input type="text" id="serialNumber" name="SerialNumber" placeholder="流水账号" style="visibility:hidden" value="@Model.SerialNumber">
-                        <input type="text" name="SubmitTime" placeholder="提交时间" style="visibility:hidden" value="@Model.SubmitTime">
+                        <input type="text" id="taskName" name="TaskName" placeholder="课题名称" style="visibility:hidden" value="@Model.TaskName">
+                         <input type="text" name="SubmitTime" placeholder="提交时间" style="visibility:hidden" value="@Model.SubmitTime">
                         <input type="text" name="AuditTime" placeholder="审核时间" style="visibility:hidden" value="@Model.AuditTime">
                         <input type="text" name="AuditStatus" placeholder="审核状态" style="visibility:hidden" value="@Model.AuditStatus">
                         <input type="text" name="UserName" placeholder="用户邮箱" style="visibility:hidden" value="@Model.UserName">
@@ -226,6 +227,7 @@
                         'theme': 'black',
                         'size': 'xsm'
                     });
+                    $('#taskName').val(taskArray[0]);
                     $('#projectDirector').val(taskArray[1]);
                 }
             },
