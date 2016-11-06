@@ -189,6 +189,7 @@ namespace BEYON.Web.Areas.App.Controllers
                 ProjectDirector = application.ProjectDirector,
                 DepartmentName = application.DepartmentName,
                 Agent = application.Agent,
+                PaymentType = application.PaymentType,
                 SubmitTime = application.SubmitTime,
                 AuditStatus = application.AuditStatus,
                 AuditOpinion = application.AuditOpinion,
