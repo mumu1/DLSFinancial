@@ -345,7 +345,6 @@
     editor.on('onInitCreate', function () {
         //      editor.disable('Amount');
         var paymentType = $('#paymentType').val();
-        alert(paymentType);
         editor.field('PaymentType').val(paymentType);
 
         return true;
@@ -382,7 +381,7 @@
             if (paymentType == "银行转账" && AccountNumber.val().trim() == "") {
                 AccountNumber.error("请填写银行账号");
             }
-            if (Bank.val() != "工商银行" && BankDetailName.val().trim == "") {
+            if (Bank.val() != "工商银行" && BankDetailName.val().trim == "" || BankDetailName.val() == null) {
                 BankDetailName.error("请填写开户行详细名称");
             }
 
@@ -470,6 +469,30 @@
                     }
                 });
             }
+
+            //银行卡号验证
+            if (paymentType === "银行转账") {
+                var regex = /^(\d{4}[\s\-]?){4,5}\d{3}$/g;
+                var str1 = AccountNumber.val();
+                var arr1 = regex.test(str1);
+                //alert(arr);
+                if (arr1 !== true) {
+                    AccountNumber.error("银行卡号有误，请检查！");
+                }
+            }
+
+            //手机号码验证
+            var Tele = editor.field('Tele');           
+            var regMobile = /^1[34578]\d{9}$/;    //手机验证
+            var regPhone = /^0\d{2,3}-?\d{7,8}$/;///^(\(\d{3,4}\)|\d{3,4}-|\s)?\d{7,14}$/;     //座机验证
+            var str2 = Tele.val();
+            var arr2 = regMobile.test(str2);
+            var arr3 = regPhone.test(str2);
+            //alert(arr);
+            if (arr2 !== true && arr3 !== true) {
+                Tele.error("联系电话有误，请检查！");
+            }
+
 
             // 如果有错误报告，不能提交编辑结果
             if (this.inError()) {
