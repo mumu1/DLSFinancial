@@ -105,6 +105,11 @@ namespace BEYON.Web.Areas.Member.Controllers
             if (!ModelState.IsValid) return Json(new OperationResult(OperationResultType.ParamError, "参数错误，请重新检查输入"));
             userVm.Password = EncryptionHelper.GetMd5Hash("123456");
             var result = _userService.Insert(userVm);
+            //获取插入用户的userID
+            int userID = _userService.GetUserIDByUserName(userVm.UserName);
+            String[] roles = { "2" };    //导入的用户设为普通用户角色
+            //为用户设置角色
+            _userService.UpdateUserRoles(userID, roles);
             result.Message = result.Message ?? result.ResultType.GetDescription();
             return Json(result);
         }
