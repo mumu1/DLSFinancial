@@ -33,7 +33,7 @@ namespace BEYON.Web.Areas.App.Controllers
         private readonly IApplyPrintService _applyPrintService;
         private readonly IAuditOpinionService _auditOpinionService;
         private readonly ITaxPerOrderService _taxPerOrderService;
-        public ApplyFormController(IApplicationFormService applicationFormService,  IPersonalRecordService personalRecordService,
+        public ApplyFormController(IApplicationFormService applicationFormService, IPersonalRecordService personalRecordService,
             IUserService userService, IApplyPrintService applyPrintService, IAuditOpinionService auditOpinionService, ITaxPerOrderService taxPerOrderService)
         {
             this._applicationFormService = applicationFormService;
@@ -76,7 +76,7 @@ namespace BEYON.Web.Areas.App.Controllers
             }
         }
 
-      
+
         // POST: /App/ApplyForm/Create/
         public ActionResult Create()
         {
@@ -88,7 +88,7 @@ namespace BEYON.Web.Areas.App.Controllers
             string userid = ((System.Web.Security.FormsIdentity)(System.Web.HttpContext.Current.User.Identity)).Ticket.UserData;
             var userID = Int32.Parse(userid);
             User user = this._userService.Users.FirstOrDefault(t => t.Id == userID);
-            
+
             var model = new ApplicationFormVM()
             {
                 SerialNumber = serialNumber,
@@ -115,7 +115,7 @@ namespace BEYON.Web.Areas.App.Controllers
         public ActionResult Edit(String SerialNumber)
         {
             var application = _applicationFormService.ApplicationForms.FirstOrDefault(c => c.SerialNumber == SerialNumber);
-            if (application == null) 
+            if (application == null)
                 return PartialView("Create", new ApplicationFormVM());
             var model = new ApplicationFormVM()
             {
@@ -124,6 +124,7 @@ namespace BEYON.Web.Areas.App.Controllers
                 TaskName = application.TaskName,
                 ProjectDirector = application.ProjectDirector,
                 DepartmentName = application.DepartmentName,
+                PaymentType = application .PaymentType,
                 Agent = application.Agent,
                 SubmitTime = application.SubmitTime,
                 AuditStatus = application.AuditStatus,
@@ -163,7 +164,7 @@ namespace BEYON.Web.Areas.App.Controllers
             foreach (var data in datas)
             {
                 serialNumberList.Add(data.SerialNumber);
-                var result = _applicationFormService.Delete(data);          
+                var result = _applicationFormService.Delete(data);
                 if (result.ResultType != OperationResultType.Success)
                 {
                     return Json(new { error = result.ResultType.GetDescription(), total = datas.Length, data = datas });
@@ -189,6 +190,7 @@ namespace BEYON.Web.Areas.App.Controllers
                 ProjectDirector = application.ProjectDirector,
                 DepartmentName = application.DepartmentName,
                 Agent = application.Agent,
+                PaymentType = application.PaymentType,
                 SubmitTime = application.SubmitTime,
                 AuditStatus = application.AuditStatus,
                 AuditOpinion = application.AuditOpinion,
@@ -205,33 +207,33 @@ namespace BEYON.Web.Areas.App.Controllers
         public ActionResult Save(ApplicationFormVM formVM)
         {
             ApplicationForm form = _applicationFormService.ApplicationForms.FirstOrDefault(t => t.SerialNumber == formVM.SerialNumber);
-           
+
             if (form == null)
             {
-                formVM.SubmitTime = DateTime.Now;              
+                formVM.SubmitTime = DateTime.Now;
                 _applicationFormService.Insert(formVM);
             }
             else
             {
                 form.UpdateDate = DateTime.Now;
-                
+
                 _applicationFormService.Update(formVM);
             }
             return Json(new { }, JsonRequestBehavior.AllowGet);
         }
 
-#region Personal操作
+        #region Personal操作
 
         // GET: /App/ApplyForm/GetPersonalData/
         public ActionResult GetPersonalData(String serialNumber)
         {
-            var result = this._personalRecordService.PersonalRecords.Where(t=>t.SerialNumber == serialNumber).ToList();
+            var result = this._personalRecordService.PersonalRecords.Where(t => t.SerialNumber == serialNumber).ToList();
             return Json(new { total = result.Count, data = result }, JsonRequestBehavior.AllowGet);
         }
 
         List<PersonalRecord> GetPersonalDatas(String serialNumber)
         {
-            return this._personalRecordService.PersonalRecords.Where(t => t.SerialNumber == serialNumber).ToList();        
+            return this._personalRecordService.PersonalRecords.Where(t => t.SerialNumber == serialNumber).ToList();
         }
 
         // POST: /App/ApplyForm/CreatePersonal/
@@ -304,16 +306,18 @@ namespace BEYON.Web.Areas.App.Controllers
         [HttpPost]
         public ActionResult InsertOrUpdatePersonal(PersonalRecordVM[] datas)
         {
-            _personalRecordService.Delete(new List<String>() { datas[0].SerialNumber });
-
-            foreach (var data in datas)
+            if (datas != null)
             {
-                _personalRecordService.Insert(data);
-            }
+                _personalRecordService.Delete(new List<String>() { datas[0].SerialNumber });
 
+                foreach (var data in datas)
+                {
+                    _personalRecordService.Insert(data);
+                }
+            }
             return Json(new { }, JsonRequestBehavior.AllowGet);
         }
-   
+
 
         // POST: /App/ApplyForm/ImportPersonal/
         [HttpPost]
@@ -352,13 +356,13 @@ namespace BEYON.Web.Areas.App.Controllers
             return Json(new { erro = "上传数据失败！" });
         }
 
-#endregion
+        #endregion
 
-#region 业务流程
+        #region 业务流程
         [HttpPost]
         public ActionResult ApplySubmit(String[] serialNumbers)
         {
-            foreach(var serialNumber in serialNumbers)
+            foreach (var serialNumber in serialNumbers)
             {
                 ApplicationForm form = _applicationFormService.ApplicationForms.FirstOrDefault(t => t.SerialNumber == serialNumber);
                 if (form != null)
@@ -369,7 +373,7 @@ namespace BEYON.Web.Areas.App.Controllers
                     _applicationFormService.Update(form);
                 }
             }
-            
+
             return Json(new { }, JsonRequestBehavior.AllowGet);
         }
 
@@ -411,19 +415,20 @@ namespace BEYON.Web.Areas.App.Controllers
             foreach (var serialNumber in serialNumbers)
             {
                 ApplicationForm form = _applicationFormService.ApplicationForms.FirstOrDefault(t => t.SerialNumber == serialNumber);
-                if(form != null)
+                if (form != null)
                 {
                     form.AuditStatus = formVM.AuditStatus;
                     if (!string.IsNullOrEmpty(formVM.AuditOpinion))
                     {
                         form.AuditOpinion = formVM.AuditOpinion;
                         form.AuditTime = DateTime.Now;
-                    }                 
+                    }
                     //若审核通过，开始算税，单笔税保存在TaxPerOrder表
-                    if (formVM.AuditStatus.Equals("审核通过")) {                      
-                        List<PersonalRecord> records = GetPersonalDatas(serialNumber);                       
-                        TaxPerOrder taxPerOrder=null;
-                        if (records != null )
+                    if (formVM.AuditStatus.Equals("审核通过"))
+                    {
+                        List<PersonalRecord> records = GetPersonalDatas(serialNumber);
+                        TaxPerOrder taxPerOrder = null;
+                        if (records != null)
                         {
                             for (int i = 0; i < records.Count; i++)
                             {
@@ -443,12 +448,13 @@ namespace BEYON.Web.Areas.App.Controllers
                                 taxPerOrder.BankDetailName = records[i].BankDetailName;
                                 taxPerOrder.AccountName = records[i].AccountName;
                                 taxPerOrder.AccountNumber = records[i].AccountNumber;
-                                taxPerOrder.PaymentType = records[i].PaymentType;
+                                taxPerOrder.PaymentType = form.PaymentType;
                                 _taxPerOrderService.Insert(taxPerOrder);
                             }
                         }
                     }
-                    else if (formVM.AuditStatus.Equals("已退回")) {
+                    else if (formVM.AuditStatus.Equals("已退回"))
+                    {
                         //删除TaxPerOrder表中审核通过时的记录（主要是保证多次审核的情况，如第一次审核通过，发现问题，重新审核为退回）
                         _taxPerOrderService.DeleteBySerialNumber(serialNumber);
                     }
@@ -469,22 +475,22 @@ namespace BEYON.Web.Areas.App.Controllers
             {
                 ApplicationForm form = _applicationFormService.ApplicationForms.FirstOrDefault(t => t.SerialNumber == serialNumber);
                 if (form != null)
-                {                              
-                        //再次检查现金发放次数是否已满三次                       
-                        List<PersonalRecord> records = GetPersonalDatas(serialNumber);
-                        if (records != null)
-                            for (int k = 0; k < records.Count; k++)
+                {
+                    //再次检查现金发放次数是否已满三次                       
+                    List<PersonalRecord> records = GetPersonalDatas(serialNumber);
+                    if (records != null)
+                        for (int k = 0; k < records.Count; k++)
+                        {
+                            if (records[k].PaymentType.Equals("现金支付"))
                             {
-                                if (records[k].PaymentType.Equals("现金支付"))
+                                String str = GetCashCount(records[k].CertificateID);
+                                if (!str.Equals(""))
                                 {
-                                    String str = GetCashCount(records[k].CertificateID);
-                                    if (!str.Equals(""))
-                                    {
-                                        notQualify.Add(records[k].Name);                                    
-                                    }
+                                    notQualify.Add(records[k].Name);
                                 }
+                            }
 
-                            }                                                              
+                        }
                 }
             }
             return Json(notQualify, JsonRequestBehavior.AllowGet);
@@ -495,7 +501,8 @@ namespace BEYON.Web.Areas.App.Controllers
         {
             String feedback = "";
             int count = _taxPerOrderService.GetCashCount(certificateID);
-            if (count >= 3) {
+            if (count >= 3)
+            {
                 feedback = "该人员本月已发放3次现金，若需再次发放，需将支付方式改为银行转账方式";
             }
             return feedback;
@@ -506,9 +513,9 @@ namespace BEYON.Web.Areas.App.Controllers
         public ActionResult ExportApplyPersons(String SerialNumber)
         {
             string fullPath = Server.MapPath("/Exports/");
-             String fileName = this._applyPrintService.ApplyExcel(fullPath, SerialNumber);
-             return Json(fileName);
-             //return Json(new { filename = fileName }, JsonRequestBehavior.AllowGet);
+            String fileName = this._applyPrintService.ApplyExcel(fullPath, SerialNumber);
+            return Json(fileName);
+            //return Json(new { filename = fileName }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -556,10 +563,10 @@ namespace BEYON.Web.Areas.App.Controllers
         public ActionResult DeleteFile(string fileName)
         {
             if (String.IsNullOrEmpty(fileName))
-                return Json(new{});
+                return Json(new { });
             var filepath = System.IO.Path.Combine(Server.MapPath("/Exports/"), fileName);
             System.IO.FileInfo file = new System.IO.FileInfo(filepath);
-            if(file.Exists)
+            if (file.Exists)
             {
                 if (file.Attributes.ToString().IndexOf("ReadOnly") != -1)
                 {
@@ -570,7 +577,7 @@ namespace BEYON.Web.Areas.App.Controllers
 
             return Json(new { });
         }
-        
-#endregion
+
+        #endregion
     }
 }
