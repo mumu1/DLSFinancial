@@ -4,33 +4,10 @@
 }
 
 <div class="content-wrapper">
-    <!-- Main content -->
-    <section class="content" id="permissionSection">
-        <div class="panel-body" style="padding-bottom:0px;">
-            <div class="panel panel-default">
-                <div class="panel-heading">查询条件</div>
-                <div class="panel-body">
-                    <form id="formSearch" class="form-horizontal">
-                        <div class="form-group" style="margin-top: 15px">
-                            <label class="control-label  col-sm-1" for="txt_search_permissionname">权限名称</label>
-                            <div class=" col-sm-3">
-                                <input type="text" class="form-control" id="txt_search_permissionname">
-                            </div>
-                            <label class="control-label col-sm-1">是否激活</label>
-                            <div class="col-sm-4" style="text-align:right;">
-                                <button type="button" style="margin-right:100px" id="btn_query" class="btn btn-primary">查询</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-        </div>
-
-        @Html.Partial("_ModalForm")
-    </section><!-- /.content -->
-</div><!-- /.content-wrapper -->
-@*@section scripts{*@
+    <div class="widget-body">
+        <table id="datatable_perperson_detail" class="table table-striped table-bordered table-hover" width="100%"></table>
+    </div>
+</div>
 
 <script src="@Url.Content("~/Scripts/jquery.validate.min.js")"></script>
 <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")"></script>
@@ -42,7 +19,7 @@
 
     // pagefunction
     var pagefunction = function () {
-
+        initTable();
     };
     // end pagefunction
 
@@ -55,6 +32,141 @@
     // end destroy
 
     pagefunction();
+
+    function initTable() {
+        var editor = new $.fn.dataTable.Editor({
+            "ajaxUrl": {
+                "remove": "@Url.Action("Delete")"
+            },
+            "table": "#datatable_perperson_detail",
+            fields: [
+                { name: "SerialNumber", label: "申请单流水号:", type: "hidden" },
+                { name: "AuditStatus", label: "审核状态:", type: "hidden" }
+            ]
+        });
+
+        editor.on('submitSuccess', function () {
+
+        });
+
+
+
+        var buttons = [
+            {
+                text: "刷新",
+                action: function (e, dt, node, config) {
+                    var rowData = dt.rows({ selected: true }).data();
+                    var actionUrl = "@Url.Action("Submit")";
+                    var serialNumbers = [];
+                    $.each($(rowData), function (key, value) {
+                        serialNumbers.push(value["SerialNumber"]);
+                    });
+                    applyRevoke(dt, serialNumbers);
+                },
+                enabled: false
+            },
+            {
+                text: "输出打印", action: function (e, dt, node, config) {
+                    var rowData = dt.rows({ selected: true }).data();
+                    $.each($(rowData), function (key, value) {
+                        $.ajax({
+                            type: "POST",
+                            url: "@Url.Action("ExportApplyPersons")",
+                            dataType: "json",
+                            contentType: "application/json; charset=utf-8",
+                            data: JSON.stringify({ SerialNumber: value["SerialNumber"] }),
+                            success: function (result) {
+                                fileDownload('../App/ApplyForm/DownloadFile', result);
+                                toastr.success('数据导出完成');
+                                @*$.ajax({
+                            type: "POST",
+                            url: "@Url.Action("DeleteFile")",
+                            dataType: "json",
+                        contentType: "application/json; charset=utf-8",
+                        data: JSON.stringify({ fileName: result }),
+                        success: function (result) {
+
+                        },
+                        error: function () {
+                            toastr.error('无法删除导出文件！');
+                        }
+                    });*@
+                            },
+                            error: function () {
+                                toastr.error('网络错误，请重新提交！');
+                            }
+                        });
+                    });
+                },
+                enabled: false
+            },
+            {
+                text: "列显示",
+                extend: 'colvis'
+            }
+        ];
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("PerPersonDetailColumns")",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (columns) {
+                var table = $('#datatable_perperson_detail').dataTable({
+                    dom: 'Bfrtip',
+                    colReorder: true,
+                    ajax: '@Url.Action("PerPersonDetailDatas")',
+                    searching: true,
+                    ordering: true,
+                    select: true,
+                    info: true,
+                    paginate: false, //是否显示（应用）分页器
+                    sort: true, //是否启动各个字段的排序功能
+                    stateSave: false,
+                    stateDuration: 60 * 60 * 12,
+                    autoWidth: true,
+                    bProcessing: true,
+                    paging: false,
+                    order: [[10, "desc"]],
+                    buttons: buttons,
+                    columns: columns,
+                    oLanguage: {
+                        "sLengthMenu": "每页显示 _MENU_ 条记录",
+                        "sZeroRecords": "抱歉， 没有找到",
+                        "sInfo": "显示 _START_ 到 _END_ 条记录，总共 _TOTAL_ 条记录",
+                        "sInfoEmpty": "没有数据",
+                        "sInfoFiltered": "(从 _MAX_ 条数据中检索)",
+                        "sZeroRecords": "没有检索到数据",
+                        "sSearch": "搜索名称:",
+                        "sSelected": "选中 _TOTAL_ 条记录",
+                        "oPaginate": {
+                            "sFirst": "首页",
+                            "sPrevious": "前一页",
+                            "sNext": "后一页",
+                            "sLast": "尾页"
+                        }
+                    }
+                });
+
+                $('#datatable_perperson_detail').DataTable().on('select', function (e, dt, type, indexes) {
+                    var selectedTable = $('#datatable_perperson_detail').DataTable();
+                    var selectedRows = selectedTable.rows({ selected: true });
+                    var selectedCount = selectedRows.count();
+                    //if (selectedCount < 1) {
+                    //    selectedTable.button(1).enable(false);      //修改
+                    //    selectedTable.button(2).enable(false);      //删除
+                    //    selectedTable.button(3).enable(false);      //提交
+                    //    selectedTable.button(4).enable(false);      //撤回
+                    //    selectedTable.button(5).enable(false);      //输出打印
+                    //    selectedTable.button(6).enable(false);      //查看
+                    //}
+                });
+            },
+            error: function (errors) {
+                
+            }
+        });
+    }
 </script>
 @*}*@
 

@@ -9,6 +9,7 @@ using BEYON.Component.Data.Enum;
 using BEYON.Component.Tools;
 using BEYON.Component.Tools.helpers;
 using BEYON.CoreBLL.Service.Member.Interface;
+using BEYON.CoreBLL.Service.App.Interface;
 using BEYON.Domain.Model.Member;
 using BEYON.ViewModel;
 using BEYON.ViewModel.Member;
@@ -21,12 +22,12 @@ namespace BEYON.Web.Areas.App.Controllers
     {
         private readonly IUserService _userService;
         private readonly IRoleService _roleService;
-        private readonly IUserGroupService _userGroupService;
-        public StatisticsController(IUserService userService, IRoleService roleService, IUserGroupService userGroupService)
+        private readonly IStatisticsService _statisticsServer;
+        public StatisticsController(IUserService userService, IRoleService roleService, IStatisticsService statisticsServer)
         {
             this._userService = userService;
             this._roleService = roleService;
-            this._userGroupService = userGroupService;
+            this._statisticsServer = statisticsServer;
         }
 
         //
@@ -44,6 +45,27 @@ namespace BEYON.Web.Areas.App.Controllers
         {
             return PartialView("Monthly");
         }
-        
+
+        #region 按人明细统计业务流程
+        //
+        // GET: /App/Statistics/PerPersonDetailColumns
+        public ActionResult PerPersonDetailColumns()
+        {
+            return Json(this._statisticsServer.GetPerPersonDetailColumns());
+        }
+
+        //
+        // GET: /App/Statistics/PerPersonDetailDatas
+        public ActionResult PerPersonDetailDatas()
+        {
+            var datas = this._statisticsServer.GetPerPersonDetail();
+
+            return Json(new { total = datas.Count, data = datas }, JsonRequestBehavior.AllowGet);
+        }
+        #endregion
+
+        #region 按月明细统计业务流程
+
+        #endregion
     }
 }

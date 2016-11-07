@@ -45,9 +45,19 @@
     <Reference Include="log4net">
       <HintPath>..\Support\LinqToExcelLib\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Npgsql">
+      <HintPath>..\packages\Npgsql.3.1.2\lib\net451\Npgsql.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -58,9 +68,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\App\IDepartmentRepository.generated.cs" />
     <Compile Include="Repositories\App\Impl\DepartmentRepository.generated.cs" />
+    <Compile Include="Repositories\App\Impl\StatisticsRepository.cs" />
     <Compile Include="Repositories\App\Impl\TaxPerOrderRepository.generated.cs" />
     <Compile Include="Repositories\App\Impl\TaskManageRepository.generated.cs" />
     <Compile Include="Repositories\App\Impl\TaxPerOrderHistoryRepository.generated.cs" />
+    <Compile Include="Repositories\App\IStatisticsRepository.cs" />
     <Compile Include="Repositories\App\ITaxPerOrderRepository.generated.cs" />
     <Compile Include="Repositories\App\ITaskManageRepository.generated.cs" />
     <Compile Include="Repositories\App\Impl\PersonalRecordRepository.generated.cs" />

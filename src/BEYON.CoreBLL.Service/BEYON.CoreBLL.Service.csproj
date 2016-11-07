@@ -76,9 +76,11 @@
   <ItemGroup>
     <Compile Include="App\DepartmentService.cs" />
     <Compile Include="App\Interface\IDepartmentService.cs" />
+    <Compile Include="App\Interface\IStatisticsService.cs" />
     <Compile Include="App\Interface\ITaxPerOrderHistoryService.cs" />
     <Compile Include="App\Interface\ITaxPerOrderService.cs" />
     <Compile Include="App\Interface\ITaskManageService.cs" />
+    <Compile Include="App\StatisticsService.cs" />
     <Compile Include="App\TaxPerOrderHistoryService.cs" />
     <Compile Include="App\TaxPerOrderService.cs" />
     <Compile Include="App\TaskManageService.cs" />
