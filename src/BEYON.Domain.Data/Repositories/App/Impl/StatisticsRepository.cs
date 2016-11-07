@@ -63,12 +63,13 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
             sb.Append("b.\"InitialTaxPayable\" as C9,");
             sb.Append("a.\"AmountX\" as C11,");
             sb.Append("a.\"Tax\" as C12,");
-            sb.Append("a.\"AmountY\" as C13 ");
+            sb.Append("a.\"AmountY\" as C13,");
+            sb.Append("a.\"UpdateDate\" updateDate ");
             //2.添加表
             sb.Append(" FROM dbo.\"TaxPerOrders\" a,");
             sb.Append(" dbo.\"TaxBaseByMonths\" b ");
             //3.条件
-            sb.Append(" WHERE a.\"CertificateID\" = b.\"CertificateID\" ");
+            sb.Append(" WHERE a.\"CertificateID\" = b.\"CertificateID\" ORDER BY updateDate ASC");
 
             //string sql = "SELECT count(a.\"CertificateID\") FROM dbo.\"TaxBaseByMonths\" a, dbo.\"TaxPerOrders\" b WHERE a.\"CertificateID\" = b.\"CertificateID\" GROUP BY a.\"CertificateID\" ORDER BY DESC";
             var connectString = System.Configuration.ConfigurationManager.ConnectionStrings["BeyonDBGuMu"];
