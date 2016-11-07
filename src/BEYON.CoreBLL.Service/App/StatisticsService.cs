@@ -52,5 +52,36 @@ namespace BEYON.CoreBLL.Service.App
             
         #endregion
 
+        #region 按劳务统计明细表
+        public Column[] GetLaborStatisticsColumns()
+        {
+            List<Column> columns = new List<Column>();
+            columns.Add(new Column("C0", "序号"));
+            columns.Add(new Column("C1", "期间"));
+            columns.Add(new Column("C2", "姓名"));
+            columns.Add(new Column("C3", "证件类型"));
+            columns.Add(new Column("C4", "证件号码"));
+
+            columns.Add(new Column("C5", "收入额"));
+            columns.Add(new Column("C6", "免税金额"));
+            columns.Add(new Column("C7", "基本扣除"));
+            columns.Add(new Column("C8", "已扣缴税额"));
+            columns.Add(new Column("C9", "应纳税额"));
+            columns.Add(new Column("C10", "当月费用发放次数"));
+            int count = _statisticsRepository.GetMaxCountLaborStatistics();
+            for (var i = 0; i < count; i++)
+            {
+                columns.Add(new Column(String.Format("C{0}", columns.Count), String.Format("第{0}次发放税前", i + 1)));
+                columns.Add(new Column(String.Format("C{0}", columns.Count), String.Format("第{0}次发放税后", i + 1)));
+                columns.Add(new Column(String.Format("C{0}", columns.Count), String.Format("第{0}次发放税额", i + 1)));
+            }
+            return columns.ToArray();
+        }
+
+        public List<Object> GetLaborStatisticsDetail()
+        {
+            return this._statisticsRepository.GetLaborStatisticsDetail();
+        }
+        #endregion
     }
 }

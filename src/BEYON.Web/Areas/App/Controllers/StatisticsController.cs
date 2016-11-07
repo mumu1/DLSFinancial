@@ -65,7 +65,21 @@ namespace BEYON.Web.Areas.App.Controllers
         #endregion
 
         #region 按月明细统计业务流程
+        //
+        // GET: /App/Statistics/LaborStatisticsColumns
+        public ActionResult LaborStatisticsColumns()
+        {
+            return Json(this._statisticsServer.GetLaborStatisticsColumns());
+        }
 
+        //
+        // GET: /App/Statistics/LaborStatisticsDatas
+        public ActionResult LaborStatisticsDatas()
+        {
+            var datas = this._statisticsServer.GetLaborStatisticsDetail();
+
+            return Json(new { total = datas.Count, data = datas }, JsonRequestBehavior.AllowGet);
+        }
         #endregion
     }
 }

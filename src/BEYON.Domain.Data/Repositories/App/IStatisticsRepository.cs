@@ -11,5 +11,9 @@ namespace BEYON.Domain.Data.Repositories.App
          int GetMaxCountPerMonthPerPerson();
 
          List<Object> GetPerMonthPerPerson();
+
+         int GetMaxCountLaborStatistics();
+
+         List<Object> GetLaborStatisticsDetail();
     }
 }
