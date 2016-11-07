@@ -503,7 +503,7 @@ namespace BEYON.Web.Areas.App.Controllers
             int count = _taxPerOrderService.GetCashCount(certificateID);
             if (count >= 3)
             {
-                feedback = "该人员本月已发放3次现金，若需再次发放，需将支付方式改为银行转账方式";
+                feedback = "该人员本月已发放3次现金，若需再次发放，需在支付方式为【银行转账】的申请单中填报！";
             }
             return feedback;
         }
