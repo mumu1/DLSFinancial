@@ -439,6 +439,7 @@ namespace BEYON.Web.Areas.App.Controllers
                                 taxPerOrder.RefundType = form.RefundType;
                                 taxPerOrder.ProjectDirector = form.ProjectDirector;
                                 taxPerOrder.Agent = form.Agent;
+                                taxPerOrder.Name = records[i].Name;
                                 taxPerOrder.PersonType = records[i].PersonType;
                                 taxPerOrder.CertificateType = records[i].CertificateType;
                                 taxPerOrder.CertificateID = records[i].CertificateID;

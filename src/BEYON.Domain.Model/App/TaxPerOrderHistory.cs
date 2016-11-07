@@ -44,6 +44,10 @@ namespace BEYON.Domain.Model.App
         [StringLength(100)]
         public String RefundType { get; set; }
 
+        [Display(Name = "姓名")]
+        [StringLength(36)]
+        public string Name { get; set; }
+
         [Display(Name = "课题负责人")]
         [StringLength(36)]
         public string ProjectDirector { get; set; }

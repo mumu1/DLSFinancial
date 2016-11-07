@@ -144,6 +144,7 @@ namespace BEYON.Web.Areas.BasicDataManagement.Controllers
                 history.AccountName = model.AccountName;
                 history.AccountNumber = model.AccountNumber;
                 history.Agent = model.Agent;
+                history.Name = model.Name;
                 history.Amount = model.Amount;
                 history.AmountX = model.AmountX;
                 history.AmountY = model.AmountY;
