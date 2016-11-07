@@ -45,10 +45,9 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
             }                            
         }
 
-        public List<Object> GetPerMonthPerPerson()
+        private void GetMonthWithinPerOrder(ref Dictionary<String, JObject> objects, int addColumns)
         {
-            Dictionary<String, JObject> objects = new Dictionary<String, JObject>();
-
+            //1.获取工资表和劳务都有钱的
             StringBuilder sb = new StringBuilder();
             sb.Append("SELECT ");
             //1.添加列名
@@ -66,10 +65,10 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
             sb.Append("a.\"AmountY\" as C13,");
             sb.Append("a.\"UpdateDate\" updateDate ");
             //2.添加表
-            sb.Append(" FROM dbo.\"TaxPerOrders\" a,");
-            sb.Append(" dbo.\"TaxBaseByMonths\" b ");
+            sb.Append(" FROM dbo.\"TaxBaseByMonths\" b ");
+            sb.Append(" LEFT OUTER JOIN  dbo.\"TaxPerOrders\" a ");
             //3.条件
-            sb.Append(" WHERE a.\"CertificateID\" = b.\"CertificateID\" ORDER BY updateDate ASC");
+            sb.Append(" ON a.\"CertificateID\" = b.\"CertificateID\" ORDER BY updateDate ASC");
 
             //string sql = "SELECT count(a.\"CertificateID\") FROM dbo.\"TaxBaseByMonths\" a, dbo.\"TaxPerOrders\" b WHERE a.\"CertificateID\" = b.\"CertificateID\" GROUP BY a.\"CertificateID\" ORDER BY DESC";
             var connectString = System.Configuration.ConfigurationManager.ConnectionStrings["BeyonDBGuMu"];
@@ -79,26 +78,22 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                 using (var command = conntion.CreateCommand())
                 {
                     command.CommandText = sb.ToString();
-                    using(NpgsqlDataReader reader = command.ExecuteReader())
+                    using (NpgsqlDataReader reader = command.ExecuteReader())
                     {
-                        int nPos = 0;
-                        while(reader.Read())
+                        while (reader.Read())
                         {
                             var certificateID = reader["C4"].ToString();
                             var initialEaring = reader["C5"] != null ? Convert.ToDouble(reader["C5"]) : 0;
                             var initialTax = reader["C8"] != null ? Convert.ToDouble(reader["C8"]) : 0;
                             var initialTaxPayable = reader["C9"] != null ? Convert.ToDouble(reader["C9"]) : 0;
-                            var amountX = reader["C11"] != null ? Convert.ToDouble(reader["C11"]) : 0;
-                            var tax = reader["C12"] != null ? Convert.ToDouble(reader["C12"]) : 0;
-                            var amountY = reader["C13"] != null ? Convert.ToDouble(reader["C13"]) : 0;
+                            var amountX = String.IsNullOrEmpty(reader["C11"].ToString()) ? 0 : Convert.ToDouble(reader["C11"]);
+                            var tax = String.IsNullOrEmpty(reader["C12"].ToString()) ? 0 : Convert.ToDouble(reader["C12"]);
+                            var amountY = String.IsNullOrEmpty(reader["C13"].ToString()) ? 0: Convert.ToDouble(reader["C13"]);
 
                             //返回前端显示结果数据
                             if (!objects.ContainsKey(certificateID))
                             {
-                                ++nPos;
-
                                 JObject result = new JObject();
-                                result["C0"] = nPos;
                                 result["C1"] = reader["C1"].ToString();
                                 result["C2"] = reader["C2"].ToString();
                                 result["C3"] = reader["C3"].ToString();
@@ -108,37 +103,55 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                                 result["C7"] = reader["C7"].ToString();
                                 result["C8"] = initialTax + tax;
                                 result["C9"] = initialTaxPayable + amountY;
-                                result["C10"] = 1;
+                                if (String.IsNullOrEmpty(reader["C11"].ToString()))
+                                    result["C10"] = 0;
+                                else
+                                    result["C10"] = 1;
                                 result["C11"] = amountY;
                                 result["C12"] = amountX;
                                 result["C13"] = tax;
-
+                                for (var i = 1; i < addColumns; i++ )
+                                {
+                                    result[String.Format("C{0}", 11 + i*3)] = "";
+                                    result[String.Format("C{0}", 12 + i * 3)] = "";
+                                    result[String.Format("C{0}", 13 + i * 3)] = "";
+                                }
                                 objects.Add(certificateID, result);
                             }
                             else
                             {
                                 JObject jsonObject = objects[certificateID] as JObject;
-                                var count = jsonObject.Count;
-                                jsonObject["C5"] = Convert.ToDouble(jsonObject["C5"]) + amountX;
-                                jsonObject["C8"] = Convert.ToDouble(jsonObject["C8"]) + tax;
-                                jsonObject["C9"] = Convert.ToDouble(jsonObject["C9"]) + amountY;
-                                jsonObject["C10"] = Convert.ToDouble(jsonObject["C10"]) + 1;
+                                jsonObject["C5"] = jsonObject["C5"].ToObject<double>() + amountX;
+                                jsonObject["C8"] = jsonObject["C8"].ToObject<double>() + tax;
+                                jsonObject["C9"] = jsonObject["C9"].ToObject<double>() + amountY;
+                                int repetTimes = jsonObject["C10"].ToObject<int>() + 1;
+                                jsonObject["C10"] = repetTimes;
 
-                                jsonObject["C" + count] = amountY;
-                                jsonObject["C" + count + 1] = amountY;
-                                jsonObject["C" + count + 2] = amountY;
+                                jsonObject[String.Format("C{0}",11 + (repetTimes-1) * 3)] = amountY;
+                                jsonObject[String.Format("C{0}",12 + (repetTimes - 1) * 3)] = amountX;
+                                jsonObject[String.Format("C{0}",13 + (repetTimes - 1) * 3)] = tax;
 
                                 objects[certificateID] = jsonObject;
-                            } 
+                            }
                         }
                     }
                 }
             }
+        }
+
+        public List<Object> GetPerMonthPerPerson()
+        {
+            Dictionary<String, JObject> objects = new Dictionary<String, JObject>();
+
+            int addColumns = GetMaxCountPerMonthPerPerson();
+            GetMonthWithinPerOrder(ref objects, addColumns);
 
             var resultTemp = new List<Object>();
             var serializer = new JavaScriptSerializer();
-            foreach(var item in objects.Values)
+            int nPos = 1;
+            foreach (var item in objects.Values)
             {
+                item["C0"] = nPos++;
                 resultTemp.Add(serializer.Deserialize(Newtonsoft.Json.JsonConvert.SerializeObject(item), typeof(object)));
             }
 
