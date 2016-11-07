@@ -53,53 +53,16 @@
 
         var buttons = [
             {
-                text: "刷新",
-                action: function (e, dt, node, config) {
-                    var rowData = dt.rows({ selected: true }).data();
-                    var actionUrl = "@Url.Action("Submit")";
-                    var serialNumbers = [];
-                    $.each($(rowData), function (key, value) {
-                        serialNumbers.push(value["SerialNumber"]);
-                    });
-                    applyRevoke(dt, serialNumbers);
-                },
-                enabled: false
-            },
-            {
-                text: "输出打印", action: function (e, dt, node, config) {
-                    var rowData = dt.rows({ selected: true }).data();
-                    $.each($(rowData), function (key, value) {
-                        $.ajax({
-                            type: "POST",
-                            url: "@Url.Action("ExportApplyPersons")",
-                            dataType: "json",
-                            contentType: "application/json; charset=utf-8",
-                            data: JSON.stringify({ SerialNumber: value["SerialNumber"] }),
-                            success: function (result) {
-                                fileDownload('../App/ApplyForm/DownloadFile', result);
-                                toastr.success('数据导出完成');
-                                @*$.ajax({
-                            type: "POST",
-                            url: "@Url.Action("DeleteFile")",
-                            dataType: "json",
-                        contentType: "application/json; charset=utf-8",
-                        data: JSON.stringify({ fileName: result }),
-                        success: function (result) {
-
-                        },
-                        error: function () {
-                            toastr.error('无法删除导出文件！');
-                        }
-                    });*@
-                            },
-                            error: function () {
-                                toastr.error('网络错误，请重新提交！');
-                            }
-                        });
-                    });
-                },
-                enabled: false
-            },
+                    extend: 'collection',
+                    text: '导出',
+                    buttons: [
+                        { text: "拷贝", extend: 'copy' },
+                        { text: "EXCEL表格", extend: 'excel' },
+                        { text: "CSV表格", extend: 'csv' },
+                        { text: "PDF文档", extend: 'pdf' },
+                        { text: "打印", extend: 'print' }
+                    ]
+             },
             {
                 text: "列显示",
                 extend: 'colvis'
@@ -163,7 +126,7 @@
                 });
             },
             error: function (errors) {
-                
+
             }
         });
     }
