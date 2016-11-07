@@ -104,8 +104,22 @@
                                 <label class="label">支付类型</label>
                                 <label class="select">
                                     <select id="paymentType" name="PaymentType">
-                                        <option value="银行转账" selected="">银行转账</option>
-                                        <option value="现金支付">现金支付</option>
+                                        @{ var opt1 = "";
+                                         var opt2 = "";
+                                         if (@Model.PaymentType != null)
+                                         {
+                                             if (@Model.PaymentType.Equals("银行转账"))
+                                             {
+                                                 opt1 = "selected";
+                                             }
+                                             else
+                                             {
+                                                 opt2 = "selected";
+                                             }
+                                         }
+                                        }
+                                        <option value="银行转账" @opt1>银行转账</option>
+                                        <option value="现金支付" @opt2>现金支付</option>
                                     </select> <i></i>
                                 </label>
                             </section>
@@ -132,7 +146,7 @@
                         </section>
                         <input type="text" id="serialNumber" name="SerialNumber" placeholder="流水账号" style="visibility:hidden" value="@Model.SerialNumber">
                         <input type="text" id="taskName" name="TaskName" placeholder="课题名称" style="visibility:hidden" value="@Model.TaskName">
-                         <input type="text" name="SubmitTime" placeholder="提交时间" style="visibility:hidden" value="@Model.SubmitTime">
+                        <input type="text" name="SubmitTime" placeholder="提交时间" style="visibility:hidden" value="@Model.SubmitTime">
                         <input type="text" name="AuditTime" placeholder="审核时间" style="visibility:hidden" value="@Model.AuditTime">
                         <input type="text" name="AuditStatus" placeholder="审核状态" style="visibility:hidden" value="@Model.AuditStatus">
                         <input type="text" name="UserName" placeholder="用户邮箱" style="visibility:hidden" value="@Model.UserName">
@@ -152,7 +166,7 @@
             </div>
             <!-- end widget content -->
         </div>
-       
+
     </div>
     <!-- end widget div -->
     <div id="importDataDialog"></div>
@@ -175,7 +189,9 @@
     registerRefundType();   //从数据库读取报销事由下拉菜单对应数组
     registerDepartment();   //从数据库读取部门下拉菜单对应数组
 
+
     var userName = "@Model.UserName";
+
     //获取用户信息
     $.ajax({
         type: "GET",
@@ -345,8 +361,7 @@
     editor.on('onInitCreate', function () {
         //      editor.disable('Amount');
         var paymentType = $('#paymentType').val();
-        editor.field('PaymentType').val(paymentType);
-
+        editor.field('PaymentType').val(paymentType);       
         return true;
     });
 
@@ -354,8 +369,7 @@
 
     //初始化编辑框显示
     editor.on('onInitEdit', function () {
-        var CertificateType = editor.field('CertificateType');
-
+        var CertificateType = editor.field('CertificateType');            
         //    editor.disable('Amount');
     });
 
@@ -482,7 +496,7 @@
             }
 
             //手机号码验证
-            var Tele = editor.field('Tele');           
+            var Tele = editor.field('Tele');
             var regMobile = /^1[34578]\d{9}$/;    //手机验证
             var regPhone = /^0\d{2,3}-?\d{7,8}$/;///^(\(\d{3,4}\)|\d{3,4}-|\s)?\d{7,14}$/;     //座机验证
             var str2 = Tele.val();
@@ -559,8 +573,9 @@
                     //})
                     //$.session.set("serNum", $('#serialNumber').val());
                     //$.session.set("payType", $('#paymentType').val());
-                   
+
                     if ($('#paymentType').val() === "现金支付") {
+                        ColumnDatas.push({ ColumnName: 'Id', TitleName: '编号' });
                         ColumnDatas.push({ ColumnName: 'Name', TitleName: '姓名' });
                         ColumnDatas.push({ ColumnName: 'CertificateType', TitleName: '证件类型' });
                         ColumnDatas.push({ ColumnName: 'CertificateID', TitleName: '证件号码' });
@@ -570,8 +585,9 @@
                         ColumnDatas.push({ ColumnName: 'Nationality', TitleName: '国籍' });
                         ColumnDatas.push({ ColumnName: 'Title', TitleName: '职称' });
                         ColumnDatas.push({ ColumnName: 'TaxOrNot', TitleName: '是否含税' });
-                        ColumnDatas.push({ ColumnName: 'Amount', TitleName: '金额(元)' });                                       
+                        ColumnDatas.push({ ColumnName: 'Amount', TitleName: '金额(元)' });
                     } else if ($('#paymentType').val() === "银行转账") {
+                        ColumnDatas.push({ ColumnName: 'Id', TitleName: '编号' });
                         ColumnDatas.push({ ColumnName: 'Name', TitleName: '姓名' });
                         ColumnDatas.push({ ColumnName: 'CertificateType', TitleName: '证件类型' });
                         ColumnDatas.push({ ColumnName: 'CertificateID', TitleName: '证件号码' });
@@ -586,7 +602,7 @@
                         ColumnDatas.push({ ColumnName: 'AccountNumber', TitleName: '银行账号' });
                         ColumnDatas.push({ ColumnName: 'BankDetailName', TitleName: '开户行详细名称' });
                     }
-                    
+
                     $.ajax({
                         url: '../App/Import/ImportData',
                         type: 'POST',
@@ -674,6 +690,7 @@
     }
 
     initTable();
+    registerPaymentType();
 
     function closeFrom() {
         if ($("#widget-grid")[0]) {
@@ -781,6 +798,34 @@
                 toastr.error('获取报销事由数据失败！');
             }
         });
+    }
+
+    function registerPaymentType() {
+        var pType = "@Model.PaymentType";
+        if (pType !== null) {
+            if (pType == "现金支付") {
+                editor.field('Bank').hide();
+                editor.field('AccountNumber').hide();
+                editor.field('BankDetailName').hide();
+                $('#datatable_create_form').DataTable().column(11).visible(false);   //开户银行列隐藏
+                $('#datatable_create_form').DataTable().column(12).visible(false);  //银行账号列隐藏
+                $('#datatable_create_form').DataTable().column(13).visible(false);  //开户行详细名称列隐藏
+            } else if (pType == "银行转账") {
+                editor.field('Bank').show();
+                editor.field('AccountNumber').show();
+                editor.field('BankDetailName').show();
+                $('#datatable_create_form').DataTable().column(11).visible(true);
+                $('#datatable_create_form').DataTable().column(12).visible(true);
+                $('#datatable_create_form').DataTable().column(13).visible(true);
+            }
+        } else {
+            editor.field('Bank').show();
+            editor.field('AccountNumber').show();
+            editor.field('BankDetailName').show();
+            $('#datatable_create_form').DataTable().column(11).visible(true);
+            $('#datatable_create_form').DataTable().column(12).visible(true);
+            $('#datatable_create_form').DataTable().column(13).visible(true);
+        }
     }
 
     function registerDepartment() {

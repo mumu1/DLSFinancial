@@ -200,7 +200,7 @@
                     { data: "Bank", title: "开户银行" },
                     { data: "AccountNumber", title: "银行账号" },
                     { data: "BankDetailName", title: "开户行详细名称" },              
-                    { data: "PaymentType", title: "支付类型" },                    
+                    { data: "PaymentType", title: "支付类型", visible: false },
                     { data: "Signature", title: "领取人签字", visible: false }
 
                 ],
@@ -228,13 +228,13 @@
     //根据支付类型，显示与隐藏银行信息
     if (table !== undefined) {
         if ("@Model.PaymentType" == "现金支付") {
-            $('#datatable_create_form').DataTable().column(11).visible(false);   //开户银行列隐藏
-            $('#datatable_create_form').DataTable().column(12).visible(false);  //银行账号列隐藏
-            $('#datatable_create_form').DataTable().column(13).visible(false);  //开户行详细名称列隐藏
+            $('#datatable_create_form').DataTable().column(12).visible(false);   //开户银行列隐藏
+            $('#datatable_create_form').DataTable().column(13).visible(false);  //银行账号列隐藏
+            $('#datatable_create_form').DataTable().column(14).visible(false);  //开户行详细名称列隐藏
         } else if ("@Model.PaymentType" == "银行转账") {          
-            $('#datatable_create_form').DataTable().column(11).visible(true);
             $('#datatable_create_form').DataTable().column(12).visible(true);
             $('#datatable_create_form').DataTable().column(13).visible(true);
+            $('#datatable_create_form').DataTable().column(14).visible(true);
         }
     }
 
