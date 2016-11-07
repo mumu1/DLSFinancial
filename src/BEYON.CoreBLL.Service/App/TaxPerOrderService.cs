@@ -232,6 +232,7 @@ namespace BEYON.CoreBLL.Service.App
                     TaskName = model.TaskName,
                     RefundType = model.RefundType,
                     ProjectDirector = model.ProjectDirector,
+                    Name = model.Name,
                     Agent = model.Agent,
                     PersonType = model.PersonType,
                     CertificateType = model.CertificateType,
@@ -272,6 +273,7 @@ namespace BEYON.CoreBLL.Service.App
                 taxPerOrder.RefundType = model.RefundType;
                 taxPerOrder.ProjectDirector = model.ProjectDirector;
                 taxPerOrder.Agent = model.Agent;
+                taxPerOrder.Name = model.Name;
                 taxPerOrder.PersonType = model.PersonType;
                 taxPerOrder.CertificateType = model.CertificateType;
                 taxPerOrder.CertificateID = model.CertificateID;

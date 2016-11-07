@@ -26,6 +26,10 @@ namespace BEYON.ViewModel.App
         [StringLength(50)]
         public String Period { get; set; }
 
+        [Display(Name = "姓名")]
+        [StringLength(36)]
+        public string Name { get; set; }
+
         [Display(Name = "报销事由")]
         [StringLength(100)]
         public String RefundType { get; set; }

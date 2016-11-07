@@ -18,6 +18,10 @@ namespace BEYON.ViewModel.App
         [StringLength(36)]
         public string ProjectNumber { get; set; }
 
+        [Display(Name = "姓名")]
+        [StringLength(36)]
+        public string Name { get; set; }
+
         [Display(Name = "课题名称")]
         [StringLength(100)]
         public string TaskName { get; set; }

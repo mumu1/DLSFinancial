@@ -36,6 +36,10 @@ namespace BEYON.Domain.Model.App
         [StringLength(100)]
         public string TaskName { get; set; }
 
+        [Display(Name = "姓名")]
+        [StringLength(36)]
+        public string Name { get; set; }
+
         [Display(Name = "报销事由")]
         [StringLength(100)]
         public String RefundType { get; set; }
