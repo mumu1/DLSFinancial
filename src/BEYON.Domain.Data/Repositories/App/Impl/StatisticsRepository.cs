@@ -13,7 +13,9 @@ using System.Text;
 using System.Web.Script.Serialization;
 using Npgsql;
 using Npgsql.Schema;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Converters;
 using BEYON.Component.Data;
 using BEYON.Component.Data.EF;
 using BEYON.Component.Data.EF.Interface;
@@ -22,6 +24,24 @@ using BEYON.Domain.Model.App;
 
 namespace BEYON.Domain.Data.Repositories.App.Impl
 {
+    public class DoubleConverter : JsonConverter
+    {
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            return JToken.Load(reader);
+        }
+
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            writer.WriteValue(String.Format("{0:N2}", value));
+        }
+
+        public override bool CanConvert(Type objectType)
+        {
+            return objectType == typeof(float) || objectType == typeof(double);
+        }
+    }
+
     public partial class StatisticsRepository : EFRepositoryBase<TaxPerOrder, Int32>, IStatisticsRepository
     {
         private readonly log4net.ILog _log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
@@ -70,7 +90,7 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
             foreach (var item in objects.Values)
             {
                 item["C0"] = nPos++;
-                resultTemp.Add(serializer.Deserialize(Newtonsoft.Json.JsonConvert.SerializeObject(item), typeof(object)));
+                resultTemp.Add(serializer.Deserialize(JsonConvert.SerializeObject(item, Formatting.Indented, new DoubleConverter()), typeof(object)));
             }
 
             return resultTemp;
@@ -116,12 +136,12 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                             while (reader.Read())
                             {
                                 var certificateID = reader["C4"].ToString();
-                                var initialEaring = reader["C5"] != null ? Convert.ToDouble(reader["C5"]) : 0;
-                                var initialTax = reader["C8"] != null ? Convert.ToDouble(reader["C8"]) : 0;
-                                var initialTaxPayable = reader["C9"] != null ? Convert.ToDouble(reader["C9"]) : 0;
-                                var amountX = String.IsNullOrEmpty(reader["C11"].ToString()) ? 0 : Convert.ToDouble(reader["C11"]);
-                                var tax = String.IsNullOrEmpty(reader["C12"].ToString()) ? 0 : Convert.ToDouble(reader["C12"]);
-                                var amountY = String.IsNullOrEmpty(reader["C13"].ToString()) ? 0 : Convert.ToDouble(reader["C13"]);
+                                var initialEaring = reader["C5"] != null ? Convert.ToSingle(reader["C5"]) : 0;
+                                var initialTax = reader["C8"] != null ? Convert.ToSingle(reader["C8"]) : 0;
+                                var initialTaxPayable = reader["C9"] != null ? Convert.ToSingle(reader["C9"]) : 0;
+                                var amountX = String.IsNullOrEmpty(reader["C11"].ToString()) ? 0 : Convert.ToSingle(reader["C11"]);
+                                var tax = String.IsNullOrEmpty(reader["C12"].ToString()) ? 0 : Convert.ToSingle(reader["C12"]);
+                                var amountY = String.IsNullOrEmpty(reader["C13"].ToString()) ? 0 : Convert.ToSingle(reader["C13"]);
 
                                 //返回前端显示结果数据
                                 if (!objects.ContainsKey(certificateID))
@@ -154,9 +174,9 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                                 else
                                 {
                                     JObject jsonObject = objects[certificateID] as JObject;
-                                    jsonObject["C5"] = jsonObject["C5"].ToObject<double>() + amountX;
-                                    jsonObject["C8"] = jsonObject["C8"].ToObject<double>() + tax;
-                                    jsonObject["C9"] = jsonObject["C9"].ToObject<double>() + amountY;
+                                    jsonObject["C5"] = jsonObject["C5"].ToObject<float>() + amountX;
+                                    jsonObject["C8"] = jsonObject["C8"].ToObject<float>() + tax;
+                                    jsonObject["C9"] = jsonObject["C9"].ToObject<float>() + amountY;
                                     int repetTimes = jsonObject["C10"].ToObject<int>() + 1;
                                     jsonObject["C10"] = repetTimes;
 
@@ -219,7 +239,7 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
             foreach (var item in objects.Values)
             {
                 item["C0"] = nPos++;
-                resultTemp.Add(serializer.Deserialize(Newtonsoft.Json.JsonConvert.SerializeObject(item), typeof(object)));
+                resultTemp.Add(serializer.Deserialize(Newtonsoft.Json.JsonConvert.SerializeObject(item, Formatting.Indented, new DoubleConverter()), typeof(object)));
             }
 
             return resultTemp;
@@ -281,9 +301,9 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                             while (reader.Read())
                             {
                                 var certificateID = reader["C4"].ToString();
-                                var amountX = String.IsNullOrEmpty(reader["C5"].ToString()) ? 0 : Convert.ToDouble(reader["C5"]);
-                                var tax = String.IsNullOrEmpty(reader["C6"].ToString()) ? 0 : Convert.ToDouble(reader["C6"]);
-                                var amountY = String.IsNullOrEmpty(reader["C7"].ToString()) ? 0 : Convert.ToDouble(reader["C7"]);
+                                var amountX = String.IsNullOrEmpty(reader["C5"].ToString()) ? 0 : Convert.ToSingle(reader["C5"]);
+                                var tax = String.IsNullOrEmpty(reader["C6"].ToString()) ? 0 : Convert.ToSingle(reader["C6"]);
+                                var amountY = String.IsNullOrEmpty(reader["C7"].ToString()) ? 0 : Convert.ToSingle(reader["C7"]);
 
                                 //返回前端显示结果数据
                                 if (!objects.ContainsKey(certificateID))
@@ -316,9 +336,9 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                                 else
                                 {
                                     JObject jsonObject = objects[certificateID] as JObject;
-                                    jsonObject["C5"] = jsonObject["C5"].ToObject<double>() + amountX;
-                                    jsonObject["C8"] = jsonObject["C8"].ToObject<double>() + tax;
-                                    jsonObject["C9"] = jsonObject["C9"].ToObject<double>() + amountY;
+                                    jsonObject["C5"] = jsonObject["C5"].ToObject<float>() + amountX;
+                                    jsonObject["C8"] = jsonObject["C8"].ToObject<float>() + tax;
+                                    jsonObject["C9"] = jsonObject["C9"].ToObject<float>() + amountY;
                                     int repetTimes = jsonObject["C10"].ToObject<int>() + 1;
                                     jsonObject["C10"] = repetTimes;
 
