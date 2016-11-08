@@ -34,16 +34,16 @@
         $("#importData").fileinput({
             uploadUrl: "@Model", // server upload action
             uploadAsync: true,
-            showPreview: false,
+            showPreview: true,
             showUpload: true,
-            maxFileCount: 5,
+            maxFileCount: 1,
             language: 'zh',
             allowedFileExtensions: ['xlsx'],
             removeClass: "btn btn-danger",
             removeLabel: "Delete",
-            removeIcon: "<i class=\"glyphicon glyphicon-trash\"></i> ",   
-            success: function (result) {
-                toastr.success("导入数据成功");
+            removeIcon: "<i class=\"glyphicon glyphicon-trash\"></i> ",
+            done: function (e, data) {
+                alert('完成导入');
             }
         });
     });

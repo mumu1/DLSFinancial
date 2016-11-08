@@ -25,6 +25,19 @@ namespace BEYON.CoreBLL.Service.Excel
             return items;
         }
 
+        public static IQueryable<Row> GetObjects(string filePath, ColumnMap[] maps = null)
+        {
+            var excel = new ExcelQueryFactory(filePath);
+            for (var i = 0; maps != null && i < maps.Length; i++)
+            {
+                var map = maps[i];
+                map.TitleName = map.TitleName != null ? map.TitleName : map.ColumnName;
+                excel.AddMapping(map.ColumnName, map.TitleName);
+            }
+            var items = from c in excel.Worksheet<Row>(0) select c;
+            return items;
+        }
+
         public static void Add(ImportData importData)
         {
             if(!excelColumnMaps.ContainsKey(importData.ActionUrl))
