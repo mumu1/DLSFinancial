@@ -179,6 +179,7 @@ namespace BEYON.CoreBLL.Service.App
             try
             {
                 var columns = importData == null ? null : importData.Columns;
+                var maps = GetColumns(columns, new PersonalRecord());
                 var items = ExcelService.GetObjects(fileName, columns);
                 if (importData != null)
                 {
@@ -187,14 +188,17 @@ namespace BEYON.CoreBLL.Service.App
                     int num = 1;
                     foreach (var item in items)
                     {
-                        List<ImportFeedBack> errors = ValidatePersonalRecord(item, num++);
+                        PersonalRecord record = new PersonalRecord();
+                        record.SerialNumber = serialNumber;
+                        record.PaymentType = paymentType;
+                        List<ImportFeedBack> errors = ValidatePersonalRecord(item,  num++, maps, ref record);
                         if(errors.Count > 0)
                         {
-                            return new OperationResult(OperationResultType.Error, "导入数据失败", errors);
+                            return new OperationResult(OperationResultType.Error, "导入数据失败", ParseToHtml(errors));
                         }
 
-                        //插入数据
-
+                        //插入或更新数据
+                        _PersonalRecordRepository.InsertOrUpdate(record);
                     }
                 }
 
@@ -210,6 +214,28 @@ namespace BEYON.CoreBLL.Service.App
                 List<ImportFeedBack> erros = new List<ImportFeedBack>();
                 return new OperationResult(OperationResultType.Error, "导入数据失败!", ParseToHtml(new List<ImportFeedBack>(){feedBack}));
             }
+        }
+
+        private Dictionary<String, String> GetColumns(ColumnMap[] colums, PersonalRecord record)
+        {
+            Dictionary<String, String> result = new Dictionary<String, String>();
+            if (colums != null)
+            {
+                foreach (var column in colums)
+                {
+                    result.Add(column.ColumnName, column.TitleName);
+                }
+            }
+            else
+            {
+                var properties = record.GetType().GetProperties();
+                foreach (var property in properties)
+                {
+                    result.Add(property.Name, property.Name);
+                }
+            }
+            
+            return result;
         }
 
         private String ParseToHtml(List<ImportFeedBack> feedbacks)
@@ -235,108 +261,127 @@ namespace BEYON.CoreBLL.Service.App
             return sb.ToString();
         }
 
-        private List<ImportFeedBack> ValidatePersonalRecord(LinqToExcel.Row record, int num)
+        private String GetValue(LinqToExcel.Row record, Dictionary<String, String> map, String name)
+        {
+            if(map.ContainsKey(name))
+            {
+                return record[map[name]];
+            }
+            else
+            {
+                return record[name];
+            }
+        }
+
+        private List<ImportFeedBack> ValidatePersonalRecord(LinqToExcel.Row record, int num, Dictionary<String, String> map, ref PersonalRecord personal)
         {
             List<ImportFeedBack> list = new List<ImportFeedBack>();
             ImportFeedBack feedBack = null;
             //非空验证
             feedBack = new ImportFeedBack();
             feedBack.ExceptionType = "空值";
-            if (record["PaymentType"].Equals("银行转账"))
+            if (personal.PaymentType.Equals("银行转账"))
             {
-                if (String.IsNullOrEmpty(record["Name"]))
+                var properties = personal.GetType().GetProperties();
+                foreach (var property in properties)
                 {
-                    feedBack.ExceptionContent.Add("第" + num + "行记录  姓名为空！");
-                }
-                if (String.IsNullOrEmpty(record["CertificateType"]))
-                {
-                    feedBack.ExceptionContent.Add("第" + num + "行记录  证件类型为空！");
-                }
-                if (String.IsNullOrEmpty(record["CertificateID"]))
-                {
-                    feedBack.ExceptionContent.Add("第" + num + "行记录  证件号码为空！");
-                }
-                if (String.IsNullOrEmpty(record["Company"]))
-                {
-                    feedBack.ExceptionContent.Add("第" + num + "行记录  单位为空！");
-                }
-                if (String.IsNullOrEmpty(record["Tele"]))
-                {
-                    feedBack.ExceptionContent.Add("第" + num + "行记录  电话号码为空！");
-                }
-                if (String.IsNullOrEmpty(record["PersonType"]))
-                {
-                    feedBack.ExceptionContent.Add("第" + num + "行记录  人员类型为空！");
-                }
-                if (String.IsNullOrEmpty(record["Nationality"]))
-                {
-                    feedBack.ExceptionContent.Add("第" + num + "行记录  国籍为空！");
-                }
-                if (String.IsNullOrEmpty(record["Title"]))
-                {
-                    feedBack.ExceptionContent.Add("第" + num + "行记录  职称为空！");
-                }
-                if (String.IsNullOrEmpty(record["TaxOrNot"]))
-                {
-                    feedBack.ExceptionContent.Add("第" + num + "行记录  是否含税为空！");
-                }
-                if (String.IsNullOrEmpty(record["Amount"]))
-                {
-                    feedBack.ExceptionContent.Add("第" + num + "行记录  金额为空！");
-                }
-                if (String.IsNullOrEmpty(record["Bank"]))
-                {
-                    feedBack.ExceptionContent.Add("第" + num + "行记录  开户银行为空！");
-                }
-                if (String.IsNullOrEmpty(record["AccountNumber"]))
-                {
-                    feedBack.ExceptionContent.Add("第" + num + "行记录  银行账号为空！");
-                }
-                if (!record["Bank"].Equals("工商银行"))
-                {
-                    if (String.IsNullOrEmpty(record["BankDetailName"]))
+                    switch (property.Name)
                     {
-                        feedBack.ExceptionContent.Add("第" + num + "行记录  开户行详细名称为空！");
+                        case "Name":
+                        case "CertificateType":
+                        case "CertificateID":
+                        case "Company":
+                        case "Tele":
+                        case "PersonType":
+                        case "Nationality":
+                        case "Title":
+                        case "TaxOrNot":
+                        case "AccountNumber":
+                            if (String.IsNullOrEmpty(GetValue(record, map, property.Name)))
+                            {
+                                feedBack.ExceptionContent.Add(String.Format("第{0}行记录  {1}为空！", num, map[property.Name]));
+                            }
+                            else
+                            {
+                                property.SetValue(personal, GetValue(record, map, property.Name));
+                            }
+                            break;
+                        case "BankDetailName":
+                            if (!GetValue(record, map, "Bank").Equals("工商银行"))
+                            {
+                                if (String.IsNullOrEmpty(GetValue(record, map, property.Name)))
+                                {
+                                    feedBack.ExceptionContent.Add(String.Format("第{0}行记录  {1}为空！", num, map[property.Name]));
+                                }
+                                else
+                                {
+                                    property.SetValue(personal, GetValue(record, map, property.Name));
+                                }
+                            }
+                            break;
+                        case "Amount":
+                            try
+                            {
+                                var value = Convert.ToDouble(GetValue(record, map, property.Name));
+                                property.SetValue(personal, value);
+                            }
+                            catch
+                            {
+                                feedBack.ExceptionContent.Add(String.Format("第{0}行记录  {1}格式不正确！", num, map[property.Name]));
+                            }
+                            break;
+                        default:
+                            break;
                     }
                 }
             }
-            else if (record["PaymentType"].Equals("现金支付"))
+            else if (personal.PaymentType.Equals("现金支付"))
             {
-                if (String.IsNullOrEmpty(record["Name"]))
+                var properties = personal.GetType().GetProperties();
+                foreach (var property in properties)
                 {
-                    feedBack.ExceptionContent.Add("第" + num + "行记录  姓名为空！");
-                }
-                if (String.IsNullOrEmpty(record["CertificateType"]))
-                {
-                    feedBack.ExceptionContent.Add("第" + num + "行记录  证件类型为空！");
-                }
-                if (String.IsNullOrEmpty(record["CertificateID"]))
-                {
-                    feedBack.ExceptionContent.Add("第" + num + "行记录  证件号码为空！");
-                }
-                if (String.IsNullOrEmpty(record["Company"]))
-                {
-                    feedBack.ExceptionContent.Add("第" + num + "行记录  单位为空！");
-                }
-                if (String.IsNullOrEmpty(record["Tele"]))
-                {
-                    feedBack.ExceptionContent.Add("第" + num + "行记录  电话号码为空！");
-                }
-                if (String.IsNullOrEmpty(record["PersonType"]))
-                {
-                    feedBack.ExceptionContent.Add("第" + num + "行记录  人员类型为空！");
-                }
-                if (String.IsNullOrEmpty(record["Nationality"]))
-                {
-                    feedBack.ExceptionContent.Add("第" + num + "行记录  国籍为空！");
-                }
-                if (String.IsNullOrEmpty(record["Title"]))
-                {
-                    feedBack.ExceptionContent.Add("第" + num + "行记录  职称为空！");
-                }
-                if (String.IsNullOrEmpty(record["TaxOrNot"]))
-                {
-                    feedBack.ExceptionContent.Add("第" + num + "行记录  是否含税为空！");
+                    switch(property.Name)
+                    {
+                        case "Name":
+                        case "CertificateType":
+                        case "CertificateID":
+                        case "Company":
+                        case "Tele":
+                        case "PersonType":
+                        case "Nationality":
+                        case "Title":
+                        case "TaxOrNot":
+                            if (String.IsNullOrEmpty(GetValue(record, map, property.Name)))
+                            {
+                                feedBack.ExceptionContent.Add(String.Format("第{0}行记录  {1}为空！", num, map[property.Name]));
+                            }
+                            else
+                            {
+                                property.SetValue(personal, GetValue(record, map, property.Name));
+                            }
+                            break;
+                        case "Amount":
+                            if (String.IsNullOrEmpty(GetValue(record, map, property.Name)))
+                            {
+                                feedBack.ExceptionContent.Add(String.Format("第{0}行记录  {1}为空！", num, map[property.Name]));
+                            }
+                            else
+                            {
+                                try
+                                {
+                                    var value = Convert.ToDouble(GetValue(record, map, property.Name));
+                                    property.SetValue(personal, value);
+                                }
+                                catch
+                                {
+                                    feedBack.ExceptionContent.Add(String.Format("第{0}行记录  {1}格式不正确！", num, map[property.Name]));
+                                }
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+     
                 }
             }
             if (feedBack.ExceptionContent.Count > 0)
@@ -349,40 +394,40 @@ namespace BEYON.CoreBLL.Service.App
             feedBack.ExceptionType = "格式错误";
             //证件类型
             String[] regCerficateType = { "居民身份证", "中国护照", "外国护照", "军官证", "士兵证", "武警警官证", "港澳居民来往内地通行证", "台湾居民来往大陆通行证", "香港身份证", "台湾身份证", "澳门身份证", "外国人永久居留证" };
-            if (!regCerficateType.Contains(record["CertificateType"]))
+            if (!regCerficateType.Contains(personal.CertificateType))
             {
                 feedBack.ExceptionContent.Add("第" + num + "行记录  证件类型格式有误，必须是【居民身份证、中国护照、外国护照、军官证、士兵证、武警警官证、港澳居民来往内地通行证、台湾居民来往大陆通行证、香港身份证、台湾身份证、澳门身份证、外国人永久居留证】之一！");
             }
             //人员类型
             String[] regPersonType = { "所内", "所外" };
-            if (!regPersonType.Contains(record["PersonType"]))
+            if (!regPersonType.Contains(personal.PersonType))
             {
                 feedBack.ExceptionContent.Add("第" + num + "行记录  人员类型格式有误，必须是【所内、所外】之一！");
             }
             //是否含税
             String[] regTaxOrNot = { "含税", "不含税" };
-            if (!regTaxOrNot.Contains(record["TaxOrNot"]))
+            if (!regTaxOrNot.Contains(personal.TaxOrNot))
             {
                 feedBack.ExceptionContent.Add("第" + num + "行记录  是否含税格式有误，必须是【含税、不含税】之一！");
             }
             //证件号码
             Regex regCerficateID = new Regex("^\\d{15}|\\d{18}$");
-            if (!regCerficateID.IsMatch(record["CertificateID"]))
+            if (!regCerficateID.IsMatch(personal.CertificateID))
             {
                 feedBack.ExceptionContent.Add("第" + num + "行记录  证件号码格式有误！");
             }
             //联系电话
             Regex regPhone = new Regex("/^0\\d{2,3}-?\\d{7,8}$/");
             Regex regMobile = new Regex("/^1[34578]\\d{9}$/");
-            if (!regPhone.IsMatch(record["Tele"]) && !regMobile.IsMatch(record["Tele"]))
+            if (!regPhone.IsMatch(personal.Tele) && !regMobile.IsMatch(personal.Tele))
             {
                 feedBack.ExceptionContent.Add("第" + num + "行记录  联系电话格式有误！");
             }
             //银行卡号
             Regex regAccountNumber = new Regex(" /^(\\d{4}[\\s\\-]?){4,5}\\d{3}$/g");
-            if (record["PaymentType"].Equals("银行转账"))
+            if (personal.PaymentType.Equals("银行转账"))
             {
-                if (!regAccountNumber.IsMatch(record["AccountNumber"]))
+                if (!regAccountNumber.IsMatch(personal.AccountNumber))
                 {
                     feedBack.ExceptionContent.Add("第" + num + "行记录  银行卡号格式有误！");
                 }
@@ -394,22 +439,23 @@ namespace BEYON.CoreBLL.Service.App
             //若为所内：姓名、身份证验证
             feedBack = new ImportFeedBack();
             feedBack.ExceptionType = "所内所外姓名验证";
-            String name = _TaxBaseByMonthRepository.GetNameByCerID(record["CertificateID"]);
+            String name = _TaxBaseByMonthRepository.GetNameByCerID(personal.CertificateID);
             if (name.Equals(""))
             {
-                if (record["PersonType"].Equals("所内") && name.Equals(""))
+                if (personal.PersonType.Equals("所内") && name.Equals(""))
                 {
                     feedBack.ExceptionContent.Add("第" + num + "行记录  该人员不是所内人员，人员类型需要填写为【所外】！");
                 }
             }
             else
             {
-                if (record["PersonType"].Equals("所内") && !name.Equals(record["Name"]))
+                if (personal.PersonType.Equals("所内") && !name.Equals(personal.Name))
                 {
                     feedBack.ExceptionContent.Add("第" + num + "行记录  该该证件号码与人员不符，请检查！");
                 }
                 else {
-                    if (record["PersonType"].Equals("所外")) {
+                    if (personal.PersonType.Equals("所外"))
+                    {
                         feedBack.ExceptionContent.Add("第" + num + "行记录  该人员是所内人员，人员类型需要填写为【所内】！");
                     }
                 }
@@ -423,7 +469,7 @@ namespace BEYON.CoreBLL.Service.App
             //现金发放次数验证
             feedBack = new ImportFeedBack();
             feedBack.ExceptionType = "现金发放次数超过3次";
-            int count = _TaxPerOrderRepository.GetCashCount(record["CertificateID"]);
+            int count = _TaxPerOrderRepository.GetCashCount(personal.CertificateID);
             if (count >= 3)
             {
                 feedBack.ExceptionContent.Add("第" + num + "行记录  该人员本月已发放3次现金，若需再次发放，需在支付方式为【银行转账】的申请单中填报！");
