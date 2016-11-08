@@ -1,6 +1,0 @@
-F:\workspace\projects\JiLinGuMu\src\Support\ExcelExporter.0.0.1\bin\Debug\ExcelExporter.XML
-F:\workspace\projects\JiLinGuMu\src\Support\ExcelExporter.0.0.1\bin\Debug\ExcelExporter.dll
-F:\workspace\projects\JiLinGuMu\src\Support\ExcelExporter.0.0.1\bin\Debug\ExcelExporter.pdb
-F:\workspace\projects\JiLinGuMu\src\Support\ExcelExporter.0.0.1\obj\Debug\ExcelExporter.csprojResolveAssemblyReference.cache
-F:\workspace\projects\JiLinGuMu\src\Support\ExcelExporter.0.0.1\obj\Debug\ExcelExporter.dll
-F:\workspace\projects\JiLinGuMu\src\Support\ExcelExporter.0.0.1\obj\Debug\ExcelExporter.pdb
