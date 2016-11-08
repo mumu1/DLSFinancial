@@ -346,7 +346,6 @@
     <Content Include="Scripts\AdminLTE2.3.0\bootstrap\js\bootstrap-datetimepicker.zh-CN.js" />
     <Content Include="Scripts\AdminLTE2.3.0\bootstrap\js\bootstrap-select.js" />
     <Content Include="Scripts\AdminLTE2.3.0\bootstrap\js\bootstrap-table.js" />
-    <Content Include="Scripts\AdminLTE2.3.0\bootstrap\js\fileinput.min.js" />
     <Content Include="Scripts\AdminLTE2.3.0\bootstrap\js\zh.js" />
     <Content Include="Scripts\AdminLTE2.3.0\plugins\ckeditor\CHANGES.md" />
     <Content Include="Scripts\AdminLTE2.3.0\plugins\ckeditor\LICENSE.md" />
