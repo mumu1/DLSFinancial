@@ -34,5 +34,9 @@ namespace BEYON.Domain.Data.Repositories.App
     public partial interface IPersonalRecordRepository : IRepository<PersonalRecord, Int32>
     {
         IList<PersonalRecord> GetPersonalRecordBySerialNumber(String serialNumber);
+
+        void InsertOrUpdate(PersonalRecord record);
     }
+
+    
 }
