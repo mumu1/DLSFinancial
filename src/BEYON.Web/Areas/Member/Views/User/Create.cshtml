@@ -5,7 +5,8 @@
 @Html.HiddenFor(t => t.Id)
 <div class="form-group">
     <div class="col-sm-2">
-        <label style="color: red; margin-left: -8px;">*</label>@Html.LabelFor(model => model.UserName, new { @class = " control-label" })
+        @*<label style="color: red; margin-left: -8px;">*</label>*@
+        @Html.LabelFor(model => model.UserName, new { @class = " control-label" })
     </div>
 
     <div class="col-sm-8">
@@ -15,7 +16,8 @@
 </div>
 <div class="form-group">
     <div class="col-sm-2">
-        <label style="color: red; margin-left: -8px;">*</label>@Html.LabelFor(model => model.TrueName, new { @class = "control-label" })
+        @*<label style="color: red; margin-left: -8px;">*</label>*@
+        @Html.LabelFor(model => model.TrueName, new { @class = "control-label" })
     </div>
     <div class="col-sm-8">
         @Html.TextBoxFor(model => model.TrueName, new { @class = "form-control" })
@@ -24,33 +26,33 @@
 </div>
 
 @*<div class="form-group">
-    <div class="col-sm-2">
-        <label style="color: red; margin-left: -8px;">*</label>@Html.LabelFor(model => model.Email, new { @class = " control-label" })
+        <div class="col-sm-2">
+            <label style="color: red; margin-left: -8px;">*</label>@Html.LabelFor(model => model.Email, new { @class = " control-label" })
+        </div>
+        <div class="col-sm-8">
+            @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Email)
+        </div>
     </div>
-    <div class="col-sm-8">
-        @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.Email)
+    <div class="form-group">
+        <div class="col-sm-2">
+            @Html.LabelFor(model => model.Phone, new { @class = " control-label" })
+        </div>
+        <div class="col-sm-8">
+            @Html.TextBoxFor(model => model.Phone, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Phone)
+        </div>
     </div>
-</div>
-<div class="form-group">
-    <div class="col-sm-2">
-        @Html.LabelFor(model => model.Phone, new { @class = " control-label" })
-    </div>
-    <div class="col-sm-8">
-        @Html.TextBoxFor(model => model.Phone, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.Phone)
-    </div>
-</div>
-<div class="form-group">
-    <div class="col-sm-2">
-        @Html.LabelFor(model => model.Address, new { @class = "control-label" })
-    </div>
-    <div class="col-sm-8">
-        @Html.TextBoxFor(model => model.Address, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.Address)
-    </div>
-</div>*@
-  
+    <div class="form-group">
+        <div class="col-sm-2">
+            @Html.LabelFor(model => model.Address, new { @class = "control-label" })
+        </div>
+        <div class="col-sm-8">
+            @Html.TextBoxFor(model => model.Address, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Address)
+        </div>
+    </div>*@
+
 <div class="form-group">
     <div class="col-sm-2">
         @Html.LabelFor(model => model.CertificateID, new { @class = "control-label" })
@@ -65,28 +67,41 @@
         @Html.LabelFor(model => model.Gender, new { @class = " control-label" })
     </div>
     <div class="col-sm-8">
-        @Html.TextBoxFor(model => model.Gender, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.Gender)
+        @*@Html.TextBoxFor(model => model.Gender, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Gender)*@
+        @Html.DropDownList("Gender",
+new List<SelectListItem>
+{
+(new SelectListItem() {Text = "男", Value = "男", Selected = true}),
+(new SelectListItem() {Text = "女", Value = "女", Selected = false})
+}, new { @class = "form-control" }
+)
     </div>
-</div>
-<div class="form-group">
-        <div class="col-sm-2">
-            @Html.LabelFor(model => model.Department, new { @class = " control-label" })
-        </div>
-        <div class="col-sm-8">
-            @Html.TextBoxFor(model => model.Department, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.Department)
-
-        </div>
 </div>
 <div class="form-group">
     <div class="col-sm-2">
-        @Html.LabelFor(model => model.Title, new { @class = "control-label" })
-
+        @*  @Html.LabelFor(model => model.Department, new { @class = " control-label" })*@
+        <label class=" control-label">部门</label>
     </div>
     <div class="col-sm-8">
-        @Html.TextBoxFor(model => model.Title, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.Title)
+        @*@Html.TextBoxFor(model => model.Department, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Department)*@
+        <select id="dept_user" name="Department" class="form-control"></select>
+        @Html.HiddenFor(model => model.Department)
+
+
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-sm-2">
+        @*@Html.LabelFor(model => model.Title, new { @class = "control-label" })*@
+        <label class=" control-label">职称</label>
+    </div>
+    <div class="col-sm-8">
+        @*@Html.TextBoxFor(model => model.Title, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Title)*@
+        <select id="title_user" name="Title" class="form-control"></select>
+        @Html.HiddenFor(model => model.Title)
     </div>
 </div>
 <div class="form-group">
@@ -106,6 +121,15 @@
             increaseArea: '20%' // optional
         });
     });
+    GetDepartmentList();
+    GetTitleList();
+    $('#dept_user').change(function () {
+        $("#Department").val($("#dept_user").val());
+    });
+    $('#title_user').change(function () {
+        $("#Title").val($("#title_user").val());
+    });
+
     function GetDepartmentList() {
         $.ajax({
             type: "GET",
@@ -118,7 +142,9 @@
                 $("#dept_user").html("");
                 $.each(data.data, function (k, v) {
                     $("#dept_user").append("<option>" + v.DepartmentName + "</option>");
-                })              
+                })
+                if ('@Model.Department' != "")
+                    $("#dept_user").find("option:contains('@Model.Department')").attr("selected", true);
             },
             error: function () {
                 toastr.error('获取部门数据失败！');
@@ -138,6 +164,8 @@
                 $.each(data.data, function (k, v) {
                     $("#title_user").append("<option>" + v.TitleName + "</option>");
                 })
+                if ('@Model.Title' != "")
+                    $("#title_user").find("option:contains('@Model.Title')").attr("selected", true);
             },
             error: function () {
                 toastr.error('获取职称数据失败！');
