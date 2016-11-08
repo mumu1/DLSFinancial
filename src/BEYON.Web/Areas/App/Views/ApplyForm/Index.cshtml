@@ -344,19 +344,22 @@
             var selectedRows = selectedTable.rows({ selected: true });
             var selectedCount = selectedRows.count();
             if ('@Model' === '系统管理员') {
-                var enalbeAudit = true
+                var enalbeAudit = true;
+                var removeFlag = true;
                 $.each($(selectedRows.data()), function (key, value) {
                     //if (value["AuditStatus"] !== '待审核') {
                     //    enalbeAudit = false;
                     //}
                     if (value["AuditStatus"] !== '审核通过') {
                         enalbeEidt = true;
+                    } else {
+                        removeFlag = false;   //审核通过不可删除
                     }
                 });
                 selectedTable.button(0).enable(selectedCount > 0 && enalbeAudit);       //审核
                 selectedTable.button(1).enable(selectedCount === 1);                     //查看
                 selectedTable.button(2).enable(selectedCount === 1);      //修改
-                selectedTable.button(3).enable(true);      //删除
+                selectedTable.button(3).enable(removeFlag);      //删除
                 selectedTable.button(4).enable(true);      //输出打印
                 selectedTable.button(5).enable(true);      //导出
             } else {

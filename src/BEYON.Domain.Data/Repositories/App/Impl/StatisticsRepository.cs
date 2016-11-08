@@ -389,11 +389,11 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                 sb.Append("SELECT ");
                 //1.添加列名
                 sb.Append("a.\"ProjectNumber\" as C2,");
-                sb.Append("a.\"RefundType\" as C3,");
-                sb.Append("a.\"ProjectDirector\" as C4,");
-                sb.Append("a.\"AmountY\" as C5,");
+                sb.Append("a.\"AmountY\" as C3,");
+                sb.Append("a.\"RefundType\" as C4,");
+                sb.Append("a.\"ProjectDirector\" as C5,");
                 sb.Append("a.\"Tax\" as C6,");
-                sb.Append("a.\"AmountY\" as C7,");
+                sb.Append("a.\"Tax\" as C7,");
                 sb.Append("a.\"UpdateDate\" updateDate ");
                 //2.添加表
                 sb.Append(" FROM  dbo.\"TaxPerOrders\" a ");

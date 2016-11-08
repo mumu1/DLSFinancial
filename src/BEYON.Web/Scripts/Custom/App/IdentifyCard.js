@@ -287,7 +287,7 @@ function IDValidator() {
 					var prov = util.str_pad(util.rand(50), 2, '0');
 					var city = util.str_pad(util.rand(20), 2, '0');
 					var area = util.str_pad(util.rand(20), 2, '0');
-					var addrTest = [ prov, city, area ].join('');
+					var addrTest = [prov, city, area].join('');
 					if (GB2260[addrTest]) {
 						addr = addrTest;
 						break;

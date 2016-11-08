@@ -116,7 +116,7 @@ namespace BEYON.Web.Areas.Member.Controllers
         //
         // GET: /Member/User/Edit
        [IsAjax]
-        public ActionResult Edit(int id = 0)
+        public ActionResult Edit(int id)
         {
             var user = _userService.Users.FirstOrDefault(c => c.Id == id);
             if (user == null) return PartialView("Create", new UserVM());
