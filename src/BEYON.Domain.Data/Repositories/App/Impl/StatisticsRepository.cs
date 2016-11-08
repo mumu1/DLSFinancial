@@ -284,7 +284,7 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                 sb.Append("a.\"AmountY\" as C7,");
                 sb.Append("a.\"UpdateDate\" updateDate ");
                 //2.添加表
-                sb.Append(" FROM  dbo.\"TaxPerOrders\" a ");
+                sb.Append(" FROM  dbo.\"TaxPerOrders\" a WHERE  \"PersonType\" = '所外' ");
                 //3.条件
                 sb.Append(" ORDER BY updateDate ASC");
 
@@ -384,7 +384,7 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
         {
             try
             {
-                //1.获取工资表和劳务都有钱的
+                //1.获取数据[{"data":"C0","title":"序号"},{"data":"C1","title":"期间"},{"data":"C2","title":"课题号"},{"data":"C3","title":"金额"},{"data":"C4","title":"报销事由"},{"data":"C5","title":"课题负责人"},{"data":"C6","title":"工资薪金税额"},{"data":"C7","title":"劳务费税额"}]
                 StringBuilder sb = new StringBuilder();
                 sb.Append("SELECT ");
                 //1.添加列名
@@ -393,14 +393,13 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                 sb.Append("a.\"RefundType\" as C4,");
                 sb.Append("a.\"ProjectDirector\" as C5,");
                 sb.Append("a.\"Tax\" as C6,");
-                sb.Append("a.\"Tax\" as C7,");
+                sb.Append("a.\"PersonType\" as C7,");
                 sb.Append("a.\"UpdateDate\" updateDate ");
                 //2.添加表
                 sb.Append(" FROM  dbo.\"TaxPerOrders\" a ");
                 //3.条件
-                sb.Append(" ORDER BY updateDate ASC");
-
-                //string sql = "SELECT count(a.\"CertificateID\") FROM dbo.\"TaxBaseByMonths\" a, dbo.\"TaxPerOrders\" b WHERE a.\"CertificateID\" = b.\"CertificateID\" GROUP BY a.\"CertificateID\" ORDER BY DESC";
+                sb.Append(" ORDER BY C2 ASC");
+      
                 var connectString = System.Configuration.ConfigurationManager.ConnectionStrings["BeyonDBGuMu"];
                 using (var conntion = new NpgsqlConnection(connectString.ToString()))
                 {
@@ -412,42 +411,42 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                         {
                             while (reader.Read())
                             {
-                                var certificateID = reader["C4"].ToString();
-                                var amountX = String.IsNullOrEmpty(reader["C5"].ToString()) ? 0 : Convert.ToSingle(reader["C5"]);
-                                var tax = String.IsNullOrEmpty(reader["C6"].ToString()) ? 0 : Convert.ToSingle(reader["C6"]);
-                                var amountY = String.IsNullOrEmpty(reader["C7"].ToString()) ? 0 : Convert.ToSingle(reader["C7"]);
-
+                                var projectNumber = reader["C2"].ToString();
+                                var amountY = String.IsNullOrEmpty(reader["C3"].ToString()) ? 0 : Convert.ToSingle(reader["C3"]);
+                                var refundType = reader["C4"].ToString();
+                                var projectDirector = reader["C5"].ToString();
+                                var tax = String.IsNullOrEmpty(reader["C6"].ToString()) ? 0 : Convert.ToSingle(reader["C6"]);                              
+                                var personType = reader["C7"].ToString();
                                 //返回前端显示结果数据
-                                if (!objects.ContainsKey(certificateID))
+                                if (!objects.ContainsKey(projectNumber + "," + refundType))
                                 {
                                     JObject result = new JObject();
                                     result["C1"] = period;
-                                    result["C2"] = reader["C2"].ToString();
-                                    result["C3"] = reader["C3"].ToString();
-                                    result["C4"] = certificateID;
-                                    result["C5"] = amountX;
-                                    result["C6"] = 800;
-                                    result["C7"] = 800;
-                                    result["C8"] = tax;
-                                    result["C9"] = amountY;
-                                    if (String.IsNullOrEmpty(reader["C5"].ToString()))
-                                        result["C10"] = 0;
-                                    else
-                                        result["C10"] = 1;
-                                    result["C11"] = amountY;
-                                    result["C12"] = amountX;
-                                    result["C13"] = tax;
-                                  
-                                    objects.Add(certificateID, result);
+                                    result["C2"] = projectNumber;
+                                    result["C3"] = amountY;
+                                    result["C4"] = refundType;
+                                    result["C5"] = projectDirector;
+                                    if (personType.Equals("所内"))
+                                    {
+                                        result["C6"] = tax;
+                                        result["C7"] = 0;
+                                    }
+                                    else {
+                                        result["C6"] = 0;
+                                        result["C7"] = tax;
+                                    }
+                                    objects.Add(projectNumber + "," + refundType, result);
                                 }
                                 else
                                 {
-                                    JObject jsonObject = objects[certificateID] as JObject;
-                                    jsonObject["C5"] = jsonObject["C5"].ToObject<float>() + amountX;
-                                    jsonObject["C8"] = jsonObject["C8"].ToObject<float>() + tax;
-                                    jsonObject["C9"] = jsonObject["C9"].ToObject<float>() + amountY;
-                                  
-                                    objects[certificateID] = jsonObject;
+                                    JObject jsonObject = objects[projectNumber + "," + refundType] as JObject;
+                                     jsonObject["C3"] = jsonObject["C3"].ToObject<float>() + amountY;
+                                     if (personType.Equals("所内")) {
+                                         jsonObject["C6"] = jsonObject["C6"].ToObject<float>() + tax;
+                                     }else{
+                                         jsonObject["C7"] = jsonObject["C7"].ToObject<float>() + tax;
+                                     }
+                                     objects[projectNumber + "," + refundType] = jsonObject;
                                 }
                             }
                         }
