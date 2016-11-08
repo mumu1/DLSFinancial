@@ -25,6 +25,6 @@ namespace BEYON.CoreBLL.Service.Member.Interface
 
         User GetUserByUserName(String userName);
 
-        OperationResult ModifyPassword(String user);
+        OperationResult ModifyPassword(String idAndPwd);
     }
 }
