@@ -12,7 +12,7 @@ function ShowModal(actionUrl, param, title) {
         type: "GET",
         url: actionUrl,
         contentType: "application/json",
-        data: JSON.stringify(param),
+        data: param,
         beforeSend: function () {
             //
         },
