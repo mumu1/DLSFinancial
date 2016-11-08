@@ -411,20 +411,24 @@ namespace BEYON.CoreBLL.Service.App
                 feedBack.ExceptionContent.Add("第" + num + "行记录  是否含税格式有误，必须是【含税、不含税】之一！");
             }
             //证件号码
-            Regex regCerficateID = new Regex("^\\d{15}|\\d{18}$");
-            if (!regCerficateID.IsMatch(personal.CertificateID))
+           // Regex regCerficateID = new Regex("^\\d{15}|\\d{18}$");
+            //Regex regCerficateID = new Regex("^[1-9]\\d{5}[1-9]9\\d{4}3[0-1]\\d{4}$|^[1-9]\\d{5}[1-9]9\\d{4}[0-2][0-9]\\d{4}$|^[1-9]\\d{5}[1-9]9\\d{4}3[0-1]\\d{3}X$|^[1-9]\\d{5}[1-9]9\\d{4}[0-2][0-9]\\d{3}X$|^[1-9]\\d{5}\\d{4}3[0-1]\\d{4}$|^[1-9]\\d{5}\\d{4}[0-2][0-9]\\d{4}$|^[1-9]\\d{5}\\d{4}3[0-1]\\d{3}X$|^[1-9]\\d{5}\\d{4}[0-2][0-9]\\d{3}X$");
+            //^[1-9]\d{5}[1-9]9\d{4}3[0-1]\d{4}$|^[1-9]\d{5}[1-9]9\d{4}[0-2][0-9]\d{4}$|^[1-9]\d{5}[1-9]9\d{4}3[0-1]\d{3}X$|^[1-9]\d{5}[1-9]9\d{4}[0-2][0-9]\d{3}X$|^[1-9]\d{5}\d{4}3[0-1]\d{4}$|^[1-9]\d{5}\d{4}[0-2][0-9]\d{4}$|^[1-9]\d{5}\d{4}3[0-1]\d{3}X$|^[1-9]\d{5}\d{4}[0-2][0-9]\d{3}X$
+            string Info = CheckCidInfo(personal.CertificateID);
+            if (!Info.Equals(personal.CertificateID))
             {
                 feedBack.ExceptionContent.Add("第" + num + "行记录  证件号码格式有误！");
             }
             //联系电话
-            Regex regPhone = new Regex("/^0\\d{2,3}-?\\d{7,8}$/");
-            Regex regMobile = new Regex("/^1[34578]\\d{9}$/");
-            if (!regPhone.IsMatch(personal.Tele) && !regMobile.IsMatch(personal.Tele))
+            Regex regPhone = new Regex("^0\\d{2,3}-?\\d{7,8}$");
+            Regex regMobile = new Regex("^1[34578]\\d{9}$");
+           // if (!regPhone.IsMatch(personal.Tele) && !regMobile.IsMatch(personal.Tele))
+            if (System.Text.RegularExpressions.Regex.IsMatch(personal.Tele, @"^(\d{3,4}-)?\d{6,8}$"))
             {
                 feedBack.ExceptionContent.Add("第" + num + "行记录  联系电话格式有误！");
             }
             //银行卡号
-            Regex regAccountNumber = new Regex(" /^(\\d{4}[\\s\\-]?){4,5}\\d{3}$/g");
+            Regex regAccountNumber = new Regex("^(\\d{4}[\\s\\-]?){4,5}\\d{3}$");
             if (personal.PaymentType.Equals("银行转账"))
             {
                 if (!regAccountNumber.IsMatch(personal.AccountNumber))
@@ -492,5 +496,42 @@ namespace BEYON.CoreBLL.Service.App
             public List<String> ExceptionContent { get; private set; }
 
         }
+
+        private string CheckCidInfo(string cid)
+{
+string[] aCity = new string[]{null,null,null,null,null,null,null,null,null,null,null,"北京","天津","河北","山西","古",null,null,null,null,null,"辽 宁","吉林","黑龙江",null,null,null,null,null,null,null,"上海","江苏","浙江","安微","福建","江西","山东",null,null,null,"河南","湖北","湖南","广东","广西","海南",null,null,null,"重庆","四川","贵州","云南","西藏",null,null,null,null,null,null,"陕西","甘肃","青海","宁夏","新疆",null,null,null,null,null,"台湾",null,null,null,null,null,null,null,null,null,"香港","澳门",null,null,null,null,null,null,null,null,"国外"};
+double iSum=0;
+string info="";
+System.Text.RegularExpressions.Regex rg = new System.Text.RegularExpressions.Regex(@"^\d{17}(\d|x)$");
+System.Text.RegularExpressions.Match mc = rg.Match(cid);
+if(!mc.Success)
+{
+return "";
+} 
+cid = cid.ToLower();
+cid = cid.Replace("x","a");
+if(aCity[int.Parse(cid.Substring(0,2))]==null)
+{
+return "非法地区";
+}
+try
+{
+DateTime.Parse(cid.Substring(6,4)+"-"+cid.Substring(10,2)+"-"+cid.Substring(12,2));
+}
+catch
+{
+return "非法生日";
+}
+for(int i=17;i>=0;i--)
+{ 
+iSum +=(System.Math.Pow(2,i)%11)*int.Parse(cid[17-i].ToString(),System.Globalization.NumberStyles.HexNumber);
+
+}
+if(iSum%11!=1)
+return("非法证号");
+
+return(aCity[int.Parse(cid.Substring(0,2))]+","+cid.Substring(6,4)+"-"+cid.Substring(10,2)+"-"+cid.Substring(12,2)+","+(int.Parse(cid.Substring(16,1))%2==1?"男":"女"));
+
+}
     }
 }
