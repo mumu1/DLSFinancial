@@ -348,12 +348,17 @@ namespace BEYON.Web.Areas.App.Controllers
                 //删除临时创建文件
                 System.IO.File.Delete(path);
 
-                result.Message = result.Message ?? result.ResultType.GetDescription();
-
-                return Json(new { erro = result.Message });
+                if(result.ResultType != OperationResultType.Success)
+                {
+                    return Json(new { error = result.LogMessage });
+                }
+                else
+                {
+                    return Json(new { });
+                }
             }
 
-            return Json(new { erro = "上传数据失败！" });
+            return Json(new { error = "上传数据失败！" });
         }
 
         #endregion

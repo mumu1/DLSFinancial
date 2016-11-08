@@ -28,7 +28,7 @@ namespace BEYON.Web
                    "~/Scripts/bootstraptable/dist/bootstrap-table.js",
                    "~/Scripts/bootstraptable/dist/locale/bootstrap-table-zh-CN.js",
                    "~/Scripts/Custom/WinMsg.js",
-                   "~/Scripts/AdminLTE2.3.0/bootstrap/js/fileinput.js",
+                   //"~/Scripts/AdminLTE2.3.0/bootstrap/js/fileinput.js",
                    "~/Scripts/AdminLTE2.3.0/bootstrap/js/zh.js",
                    "~/Scripts/AdminLTE2.3.0/bootstrap/js/bootstrap-datetimepicker.js",
                    "~/Scripts/AdminLTE2.3.0/bootstrap/js/bootstrap-datetimepicker.zh-CN.js",
