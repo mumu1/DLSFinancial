@@ -5,7 +5,7 @@
 
 <div class="content-wrapper">
     <div class="widget-body">
-        <table id="datatable_labor_statistics" class="table table-striped table-bordered table-hover" style="width:100%"></table>
+        <table id="datatable_task_statistics" class="table table-striped table-bordered table-hover" style="width:100%"></table>
     </div>
 </div>
 
@@ -41,11 +41,11 @@
                     extend: 'collection',
                     text: '导出',
                     buttons: [
-                        { text: "拷贝", extend: 'copy' },
+                        //{ text: "拷贝", extend: 'copy' },
                         { text: "EXCEL表格", extend: 'excel' },
-                        { text: "CSV表格", extend: 'csv' },
-                        { text: "PDF文档", extend: 'pdf' },
-                        { text: "打印", extend: 'print' }
+                        //{ text: "CSV表格", extend: 'csv' },
+                        //{ text: "PDF文档", extend: 'pdf' },
+                        //{ text: "打印", extend: 'print' }
                     ]
              },
             {
@@ -55,15 +55,15 @@
         ];
 
         $.ajax({
-            type: "POST",
-            url: "@Url.Action("LaborStatisticsColumns")",
+            type: "GET",
+            url: "@Url.Action("TaskStatisticsColumns")",
             dataType: "json",
             contentType: "application/json; charset=utf-8",
             success: function (columns) {
-                var table = $('#datatable_labor_statistics').dataTable({
+                var table = $('#datatable_task_statistics').dataTable({
                     dom: 'Bfrtip',
                     colReorder: true,
-                    ajax: '@Url.Action("LaborStatisticsDatas")',
+                    ajax: '@Url.Action("TaskStatisticsDatas")',
                     searching: true,
                     ordering: true,
                     select: true,
@@ -79,7 +79,7 @@
                     "sScrollX": "100%",
                     "sScrollXInner": "110%",
                     scrollCollapse: true,
-                    order: [[10, "desc"]],
+                    order: [[0, "asc"]],
                     buttons: buttons,
                     columns: columns,
                     oLanguage: {
@@ -100,8 +100,8 @@
                     }
                 });
 
-                $('#datatable_labor_statistics').DataTable().on('select', function (e, dt, type, indexes) {
-                    var selectedTable = $('#datatable_labor_statistics').DataTable();
+                $('#datatable_task_statistics').DataTable().on('select', function (e, dt, type, indexes) {
+                    var selectedTable = $('#datatable_task_statistics').DataTable();
                     var selectedRows = selectedTable.rows({ selected: true });
                     var selectedCount = selectedRows.count();
                     //if (selectedCount < 1) {

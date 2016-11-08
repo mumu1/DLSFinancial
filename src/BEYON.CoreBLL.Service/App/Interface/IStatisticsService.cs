@@ -20,5 +20,11 @@ namespace BEYON.CoreBLL.Service.App.Interface
 
         List<Object> GetLaborStatisticsDetail();
         #endregion
+
+        #region 按课题统计明细表
+        Column[] GetTaskStatisticsColumns();
+
+        List<Object> GetTaskStatisticsDetail();
+        #endregion
     }
 }

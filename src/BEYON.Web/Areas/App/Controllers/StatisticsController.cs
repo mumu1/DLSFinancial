@@ -88,5 +88,23 @@ namespace BEYON.Web.Areas.App.Controllers
             return Json(new { total = datas.Count, data = datas }, JsonRequestBehavior.AllowGet);
         }
         #endregion
+
+        #region 按月课题统计业务流程
+        
+        // GET: /App/Statistics/TaskStatisticsColumns
+        public ActionResult TaskStatisticsColumns()
+        {
+            return Json(this._statisticsServer.GetTaskStatisticsColumns(), JsonRequestBehavior.AllowGet);
+        }
+
+        
+        // GET: /App/Statistics/TaskStatisticsDatas
+        public ActionResult TaskStatisticsDatas()
+        {
+            var datas = this._statisticsServer.GetTaskStatisticsDetail();
+
+            return Json(new { total = datas.Count, data = datas }, JsonRequestBehavior.AllowGet);
+        }
+        #endregion
     }
 }
