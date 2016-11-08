@@ -521,7 +521,14 @@
                 //  data.data[0].Summation = $('#summation').val();
                 return true;
             }
-
+            if (action === 'edit') {
+                //合计金额需更新
+                var sumBefore = $('#summation').val();
+                alert(sumBefore);
+                var amountBefore = $('#datatable_create_form').DataTable().rows('.selected').data()[0].Amount;
+                $('#summation').val(new Number(sumBefore) - new Number(amountBefore) + new Number(Amount.val()));
+               
+            }
         } else if (action === 'remove') {
             //合计金额需减去
             var sumBefore = $('#summation').val();
@@ -534,12 +541,7 @@
                 $('#summation').val(sum);
             }
         }
-        else if (action === 'edit') {
-            //合计金额需更新
-            var sumBefore = $('#summation').val();
-            var amountBefore = $('#datatable_create_form').DataTable().rows('.selected').data()[0].Amount;
-            $('#summation').val(new Number(sumBefore) - new Number(amountBefore) + new Number(Amount.val()));
-        }
+     
     });
 
 

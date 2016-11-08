@@ -429,10 +429,10 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                                     if (personType.Equals("所内"))
                                     {
                                         result["C6"] = tax;
-                                        result["C7"] = 0;
+                                        result["C7"] = 0.00;
                                     }
                                     else {
-                                        result["C6"] = 0;
+                                        result["C6"] = 0.00;
                                         result["C7"] = tax;
                                     }
                                     objects.Add(projectNumber + "," + refundType, result);
