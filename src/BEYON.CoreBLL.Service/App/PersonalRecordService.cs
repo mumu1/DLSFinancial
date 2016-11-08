@@ -194,7 +194,7 @@ namespace BEYON.CoreBLL.Service.App
                         List<ImportFeedBack> errors = ValidatePersonalRecord(item,  num++, maps, ref record);
                         if(errors.Count > 0)
                         {
-                            return new OperationResult(OperationResultType.Error, "导入数据失败", errors);
+                            return new OperationResult(OperationResultType.Error, "导入数据失败", ParseToHtml(errors));
                         }
 
                         //插入或更新数据
