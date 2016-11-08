@@ -173,6 +173,15 @@ namespace BEYON.Web.Areas.Member.Controllers
             return Json(result);
         }
 
+        // POST: /Member/User/ModifyPassword
+        [HttpPost]
+        public ActionResult ModifyPassword(String user)
+        {          
+            var result = _userService.ModifyPassword(user);
+            result.Message = result.Message ?? result.ResultType.GetDescription();
+            return Json(result);
+        }
+
         // POST: /Member/User/Import/
         [HttpPost]
         public ActionResult Import(System.Web.HttpPostedFileBase upload)

@@ -383,8 +383,7 @@
             var personName = editor.field('Name');
             //var PaymentType = editor.field('PaymentType');
             var paymentType = $('#paymentType').val();
-            //alert(paymentType);
-            //editor.field('PaymentType').val(paymentType);
+            //alert(paymentType);                 
             var Bank = editor.field('Bank');
             var AccountNumber = editor.field('AccountNumber');
             var BankDetailName = editor.field('BankDetailName');
@@ -665,9 +664,9 @@
                 { data: "Bank", title: "开户银行", attribute: "开户银行" },
                 { data: "AccountNumber", title: "银行账号" },
                 { data: "BankDetailName", title: "开户行详细名称" },
-                //{ data: "AccountName", title: "账户名称", visible: false },
-                { data: "PaymentType", title: "支付类型", visible: false }
-                //{ data: "Signature", title: "领取人签字", visible: false },
+                { data: "AccountName", title: "账户名称", visible: false },
+                { data: "PaymentType", title: "支付类型", visible: false },
+                { data: "Signature", title: "领取人签字", visible: false }
 
             ],
             oLanguage: {

@@ -68,5 +68,28 @@ namespace BEYON.Domain.Data.Repositories.Member.Impl
             }
             return user;
         }
+
+        public User GetUserByUserId(int userId)
+        {
+            User user = null;
+            var record = from p in Context.Users.Where(w => w.Id == userId)
+                         select p;
+            var lists = record.ToList();
+            if (lists.Count > 0)
+            {
+                user = new User();
+                user.Id = lists[0].Id;
+                user.TrueName = lists[0].TrueName;
+                user.Department = lists[0].Department;
+                user.Title = lists[0].Title;
+                user.CertificateID = lists[0].CertificateID;
+                user.Gender = lists[0].Gender;
+                user.Enabled = lists[0].Enabled;
+                user.UserName = lists[0].UserName;
+                user.Roles = lists[0].Roles;            
+                user.UserGroups = lists[0].UserGroups;              
+            }
+            return user;
+        }
      }
 }

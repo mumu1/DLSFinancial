@@ -1,12 +1,33 @@
 ﻿<!-- #HEADER -->
 @using System
 @using System.Collections.Generic
+@using BEYON.Domain.Model.Member;
 @{
     var lastUpdate = DateTime.Now;
     var hasNotify = false;
+    User user = ViewBag.User;
 }
 
 <header id="header">
+    <style>      
+        label, input {
+            display: block;
+        }
+            input.text {
+                margin-bottom: 8px;
+                width: 85%;
+                padding: .4em;
+            }
+        fieldset {
+            padding: 0;
+            border: 0;
+            margin-top: 20px;
+        }    
+        .validateTips {
+            border: 1px solid transparent;
+            padding: 0.3em;
+        }
+    </style>
     <div id="logo-group" style="width:400px;">
 
         <!-- PLACE YOUR LOGO HERE -->
@@ -51,7 +72,6 @@
 
         </div>
         <!-- end notify container -->
-
         <!-- collapse menu button -->
         <div id="hide-menu" class="btn-header pull-right">
             <span> <a href="javascript:void(0);" data-action="toggleMenu" title="折叠菜单"><i class="fa fa-reorder"></i></a> </span>
@@ -76,6 +96,10 @@
                     <li>
                         <a href="javascript:void(0);" class="padding-10 padding-top-0 padding-bottom-0" data-action="toggleShortcut"><i class="fa fa-arrow-down"></i> 快捷键</a>
                     </li>
+                    @*<li class="divider"></li>
+                        <li>
+                            <a href="javascript:void(0);" onclick="openModify()" class="padding-10 padding-top-5 padding-bottom-5" data-action="ModifyPwd"><i class="fa fa-user"></i> <strong>修改密码</strong></a>
+                        </li>*@
                     <li class="divider"></li>
                     <li>
                         <a href="javascript:void(0);" class="padding-10 padding-top-0 padding-bottom-0" data-action="launchFullscreen"><i class="fa fa-arrows-alt"></i> 全屏</a>
@@ -87,6 +111,13 @@
                 </ul>
             </li>
         </ul>
+        <!--modify password button-->
+        <div id="modify" class="btn-header transparent pull-right">          
+                <span>
+                    <a href="javascript:void(0);" onclick="openModify()" title="修改密码" ><i class="fa fa-user"></i></a>
+                </span>
+            </div>
+        
 
         <!-- logout button -->
         <div id="logout" class="btn-header transparent pull-right">
@@ -101,12 +132,12 @@
         <!-- #SEARCH -->
         <!-- input: search field -->
         @*<form action="#ajax/search.html" class="header-search pull-right">
-            <input id="search-fld" type="text" name="param" placeholder="标签查询">
-            <button type="submit">
-                <i class="fa fa-search"></i>
-            </button>
-            <a href="javascript:void(0);" id="cancel-search-js" title="取消查询"><i class="fa fa-times"></i></a>
-        </form>*@
+                <input id="search-fld" type="text" name="param" placeholder="标签查询">
+                <button type="submit">
+                    <i class="fa fa-search"></i>
+                </button>
+                <a href="javascript:void(0);" id="cancel-search-js" title="取消查询"><i class="fa fa-times"></i></a>
+            </form>*@
         <!-- end input: search field -->
         <!-- fullscreen button -->
         <div id="fullscreen" class="btn-header transparent pull-right">
@@ -175,10 +206,19 @@
                 </li>
             </ul>*@
         <!-- end multiple lang -->
-
-    </div>
-    <!-- end pulled right: nav area -->
-
+        <!-- end pulled right: nav area -->
+        <div id="dialog-modifyPwd" title="修改密码"  style="display:none;">
+            <p class="validateTips">请设置不少于6位，不多于16位的密码，仅可包含字母与数字。</p>
+            <form>
+                <fieldset>
+                    <label for="password">新的密码</label>
+                    <input type="password" name="password" id="password" value="" class="text ui-widget-content ui-corner-all">
+                    <label for="password">再次输入</label>
+                    <input type="password" name="password_ck" id="password_ck" value="" class="text ui-widget-content ui-corner-all">
+                </fieldset>
+            </form>
+        </div>
+      
 </header>
 <!-- END HEADER -->
 
@@ -198,7 +238,7 @@
                     break;
                 }
             }
-            
+
         }
 
         if ('@hasNotify' == 'True') {
@@ -216,6 +256,96 @@
                     toastr.error('获取状态消息错误！');
                 }
             })*@
+        }
+
+        var password = $("#password");
+        var password_ck = $("#password_ck");
+        //allFields = $( [] ).add( name ).add( email ).add( password ),
+        var tips = $(".validateTips");
+        //修改密码
+        $("#dialog-modifyPwd").dialog({
+            autoOpen: false,
+            height: 320,
+            width: 400,
+            modal: true,           
+            buttons: {
+                "修改密码": function () {
+                    var bValid = true;
+                  //  allFields.removeClass("ui-state-error");
+                    bValid = bValid && checkLength(password, "password", 6, 16);
+                    //bValid = bValid && checkRegexp( name, /^[a-z]([0-9a-z_])+$/i, "用户名必须由 a-z、0-9、下划线组成，且必须以字母开头。" );
+                    bValid = bValid && checkRegexp(password, /^([0-9a-zA-Z])+$/, "密码字段只允许： a-z 0-9");
+                    bValid = bValid && checkEquals(password, password_ck, "两次输入的密码不一致，请重新输入");
+
+                    if (bValid) {
+                        var idandpwd = "@user.Id" + "," + password.val();
+                        $.ajax({
+                            type: "POST",
+                            async: false,
+                            url: "../Member/User/ModifyPassword?user=" + idandpwd,
+                            //data: JSON.stringify(params),
+                            contentType: "application/json; charset=utf-8",
+                            datatype: "json",
+                            success: function (data) {
+                                toastr.info('修改密码成功！');
+                            },
+                            error: function () {
+                                toastr.error('修改密码失败！');
+                            }
+                        });
+                        $(this).dialog("close");
+                    }
+                },
+                Cancel: function () {
+                    $(this).dialog("close");
+                }
+            }
+            //,
+            //close: function () {
+            //    //allFields.val("").removeClass("ui-state-error");
+            //}
+        });
+        //$("#modify").click(function (event) {                    
+        //    $("#dialog-modifyPwd").dialog("open");
+        //});
+       
+        function updateTips(t) {
+            tips
+              .text(t)
+              .addClass("ui-state-highlight");
+            setTimeout(function () {
+                tips.removeClass("ui-state-highlight", 1500);
+            }, 500);
+        }
+
+        function checkLength(o, n, min, max) {
+            if (o.val().length > max || o.val().length < min) {
+                o.addClass("ui-state-error");
+                updateTips("" + n + " 的长度必须在 " +
+                  min + " 和 " + max + " 之间。");
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        function checkRegexp(o, regexp, n) {
+            if (!(regexp.test(o.val()))) {
+                o.addClass("ui-state-error");
+                updateTips(n);
+                return false;
+            } else {
+                return true;
+            }
+        }
+        function checkEquals(comp1, comp2, n) {
+            if (comp1.val() == comp2.val()) {
+                return true;
+            } else {
+                comp2.addClass('ui-state-error');
+                updateTips(n);
+                return false;
+            }
         }
     });
 
@@ -272,4 +402,8 @@
             }
         })
     }*@
+    function openModify() {
+        $("#dialog-modifyPwd").css("display", "block");
+        $("#dialog-modifyPwd").dialog("open");
+    }
 </script>

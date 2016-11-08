@@ -136,14 +136,23 @@ namespace BEYON.CoreBLL.Service.Member
 
         public OperationResult ResetPassword(IEnumerable<UserVM> list)
         {
-
-            var listIds = list.Select(c => c.Id).ToList();
             try
             {
+                var listIds = list.Select(c => c.Id).ToList();
                 string md5Pwd = EncryptionHelper.GetMd5Hash("123456");
-                _userRepository.Entities.Where(u => listIds.Contains(u.Id))
-                    .Update(u => new User() { Password = md5Pwd });
-                UnitOfWork.Commit();
+                //_userRepository.Entities.Where(u => listIds.Contains(u.Id))
+                //    .Update(u => new User() { Password = md5Pwd });
+                //UnitOfWork.Commit();
+                foreach (int uu in listIds)
+                {
+                    User user = _userRepository.GetUserByUserId(uu);
+                    if (user != null)
+                    {
+                        user.Password = md5Pwd;
+                        user.UpdateDate = DateTime.Now;
+                        _userRepository.Update(user);
+                    }
+                }
                 return new OperationResult(OperationResultType.Success, "密码重置成功！");
             }
             catch
@@ -153,6 +162,30 @@ namespace BEYON.CoreBLL.Service.Member
 
         }
 
+        public OperationResult ModifyPassword(String idAndPwd)
+        {
+            try
+            {
+                String[] uu = idAndPwd.Split(',');
+                string md5Pwd = EncryptionHelper.GetMd5Hash(uu[1]);
+                int userId = Int32.Parse(uu[0]);
+                User user = _userRepository.GetUserByUserId(userId);
+                if (user != null)
+                {
+                    user.Password = md5Pwd;
+                    user.UpdateDate = DateTime.Now;
+                    _userRepository.Update(user);
+                    return new OperationResult(OperationResultType.Success, "修改密码成功！");
+                }
+                else {
+                    return new OperationResult(OperationResultType.Error, "修改密码失败!");
+                }
+            }
+            catch
+            {
+                return new OperationResult(OperationResultType.Error, "修改密码失败!");
+            }         
+        }
 
         public OperationResult UpdateUserRoles(int userId, string[] chkRoles)
         {

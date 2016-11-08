@@ -36,5 +36,7 @@ namespace BEYON.Domain.Data.Repositories.Member
         int GetUserIDByUserName(String userName);
 
         User GetUserByUserName(String userName);
+
+        User GetUserByUserId(int userId);
     }
 }

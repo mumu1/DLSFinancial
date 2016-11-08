@@ -258,7 +258,7 @@ namespace BEYON.Web.Areas.App.Controllers
                 TaxOrNot = recordVMs[0].TaxOrNot,
                 Bank = recordVMs[0].Bank,
                 BankDetailName = recordVMs[0].BankDetailName,
-                AccountName = recordVMs[0].AccountName,
+                AccountName = recordVMs[0].Name,
                 AccountNumber = recordVMs[0].AccountNumber,
                 PaymentType = recordVMs[0].PaymentType,
                 UpdateDate = DateTime.Now
