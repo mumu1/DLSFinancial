@@ -181,6 +181,8 @@
     <Compile Include="Areas\BasicDataManagement\BasicDataManagementRegistration.cs" />
     <Compile Include="Areas\BasicDataManagement\Controllers\AuditOptionController.cs" />
     <Compile Include="Areas\BasicDataManagement\Controllers\BankAccountController.cs" />
+    <Compile Include="Areas\BasicDataManagement\Controllers\TaxPerOrderHistoryController.cs" />
+    <Compile Include="Areas\BasicDataManagement\Controllers\TaxPerOrderController.cs" />
     <Compile Include="Areas\BasicDataManagement\Controllers\TaskManageController.cs" />
     <Compile Include="Areas\BasicDataManagement\Controllers\DepartmentController.cs" />
     <Compile Include="Areas\BasicDataManagement\Controllers\ProfessionalController.cs" />
@@ -503,6 +505,8 @@
     <Content Include="Scripts\bootstraptable\dist\locale\bootstrap-table-zh-TW.js" />
     <Content Include="Scripts\bootstraptable\dist\locale\bootstrap-table-zh-TW.min.js" />
     <Content Include="Scripts\bootstrap\bootstrap.min.js" />
+    <Content Include="Scripts\Custom\App\File.js" />
+    <Content Include="Scripts\Custom\App\IdentifyCard.js" />
     <Content Include="Scripts\Custom\App\Menu.js" />
     <Content Include="Scripts\Custom\App\Navigation.js" />
     <Content Include="Scripts\Custom\App\Query.js" />
@@ -632,6 +636,9 @@
     <Content Include="Areas\App\Views\ApplyForm\Show.cshtml" />
     <Content Include="Areas\BasicDataManagement\Views\TaskManage\Index.cshtml" />
     <Content Include="Areas\BasicDataManagement\Views\Department\Index.cshtml" />
+    <Content Include="Areas\App\Views\Statistics\TaskDetail.cshtml" />
+    <Content Include="Areas\BasicDataManagement\Views\TaxPerOrder\Index.cshtml" />
+    <Content Include="Areas\BasicDataManagement\Views\TaxPerOrderHistory\Index.cshtml" />
     <None Include="Properties\PublishProfiles\beyondb.pubxml" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Scripts\AdminLTE2.3.0\bootstrap\css\bootstrap.css" />

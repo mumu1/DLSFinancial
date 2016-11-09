@@ -1,0 +1,159 @@
+﻿@using BEYON.Domain.Model.App
+
+<div id="content" style="overflow-y: auto; height: 100%; opacity: 1;">
+    <div class="content-wrapper">
+        <!-- widget content -->
+        <div class="widget-body">
+            <table id="datatable_tabletools" class="table table-striped table-bordered table-hover" width="100%"></table>
+        </div>
+        <!-- end widget content -->
+
+    </div>
+    <!-- end widget div -->
+
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        loadTableData();
+
+    });
+
+    //加载职称列表
+    function loadTableData() {
+        $.ajax({
+            type: "GET",
+            url: "../BasicDataManagement/TaxPerOrder/GetAllData",
+            //data: params,
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            success: function (data) {
+                initTable(data);
+            },
+            error: function () {
+                toastr.error('获取本月算税数据失败！');
+            }
+        });
+    }
+
+    function initTable(data) {
+        pageSetUp();
+        //更新数据
+        if ($.fn.dataTable.isDataTable('#datatable_tabletools')) {
+            var oSettings = table.fnSettings();
+            table.fnClearTable(this);
+            for (var i = 0; i < data.rows.length; i++) {
+                table.oApi._fnAddData(oSettings, data.rows[i]);
+            }
+
+            oSettings.aiDisplay = oSettings.aiDisplayMaster.slice();
+            table.fnDraw();
+            return;
+        }
+
+        @*var editor = new $.fn.dataTable.Editor({
+            "ajaxUrl": {
+                "create": "@Url.Action("Create")",
+                "edit": "@Url.Action("Edit")",
+                "remove": "@Url.Action("Delete")"
+            },
+            "table": "#datatable_tabletools",
+            fields: [{
+                label: "部门代码",
+                name: "DepartmentCode"
+            }, {
+                label: "部门名称:",
+                name: "DepartmentName"
+            }
+            ]
+        });*@
+
+        table = $('#datatable_tabletools').dataTable({
+            dom: 'Bfrtip',
+            ajax: '@Url.Action("GetAllData")',
+            buttons: [
+                //{
+                //    text: "新增", extend: "create", editor: editor
+                //},
+                //{
+                //    text: "修改", extend: "edit", editor: editor
+                //},
+                //{ text: "删除", extend: "remove", editor: editor },
+                {
+                    extend: 'collection',
+                    text: '导出',
+                    buttons: [
+                        //{ text: "拷贝", extend: 'copy' },
+                        { text: "EXCEL表格", extend: 'excel' },
+                        //{ text: "CSV表格", extend: 'csv' },
+                        //{ text: "PDF文档", extend: 'pdf' },
+                        //{ text: "打印", extend: 'print' }
+                    ]
+                },
+                {
+                    text: "刷新",
+                    action: function (e, dt, node, config) {
+                        dt.ajax.reload();
+                    }
+                }
+            ],
+            searching: true,
+            ordering: true,
+            select: true,
+            info: true,
+            paginate: true, //是否显示（应用）分页器
+            sort: true, //是否启动各个字段的排序功能
+            stateSave: false,
+            stateDuration: 60 * 60 * 12,
+            autoWidth: true,
+            bProcessing: true,
+            paging: false,
+            "sScrollY": "100%",
+            "sScrollX": "100%",
+            "sScrollXInner": "100%",
+            scrollCollapse: true,
+            columns: [
+                                   // { data: "Id", title: "编号" },
+                                    { data: "SerialNumber", title: "申请单流水号"},
+                                    { data: "Name", title: "姓名" },
+                                    { data: "PersonType", title: "人员类型" },
+                                    { data: "CertificateType", title: "证件类型" },
+                                    { data: "CertificateID", title: "证件号码" },
+                                    { data: "PaymentType", title: "支付类型" },
+                                    { data: "Amount", title: "金额" },
+                                    { data: "TaxOrNot", title: "是否含税" },
+                                    { data: "Tax", title: "应纳税额" },
+                                    { data: "AmountY", title: "税前金额" },
+                                    { data: "AmountX", title: "税后金额" },
+                                    { data: "ProjectNumber", title: "课题号" },
+                                    { data: "TaskName", title: "课题名称" },
+                                    { data: "ProjectDirector", title: "课题负责人" },
+                                    { data: "Agent", title: "经办人" },
+                                    { data: "Bank", title: "开户银行" },
+                                    { data: "AccountNumber", title: "银行账号" },
+                                    { data: "BankDetailName", title: "开户行详细名称" }
+            ],
+           
+            oLanguage: {
+                "sLengthMenu": "每页显示 _MENU_ 条记录",
+                "sZeroRecords": "抱歉， 没有找到",
+                "sInfo": "显示 _START_ 到 _END_ 条记录，总共 _TOTAL_ 条记录",
+                "sInfoEmpty": "没有数据",
+                "sInfoFiltered": "(从 _MAX_ 条数据中检索)",
+                "sZeroRecords": "没有检索到数据",
+                "sSearch": "搜索名称:",
+                "sSelected": "选中 _TOTAL_ 条记录",
+                "oPaginate": {
+                    "sFirst": "首页",
+                    "sPrevious": "前一页",
+                    "sNext": "后一页",
+                    "sLast": "尾页"
+                }
+
+            }
+        });
+    }
+    
+
+</script>

@@ -5,7 +5,7 @@
 
 <div class="content-wrapper">
     <div class="widget-body">
-        <table id="datatable_perperson_detail" class="table table-striped table-bordered table-hover" width="100%"></table>
+        <table id="datatable_labor_statistics" class="table table-striped table-bordered table-hover" style="width:100%"></table>
     </div>
 </div>
 
@@ -19,7 +19,9 @@
 
     // pagefunction
     var pagefunction = function () {
-        initTable();
+        $(document).ready(function () {
+            initTable();
+        })
     };
     // end pagefunction
 
@@ -34,23 +36,6 @@
     pagefunction();
 
     function initTable() {
-        var editor = new $.fn.dataTable.Editor({
-            "ajaxUrl": {
-                "remove": "@Url.Action("Delete")"
-            },
-            "table": "#datatable_perperson_detail",
-            fields: [
-                { name: "SerialNumber", label: "申请单流水号:", type: "hidden" },
-                { name: "AuditStatus", label: "审核状态:", type: "hidden" }
-            ]
-        });
-
-        editor.on('submitSuccess', function () {
-
-        });
-
-
-
         var buttons = [
             {
                     extend: 'collection',
@@ -71,14 +56,14 @@
 
         $.ajax({
             type: "POST",
-            url: "@Url.Action("PerPersonDetailColumns")",
+            url: "@Url.Action("LaborStatisticsColumns")",
             dataType: "json",
             contentType: "application/json; charset=utf-8",
             success: function (columns) {
-                var table = $('#datatable_perperson_detail').dataTable({
+                var table = $('#datatable_labor_statistics').dataTable({
                     dom: 'Bfrtip',
                     colReorder: true,
-                    ajax: '@Url.Action("PerPersonDetailDatas")',
+                    ajax: '@Url.Action("LaborStatisticsDatas")',
                     searching: true,
                     ordering: true,
                     select: true,
@@ -91,8 +76,9 @@
                     bProcessing: true,
                     paging: false,
                     "sScrollY": "100%",
-                    "sScrollX": "300%",
-                    "sScrollXInner": "300%",
+                    "sScrollX": "100%",
+                    "sScrollXInner": "110%",
+                    scrollCollapse: true,
                     order: [[10, "desc"]],
                     buttons: buttons,
                     columns: columns,
@@ -114,8 +100,8 @@
                     }
                 });
 
-                $('#datatable_perperson_detail').DataTable().on('select', function (e, dt, type, indexes) {
-                    var selectedTable = $('#datatable_perperson_detail').DataTable();
+                $('#datatable_labor_statistics').DataTable().on('select', function (e, dt, type, indexes) {
+                    var selectedTable = $('#datatable_labor_statistics').DataTable();
                     var selectedRows = selectedTable.rows({ selected: true });
                     var selectedCount = selectedRows.count();
                     //if (selectedCount < 1) {

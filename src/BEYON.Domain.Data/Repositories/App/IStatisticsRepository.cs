@@ -15,5 +15,7 @@ namespace BEYON.Domain.Data.Repositories.App
          int GetMaxCountLaborStatistics();
 
          List<Object> GetLaborStatisticsDetail();
+
+         List<Object> GetTaskStatisticsDetail();
     }
 }

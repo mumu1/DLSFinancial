@@ -111,19 +111,20 @@
                 </ul>
             </li>
         </ul>
-        <!--modify password button-->
-        <div id="modify" class="btn-header transparent pull-right">          
-                <span>
-                    <a href="javascript:void(0);" onclick="openModify()" title="修改密码" ><i class="fa fa-user"></i></a>
-                </span>
-            </div>
-        
-
+     
         <!-- logout button -->
         <div id="logout" class="btn-header transparent pull-right">
             <span> <a href="@Url.Action("Logout", "Login", new { Area="Common"})" title="退出" data-action="userLogout" data-logout-msg="是否退出系统？"><i class="fa fa-sign-out"></i></a> </span>
         </div>
         <!-- end logout button -->
+
+        <!--modify password button-->
+        <div id="modify" class="btn-header transparent pull-right">
+            <span>
+                <a href="javascript:void(0);" onclick="openModify()" title="修改密码"><i class="fa fa-user"></i></a>
+            </span>
+        </div>
+
         <!-- search mobile button (this is hidden till mobile view port) -->
         <div id="search-mobile" class="btn-header transparent pull-right">
             <span> <a href="javascript:void(0)" title="Search"><i class="fa fa-search"></i></a> </span>

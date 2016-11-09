@@ -46,6 +46,13 @@ namespace BEYON.Web.Areas.App.Controllers
             return PartialView("Monthly");
         }
 
+        // GET: /App/Statistics/TaskDetail
+        [Layout]
+        public ActionResult TaskDetail()
+        {
+            return PartialView("TaskDetail");
+        }
+
         #region 按人明细统计业务流程
         //
         // GET: /App/Statistics/PerPersonDetailColumns

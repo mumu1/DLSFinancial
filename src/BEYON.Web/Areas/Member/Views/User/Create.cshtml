@@ -76,11 +76,13 @@
         <div class="col-sm-8">
             @Html.TextBoxFor(model => model.Department, new { @class = "form-control" })
             @Html.ValidationMessageFor(model => model.Department)
+
         </div>
 </div>
 <div class="form-group">
     <div class="col-sm-2">
         @Html.LabelFor(model => model.Title, new { @class = "control-label" })
+
     </div>
     <div class="col-sm-8">
         @Html.TextBoxFor(model => model.Title, new { @class = "form-control" })
@@ -104,5 +106,45 @@
             increaseArea: '20%' // optional
         });
     });
+    function GetDepartmentList() {
+        $.ajax({
+            type: "GET",
+            async: false,
+            url: "../BasicDataManagement/Department/GetAllData",
+            //data: params,
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            success: function (data) {
+                $("#dept_user").html("");
+                $.each(data.data, function (k, v) {
+                    $("#dept_user").append("<option>" + v.DepartmentName + "</option>");
+                })              
+            },
+            error: function () {
+                toastr.error('获取部门数据失败！');
+            }
+        });
+    }
+    function GetTitleList() {
+        $.ajax({
+            type: "GET",
+            async: false,
+            url: "../BasicDataManagement/Professional/GetAllData",
+            //data: params,
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            success: function (data) {
+                $("#title_user").html("");
+                $.each(data.data, function (k, v) {
+                    $("#title_user").append("<option>" + v.TitleName + "</option>");
+                })
+            },
+            error: function () {
+                toastr.error('获取职称数据失败！');
+            }
+        });
+    }
+
+
 </script>
 

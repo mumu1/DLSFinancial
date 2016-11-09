@@ -39,8 +39,9 @@ namespace BEYON.Component.Data.Migrations
                 new Module { Id = 1, ParentId = null, Name = "财务申请单", LinkUrl = "#",  Code = 100,  Description = null, IsMenu = true, Enabled = true,  UpdateDate = DateTime.Now, Icon = "fa-globe"},
                 new Module { Id = 2, ParentId = 1, Name = "申请单管理", LinkUrl = "~/App/ApplyForm/Index",  Code = 101,  Description = null, IsMenu = true, Enabled = true,  UpdateDate = DateTime.Now},
                 new Module { Id = 3, ParentId = null, Name = "财务统计", LinkUrl = "#",  Code = 200,  Description = null, IsMenu = true, Enabled = true,  UpdateDate = DateTime.Now, Icon = "fa-thumb-tack"},
-                new Module { Id = 4, ParentId = 3, Name = "按月统计报表", LinkUrl = "~/App/Statistics/Monthly",  Code = 201,  Description = null, IsMenu = true, Enabled = true,  UpdateDate = DateTime.Now },
-                new Module { Id = 5, ParentId = 3, Name = "按人明细统计报表", LinkUrl = "~/App/Statistics/PerPersonDetail",  Code = 202,  Description = null, IsMenu = true, Enabled = true,  UpdateDate = DateTime.Now },
+                new Module { Id = 4, ParentId = 3, Name = "人员劳务月统计报表", LinkUrl = "~/App/Statistics/Monthly",  Code = 201,  Description = null, IsMenu = true, Enabled = true,  UpdateDate = DateTime.Now },
+                new Module { Id = 5, ParentId = 3, Name = "人员工资月统计报表", LinkUrl = "~/App/Statistics/PerPersonDetail",  Code = 202,  Description = null, IsMenu = true, Enabled = true,  UpdateDate = DateTime.Now },
+                 new Module { Id = 35, ParentId = 3, Name = "课题月统计报表", LinkUrl = "~/App/Statistics/TaskDetail",  Code = 203,  Description = null, IsMenu = true, Enabled = true,  UpdateDate = DateTime.Now },
                 new Module { Id = 6, ParentId = null, Name = "系统管理", Code = 300,LinkUrl="#",  Description = null, IsMenu = true, Enabled = true,  UpdateDate = DateTime.Now, Icon = "fa-cogs"},
                 new Module { Id = 7, ParentId = 6, Name = "角色管理", LinkUrl = "~/Member/Role/Index",  Code = 301,Description = null, IsMenu = true, Enabled = true, UpdateDate = DateTime.Now},
                 new Module { Id = 8, ParentId = 6, Name = "用户管理", LinkUrl = "~/Member/User/Index", Code = 302, Description = null, IsMenu = true, Enabled = true, UpdateDate = DateTime.Now },
@@ -54,7 +55,9 @@ namespace BEYON.Component.Data.Migrations
                 new Module { Id = 16, ParentId = 12, Name = "工资基础表初始化", LinkUrl = "~/BasicDataManagement/WageBaseTable/Index",  Code = 404,Description = null, IsMenu = true, Enabled = true, UpdateDate = DateTime.Now},
                 new Module { Id = 17, ParentId = 12, Name = "审核意见字典表", LinkUrl = "~/BasicDataManagement/AuditOption/Index",  Code = 405,Description = null, IsMenu = true, Enabled = true, UpdateDate = DateTime.Now},
                 new Module { Id = 18, ParentId = 12, Name = "课题字典表", LinkUrl = "~/BasicDataManagement/TaskManage/Index",  Code = 406,Description = null, IsMenu = true, Enabled = true, UpdateDate = DateTime.Now},
-                new Module { Id = 19, ParentId = 12, Name = "部门字典表", LinkUrl = "~/BasicDataManagement/Department/Index",  Code = 407,Description = null, IsMenu = true, Enabled = true, UpdateDate = DateTime.Now}
+                new Module { Id = 19, ParentId = 12, Name = "部门字典表", LinkUrl = "~/BasicDataManagement/Department/Index",  Code = 407,Description = null, IsMenu = true, Enabled = true, UpdateDate = DateTime.Now},
+                new Module { Id = 36, ParentId = 12, Name = "本月算税记录", LinkUrl = "~/BasicDataManagement/TaxPerOrder/Index",  Code = 408,Description = null, IsMenu = true, Enabled = true, UpdateDate = DateTime.Now},
+                new Module { Id = 37, ParentId = 12, Name = "历史算税记录", LinkUrl = "~/BasicDataManagement/TaxPerOrderHistory/Index",  Code = 409,Description = null, IsMenu = true, Enabled = true, UpdateDate = DateTime.Now}
         
             };
             DbSet<Module> moduleSet = context.Set<Module>();
@@ -70,8 +73,10 @@ namespace BEYON.Component.Data.Migrations
             #endregion
 
             #region 财务统计
-             new Permission{Id=2, Name="月统计",Code=EnumPermissionCode.Input.ToString(), Description="按月统计报表" ,Enabled=true,UpdateDate=DateTime.Now,module=modules[3]},
-             new Permission{Id=3, Name="人统计",Code=EnumPermissionCode.Input.ToString(), Description="按人明细统计报表" ,Enabled=true,UpdateDate=DateTime.Now,module=modules[4]},
+             new Permission{Id=2, Name="劳务统计",Code=EnumPermissionCode.Input.ToString(), Description="人员劳务月统计报表" ,Enabled=true,UpdateDate=DateTime.Now,module=modules[3]},
+             new Permission{Id=3, Name="工资统计",Code=EnumPermissionCode.Input.ToString(), Description="人员工资月统计报表" ,Enabled=true,UpdateDate=DateTime.Now,module=modules[4]},
+             new Permission{Id=35, Name="课题统计",Code=EnumPermissionCode.Input.ToString(), Description="课题月统计报表" ,Enabled=true,UpdateDate=DateTime.Now,module=modules[5]},
+       
             #endregion
 
             #region 角色
@@ -121,7 +126,9 @@ namespace BEYON.Component.Data.Migrations
              new Permission{Id=30, Name="操作",Code=EnumPermissionCode.Audit.ToString(), Description="工资基础表初始化" ,Enabled=true,UpdateDate=DateTime.Now,module=modules[15]},
              new Permission{Id=31, Name="操作",Code=EnumPermissionCode.Audit.ToString(), Description="审核意见字典表" ,Enabled=true,UpdateDate=DateTime.Now,module=modules[16]},
              new Permission{Id=32, Name="操作",Code=EnumPermissionCode.Audit.ToString(), Description="课题字典表" ,Enabled=true,UpdateDate=DateTime.Now,module=modules[17]},           
-             new Permission{Id=33, Name="操作",Code=EnumPermissionCode.Audit.ToString(), Description="部门字典表" ,Enabled=true,UpdateDate=DateTime.Now,module=modules[18]}                     
+             new Permission{Id=33, Name="操作",Code=EnumPermissionCode.Audit.ToString(), Description="部门字典表" ,Enabled=true,UpdateDate=DateTime.Now,module=modules[18]},                     
+             new Permission{Id=36, Name="操作",Code=EnumPermissionCode.Audit.ToString(), Description="本月算税记录" ,Enabled=true,UpdateDate=DateTime.Now,module=modules[19]},     
+             new Permission{Id=37, Name="操作",Code=EnumPermissionCode.Audit.ToString(), Description="历史算税记录" ,Enabled=true,UpdateDate=DateTime.Now,module=modules[20]},  
             #endregion
             };
             DbSet<Permission> permissionSet = context.Set<Permission>();
