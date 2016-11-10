@@ -56,11 +56,14 @@ namespace BEYON.CoreBLL.Service.App
                     //double deductTaxSum = 0.0;
                     //2.从基本工资表TaxBaseByMonth中查询（初始应发工资-免税额-基本扣除）
                     double baseSalary = _TaxBaseByMonthRepository.GetBaseSalary(model.CertificateID);
+                    //从基本工资表里读取税
+                    double baseTax = _TaxBaseByMonthRepository.GetBaseTax(model.CertificateID);
                     //double baseSalary = 4000;
                     //3.根据已发放总金额，判断算税公式 
                     //含税与不含税的税率区间不同，分开判断
-                    //含税公式：T=【Y+(初始应发工资-免税额-基本扣除数)】*税率-速算扣除数-前几次税额总数
+                    //含税公式：T=【Y+(初始应发工资-免税额-基本扣除数)】*税率-速算扣除数-初始表税-前几次税额总数
                     double interval = model.Amount + amount + baseSalary;
+                   
                     //4.计算Tax(税额),AmountX(税后),AmountY(税前)
                     if (model.TaxOrNot.Equals("含税"))
                     {
@@ -71,37 +74,37 @@ namespace BEYON.CoreBLL.Service.App
                         //不超过1500元，税率3%，速算扣除数0
                         else if (interval > 0 && interval <= 1500)
                         {
-                            tax = interval * 0.03 - deductTaxSum;
+                            tax = interval * 0.03 - deductTaxSum - baseTax;
                         }
                         //超过1500至4500元，税率10%，速算扣除数105
                         else if (interval > 1500 && interval <= 4500)
                         {
-                            tax = interval * 0.1 - 105 - deductTaxSum;
+                            tax = interval * 0.1 - 105 - deductTaxSum - baseTax;
                         }
                         //超过4500至9000元，税率20%，速算扣除数555
                         else if (interval > 4500 && interval <= 9000)
                         {
-                            tax = interval * 0.2 - 555 - deductTaxSum;
+                            tax = interval * 0.2 - 555 - deductTaxSum - baseTax;
                         }
                         //超过9000至35000元，税率25%，速算扣除数1005
                         else if (interval > 9000 && interval <= 35000)
                         {
-                            tax = interval * 0.25 - 1005 - deductTaxSum;
+                            tax = interval * 0.25 - 1005 - deductTaxSum - baseTax;
                         }
                         //超过35000至55000元，税率30%，速算扣除数2755
                         else if (interval > 35000 && interval <= 55000)
                         {
-                            tax = interval * 0.3 - 2755 - deductTaxSum;
+                            tax = interval * 0.3 - 2755 - deductTaxSum - baseTax;
                         }
                         //超过55000至80000元，税率35%，速算扣除数5505
                         else if (interval > 55000 && interval <= 80000)
                         {
-                            tax = interval * 0.35 - 5505 - deductTaxSum;
+                            tax = interval * 0.35 - 5505 - deductTaxSum - baseTax;
                         }
                         //超过80000元，税率45%，速算扣除数13505
                         else if (interval > 80000)
                         {
-                            tax = interval * 0.45 - 13505 - deductTaxSum;
+                            tax = interval * 0.45 - 13505 - deductTaxSum - baseTax;
                         }
                         amountX = model.Amount - tax;
                         amountY = model.Amount;
@@ -112,40 +115,54 @@ namespace BEYON.CoreBLL.Service.App
                         {
                             tax = 0.0;
                         }
-                        //不超过1455元，税率3%，速算扣除数0
-                        else if (interval > 0 && interval <= 1455)
+                        ////不超过1455元，税率3%，速算扣除数0
+                        //else if (interval > 0 && interval <= 1455)
+                        //不超过1500元，税率3%，速算扣除数0
+                        else if (interval > 0 && interval <= 1500)
                         {
-                            tax = (interval * 0.03) / (1 - 0.03) - deductTaxSum;
+                            tax = (interval * 0.03 - baseTax) / (1 - 0.03) - deductTaxSum;
                         }
-                        //超过1455至4155元，税率10%，速算扣除数105
-                        else if (interval > 1455 && interval <= 4155)
+                        ////超过1455至4155元，税率10%，速算扣除数105
+                        //else if (interval > 1455 && interval <= 4155)
+                        //超过1500至4500元，税率10%，速算扣除数105
+                        else if (interval > 1500 && interval <= 4500)
                         {
-                            tax = (interval * 0.1 - 105) / (1 - 0.1) - deductTaxSum;
+                            tax = (interval * 0.1 - baseTax - 105) / (1 - 0.1) - deductTaxSum;
                         }
-                        //超过4155至7755元，税率20%，速算扣除数555
-                        else if (interval > 4155 && interval <= 7755)
+                        ////超过4155至7755元，税率20%，速算扣除数555
+                        //else if (interval > 4155 && interval <= 7755)
+                        //超过4500至9000元，税率20%，速算扣除数555
+                        else if (interval > 4500 && interval <= 9000)
                         {
-                            tax = (interval * 0.2 - 555) / (1 - 0.2) - deductTaxSum;
+                            tax = (interval * 0.2 - baseTax - 555) / (1 - 0.2) - deductTaxSum;
                         }
-                        //超过7755至27255元，税率25%，速算扣除数1005
-                        else if (interval > 7755 && interval <= 27255)
+                        ////超过7755至27255元，税率25%，速算扣除数1005
+                        //else if (interval > 7755 && interval <= 27255)
+                        //超过9000至35000元，税率25%，速算扣除数1005
+                        else if (interval > 9000 && interval <= 35000)
                         {
-                            tax = (interval * 0.25 - 1005) / (1 - 0.25) - deductTaxSum;
+                            tax = (interval * 0.25 - baseTax - 1005) / (1 - 0.25) - deductTaxSum;
                         }
-                        //超过27255至41255元，税率30%，速算扣除数2755
-                        else if (interval > 27255 && interval <= 41255)
+                        ////超过27255至41255元，税率30%，速算扣除数2755
+                        //else if (interval > 27255 && interval <= 41255)
+                        //超过35000至55000元，税率30%，速算扣除数2755
+                        else if (interval > 35000 && interval <= 55000)
                         {
-                            tax = (interval * 0.3 - 2755) / (1 - 0.3) - deductTaxSum;
+                            tax = (interval * 0.3 - baseTax - 2755) / (1 - 0.3) - deductTaxSum;
                         }
-                        //超过41255至57505元，税率35%，速算扣除数5505
-                        else if (interval > 41255 && interval <= 57505)
+                        ////超过41255至57505元，税率35%，速算扣除数5505
+                        //else if (interval > 41255 && interval <= 57505)
+                        //超过55000至80000元，税率35%，速算扣除数5505
+                        else if (interval > 55000 && interval <= 80000)
                         {
-                            tax = (interval * 0.35 - 5505) / (1 - 0.35) - deductTaxSum;
+                            tax = (interval * 0.35 - baseTax - 5505) / (1 - 0.35) - deductTaxSum;
                         }
-                        //超过57505元，税率45%，速算扣除数13505
-                        else if (interval > 57505)
+                        ////超过57505元，税率45%，速算扣除数13505
+                        //else if (interval > 57505)
+                        //超过80000元，税率45%，速算扣除数13505
+                        else if (interval > 80000)
                         {
-                            tax = (interval * 0.45 - 13505) / (1 - 0.45) - deductTaxSum;
+                            tax = (interval * 0.45 - baseTax - 13505) / (1 - 0.45) - deductTaxSum;
                         }
                         amountX = model.Amount;
                         amountY = model.Amount + tax;

@@ -311,7 +311,7 @@
              { name: "Amount", label: "金额(元):", type: "text" },
               {
                   name: "TaxOrNot",
-                  label: "是否含税:",
+                  label: "是否含税:",               
                   type: "radio",
                   options: [
                       { label: "含税", value: "含税" },
@@ -327,7 +327,7 @@
                 def: "工商银行"
             },
             { name: "AccountNumber", label: "银行账户:", type: "text" },
-            { name: "BankDetailName", label: "开户行详细名称:", type: "text", fieldInfo: "除工商银行外，选择其他银行转账均需填写该项" },
+            { name: "BankDetailName", label: "开户行详细名称:", type: "text", fieldInfo: "<font color='red'>除工商银行外，选择其他银行转账均需填写该项</font>" },
              {
                  name: "PaymentType",
                  label: "支付类型:",
@@ -388,17 +388,23 @@
             var paymentType = $('#paymentType').val();
             //alert(paymentType);                 
             var Bank = editor.field('Bank');
+            var Company = editor.field('Company');
             var AccountNumber = editor.field('AccountNumber');
             var BankDetailName = editor.field('BankDetailName');
             //0.各项必填验证
             if (personName.val().trim() == "") {
                 personName.error("请填写人员姓名");
             }
+            if (Company.val().trim() == "") {
+                Company.error("请填写人员单位");
+            }
             if (paymentType == "银行转账" && AccountNumber.val().trim() == "") {
                 AccountNumber.error("请填写银行账号");
             }
-            if (Bank.val() != "工商银行" && BankDetailName.val().trim == "" || BankDetailName.val() == null) {
-                BankDetailName.error("请填写开户行详细名称");
+            if (Bank.val().trim() !== "工商银行") {
+                if (BankDetailName.val().trim() == ""  ) {
+                    BankDetailName.error("请填写开户行详细名称");
+                }
             }
 
             //1.身份证检查
@@ -613,9 +619,10 @@
                         contentType: 'application/json; charset=utf8',
                         cache: false,
                         dataType: 'html',
-                        success: function (data) {
+                        success: function (data) {                       
                             $('#importDataDialog').html(data);
                             dt.ajax.reload();
+                           
                         },
                         error: function (xhr) {
                             alert("出现错误，请稍后再试:" + xhr.responseText);
@@ -670,7 +677,7 @@
                 { data: "Title", title: "职称" },
                 { data: "TaxOrNot", title: "是否含税" },
                 { data: "Amount", title: "金额(元)" },
-                { data: "Bank", title: "开户银行", attribute: "开户银行" },
+                { data: "Bank", title: "开户银行" },
                 { data: "AccountNumber", title: "银行账号" },
                 { data: "BankDetailName", title: "开户行详细名称" },
                 { data: "AccountName", title: "账户名称", visible: false },

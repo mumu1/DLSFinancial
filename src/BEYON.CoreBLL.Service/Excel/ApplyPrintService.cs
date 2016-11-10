@@ -94,7 +94,7 @@ namespace BEYON.CoreBLL.Service.Excel
             if (applicationForm.PaymentType.Equals("银行转账"))
             {
                 int rowCount = persons.Count();//总行数
-                int nMax = rowCount + 5 - 1;
+                int nMax = rowCount + 6 - 1;
                 const int columnCount = 15;//总列数          
 
                 //1.设置标题
@@ -107,63 +107,76 @@ namespace BEYON.CoreBLL.Service.Excel
                 titleRange.HorizontalAlignment = XlHAlign.xlHAlignCenter; //水平居中
                 titleRange.VerticalAlignment = XlVAlign.xlVAlignCenter;   //垂直居中
 
-                Range tipRange = worksheet.get_Range(worksheet.Cells[2, 1], worksheet.Cells[2, columnCount]);//选取单元格
+                //设置空行
+                Range Range2 = worksheet.get_Range(worksheet.Cells[2, 1], worksheet.Cells[2, columnCount]);//选取单元格
+                Range2.Merge(true);
+
+                Range tipRange = worksheet.get_Range(worksheet.Cells[3, 1], worksheet.Cells[3, columnCount]);//选取单元格
                 tipRange.Merge(true);//合并单元格
-                tipRange.Value = "我声明，以下填写的内容是完全真实的，如有不实，由此产生的一切后果由本人承担。---声明人签字:           "; //设置单元格内文本
+                tipRange.Value = "我声明，以下填写的内容是完全真实的，如有不实，由此产生的一切后果由本人承担。---声明人签字:"; //设置单元格内文本
                 tipRange.Font.Name = "宋体";//设置字体
                 tipRange.Font.Size = 10;//字体大小
                 tipRange.Font.Bold = true;//加粗显示
                 tipRange.HorizontalAlignment = XlHAlign.xlHAlignLeft;//水平居中
                 tipRange.VerticalAlignment = XlVAlign.xlVAlignCenter;//垂直居中
 
-                //Range Range1 = worksheet.get_Range(worksheet.Cells[1, 1], worksheet.Cells[3, columnCount]);//选取单元格
-                //Range1.Merge(true);
+                //流水号
+                Range SerRange = worksheet.get_Range(worksheet.Cells[4, 1], worksheet.Cells[4, columnCount]);//选取单元格
+                SerRange.Merge(true);
+                SerRange.Value = String.Format("流水号：  {0}", applicationForm.SerialNumber); //设置单元格内文本
+                SerRange.Font.Name = "黑体";//设置字体
+                SerRange.Font.Size = 12;//字体大小
+                //SerRange.Font.Bold = true;//加粗显示
+                SerRange.HorizontalAlignment = XlHAlign.xlHAlignRight; //水平靠右
+                SerRange.VerticalAlignment = XlVAlign.xlVAlignCenter;   //垂直居中
+                
+
+                Range infoRange = worksheet.get_Range(worksheet.Cells[5, 1], worksheet.Cells[5, columnCount]);//选取单元格
+                infoRange.MergeCells = true;
+                infoRange.Font.Name = "黑体";//设置字体
+                infoRange.Font.Size = 10;//字体大小
+                infoRange.VerticalAlignment = XlVAlign.xlVAlignTop;//垂直居中
+                infoRange.HorizontalAlignment = XlHAlign.xlHAlignLeft; //水平靠左
+                infoRange.Value = String.Format("课题号：  {0}                   课题负责人：  {1}                   经办人：  {2}                   支付类型：  {3}                   合计金额：  {4} 元", applicationForm.ProjectNumber, applicationForm.ProjectDirector, applicationForm.Agent, applicationForm.PaymentType,applicationForm.Summation); //设置单元格内文本
+                  
 
                 //2.设置申请单常规信息格式
-                Range rangeSer1 = worksheet.get_Range(worksheet.Cells[3, 1], worksheet.Cells[3, 2]);//选取单元格
-                rangeSer1.Merge(true);
-                Range rangeSer = worksheet.get_Range(worksheet.Cells[3, 3], worksheet.Cells[3, 4]);//选取单元格
-                rangeSer.Merge(true);
-                Range rangeTask = worksheet.get_Range(worksheet.Cells[3, 6], worksheet.Cells[3, 7]);//选取单元格
-                rangeTask.Merge(true);
-                //Range rangeLeader = worksheet.get_Range(worksheet.Cells[3, 9], worksheet.Cells[3, 10]);//选取单元格
-                //rangeLeader.Merge(true);
-                //Range rangeSum = worksheet.get_Range(worksheet.Cells[3, 12], worksheet.Cells[3, 13]);//选取单元格
-                //rangeSum.Merge(true);
-                //Range rangePayment = worksheet.get_Range(worksheet.Cells[3, 15], worksheet.Cells[3, columnCount]);//选取单元格
-                //rangePayment.Merge(true);
+                //Range rangeSer1 = worksheet.get_Range(worksheet.Cells[3, 1], worksheet.Cells[3, 2]);//选取单元格
+                //rangeSer1.Merge(true);
+                //Range rangeSer = worksheet.get_Range(worksheet.Cells[3, 3], worksheet.Cells[3, 4]);//选取单元格
+                //rangeSer.Merge(true);
+                //Range rangeTask = worksheet.get_Range(worksheet.Cells[3, 6], worksheet.Cells[3, 7]);//选取单元格
+                //rangeTask.Merge(true);
+          
+                //worksheet.Cells[3, 1] = "流水号";
+                //worksheet.Cells[3, 3] = applicationForm.SerialNumber;
+                //worksheet.Cells[3, 5] = "课题号";
+                //worksheet.Cells[3, 6] = applicationForm.ProjectNumber;
+                //worksheet.Cells[3, 8] = "课题负责人";
+                //worksheet.Cells[3, 9] = applicationForm.ProjectDirector;
+                //worksheet.Cells[3, 10] = "经办人";
+                //worksheet.Cells[3, 11] = applicationForm.Agent;
+                //worksheet.Cells[3, 12] = "合计金额";
+                //worksheet.Cells[3, 13] = applicationForm.Summation;
+                //worksheet.Cells[3, 14] = "支付类型";
+                //worksheet.Cells[3, 15] = applicationForm.PaymentType;
 
-                worksheet.Cells[3, 1] = "流水号";
-                worksheet.Cells[3, 3] = applicationForm.SerialNumber;
-                worksheet.Cells[3, 5] = "课题号";
-                worksheet.Cells[3, 6] = applicationForm.ProjectNumber;
-                worksheet.Cells[3, 8] = "课题负责人";
-                worksheet.Cells[3, 9] = applicationForm.ProjectDirector;
-                worksheet.Cells[3, 10] = "经办人";
-                worksheet.Cells[3, 11] = applicationForm.Agent;
-                worksheet.Cells[3, 12] = "合计金额";
-                worksheet.Cells[3, 13] = applicationForm.Summation;
-                worksheet.Cells[3, 14] = "支付类型";
-                worksheet.Cells[3, 15] = applicationForm.PaymentType;
-
-                Range info = worksheet.get_Range(worksheet.Cells[3, 1], worksheet.Cells[3, columnCount]);//选取单元格           
-                info.Borders.LineStyle = XlLineStyle.xlContinuous;//设置边框
-                info.Borders.Weight = XlBorderWeight.xlThin;//边框常规粗细
-                info.HorizontalAlignment = XlHAlign.xlHAlignLeft;//水平居中
-                info.VerticalAlignment = XlVAlign.xlVAlignTop;//垂直居中
-                info.Font.Name = "宋体";//设置字体
-                info.Font.Size = 12;//字体大小
-                info.Font.Bold = true;//加粗显示
-                //设置空行
-                Range Range2 = worksheet.get_Range(worksheet.Cells[4, 1], worksheet.Cells[4, columnCount]);//选取单元格
-                Range2.Merge(true);
+                //Range info = worksheet.get_Range(worksheet.Cells[3, 1], worksheet.Cells[3, columnCount]);//选取单元格           
+                //info.Borders.LineStyle = XlLineStyle.xlContinuous;//设置边框
+                //info.Borders.Weight = XlBorderWeight.xlThin;//边框常规粗细
+                //info.HorizontalAlignment = XlHAlign.xlHAlignLeft;//水平居中
+                //info.VerticalAlignment = XlVAlign.xlVAlignTop;//垂直居中
+                //info.Font.Name = "宋体";//设置字体
+                //info.Font.Size = 12;//字体大小
+                //info.Font.Bold = true;//加粗显示
+               
 
                 //2.设置表头
                 string[] strHead = new string[columnCount] { "序号", "姓名", "证件类型", "身份证件号码", "单位", "联系电话", "国籍", "职称", "人员类型", "金额(元)", "是否含税", "开户银行", "银行存折帐号", "开户银行详细名称", "领取人签字" };
                 int[] columnWidth = new int[columnCount] { 4, 10, 10, 20, 20, 12, 10, 12, 10, 10, 10, 10, 20, 20, 12 };
                 for (int i = 0; i < columnCount; i++)
                 {
-                    Range headRange = worksheet.Cells[5, i + 1] as Range;//获取表头单元格,不用标题则从1开始
+                    Range headRange = worksheet.Cells[6, i + 1] as Range;//获取表头单元格,不用标题则从1开始
                     headRange.Value2 = strHead[i];//设置单元格文本
                     headRange.Font.Name = "宋体";//设置字体
                     headRange.Font.Size = 12;//字体大小
@@ -177,21 +190,21 @@ namespace BEYON.CoreBLL.Service.Excel
                 for (int k = 1; k <= rowCount; k++)
                 {
                     var person = persons[k - 1];
-                    excelApp.Cells[k + 5, 1] = string.Format("{0}", k);
-                    excelApp.Cells[k + 5, 2] = person.Name;
-                    excelApp.Cells[k + 5, 3] = person.CertificateType;
-                    excelApp.Cells[k + 5, 4] = person.CertificateID;
-                    excelApp.Cells[k + 5, 5] = person.Company;
-                    excelApp.Cells[k + 5, 6] = person.Tele;
-                    excelApp.Cells[k + 5, 7] = person.Nationality;
-                    excelApp.Cells[k + 5, 8] = person.Title;
-                    excelApp.Cells[k + 5, 9] = person.PersonType;
-                    excelApp.Cells[k + 5, 10] = person.Amount;
-                    excelApp.Cells[k + 5, 11] = person.TaxOrNot;
+                    excelApp.Cells[k + 6, 1] = string.Format("{0}", k);
+                    excelApp.Cells[k + 6, 2] = person.Name;
+                    excelApp.Cells[k + 6, 3] = person.CertificateType;
+                    excelApp.Cells[k + 6, 4] = person.CertificateID;
+                    excelApp.Cells[k + 6, 5] = person.Company;
+                    excelApp.Cells[k + 6, 6] = person.Tele;
+                    excelApp.Cells[k + 6, 7] = person.Nationality;
+                    excelApp.Cells[k + 6, 8] = person.Title;
+                    excelApp.Cells[k + 6, 9] = person.PersonType;
+                    excelApp.Cells[k + 6, 10] = person.Amount;
+                    excelApp.Cells[k + 6, 11] = person.TaxOrNot;
                     // excelApp.Cells[k + 5, 12] = person.PaymentType;
-                    excelApp.Cells[k + 5, 12] = person.Bank;
-                    excelApp.Cells[k + 5, 13] = person.AccountNumber;
-                    excelApp.Cells[k + 5, 14] = person.BankDetailName;
+                    excelApp.Cells[k + 6, 12] = person.Bank;
+                    excelApp.Cells[k + 6, 13] = person.AccountNumber;
+                    excelApp.Cells[k + 6, 14] = person.BankDetailName;
                 }
 
 
@@ -209,7 +222,7 @@ namespace BEYON.CoreBLL.Service.Excel
                 //    Missing.Value, Missing.Value, 560, 138, 108, 18);
                 //obj1.Name = "所外";
 
-                Range contentRange = worksheet.get_Range(worksheet.Cells[5, 1], worksheet.Cells[nMax + 1, columnCount]);//选取单元格
+                Range contentRange = worksheet.get_Range(worksheet.Cells[6, 1], worksheet.Cells[nMax + 1, columnCount]);//选取单元格
                 contentRange.Borders.LineStyle = XlLineStyle.xlContinuous;//设置边框
                 contentRange.Borders.Weight = XlBorderWeight.xlThin;//边框常规粗细
                 contentRange.HorizontalAlignment = XlHAlign.xlHAlignCenter;//水平居中
@@ -257,14 +270,17 @@ namespace BEYON.CoreBLL.Service.Excel
 
                 Range signRange = worksheet.get_Range(worksheet.Cells[nMax + 11, 1], worksheet.Cells[nMax + 12, columnCount]);//选取单元格
                 signRange.MergeCells = true;
+                signRange.Font.Name = "黑体";//设置字体
+                signRange.Font.Size = 10;//字体大小
                 signRange.VerticalAlignment = XlVAlign.xlVAlignTop;//垂直居中
-                signRange.Value = " 课题负责人:                                  部门负责人:                                  单位负责人:                                  经办人:                                  ";
+                signRange.HorizontalAlignment = XlHAlign.xlHAlignLeft; //水平靠左
+                signRange.Value = " 单位负责人:                                  部门负责人:                                 项目负责人:                                 课题负责人:                                 经办人:                                 ";
             }
             else if (applicationForm.PaymentType.Equals("现金支付"))
             {
                 //支付类型为现金，少三个字段
                 int rowCount = persons.Count();//总行数
-                int nMax = rowCount + 5 - 1;
+                int nMax = rowCount + 6 - 1;
                 const int columnCount = 12;//总列数
 
                 //1.设置标题
@@ -277,63 +293,69 @@ namespace BEYON.CoreBLL.Service.Excel
                 titleRange.HorizontalAlignment = XlHAlign.xlHAlignCenter; //水平居中
                 titleRange.VerticalAlignment = XlVAlign.xlVAlignCenter;   //垂直居中
 
-                Range tipRange = worksheet.get_Range(worksheet.Cells[2, 1], worksheet.Cells[2, columnCount]);//选取单元格
+                //设置空行
+                Range Range2 = worksheet.get_Range(worksheet.Cells[2, 1], worksheet.Cells[2, columnCount]);//选取单元格
+                Range2.Merge(true);
+
+                Range tipRange = worksheet.get_Range(worksheet.Cells[3, 1], worksheet.Cells[3, columnCount]);//选取单元格
                 tipRange.Merge(true);//合并单元格
                 tipRange.Value = "我声明，以下填写的内容是完全真实的，如有不实，由此产生的一切后果由本人承担。---声明人签字:           "; //设置单元格内文本
                 tipRange.Font.Name = "宋体";//设置字体
                 tipRange.Font.Size = 10;//字体大小
                 tipRange.Font.Bold = true;//加粗显示
                 tipRange.HorizontalAlignment = XlHAlign.xlHAlignLeft;//水平居中
-                tipRange.VerticalAlignment = XlVAlign.xlVAlignCenter;//垂直居中
+                tipRange.VerticalAlignment = XlVAlign.xlVAlignCenter;//垂直居中           
 
-                //Range Range1 = worksheet.get_Range(worksheet.Cells[1, 1], worksheet.Cells[3, columnCount]);//选取单元格
-                //Range1.Merge(true);
+                //流水号
+                Range SerRange = worksheet.get_Range(worksheet.Cells[4, 1], worksheet.Cells[4, columnCount]);//选取单元格
+                SerRange.Merge(true);
+                SerRange.Value = String.Format("流水号：  {0}", applicationForm.SerialNumber); //设置单元格内文本
+                SerRange.Font.Name = "黑体";//设置字体
+                SerRange.Font.Size = 12;//字体大小
+                //SerRange.Font.Bold = true;//加粗显示
+                SerRange.HorizontalAlignment = XlHAlign.xlHAlignRight; //水平靠右
+                SerRange.VerticalAlignment = XlVAlign.xlVAlignCenter;   //垂直居中
 
-                //2.设置申请单常规信息格式
-                //Range rangeSer1 = worksheet.get_Range(worksheet.Cells[3, 1], worksheet.Cells[3, 2]);//选取单元格
-                //rangeSer1.Merge(true);
-                //Range rangeSer = worksheet.get_Range(worksheet.Cells[3, 3], worksheet.Cells[3, 4]);//选取单元格
-                //rangeSer.Merge(true);
-                //Range rangeTask = worksheet.get_Range(worksheet.Cells[3, 6], worksheet.Cells[3, 7]);//选取单元格
-                //rangeTask.Merge(true);
-                //Range rangeLeader = worksheet.get_Range(worksheet.Cells[3, 9], worksheet.Cells[3, 10]);//选取单元格
-                //rangeLeader.Merge(true);
-                //Range rangeSum = worksheet.get_Range(worksheet.Cells[3, 12], worksheet.Cells[3, 13]);//选取单元格
-                //rangeSum.Merge(true);
-                //Range rangePayment = worksheet.get_Range(worksheet.Cells[3, 15], worksheet.Cells[3, columnCount]);//选取单元格
-                //rangePayment.Merge(true);
 
-                worksheet.Cells[3, 1] = "流水号";
-                worksheet.Cells[3, 2] = applicationForm.SerialNumber;
-                worksheet.Cells[3, 3] = "课题号";
-                worksheet.Cells[3, 4] = applicationForm.ProjectNumber;
-                worksheet.Cells[3, 5] = "课题负责人";
-                worksheet.Cells[3, 6] = applicationForm.ProjectDirector;
-                worksheet.Cells[3, 7] = "经办人";
-                worksheet.Cells[3, 8] = applicationForm.Agent;
-                worksheet.Cells[3, 9] = "合计金额";
-                worksheet.Cells[3, 10] = applicationForm.Summation;
-                worksheet.Cells[3, 11] = "支付类型";
-                worksheet.Cells[3, 12] = applicationForm.PaymentType;
+                Range infoRange = worksheet.get_Range(worksheet.Cells[5, 1], worksheet.Cells[5, columnCount]);//选取单元格
+                infoRange.MergeCells = true;
+                infoRange.Font.Name = "黑体";//设置字体
+                infoRange.Font.Size = 10;//字体大小
+                infoRange.VerticalAlignment = XlVAlign.xlVAlignTop;//垂直居中
+                infoRange.HorizontalAlignment = XlHAlign.xlHAlignLeft; //水平靠左
+                infoRange.Value = String.Format("课题号：  {0}                   课题负责人：  {1}                   经办人：  {2}                   支付类型：  {3}                   合计金额：  {4} 元", applicationForm.ProjectNumber, applicationForm.ProjectDirector, applicationForm.Agent, applicationForm.PaymentType, applicationForm.Summation); //设置单元格内文本
+                  
+                //worksheet.Cells[3, 1] = "流水号";
+                //worksheet.Cells[3, 2] = applicationForm.SerialNumber;
+                //worksheet.Cells[3, 3] = "课题号";
+                //worksheet.Cells[3, 4] = applicationForm.ProjectNumber;
+                //worksheet.Cells[3, 5] = "课题负责人";
+                //worksheet.Cells[3, 6] = applicationForm.ProjectDirector;
+                //worksheet.Cells[3, 7] = "经办人";
+                //worksheet.Cells[3, 8] = applicationForm.Agent;
+                //worksheet.Cells[3, 9] = "合计金额";
+                //worksheet.Cells[3, 10] = applicationForm.Summation;
+                //worksheet.Cells[3, 11] = "支付类型";
+                //worksheet.Cells[3, 12] = applicationForm.PaymentType;
 
-                Range info = worksheet.get_Range(worksheet.Cells[3, 1], worksheet.Cells[3, columnCount]);//选取单元格           
-                info.Borders.LineStyle = XlLineStyle.xlContinuous;//设置边框
-                info.Borders.Weight = XlBorderWeight.xlThin;//边框常规粗细
-                info.HorizontalAlignment = XlHAlign.xlHAlignLeft;//水平居中
-                info.VerticalAlignment = XlVAlign.xlVAlignTop;//垂直居中
-                info.Font.Name = "宋体";//设置字体
-                info.Font.Size = 12;//字体大小
-                info.Font.Bold = true;//加粗显示
+                //Range info = worksheet.get_Range(worksheet.Cells[3, 1], worksheet.Cells[3, columnCount]);//选取单元格           
+                //info.Borders.LineStyle = XlLineStyle.xlContinuous;//设置边框
+                //info.Borders.Weight = XlBorderWeight.xlThin;//边框常规粗细
+                //info.HorizontalAlignment = XlHAlign.xlHAlignLeft;//水平居中
+                //info.VerticalAlignment = XlVAlign.xlVAlignTop;//垂直居中
+                //info.Font.Name = "宋体";//设置字体
+                //info.Font.Size = 12;//字体大小
+                //info.Font.Bold = true;//加粗显示
                 //设置空行
-                Range Range2 = worksheet.get_Range(worksheet.Cells[4, 1], worksheet.Cells[4, columnCount]);//选取单元格
-                Range2.Merge(true);
+                //Range Range2 = worksheet.get_Range(worksheet.Cells[4, 1], worksheet.Cells[4, columnCount]);//选取单元格
+                //Range2.Merge(true);
 
                 //2.设置表头
                 string[] strHead = new string[columnCount] { "序号", "姓名", "证件类型", "身份证件号码", "单位", "联系电话", "国籍", "职称", "人员类型", "金额(元)", "是否含税", "领取人签字" };
                 int[] columnWidth = new int[columnCount] { 6, 20, 10, 20, 20, 12, 10, 12, 10, 10, 10,  12 };
                 for (int i = 0; i < columnCount; i++)
                 {
-                    Range headRange = worksheet.Cells[5, i + 1] as Range;//获取表头单元格,不用标题则从1开始
+                    Range headRange = worksheet.Cells[6, i + 1] as Range;//获取表头单元格,不用标题则从1开始
                     headRange.Value2 = strHead[i];//设置单元格文本
                     headRange.Font.Name = "宋体";//设置字体
                     headRange.Font.Size = 12;//字体大小
@@ -347,17 +369,17 @@ namespace BEYON.CoreBLL.Service.Excel
                 for (int k = 1; k <= rowCount; k++)
                 {
                     var person = persons[k - 1];
-                    excelApp.Cells[k + 5, 1] = string.Format("{0}", k);
-                    excelApp.Cells[k + 5, 2] = person.Name;
-                    excelApp.Cells[k + 5, 3] = person.CertificateType;
-                    excelApp.Cells[k + 5, 4] = person.CertificateID;
-                    excelApp.Cells[k + 5, 5] = person.Company;
-                    excelApp.Cells[k + 5, 6] = person.Tele;
-                    excelApp.Cells[k + 5, 7] = person.Nationality;
-                    excelApp.Cells[k + 5, 8] = person.Title;
-                    excelApp.Cells[k + 5, 9] = person.PersonType;
-                    excelApp.Cells[k + 5, 10] = person.Amount;
-                    excelApp.Cells[k + 5, 11] = person.TaxOrNot;
+                    excelApp.Cells[k + 6, 1] = string.Format("{0}", k);
+                    excelApp.Cells[k + 6, 2] = person.Name;
+                    excelApp.Cells[k + 6, 3] = person.CertificateType;
+                    excelApp.Cells[k + 6, 4] = person.CertificateID;
+                    excelApp.Cells[k + 6, 5] = person.Company;
+                    excelApp.Cells[k + 6, 6] = person.Tele;
+                    excelApp.Cells[k + 6, 7] = person.Nationality;
+                    excelApp.Cells[k + 6, 8] = person.Title;
+                    excelApp.Cells[k + 6, 9] = person.PersonType;
+                    excelApp.Cells[k + 6, 10] = person.Amount;
+                    excelApp.Cells[k + 6, 11] = person.TaxOrNot;
                     // excelApp.Cells[k + 5, 12] = person.PaymentType;
                     //excelApp.Cells[k + 5, 12] = person.Bank;
                     //excelApp.Cells[k + 5, 13] = person.AccountNumber;
@@ -379,7 +401,7 @@ namespace BEYON.CoreBLL.Service.Excel
                 //    Missing.Value, Missing.Value, 560, 138, 108, 18);
                 //obj1.Name = "所外";
 
-                Range contentRange = worksheet.get_Range(worksheet.Cells[5, 1], worksheet.Cells[nMax + 1, columnCount]);//选取单元格
+                Range contentRange = worksheet.get_Range(worksheet.Cells[6, 1], worksheet.Cells[nMax + 1, columnCount]);//选取单元格
                 contentRange.Borders.LineStyle = XlLineStyle.xlContinuous;//设置边框
                 contentRange.Borders.Weight = XlBorderWeight.xlThin;//边框常规粗细
                 contentRange.HorizontalAlignment = XlHAlign.xlHAlignCenter;//水平居中
@@ -427,9 +449,12 @@ namespace BEYON.CoreBLL.Service.Excel
 
                 Range signRange = worksheet.get_Range(worksheet.Cells[nMax + 11, 1], worksheet.Cells[nMax + 12, columnCount]);//选取单元格
                 signRange.MergeCells = true;
+                signRange.Font.Name = "黑体";//设置字体
+                signRange.Font.Size = 10;//字体大小
                 signRange.VerticalAlignment = XlVAlign.xlVAlignTop;//垂直居中
-                signRange.Value = " 课题负责人:                                  部门负责人:                                  单位负责人:                                  经办人:                                  ";
-       
+                signRange.HorizontalAlignment = XlHAlign.xlHAlignLeft; //水平靠左
+                signRange.Value = " 单位负责人:                               部门负责人:                              项目负责人:                              课题负责人:                              经办人:                              ";
+      
             }
             try
             {

@@ -50,6 +50,19 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
             return baseSalary;  
         }
 
+        public Double GetBaseTax(String certificateID)
+        {
+            var record = from p in Context.TaxBaseByMonths.Where(w => w.CertificateID == certificateID)
+                         select p;
+            var lists = record.ToList();
+            Double baseTax = 0.0;
+            if (lists.Count > 0)
+            {
+                baseTax = lists[0].InitialTax;
+            }
+            return baseTax;
+        }
+
         public String GetNameByCerID(String certificateID) {
             String name = "";
             var record = from p in Context.TaxBaseByMonths.Where(w => w.CertificateID == certificateID)

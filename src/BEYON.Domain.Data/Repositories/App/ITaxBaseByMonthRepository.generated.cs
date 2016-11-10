@@ -35,5 +35,7 @@ namespace BEYON.Domain.Data.Repositories.App
     {
         Double GetBaseSalary(String certificateID);
         String GetNameByCerID(String certificateID);
+
+        Double GetBaseTax(String certificateID);
     }
 }
