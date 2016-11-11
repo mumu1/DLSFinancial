@@ -364,7 +364,7 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
 
         public List<Object> GetTaskStatisticsDetail()
         {
-            Dictionary<String, JObject> objects = new Dictionary<String, JObject>();          
+            Dictionary<String, JObject> objects = new Dictionary<String, JObject>();
             String period = GetPerid();
             GetPerOrderTaskStatistics(ref objects, period);
 
@@ -380,7 +380,7 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
             return resultTemp;
         }
 
-        private void GetPerOrderTaskStatistics(ref Dictionary<String, JObject> objects,  String period)
+        private void GetPerOrderTaskStatistics(ref Dictionary<String, JObject> objects, String period)
         {
             try
             {
@@ -399,7 +399,7 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                 sb.Append(" FROM  dbo.\"TaxPerOrders\" a ");
                 //3.条件
                 sb.Append(" ORDER BY C2 ASC");
-      
+
                 var connectString = System.Configuration.ConfigurationManager.ConnectionStrings["BeyonDBGuMu"];
                 using (var conntion = new NpgsqlConnection(connectString.ToString()))
                 {
@@ -415,7 +415,7 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                                 var amountY = String.IsNullOrEmpty(reader["C3"].ToString()) ? 0 : Convert.ToSingle(reader["C3"]);
                                 var refundType = reader["C4"].ToString();
                                 var projectDirector = reader["C5"].ToString();
-                                var tax = String.IsNullOrEmpty(reader["C6"].ToString()) ? 0 : Convert.ToSingle(reader["C6"]);                              
+                                var tax = String.IsNullOrEmpty(reader["C6"].ToString()) ? 0 : Convert.ToSingle(reader["C6"]);
                                 var personType = reader["C7"].ToString();
                                 //返回前端显示结果数据
                                 if (!objects.ContainsKey(projectNumber + "," + refundType))
@@ -431,7 +431,8 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                                         result["C6"] = tax;
                                         result["C7"] = 0.00;
                                     }
-                                    else {
+                                    else
+                                    {
                                         result["C6"] = 0.00;
                                         result["C7"] = tax;
                                     }
@@ -440,13 +441,130 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                                 else
                                 {
                                     JObject jsonObject = objects[projectNumber + "," + refundType] as JObject;
-                                     jsonObject["C3"] = jsonObject["C3"].ToObject<float>() + amountY;
-                                     if (personType.Equals("所内")) {
-                                         jsonObject["C6"] = jsonObject["C6"].ToObject<float>() + tax;
-                                     }else{
-                                         jsonObject["C7"] = jsonObject["C7"].ToObject<float>() + tax;
-                                     }
-                                     objects[projectNumber + "," + refundType] = jsonObject;
+                                    jsonObject["C3"] = jsonObject["C3"].ToObject<float>() + amountY;
+                                    if (personType.Equals("所内"))
+                                    {
+                                        jsonObject["C6"] = jsonObject["C6"].ToObject<float>() + tax;
+                                    }
+                                    else
+                                    {
+                                        jsonObject["C7"] = jsonObject["C7"].ToObject<float>() + tax;
+                                    }
+                                    objects[projectNumber + "," + refundType] = jsonObject;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _log.Error(ex);
+            }
+        }
+        #endregion
+
+        #region 按申请单流水号统计功能
+
+        public List<Object> GetSerNumberStatisticsDetail()
+        {
+            Dictionary<String, JObject> objects = new Dictionary<String, JObject>();
+            GetPerOrderSerNumberStatistics(ref objects);
+
+            var resultTemp = new List<Object>();
+            var serializer = new JavaScriptSerializer();
+            int nPos = 1;
+            foreach (var item in objects.Values)
+            {
+                item["C0"] = nPos++;
+                resultTemp.Add(serializer.Deserialize(Newtonsoft.Json.JsonConvert.SerializeObject(item, Formatting.Indented, new DoubleConverter()), typeof(object)));
+            }
+
+            return resultTemp;
+        }
+
+        private void GetPerOrderSerNumberStatistics(ref Dictionary<String, JObject> objects)
+        {
+            try
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.Append("SELECT ");
+                //1.添加列名
+                sb.Append("a.\"SerialNumber\" as C1,");
+                sb.Append("a.\"ProjectNumber\" as C2,");
+                sb.Append("a.\"RefundType\" as C3,");
+                sb.Append("a.\"ProjectDirector\" as C4,");
+                sb.Append("a.\"Tax\" as C5,");
+                sb.Append("a.\"Agent\" as C6,");
+                sb.Append("a.\"Amount\" as C7,");
+                sb.Append("a.\"PersonType\" as C8,");
+                sb.Append("a.\"PaymentType\" as C9,");
+                sb.Append("a.\"UpdateDate\" updateDate ");
+                //2.添加表
+                sb.Append(" FROM  dbo.\"TaxPerOrders\" a ");
+                //3.条件
+                sb.Append(" ORDER BY C1 ASC");
+
+                var connectString = System.Configuration.ConfigurationManager.ConnectionStrings["BeyonDBGuMu"];
+                using (var conntion = new NpgsqlConnection(connectString.ToString()))
+                {
+                    conntion.Open();
+                    using (var command = conntion.CreateCommand())
+                    {
+                        command.CommandText = sb.ToString();
+                        using (NpgsqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {                        
+                                var serNumber = reader["C1"].ToString();
+                                var projectNumber = reader["C2"].ToString();
+                                var refundType = reader["C3"].ToString();
+                                var projectDirector = reader["C4"].ToString();
+                                var tax = String.IsNullOrEmpty(reader["C5"].ToString()) ? 0 : Convert.ToSingle(reader["C5"]);
+                                var agent = reader["C6"].ToString();
+                                var amount = String.IsNullOrEmpty(reader["C7"].ToString()) ? 0 : Convert.ToSingle(reader["C7"]);
+                                var personType = reader["C8"].ToString();
+                                var paymentType = reader["C9"].ToString();
+                                var updateTime = reader["updateDate"].ToString();
+                                //返回前端显示结果数据
+                                if (!objects.ContainsKey(serNumber))
+                                {
+                                    JObject result = new JObject();
+                                    result["C1"] = serNumber;
+                                    result["C2"] = projectNumber;
+                                    result["C3"] = amount;
+                                    result["C4"] = tax;
+                                    if (personType.Equals("所内"))
+                                    {
+                                        result["C5"] = tax;
+                                        result["C6"] = 0.00;
+                                    }
+                                    else
+                                    {
+                                        result["C5"] = 0.00;
+                                        result["C6"] = tax;
+                                    }
+                                    result["C7"] = paymentType;
+                                    result["C8"] = refundType;
+                                    result["C9"] = projectDirector;
+                                    result["C10"] = agent;
+                                    result["C11"] = updateTime;
+                                    objects.Add(serNumber, result);
+                                }
+                                else
+                                {
+                                    JObject jsonObject = objects[serNumber] as JObject;
+                                    jsonObject["C3"] = jsonObject["C3"].ToObject<float>() + amount;
+                                    jsonObject["C4"] = jsonObject["C4"].ToObject<float>() + tax;
+                                    if (personType.Equals("所内"))
+                                    {
+                                        jsonObject["C5"] = jsonObject["C5"].ToObject<float>() + tax;
+                                    }
+                                    else
+                                    {
+                                        jsonObject["C6"] = jsonObject["C6"].ToObject<float>() + tax;
+                                    }
+                                    objects[serNumber] = jsonObject;
                                 }
                             }
                         }

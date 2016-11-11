@@ -1,0 +1,126 @@
+﻿@using BEYON.Domain.Model.Member
+@{
+
+}
+
+<div class="content-wrapper">
+    <div class="widget-body">
+        <table id="datatable_serNumber_statistics" class="table table-striped table-bordered table-hover" style="width:100%"></table>
+    </div>
+</div>
+
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")"></script>
+<script src="@Url.Content("~/Scripts/Custom/TableOperation.js")"></script>
+<script src="@Url.Content("~/Scripts/Custom/ModalForm.js")"></script>
+
+<script>
+    pageSetUp();
+
+    // pagefunction
+    var pagefunction = function () {
+        $(document).ready(function () {
+            initTable();
+        })
+    };
+    // end pagefunction
+
+    // destroy generated instances
+    // pagedestroy is called automatically before loading a new page
+    // only usable in AJAX version!
+    var pagedestroy = function () {
+
+    }
+    // end destroy
+
+    pagefunction();
+
+    function initTable() {
+        var buttons = [
+            {
+                    extend: 'collection',
+                    text: '导出',
+                    buttons: [
+                        //{ text: "拷贝", extend: 'copy' },
+                        { text: "EXCEL表格", extend: 'excel' },
+                        //{ text: "CSV表格", extend: 'csv' },
+                        //{ text: "PDF文档", extend: 'pdf' },
+                        //{ text: "打印", extend: 'print' }
+                    ]
+             },
+            {
+                text: "列显示",
+                extend: 'colvis'
+            }
+        ];
+
+        $.ajax({
+            type: "GET",
+            url: "@Url.Action("SerNumberStatisticsColumns")",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (columns) {
+                var table = $('#datatable_serNumber_statistics').dataTable({
+                    dom: 'Bfrtip',
+                    colReorder: true,
+                    ajax: '@Url.Action("SerNumberStatisticsDatas")',
+                    searching: true,
+                    ordering: true,
+                    select: true,
+                    info: true,
+                    paginate: false, //是否显示（应用）分页器
+                    sort: true, //是否启动各个字段的排序功能
+                    stateSave: false,
+                    stateDuration: 60 * 60 * 12,
+                    autoWidth: true,
+                    bProcessing: true,
+                    paging: true,
+                    "sScrollY": "100%",
+                    "sScrollX": "100%",
+                    "sScrollXInner": "110%",
+                    scrollCollapse: true,
+                    order: [[11, "desc"]],
+                    buttons: buttons,
+                    columns: columns,
+                    oLanguage: {
+                        "sLengthMenu": "每页显示 _MENU_ 条记录",
+                        "sZeroRecords": "抱歉， 没有找到",
+                        "sInfo": "显示 _START_ 到 _END_ 条记录，总共 _TOTAL_ 条记录",
+                        "sInfoEmpty": "没有数据",
+                        "sInfoFiltered": "(从 _MAX_ 条数据中检索)",
+                        "sZeroRecords": "没有检索到数据",
+                        "sSearch": "搜索名称:",
+                        "sSelected": "选中 _TOTAL_ 条记录",
+                        "oPaginate": {
+                            "sFirst": "首页",
+                            "sPrevious": "前一页",
+                            "sNext": "后一页",
+                            "sLast": "尾页"
+                        }
+                    }
+                });
+
+                $('#datatable_serNumber_statistics').DataTable().on('select', function (e, dt, type, indexes) {
+                    var selectedTable = $('#datatable_serNumber_statistics').DataTable();
+                    var selectedRows = selectedTable.rows({ selected: true });
+                    var selectedCount = selectedRows.count();
+                    //if (selectedCount < 1) {
+                    //    selectedTable.button(1).enable(false);      //修改
+                    //    selectedTable.button(2).enable(false);      //删除
+                    //    selectedTable.button(3).enable(false);      //提交
+                    //    selectedTable.button(4).enable(false);      //撤回
+                    //    selectedTable.button(5).enable(false);      //输出打印
+                    //    selectedTable.button(6).enable(false);      //查看
+                    //}
+                });
+            },
+            error: function (errors) {
+
+            }
+        });
+    }
+</script>
+@*}*@
+
+
+

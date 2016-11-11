@@ -41,7 +41,8 @@ namespace BEYON.Component.Data.Migrations
                 new Module { Id = 3, ParentId = null, Name = "财务统计", LinkUrl = "#",  Code = 200,  Description = null, IsMenu = true, Enabled = true,  UpdateDate = DateTime.Now, Icon = "fa-thumb-tack"},
                 new Module { Id = 4, ParentId = 3, Name = "人员劳务月统计报表", LinkUrl = "~/App/Statistics/Monthly",  Code = 201,  Description = null, IsMenu = true, Enabled = true,  UpdateDate = DateTime.Now },
                 new Module { Id = 5, ParentId = 3, Name = "人员工资月统计报表", LinkUrl = "~/App/Statistics/PerPersonDetail",  Code = 202,  Description = null, IsMenu = true, Enabled = true,  UpdateDate = DateTime.Now },
-                 new Module { Id = 35, ParentId = 3, Name = "课题月统计报表", LinkUrl = "~/App/Statistics/TaskDetail",  Code = 203,  Description = null, IsMenu = true, Enabled = true,  UpdateDate = DateTime.Now },
+                new Module { Id = 35, ParentId = 3, Name = "课题月统计报表", LinkUrl = "~/App/Statistics/TaskDetail",  Code = 203,  Description = null, IsMenu = true, Enabled = true,  UpdateDate = DateTime.Now },
+                new Module { Id = 38, ParentId = 3, Name = "按流水号月统计报表", LinkUrl = "~/App/Statistics/SerNumberStatistic",  Code = 204,  Description = null, IsMenu = true, Enabled = true,  UpdateDate = DateTime.Now },             
                 new Module { Id = 6, ParentId = null, Name = "系统管理", Code = 300,LinkUrl="#",  Description = null, IsMenu = true, Enabled = true,  UpdateDate = DateTime.Now, Icon = "fa-cogs"},
                 new Module { Id = 7, ParentId = 6, Name = "角色管理", LinkUrl = "~/Member/Role/Index",  Code = 301,Description = null, IsMenu = true, Enabled = true, UpdateDate = DateTime.Now},
                 new Module { Id = 8, ParentId = 6, Name = "用户管理", LinkUrl = "~/Member/User/Index", Code = 302, Description = null, IsMenu = true, Enabled = true, UpdateDate = DateTime.Now },
@@ -76,6 +77,7 @@ namespace BEYON.Component.Data.Migrations
              new Permission{Id=2, Name="劳务统计",Code=EnumPermissionCode.Input.ToString(), Description="人员劳务月统计报表" ,Enabled=true,UpdateDate=DateTime.Now,module=modules[3]},
              new Permission{Id=3, Name="工资统计",Code=EnumPermissionCode.Input.ToString(), Description="人员工资月统计报表" ,Enabled=true,UpdateDate=DateTime.Now,module=modules[4]},
              new Permission{Id=35, Name="课题统计",Code=EnumPermissionCode.Input.ToString(), Description="课题月统计报表" ,Enabled=true,UpdateDate=DateTime.Now,module=modules[5]},
+             new Permission{Id=38, Name="流水号统计",Code=EnumPermissionCode.Input.ToString(), Description="按流水号月统计报表" ,Enabled=true,UpdateDate=DateTime.Now,module=modules[6]},
        
             #endregion
 

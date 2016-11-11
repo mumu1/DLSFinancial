@@ -53,6 +53,13 @@ namespace BEYON.Web.Areas.App.Controllers
             return PartialView("TaskDetail");
         }
 
+        // GET: /App/Statistics/SerNumberStatistic
+        [Layout]
+        public ActionResult SerNumberStatistic()
+        {
+            return PartialView("SerNumberStatistic");
+        }
+
         #region 按人明细统计业务流程
         //
         // GET: /App/Statistics/PerPersonDetailColumns
@@ -102,6 +109,24 @@ namespace BEYON.Web.Areas.App.Controllers
         public ActionResult TaskStatisticsDatas()
         {
             var datas = this._statisticsServer.GetTaskStatisticsDetail();
+
+            return Json(new { total = datas.Count, data = datas }, JsonRequestBehavior.AllowGet);
+        }
+        #endregion
+
+        #region 按流水号统计业务流程
+
+        // GET: /App/Statistics/SerNumberStatisticsColumns
+        public ActionResult SerNumberStatisticsColumns()
+        {
+            return Json(this._statisticsServer.GetSerNumberStatisticsColumns(), JsonRequestBehavior.AllowGet);
+        }
+
+
+        // GET: /App/Statistics/SerNumberStatisticsDatas
+        public ActionResult SerNumberStatisticsDatas()
+        {
+            var datas = this._statisticsServer.GetSerNumberStatisticsDetail();
 
             return Json(new { total = datas.Count, data = datas }, JsonRequestBehavior.AllowGet);
         }

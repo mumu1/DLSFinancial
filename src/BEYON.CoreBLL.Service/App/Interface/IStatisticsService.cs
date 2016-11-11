@@ -26,5 +26,11 @@ namespace BEYON.CoreBLL.Service.App.Interface
 
         List<Object> GetTaskStatisticsDetail();
         #endregion
+
+        #region 按流水号统计明细表
+        Column[] GetSerNumberStatisticsColumns();
+
+        List<Object> GetSerNumberStatisticsDetail();
+        #endregion
     }
 }

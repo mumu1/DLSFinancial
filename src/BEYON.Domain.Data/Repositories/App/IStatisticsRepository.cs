@@ -17,5 +17,7 @@ namespace BEYON.Domain.Data.Repositories.App
          List<Object> GetLaborStatisticsDetail();
 
          List<Object> GetTaskStatisticsDetail();
+
+         List<Object> GetSerNumberStatisticsDetail();
     }
 }

@@ -49,7 +49,7 @@ namespace BEYON.CoreBLL.Service.App
         {
             return this._statisticsRepository.GetPerMonthPerPerson();
         }
-            
+
         #endregion
 
         #region 按劳务统计明细表
@@ -96,13 +96,38 @@ namespace BEYON.CoreBLL.Service.App
             columns.Add(new Column("C5", "课题负责人"));
             columns.Add(new Column("C6", "工资薪金税额"));
             columns.Add(new Column("C7", "劳务费税额"));
-  
+
             return columns.ToArray();
         }
 
         public List<Object> GetTaskStatisticsDetail()
         {
             return this._statisticsRepository.GetTaskStatisticsDetail();
+        }
+        #endregion
+
+        #region 按流水号统计明细表
+        public Column[] GetSerNumberStatisticsColumns()
+        {
+            List<Column> columns = new List<Column>();
+            columns.Add(new Column("C0", "序号"));
+            columns.Add(new Column("C1", "申请单流水号"));
+            columns.Add(new Column("C2", "课题号"));
+            columns.Add(new Column("C3", "报销合计"));
+            columns.Add(new Column("C4", "税额合计"));
+            columns.Add(new Column("C5", "工资税额合计"));
+            columns.Add(new Column("C6", "劳务税额合计"));
+            columns.Add(new Column("C7", "支付类型"));
+            columns.Add(new Column("C8", "报销事由"));
+            columns.Add(new Column("C9", "课题负责人"));
+            columns.Add(new Column("C10", "经办人"));
+            columns.Add(new Column("C11", "更新时间"));
+            return columns.ToArray();
+        }
+
+        public List<Object> GetSerNumberStatisticsDetail()
+        {
+            return this._statisticsRepository.GetSerNumberStatisticsDetail();
         }
         #endregion
     }

@@ -638,6 +638,7 @@
     <Content Include="Areas\App\Views\Statistics\TaskDetail.cshtml" />
     <Content Include="Areas\BasicDataManagement\Views\TaxPerOrder\Index.cshtml" />
     <Content Include="Areas\BasicDataManagement\Views\TaxPerOrderHistory\Index.cshtml" />
+    <Content Include="Areas\App\Views\Statistics\SerNumberStatistic.cshtml" />
     <None Include="Properties\PublishProfiles\beyondb.pubxml" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Scripts\AdminLTE2.3.0\bootstrap\css\bootstrap.css" />
