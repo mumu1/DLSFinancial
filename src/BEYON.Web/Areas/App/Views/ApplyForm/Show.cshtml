@@ -121,12 +121,7 @@
                                 <textarea disabled="true" rows="3" name="ApplyDesp" style="float:left;" placeholder=" 关于工作内容、工作时间等的描述(必填)">@Model.ApplyDesp</textarea>
                             </label>
                         </section>
-                        <input type="text" name="SerialNumber" placeholder="流水账号" style="visibility:hidden" value="@Model.SerialNumber">
-                        <input type="text" name="SubmitTime" placeholder="提交时间" style="visibility:hidden" value="@Model.SubmitTime">
-                        <input type="text" name="AuditTime" placeholder="审核时间" style="visibility:hidden" value="@Model.AuditTime">
-                        <input type="text" name="AuditStatus" placeholder="审核状态" style="visibility:hidden" value="@Model.AuditStatus">
-                        <input type="text" name="AuditOpinion" placeholder="审核意见" style="visibility:hidden" value="@Model.AuditOpinion">
-                        <input type="text" name="UserName" placeholder="登陆名称" style="visibility:hidden" value="@Model.UserName">
+                      
                     </fieldset>
                     <fieldset>
                         <section>
@@ -144,6 +139,12 @@
                     </fieldset>
                     <footer>
                         <button type="button" class="btn btn-default" onclick="closeFrom();">关闭</button>
+                        <input type="text" name="SerialNumber" placeholder="流水账号" style="visibility:hidden" value="@Model.SerialNumber">
+                        <input type="text" name="SubmitTime" placeholder="提交时间" style="visibility:hidden" value="@Model.SubmitTime">
+                        <input type="text" name="AuditTime" placeholder="审核时间" style="visibility:hidden" value="@Model.AuditTime">
+                        <input type="text" name="AuditStatus" placeholder="审核状态" style="visibility:hidden" value="@Model.AuditStatus">
+                        <input type="text" name="AuditOpinion" placeholder="审核意见" style="visibility:hidden" value="@Model.AuditOpinion">
+                        <input type="text" name="UserName" placeholder="登陆名称" style="visibility:hidden" value="@Model.UserName">
                     </footer>
                 </form>
 
