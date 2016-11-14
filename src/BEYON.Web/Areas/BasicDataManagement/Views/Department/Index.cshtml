@@ -2,9 +2,9 @@
 
 <div id="content" style="overflow-y: auto; height: 100%; opacity: 1;">
     <div class="content-wrapper">
-        <header role="heading">
+        @*<header role="heading">
             <h2>部门字典表维护</h2>
-        </header>
+        </header>*@
         <!-- widget div-->
 
         <div class="jarviswidget jarviswidget-color-darken jarviswidget-sortable" id="wid-id-0" data-widget-editbutton="false" role="widget">
@@ -90,7 +90,7 @@
                 "edit": "@Url.Action("Edit")",
                 "remove": "@Url.Action("Delete")"
             },
-            "table": "#datatable_tabletools",
+            "table": "#datatable_tabletools",            
             fields: [{
                 label: "部门代码",
                 name: "DepartmentCode"
@@ -142,12 +142,13 @@
                             dataType: 'html',
                             success: function (data) {
                                 $('#importDataDialog').html(data);
+                                
                             },
                             error: function (xhr) {
                                 alert("出现错误，请稍后再试:" + xhr.responseText);
                             }
                         });
-
+                        table.ajax.reload();
                         //$('#importDataDialog').load('../App/Import/ImportData', );
                     }
                 },
@@ -174,6 +175,7 @@
                                     { data: "DepartmentCode", title: "部门代码" },
                                     { data: "DepartmentName", title: "部门名称" }
             ],
+            iDisplayLength: 15,
             oLanguage: {
                 "sLengthMenu": "每页显示 _MENU_ 条记录",
                 "sZeroRecords": "抱歉， 没有找到",

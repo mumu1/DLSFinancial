@@ -2,9 +2,9 @@
 
         <div id="content" style="overflow-y: auto; height: 100%; opacity: 1;">
             <div class="content-wrapper">
-                <header role="heading">
+                @*<header role="heading">
                     <h2>审核意见字典表维护</h2>
-                </header>
+                </header>*@
                 <!-- widget div-->
 
                 <div class="jarviswidget jarviswidget-color-darken jarviswidget-sortable" id="wid-id-0" data-widget-editbutton="false" role="widget">
@@ -169,6 +169,7 @@
             autoWidth: true,
             bProcessing: true,
             paging: true,
+            iDisplayLength: 15,
             columns: [
                                     { data: "Id", title: "编号" },
                                     { data: "AuditOpinionCode", title: "审核意见代码" },

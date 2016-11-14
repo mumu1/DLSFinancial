@@ -522,30 +522,30 @@
             }
 
             if (action === 'create') {
-                var sumBefore = $('#summation').val();
-                $('#summation').val(new Number(sumBefore) + new Number(Amount.val()));
+                //var sumBefore = $('#summation').val();
+                //$('#summation').val(new Number(sumBefore) + new Number(Amount.val()));
                 data.data[0].SerialNumber = "@Model.SerialNumber";
-                //  data.data[0].Summation = $('#summation').val();
+
                 return true;
             }
             if (action === 'edit') {
                 //合计金额需更新
-                var sumBefore = $('#summation').val();
-                var amountBefore = $('#datatable_create_form').DataTable().rows('.selected').data()[0].Amount;
-                $('#summation').val(new Number(sumBefore) - new Number(amountBefore) + new Number(Amount.val()));
+                //var sumBefore = $('#summation').val();
+                //var amountBefore = $('#datatable_create_form').DataTable().rows('.selected').data()[0].Amount;
+                //$('#summation').val(new Number(sumBefore) - new Number(amountBefore) + new Number(Amount.val()));
                
             }
         } else if (action === 'remove') {
             //合计金额需减去
-            var sumBefore = $('#summation').val();
-            var sum = new Number(sumBefore);
-            if (sumBefore >= 0) {
-                var selectRow = $('#datatable_create_form').DataTable().rows('.selected').data();
-                for (var i = 0 ; i < selectRow.length; i++) {
-                    sum -= new Number(selectRow[i].Amount);
-                }
-                $('#summation').val(sum);
-            }
+            //var sumBefore = $('#summation').val();
+            //var sum = new Number(sumBefore);
+            //if (sumBefore >= 0) {
+            //    var selectRow = $('#datatable_create_form').DataTable().rows('.selected').data();
+            //    for (var i = 0 ; i < selectRow.length; i++) {
+            //        sum -= new Number(selectRow[i].Amount);
+            //    }
+            //    $('#summation').val(sum);
+            //}
         }
      
     });
@@ -685,6 +685,20 @@
                 { data: "Signature", title: "领取人签字", visible: false }
 
             ],
+            "footerCallback": function ( row, data, start, end, display ) {
+                var api = this.api(), data;
+
+                // Total over all pages
+                total = api
+                    .column( 10 )
+                    .data()
+                    .reduce( function (a, b) {
+                        return a + b;
+                    }, 0 );
+ 
+                // Update summation
+                $('#summation').val(total);
+            },
             oLanguage: {
                 "sLengthMenu": "每页显示 _MENU_ 条记录",
                 "sZeroRecords": "抱歉， 没有找到",
