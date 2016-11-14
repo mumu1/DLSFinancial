@@ -101,7 +101,7 @@ namespace BEYON.CoreBLL.Service.Excel
                 Range titleRange = worksheet.get_Range(worksheet.Cells[1, 1], worksheet.Cells[1, columnCount]);//选取单元格
                 titleRange.Merge(true);//合并单元格
                 titleRange.Value = String.Format("发放      {0}      明细表", applicationForm.RefundType); //设置单元格内文本
-                titleRange.Font.Name = "宋体";//设置字体
+                titleRange.Font.Name = "黑体";//设置字体
                 titleRange.Font.Size = 14;//字体大小
                 titleRange.Font.Bold = true;//加粗显示
                 titleRange.Font.Underline = true;
@@ -127,7 +127,7 @@ namespace BEYON.CoreBLL.Service.Excel
                 SerRange.Value = String.Format("流水号：  {0}", applicationForm.SerialNumber); //设置单元格内文本
                 SerRange.Font.Name = "黑体";//设置字体
                 SerRange.Font.Size = 12;//字体大小
-                //SerRange.Font.Bold = true;//加粗显示
+                SerRange.Font.Bold = true;//加粗显示
                 SerRange.HorizontalAlignment = XlHAlign.xlHAlignRight; //水平靠右
                 SerRange.VerticalAlignment = XlVAlign.xlVAlignCenter;   //垂直居中
                 
@@ -223,7 +223,7 @@ namespace BEYON.CoreBLL.Service.Excel
                 //    Missing.Value, Missing.Value, 560, 138, 108, 18);
                 //obj1.Name = "所外";
 
-                Range contentRange = worksheet.get_Range(worksheet.Cells[6, 1], worksheet.Cells[nMax + 1, columnCount]);//选取单元格
+                Range contentRange = worksheet.get_Range(worksheet.Cells[6, 1], worksheet.Cells[nMax + 2, columnCount]);//选取单元格
                 contentRange.Borders.LineStyle = XlLineStyle.xlContinuous;//设置边框
                 contentRange.Borders.Weight = XlBorderWeight.xlThin;//边框常规粗细
                 contentRange.HorizontalAlignment = XlHAlign.xlHAlignCenter;//水平居中
@@ -288,7 +288,7 @@ namespace BEYON.CoreBLL.Service.Excel
                 Range titleRange = worksheet.get_Range(worksheet.Cells[1, 1], worksheet.Cells[1, columnCount]);//选取单元格
                 titleRange.Merge(true);//合并单元格
                 titleRange.Value = String.Format("发放      {0}      明细表", applicationForm.RefundType); //设置单元格内文本
-                titleRange.Font.Name = "宋体";//设置字体
+                titleRange.Font.Name = "黑体";//设置字体
                 titleRange.Font.Size = 14;//字体大小
                 titleRange.Font.Bold = true;//加粗显示
                 titleRange.Font.Underline = true;
@@ -314,7 +314,7 @@ namespace BEYON.CoreBLL.Service.Excel
                 SerRange.Value = String.Format("流水号：  {0}", applicationForm.SerialNumber); //设置单元格内文本
                 SerRange.Font.Name = "黑体";//设置字体
                 SerRange.Font.Size = 12;//字体大小
-                //SerRange.Font.Bold = true;//加粗显示
+                SerRange.Font.Bold = true;//加粗显示
                 SerRange.HorizontalAlignment = XlHAlign.xlHAlignRight; //水平靠右
                 SerRange.VerticalAlignment = XlVAlign.xlVAlignCenter;   //垂直居中
 
@@ -403,7 +403,7 @@ namespace BEYON.CoreBLL.Service.Excel
                 //    Missing.Value, Missing.Value, 560, 138, 108, 18);
                 //obj1.Name = "所外";
 
-                Range contentRange = worksheet.get_Range(worksheet.Cells[6, 1], worksheet.Cells[nMax + 1, columnCount]);//选取单元格
+                Range contentRange = worksheet.get_Range(worksheet.Cells[6, 1], worksheet.Cells[nMax + 2, columnCount]);//选取单元格
                 contentRange.Borders.LineStyle = XlLineStyle.xlContinuous;//设置边框
                 contentRange.Borders.Weight = XlBorderWeight.xlThin;//边框常规粗细
                 contentRange.HorizontalAlignment = XlHAlign.xlHAlignCenter;//水平居中
