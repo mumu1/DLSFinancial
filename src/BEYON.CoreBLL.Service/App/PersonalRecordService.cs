@@ -144,6 +144,26 @@ namespace BEYON.CoreBLL.Service.App
                 return new OperationResult(OperationResultType.Error, "删除数据失败!");
             }
         }
+
+        public OperationResult DeleteModel(List<PersonalRecord> list , bool isSave)
+        {
+            try
+            {
+                if (list.Count > 0)
+                {
+                    foreach(var item in list){
+                        _PersonalRecordRepository.Delete(item);
+                    }
+                }                                 
+                return new OperationResult(OperationResultType.Success, "删除数据成功！");              
+            }
+            catch (Exception ex)
+            {
+                _log.Error(ex);
+                return new OperationResult(OperationResultType.Error, "删除数据失败!");
+            }
+        }
+
         public OperationResult Update(PersonalRecord model, bool isSave)
         {
             try

@@ -293,13 +293,16 @@ namespace BEYON.Web.Areas.App.Controllers
         // POST: /App/ApplyForm/DeletePersonal/
         public ActionResult DeletePersonal()
         {
-            List<string> serialNumberList = new List<string>();
+            //List<string> serialNumberList = new List<string>();
+            List<PersonalRecord> list = new List<PersonalRecord>();
             PersonalRecord[] datas = ClassConvert<PersonalRecord>.Process(Request.Form);
             foreach (var data in datas)
             {
-                serialNumberList.Add(data.SerialNumber);
+                //serialNumberList.Add(data.SerialNumber);
+                list.Add(data);
             }
-            _personalRecordService.Delete(serialNumberList, true);
+           // _personalRecordService.Delete(serialNumberList, true);
+            _personalRecordService.DeleteModel(list, true);
             return Json(new { total = datas.Length, data = datas }, JsonRequestBehavior.AllowGet);
         }
 
