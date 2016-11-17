@@ -43,12 +43,78 @@
     </div>
 
     <div id="importDataDialog"></div>
+    <div id="dialog-setSafeguardTime" title="更新系统维护时间" style="display:none;">
+        <p class="validateTips">请设置系统本月的维护时间，结束时间需晚于开始时间。</p>
+        <form>
+            <fieldset>
+                <div>
+                    <label class="control-labe" id="recentSafeguardTime">当前系统维护时间区间：</label>
+                </div>
+                    <div id="starttime_main" class="control-group">
+                        <label class="control-label" for="starttime">开始时间：</label>
+                        <div class="date form_datetime controls" data-date="2013-05-10" id="starttimeDiv">
+                            <input type="text" class="span9" value="" id="starttime" readonly>
+                            <span class="add-on">
+                                <i class="icon-calendar"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div id="endtime_main" class="control-group">
+                        <label class="control-label" for="endtime">结束时间：</label>
+                        <div class=" controls date form_datetime"
+                             data-date="2013-05-10" id="endtimeDiv">
+                            <input type="text" class="span9" value="" id="endtime"
+                                   readonly> <span class="add-on">
+                                <i class="icon-calendar"></i>
+                            </span>
+                        </div>
+                    </div>
+</fieldset>
+        </form>
+    </div>
 </div>
 
 
 <script type="text/javascript">
     $(document).ready(function () {
         loadTableData();
+
+    });
+
+   
+    $("#dialog-setSafeguardTime").dialog({
+        autoOpen: false,
+        height: 320,
+        width: 400,
+        modal: true,
+        buttons: {
+            "更新": function () {
+               // var bValid = true;
+                var startTime = $('#starttime').val();
+                var endTime = $('#endtime').val();
+
+                var times = startTime + "," + endTime;
+                    $.ajax({
+                        type: "POST",
+                        async: false,
+                        url: "../BasicDataManagement/WageBaseTable/UpdateSafeguardTime?times=" + times,
+                        //data: JSON.stringify(params),
+                        contentType: "application/json; charset=utf-8",
+                        datatype: "json",
+                        success: function (data) {
+                            toastr.info('更新维护时间成功！');
+                        },
+                        error: function () {
+                            toastr.error('更新维护时间失败！');
+                        }
+                    });                
+                    $(this).dialog("close");
+
+            },
+            Cancel: function () {
+                $(this).dialog("close");
+            }
+        }
 
     });
 
@@ -93,8 +159,8 @@
             "table": "#datatable_tabletools",
             fields: [
             {
-                    label: "期间:",
-                    name: "Period"
+                label: "期间:",
+                name: "Period"
             },
             {
                 label: "姓名",
@@ -126,14 +192,14 @@
              {
                  label: "初始税额:",
                  name: "InitialTax"
-             }                    
+             }
             ]
         });
 
 
         table = $('#datatable_tabletools').dataTable({
             dom: 'Bfrtip',
-            ajax : '@Url.Action("GetAllData")',
+            ajax: '@Url.Action("GetAllData")',
             buttons: [
                 {
                     text: "新增", extend: "create", editor: editor
@@ -169,10 +235,10 @@
                             contentType: 'application/json; charset=utf8',
                             cache: false,
                             dataType: 'html',
-                            success: function (data) {                           
+                            success: function (data) {
                                 $('#importDataDialog').html(data);
                                 dt.ajax.reload();
-                                
+
                             },
                             error: function (xhr) {
                                 alert("出现错误，请稍后再试:" + xhr.responseText);
@@ -205,7 +271,7 @@
                             error: function () {
                                 toastr.error('工资基础表清空失败！');
                             }
-                        });                        
+                        });
                     }
                 },
                 {
@@ -226,7 +292,13 @@
                             }
                         });
                     }
-                }
+                },
+                 {
+                     text: "更新维护时间",
+                     action: function (e, dt, node, config) {
+                         openSafeguardTimeDialog();                       
+                     }
+                 },
             ],
             searching: true,
             ordering: true,
@@ -252,7 +324,7 @@
                                     { data: "InitialTaxPayable", title: "初始应纳税所得额" },
                                     { data: "InitialTax", title: "初始税额" },
                                    // { data: "PersonType", title: "人员类型" },
-                                    //{ data: "Title", title: "职称" }                              
+                                    //{ data: "Title", title: "职称" }
             ],
             oLanguage: {
                 "sLengthMenu": "每页显示 _MENU_ 条记录",
@@ -274,5 +346,46 @@
         });
     }
 
+    var start, end;
+
+    $('#starttime').datepicker({
+        format: 'yyyy-mm-dd',
+        weekStart: 1,
+        autoclose: true,
+        todayBtn: 'linked',
+        language: 'zh-CN'
+    }).on('changeDate', function (ev) {
+        var startTime = ev.date.valueOf();
+    });
+    $('#endtime').datepicker({
+        format: 'yyyy-mm-dd',
+        weekStart: 1,
+        autoclose: true,
+        todayBtn: 'linked',
+        language: 'zh-CN'
+    }).on('changeDate', function (ev) {
+        var endTime = ev.date.valueOf();
+    });
+
+    function openSafeguardTimeDialog() {
+        $.ajax({
+            type: "Get",
+            async: false,
+            url: "../BasicDataManagement/WageBaseTable/GetSafeguardTime",
+            //data: JSON.stringify(params),
+            contentType: "application/json; charset=utf-8",
+            datatype: "text",
+            success: function (data) {
+                $('#recentSafeguardTime').text("当前系统维护时间区间：" + data);
+            },
+            error: function () {
+                toastr.error('获取维护时间失败！');
+            }
+        });
+
+        $("#dialog-setSafeguardTime").css("display", "block");
+        $("#dialog-setSafeguardTime").dialog("open");
+
+    }
 
 </script>

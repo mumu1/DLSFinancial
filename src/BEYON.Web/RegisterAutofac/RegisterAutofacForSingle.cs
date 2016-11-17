@@ -67,6 +67,8 @@ namespace BEYON.Web
             builder.RegisterType<RefundTypeRepository>().As<IRefundTypeRepository>().InstancePerHttpRequest();
             builder.RegisterType<BankService>().As<IBankService>().InstancePerHttpRequest();
             builder.RegisterType<BankRepository>().As<IBankRepository>().InstancePerHttpRequest();
+            builder.RegisterType<SafeguardTimeService>().As<ISafeguardTimeService>().InstancePerHttpRequest();
+            builder.RegisterType<SafeguardTimeRepository>().As<ISafeguardTimeRepository>().InstancePerHttpRequest();
             builder.RegisterType<DepartmentService>().As<IDepartmentService>().InstancePerHttpRequest();
             builder.RegisterType<DepartmentRepository>().As<IDepartmentRepository>().InstancePerHttpRequest();
             builder.RegisterType<TaskManageService>().As<ITaskManageService>().InstancePerHttpRequest();

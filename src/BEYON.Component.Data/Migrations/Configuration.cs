@@ -193,6 +193,16 @@ namespace BEYON.Component.Data.Migrations
             context.SaveChanges();
             #endregion
 
+            #region 维护时间--SafeguardTime
+            //List<SafeguardTime> safeguardTime = new List<SafeguardTime>
+            //{
+            //    new SafeguardTime { StartTime=new DateTime(), EndTime= new DateTime() }
+            //};
+            //DbSet<SafeguardTime> safeguardTimesSet = context.Set<SafeguardTime>();
+            //safeguardTimesSet.AddOrUpdate(m => new { m.StartTime }, safeguardTime.ToArray());
+            //context.SaveChanges();
+            #endregion
+
             //#region 标绘--umrcover
             //List<Umrcover> umrcovers = new List<Umrcover>
             //{

@@ -66,6 +66,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\App\Impl\SafeguardTimeRepository.generated.cs" />
+    <Compile Include="Repositories\App\ISafeguardTimeRepository.generated.cs" />
     <Compile Include="Repositories\App\IDepartmentRepository.generated.cs" />
     <Compile Include="Repositories\App\Impl\DepartmentRepository.generated.cs" />
     <Compile Include="Repositories\App\Impl\StatisticsRepository.cs" />

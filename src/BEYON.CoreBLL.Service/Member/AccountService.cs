@@ -14,6 +14,7 @@ using BEYON.Component.Data.EF.Interface;
 using BEYON.Component.Tools;
 using BEYON.Component.Tools.helpers;
 using BEYON.CoreBLL.Service.Member.Interface;
+using BEYON.CoreBLL.Service.App.Interface;
 using BEYON.Domain.Data.Repositories.Member;
 using BEYON.Domain.Model.Member;
 using BEYON.ViewModel;
@@ -28,12 +29,14 @@ namespace BEYON.CoreBLL.Service.Member
 
         private readonly IUserRepository _UserRepository;
         private readonly IRoleService _RoleService;
+        private readonly ISafeguardTimeService _SafeguardTimeService;
 
-        public AccountService(IUserRepository userRepository, IRoleService roleService, IUnitOfWork unitOfWork)
+        public AccountService(IUserRepository userRepository, IRoleService roleService, ISafeguardTimeService safeguardTimeService, IUnitOfWork unitOfWork)
             : base(unitOfWork)
         {
             this._UserRepository = userRepository;
             this._RoleService = roleService;
+            this._SafeguardTimeService = safeguardTimeService;
         }
         public IQueryable<User> Users
         {
@@ -65,18 +68,25 @@ namespace BEYON.CoreBLL.Service.Member
             {
                 var roleIdsByUser = user.Roles.Select(r => r.Id).ToList();
 
-                //判断周一到周五系统维护，普通用户无法登陆
+                //若没有特别设定指定一到五日系统维护，普通用户无法登陆
                 var now = DateTime.Now;
                 var startTime = new DateTime(now.Year, now.Month, 1);
                 var endTime = new DateTime(now.Year, now.Month, 6);
+                //从数据库表SafeguardTime获取用户保存的系统维护时间
+                var saveStartTime = _SafeguardTimeService.SafeguardTimes.First().StartTime;
+                var saveEndTime = _SafeguardTimeService.SafeguardTimes.First().EndTime;
+                if(now >= saveStartTime && now < saveEndTime){
+                    startTime = saveStartTime;
+                    endTime = saveEndTime;
+                }
                 if(now >= startTime && now < endTime)
                 {
                     foreach (var roleId in roleIdsByUser)
                     {
                         Role role = _RoleService.Roles.FirstOrDefault(r => r.Id == roleId);
                         if (role != null && role.RoleName == "普通用户")
-                        {
-                            return new OperationResult(OperationResultType.Warning, "系统维护状态中。。。");
+                        {                            
+                            return new OperationResult(OperationResultType.Warning, "系统维护状态中。。。请于"+endTime.ToShortDateString()+"日之后使用。");
                         }
                     }
                 }

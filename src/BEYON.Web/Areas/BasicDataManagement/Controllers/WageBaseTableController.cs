@@ -27,12 +27,14 @@ namespace BEYON.Web.Areas.BasicDataManagement.Controllers
          private readonly ITaxBaseByMonthService _taxBaseByMonthService;
          private readonly ITaxPerOrderHistoryService _taxPerOrderHistoryService;
          private readonly ITaxPerOrderService _taxPerOrderService;
+         private readonly ISafeguardTimeService _safeguardTimeService;
 
-         public WageBaseTableController(ITaxBaseByMonthService taxBaseByMonthService, ITaxPerOrderHistoryService taxPerOrderHistoryService, ITaxPerOrderService taxPerOrderService)
+         public WageBaseTableController(ITaxBaseByMonthService taxBaseByMonthService, ITaxPerOrderHistoryService taxPerOrderHistoryService, ITaxPerOrderService taxPerOrderService, ISafeguardTimeService safeguardTimeService)
         {
             this._taxBaseByMonthService = taxBaseByMonthService;
             this._taxPerOrderHistoryService = taxPerOrderHistoryService;
             this._taxPerOrderService = taxPerOrderService;
+            this._safeguardTimeService = safeguardTimeService;
         }
 
 
@@ -59,6 +61,14 @@ namespace BEYON.Web.Areas.BasicDataManagement.Controllers
 
         }
 
+        // GET: /BasicDataManagement/WageBaseTable/GetSafeguardTime/
+        public String GetSafeguardTime()
+        {
+            string result = this._safeguardTimeService.GetSafeguardTime();
+            return result;
+
+        }
+
         // POST: /BasicDataManagement/WageBaseTable/Create/
         [HttpPost]
         public ActionResult Create()
@@ -73,6 +83,20 @@ namespace BEYON.Web.Areas.BasicDataManagement.Controllers
                 return Json(new { total = 1, data = new[] { results[results.Length - 1] } });
             }
 
+        }
+
+        //POST: /BasicDataManagement/WageBaseTable/UpdateSafeguardTime
+        [HttpPost]
+        public ActionResult UpdateSafeguardTime(string times) {
+            SafeguardTime safeguardTime = new SafeguardTime();
+            string[] t = times.Split(',');
+            string startTime = DateTime.Parse(t[0]).ToString("yyyy-MM-dd");
+            string endTime = DateTime.Parse(t[1]).ToString("yyyy-MM-dd");
+            safeguardTime.StartTime = Convert.ToDateTime(startTime);
+            safeguardTime.EndTime = Convert.ToDateTime(endTime);
+            var result = _safeguardTimeService.Update(safeguardTime);
+            result.Message = result.Message ?? result.ResultType.GetDescription();
+            return Json(result);
         }
 
         // POST: /BasicDataManagement/WageBaseTable/Edit/

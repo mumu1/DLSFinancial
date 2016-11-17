@@ -74,7 +74,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App\SafeguardTimeService.cs" />
     <Compile Include="App\DepartmentService.cs" />
+    <Compile Include="App\Interface\ISafeguardTimeService.cs" />
     <Compile Include="App\Interface\IDepartmentService.cs" />
     <Compile Include="App\Interface\IStatisticsService.cs" />
     <Compile Include="App\Interface\ITaxPerOrderHistoryService.cs" />

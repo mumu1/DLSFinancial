@@ -57,6 +57,8 @@ namespace BEYON.Component.Data.EF
 
         public DbSet<Bank> Banks { get; set; }
 
+        public DbSet<SafeguardTime> SafeguardTimes { get; set; }
+
         public DbSet<Department> Departments { get; set; }
 
         public DbSet<TaskManage> TaskManages { get; set; }
@@ -97,6 +99,7 @@ namespace BEYON.Component.Data.EF
             modelBuilder.Configurations.Add(new TitleConfiguration());
             modelBuilder.Configurations.Add(new RefundTypeConfiguration());
             modelBuilder.Configurations.Add(new BankConfiguration());
+            modelBuilder.Configurations.Add(new SafeguardTimeConfiguration());
             modelBuilder.Configurations.Add(new DepartmentConfiguration());
             modelBuilder.Configurations.Add(new TaskManageConfiguration());
             modelBuilder.Configurations.Add(new TaxBaseByMonthConfiguration());
