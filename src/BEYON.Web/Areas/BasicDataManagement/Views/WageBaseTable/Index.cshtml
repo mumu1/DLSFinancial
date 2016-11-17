@@ -74,6 +74,9 @@
     </div>
 </div>
 
+<link rel="stylesheet" href="@Url.Content("~/Content/css/jAlert-v3.css")">
+<script src="@Url.Content("~/Scripts/alert/jAlert-v3.min.js")"></script>
+<script src="@Url.Content("~/Scripts/alert/jAlert-functions.min.js")"></script>
 
 <script type="text/javascript">
     $(document).ready(function () {
@@ -92,7 +95,15 @@
                // var bValid = true;
                 var startTime = $('#starttime').val();
                 var endTime = $('#endtime').val();
-
+                if (startTime >= endTime) {
+                    $.jAlert({ //this is the normal usage
+                        'title': '起止日期范围有误',
+                        'content': '结束日期小于开始日期！请重新填写正确的起止日期范围。',
+                        'theme': 'black',
+                        'size': 'xsm'
+                    });
+                    return;
+                }
                 var times = startTime + "," + endTime;
                     $.ajax({
                         type: "POST",
