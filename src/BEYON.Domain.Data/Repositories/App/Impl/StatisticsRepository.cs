@@ -137,6 +137,7 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                             {
                                 var certificateID = reader["C4"].ToString();
                                 var initialEaring = reader["C5"] != null ? Convert.ToSingle(reader["C5"]) : 0;
+                                var taxFree = reader["C6"] != null ? Convert.ToSingle(reader["C6"]) : 0;
                                 var initialTax = reader["C8"] != null ? Convert.ToSingle(reader["C8"]) : 0;
                                 var initialTaxPayable = reader["C9"] != null ? Convert.ToSingle(reader["C9"]) : 0;
                                 var amountX = String.IsNullOrEmpty(reader["C11"].ToString()) ? 0 : Convert.ToSingle(reader["C11"]);
@@ -152,7 +153,7 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                                     result["C3"] = reader["C3"].ToString();
                                     result["C4"] = certificateID;
                                     result["C5"] = initialEaring + amountX;
-                                    result["C6"] = reader["C6"].ToString();
+                                    result["C6"] = taxFree;
                                     result["C7"] = reader["C7"].ToString();
                                     result["C8"] = initialTax + tax;
                                     result["C9"] = initialTaxPayable + amountY;
