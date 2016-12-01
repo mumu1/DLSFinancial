@@ -327,7 +327,7 @@
                 def: "工商银行"
             },
             { name: "AccountNumber", label: "银行账户:", type: "text" },
-            { name: "BankDetailName", label: "开户行详细名称:", type: "text", fieldInfo: "<font color='red'>除工商银行外，选择其他银行转账均需填写该项</font>" },
+            { name: "BankDetailName", label: "开户行详细名称:", type: "text", fieldInfo: "<font color='red'>除工商银行外，选择其他银行转账均需填写该项。建议优先选择工商银行转账。</font>" },
              {
                  name: "PaymentType",
                  label: "支付类型:",
@@ -620,17 +620,17 @@
                         cache: false,
                         dataType: 'html',
                         success: function (data) {                       
-                            $('#importDataDialog').html(data);
-                            dt.ajax.reload();
-                           
+                            $('#importDataDialog').html(data);                        
+                            dt.ajax.reload();                            
                         },
                         error: function (xhr) {
                             alert("出现错误，请稍后再试:" + xhr.responseText);
                             toastr.error("导入失败");
                         }
                     });
+                   
                 }
-
+       
             },
             {
                 text: "刷新",
@@ -642,7 +642,7 @@
 
         table = $('#datatable_create_form').dataTable({
             dom: 'Bfrtip',
-            colReorder: true,
+            colReorder: true,         
             ajax: {
                 url: '@Url.Action("GetPersonalData")',
                 type: "POST",
@@ -699,6 +699,7 @@
                 // Update summation
                 $('#summation').val(total);
             },
+            
             oLanguage: {
                 "sLengthMenu": "每页显示 _MENU_ 条记录",
                 "sZeroRecords": "抱歉， 没有找到",
@@ -719,6 +720,7 @@
     }
 
     initTable();
+  
     registerPaymentType();    //维护编辑状态的editor和table列的显示
 
     function closeFrom() {

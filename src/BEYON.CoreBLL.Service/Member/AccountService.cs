@@ -75,7 +75,7 @@ namespace BEYON.CoreBLL.Service.Member
                 //从数据库表SafeguardTime获取用户保存的系统维护时间
                 var saveStartTime = _SafeguardTimeService.SafeguardTimes.First().StartTime;
                 var saveEndTime = _SafeguardTimeService.SafeguardTimes.First().EndTime;
-                if (now >= saveStartTime && now <= saveEndTime)
+                if (now <= saveEndTime)
                 {
                     startTime = saveStartTime;
                     endTime = saveEndTime;

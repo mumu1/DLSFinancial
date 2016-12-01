@@ -192,7 +192,7 @@ namespace BEYON.CoreBLL.Service.Excel
                 {
                     var person = persons[k - 1];
                     excelApp.Cells[k + 6, 1] = string.Format("{0}", k);
-                    excelApp.Cells[k + 6, 2] = person.Name;
+                    excelApp.Cells[k + 6, 2] = person.Name.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", "");
                     excelApp.Cells[k + 6, 3] = person.CertificateType;
                     excelApp.Cells[k + 6, 4] = person.CertificateID;
                     excelApp.Cells[k + 6, 5] = person.Company;
@@ -204,7 +204,7 @@ namespace BEYON.CoreBLL.Service.Excel
                     excelApp.Cells[k + 6, 11] = person.TaxOrNot;
                     // excelApp.Cells[k + 5, 12] = person.PaymentType;
                     excelApp.Cells[k + 6, 12] = person.Bank;
-                    excelApp.Cells[k + 6, 13] = person.AccountNumber;
+                    excelApp.Cells[k + 6, 13] = person.AccountNumber.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", "");
                     excelApp.Cells[k + 6, 14] = person.BankDetailName;
                 }
 
@@ -372,7 +372,7 @@ namespace BEYON.CoreBLL.Service.Excel
                 {
                     var person = persons[k - 1];
                     excelApp.Cells[k + 6, 1] = string.Format("{0}", k);
-                    excelApp.Cells[k + 6, 2] = person.Name;
+                    excelApp.Cells[k + 6, 2] = person.Name.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", "");
                     excelApp.Cells[k + 6, 3] = person.CertificateType;
                     excelApp.Cells[k + 6, 4] = person.CertificateID;
                     excelApp.Cells[k + 6, 5] = person.Company;
