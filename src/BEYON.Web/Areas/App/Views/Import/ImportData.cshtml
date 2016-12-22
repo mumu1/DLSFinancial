@@ -41,11 +41,15 @@
             allowedFileExtensions: ['xlsx','xls'],
             removeClass: "btn btn-danger",
             removeLabel: "Delete",
-            removeIcon: "<i class=\"glyphicon glyphicon-trash\"></i> ",
-            done: function (e, data) {
-                alert('完成导入');
-            }
+            removeIcon: "<i class=\"glyphicon glyphicon-trash\"></i> "
         });
+    }).on('fileuploaded', function (event, data, id, index) {
+        
+        //2.关闭对话框
+        $("#dialog-import-data").dialog("close");
+        toastr.success('数据导入完成');
+        //1.刷新列表
+        $('#datatable_create_form').DataTable().ajax.reload();
     });
 </script>
 
