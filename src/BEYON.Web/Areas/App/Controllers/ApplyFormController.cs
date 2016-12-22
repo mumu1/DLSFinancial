@@ -27,6 +27,7 @@ namespace BEYON.Web.Areas.App.Controllers
 {
     public class ApplyFormController : Controller
     {
+        private readonly log4net.ILog _log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private readonly IApplicationFormService _applicationFormService;
         private readonly IPersonalRecordService _personalRecordService;
         private readonly IUserService _userService;
@@ -536,6 +537,7 @@ namespace BEYON.Web.Areas.App.Controllers
                     return;
 
                 var filepath = System.IO.Path.Combine(Server.MapPath("/Exports/"), filePath);
+                _log.Info(filepath);
                 System.IO.FileInfo file = new System.IO.FileInfo(filepath);
                 if (file.Exists)//判断文件是否存在
                 {
@@ -543,7 +545,7 @@ namespace BEYON.Web.Areas.App.Controllers
                     Response.ClearHeaders();
                     Response.AddHeader("Content-Disposition", "attachment;filename=" + System.Web.HttpUtility.UrlEncode("申请打印单.xlsx"));
                     Response.AddHeader("Content-Length", new FileInfo(filepath).Length.ToString());
-                    Response.ContentType = "application/octet-stream";
+                    Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
                     Response.TransmitFile(filepath);
 
                     //const long ChunkSize = 1048576;//1024K 每次读取文件，只读取100Ｋ，这样可以缓解服务器的压力
@@ -575,7 +577,7 @@ namespace BEYON.Web.Areas.App.Controllers
             }
             catch (Exception e)
             {
-                Console.Write(e.ToString());
+                _log.Error(e);
             }
         }
 

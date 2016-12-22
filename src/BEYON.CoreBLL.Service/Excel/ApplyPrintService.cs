@@ -16,6 +16,7 @@ namespace BEYON.CoreBLL.Service.Excel
 {
     public class ApplyPrintService : IApplyPrintService
     {
+        private readonly log4net.ILog _log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private readonly IApplicationFormRepository _applicationFormRepository;
         private readonly IPersonalRecordRepository _personalRecordRepository;
 
@@ -458,6 +459,7 @@ namespace BEYON.CoreBLL.Service.Excel
                 signRange.Value = " 单位负责人:                               部门负责人:                              项目负责人:                              课题负责人:                              经办人:                              ";
       
             }
+
             try
             {
                 //long XlFileFormat;
@@ -465,7 +467,7 @@ namespace BEYON.CoreBLL.Service.Excel
                 //else if (!xlFormat.CompareNoCase(_T("xlsx"))) XlFileFormat = 51;
                 //else if (!xlFormat.CompareNoCase(_T("csv"))) XlFileFormat = 6;
                 //else XlFileFormat = 56;
-
+            
                 //worksheet.SaveAs(@"D:\Tomin.xlsx", "51", "test", "test", true,
                 //    Missing.Value, Missing.Value, Missing.Value, Missing.Value, Missing.Value);
 
@@ -480,6 +482,7 @@ namespace BEYON.CoreBLL.Service.Excel
             }
             catch (Exception ex)
             {
+                _log.Error(ex);
                 Console.WriteLine(ex.Message);
             }
 
