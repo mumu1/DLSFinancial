@@ -32,7 +32,7 @@ namespace BEYON.Component.Data.Migrations
             //      new Person { FullName = "Rowan Miller" }
             //    );
             //
-#if DEBUG
+#if DEBUG1
             #region Ä£¿é¹ÜÀí
            List<Module> modules = new List<Module>
             {
