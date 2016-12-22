@@ -539,24 +539,35 @@ namespace BEYON.Web.Areas.App.Controllers
                 System.IO.FileInfo file = new System.IO.FileInfo(filepath);
                 if (file.Exists)//判断文件是否存在
                 {
-                    const long ChunkSize = 1048576;//1024K 每次读取文件，只读取100Ｋ，这样可以缓解服务器的压力
-                    byte[] buffer = new byte[ChunkSize];
-
                     Response.Clear();
-                    System.IO.FileStream iStream = System.IO.File.OpenRead(filepath);
-                    long dataLengthToRead = iStream.Length;//获取下载的文件总大小
+                    Response.ClearHeaders();
+                    Response.AddHeader("Content-Disposition", "attachment;filename=" + System.Web.HttpUtility.UrlEncode("申请打印单.xlsx"));
+                    Response.AddHeader("Content-Length", new FileInfo(filepath).Length.ToString());
                     Response.ContentType = "application/octet-stream";
-                    Response.AddHeader("Content-Disposition", "attachment; filename=" + System.Web.HttpUtility.UrlEncode("申请打印单.xlsx"));
-                    while (dataLengthToRead > 0 && Response.IsClientConnected)
+                    Response.TransmitFile(filepath);
+
+                    //const long ChunkSize = 1048576;//1024K 每次读取文件，只读取100Ｋ，这样可以缓解服务器的压力
+                    //byte[] buffer = new byte[ChunkSize];
+
+                    //Response.Clear();
+                    //System.IO.FileStream iStream = System.IO.File.OpenRead(filepath);
+                    //long dataLengthToRead = iStream.Length;//获取下载的文件总大小
+                    //Response.ContentType = "application/octet-stream";
+                    //Response.AddHeader("Content-Disposition", "attachment; filename=" + System.Web.HttpUtility.UrlEncode("申请打印单.xlsx"));
+                    //while (dataLengthToRead > 0 && Response.IsClientConnected)
+                    //{
+                    //    int lengthRead = iStream.Read(buffer, 0, Convert.ToInt32(ChunkSize));//读取的大小
+                    //    Response.OutputStream.Write(buffer, 0, lengthRead);
+                    //    Response.Flush();
+                    //    dataLengthToRead = dataLengthToRead - lengthRead;
+                    //}
+                    //iStream.Close();
+
+                    if (Response.IsClientConnected)
                     {
-                        int lengthRead = iStream.Read(buffer, 0, Convert.ToInt32(ChunkSize));//读取的大小
-                        Response.OutputStream.Write(buffer, 0, lengthRead);
-                        Response.Flush();
-                        dataLengthToRead = dataLengthToRead - lengthRead;
+                        //Response.Close();
+                        Response.End();
                     }
-                    Response.Close();
-                    Response.End();
-                    iStream.Close();
 
                     System.IO.File.SetAttributes(filepath, System.IO.FileAttributes.Normal);
                     System.IO.File.Delete(filepath);
