@@ -199,7 +199,7 @@ namespace BEYON.CoreBLL.Service.App
             try
             {
                 var columns = importData == null ? null : importData.Columns;
-                var maps = GetColumns(columns, new PersonalRecord());
+                var maps = ImportUtil.GetColumns(columns, new PersonalRecord());
                 var items = ExcelService.GetObjects(fileName, columns);
                 if (importData != null)
                 {
@@ -220,7 +220,7 @@ namespace BEYON.CoreBLL.Service.App
                         List<ImportFeedBack> errors = ValidatePersonalRecord(item,  num++, maps, ref record);
                         if(errors.Count > 0)
                         {
-                            return new OperationResult(OperationResultType.Error, "导入数据失败", ParseToHtml(errors));
+                            return new OperationResult(OperationResultType.Error, "导入数据失败", ImportUtil.ParseToHtml(errors));
                         }
 
                         //插入或更新数据
@@ -230,7 +230,6 @@ namespace BEYON.CoreBLL.Service.App
 
                 return new OperationResult(OperationResultType.Success, "导入数据成功！");
             }
-
             catch (Exception ex)
             {
                 _log.Error(ex);
@@ -238,64 +237,7 @@ namespace BEYON.CoreBLL.Service.App
                 feedBack.ExceptionType = "未知错误";
                 feedBack.ExceptionContent.Add(ex.Message);
                 List<ImportFeedBack> erros = new List<ImportFeedBack>();
-                return new OperationResult(OperationResultType.Error, "导入数据失败!", ParseToHtml(new List<ImportFeedBack>(){feedBack}));
-            }
-        }
-
-        private Dictionary<String, String> GetColumns(ColumnMap[] colums, PersonalRecord record)
-        {
-            Dictionary<String, String> result = new Dictionary<String, String>();
-            if (colums != null)
-            {
-                foreach (var column in colums)
-                {
-                    result.Add(column.ColumnName, column.TitleName);
-                }
-            }
-            else
-            {
-                var properties = record.GetType().GetProperties();
-                foreach (var property in properties)
-                {
-                    result.Add(property.Name, property.Name);
-                }
-            }
-            
-            return result;
-        }
-
-        private String ParseToHtml(List<ImportFeedBack> feedbacks)
-        {
-            System.Text.StringBuilder sb = new System.Text.StringBuilder();
-            foreach (ImportFeedBack feedback in feedbacks)
-            {
-                sb.Append("<li>");
-                sb.Append(String.Format("错误类型[ {0} ]", feedback.ExceptionType));
-                sb.Append("</li>");
-                if(feedback.ExceptionContent.Count > 0)
-                {
-                    sb.Append("<li>详细信息错误如下: </li>");
-                    foreach(var error in feedback.ExceptionContent)
-                    {
-                        sb.Append("<li>");
-                        sb.Append(error);
-                        sb.Append("</li>");
-                    }
-                }
-            }
-
-            return sb.ToString();
-        }
-
-        private String GetValue(LinqToExcel.Row record, Dictionary<String, String> map, String name)
-        {
-            if(map.ContainsKey(name))
-            {
-                return record[map[name]];
-            }
-            else
-            {
-                return record[name];
+                return new OperationResult(OperationResultType.Error, "导入数据失败!", ImportUtil.ParseToHtml(new List<ImportFeedBack>() { feedBack }));
             }
         }
 
@@ -323,32 +265,32 @@ namespace BEYON.CoreBLL.Service.App
                         case "Title":
                         case "TaxOrNot":
                         case "AccountNumber":
-                            if (String.IsNullOrEmpty(GetValue(record, map, property.Name)))
+                            if (String.IsNullOrEmpty(ImportUtil.GetValue(record, map, property.Name)))
                             {
                                 feedBack.ExceptionContent.Add(String.Format("第{0}行记录  {1}为空！", num, map[property.Name]));
                             }
                             else
                             {
-                                property.SetValue(personal, GetValue(record, map, property.Name));
+                                property.SetValue(personal, ImportUtil.GetValue(record, map, property.Name));
                             }
                             break;
                         case "BankDetailName":
-                            if (!GetValue(record, map, "Bank").Equals("工商银行"))
+                            if (!ImportUtil.GetValue(record, map, "Bank").Equals("工商银行"))
                             {
-                                if (String.IsNullOrEmpty(GetValue(record, map, property.Name)))
+                                if (String.IsNullOrEmpty(ImportUtil.GetValue(record, map, property.Name)))
                                 {
                                     feedBack.ExceptionContent.Add(String.Format("第{0}行记录  {1}为空！", num, map[property.Name]));
                                 }
                                 else
                                 {
-                                    property.SetValue(personal, GetValue(record, map, property.Name));
+                                    property.SetValue(personal, ImportUtil.GetValue(record, map, property.Name));
                                 }
                             }
                             break;
                         case "Amount":
                             try
                             {
-                                var value = Convert.ToDouble(GetValue(record, map, property.Name));
+                                var value = Convert.ToDouble(ImportUtil.GetValue(record, map, property.Name));
                                 property.SetValue(personal, value);
                             }
                             catch
@@ -377,17 +319,17 @@ namespace BEYON.CoreBLL.Service.App
                         case "Nationality":
                         case "Title":
                         case "TaxOrNot":
-                            if (String.IsNullOrEmpty(GetValue(record, map, property.Name)))
+                            if (String.IsNullOrEmpty(ImportUtil.GetValue(record, map, property.Name)))
                             {
                                 feedBack.ExceptionContent.Add(String.Format("第{0}行记录  {1}为空！", num, map[property.Name]));
                             }
                             else
                             {
-                                property.SetValue(personal, GetValue(record, map, property.Name));
+                                property.SetValue(personal, ImportUtil.GetValue(record, map, property.Name));
                             }
                             break;
                         case "Amount":
-                            if (String.IsNullOrEmpty(GetValue(record, map, property.Name)))
+                            if (String.IsNullOrEmpty(ImportUtil.GetValue(record, map, property.Name)))
                             {
                                 feedBack.ExceptionContent.Add(String.Format("第{0}行记录  {1}为空！", num, map[property.Name]));
                             }
@@ -395,7 +337,7 @@ namespace BEYON.CoreBLL.Service.App
                             {
                                 try
                                 {
-                                    var value = Convert.ToDouble(GetValue(record, map, property.Name));
+                                    var value = Convert.ToDouble(ImportUtil.GetValue(record, map, property.Name));
                                     property.SetValue(personal, value);
                                 }
                                 catch
@@ -509,18 +451,6 @@ namespace BEYON.CoreBLL.Service.App
                 list.Add(feedBack);
             }
             return list;
-        }
-
-        public class ImportFeedBack
-        {
-            public ImportFeedBack()
-            {
-                this.ExceptionContent = new List<String>();
-            }
-
-            public String ExceptionType { get; set; }
-            public List<String> ExceptionContent { get; private set; }
-
         }
 
         private bool CheckIDCard18(string Id)

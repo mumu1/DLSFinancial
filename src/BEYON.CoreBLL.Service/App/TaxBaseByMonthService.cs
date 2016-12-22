@@ -14,9 +14,8 @@ namespace BEYON.CoreBLL.Service.App
 {
     public class TaxBaseByMonthService : CoreServiceBase, ITaxBaseByMonthService
     {
+        private readonly log4net.ILog _log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private readonly ITaxBaseByMonthRepository _TaxBaseByMonthRepository;
-
-
 
         public TaxBaseByMonthService(ITaxBaseByMonthRepository taxBaseByMonthRepository, IUnitOfWork unitOfWork)
             : base(unitOfWork)
@@ -147,19 +146,60 @@ namespace BEYON.CoreBLL.Service.App
             }
         }
 
-        public OperationResult Import(String fileName, Service.Excel.ColumnMap[] columns)
+        public OperationResult Import(String fileName, Service.Excel.ImportData importData)
         {
             try
             {
-                var items = ExcelService.GetObjects<TaxBaseByMonth>(fileName, columns);
-                _TaxBaseByMonthRepository.InsertOrUpdate(items);
+                var columns = importData == null ? null : importData.Columns;
+                var maps = ImportUtil.GetColumns(columns, new TaxBaseByMonth());
+                var items = ExcelService.GetObjects(fileName, columns);
+                if (importData != null)
+                {
+                    String serialNumber = importData.Parameters[0].Value;
+                    String paymentType = importData.Parameters[1].Value;
+                    int num = 1;
+                    foreach (var item in items)
+                    {
+                        TaxBaseByMonth record = new TaxBaseByMonth();
+                        List<ImportFeedBack> errors = ImportUtil.ValidateImportRecord(item, num++, maps, ref record);
+                        if (errors.Count > 0)
+                        {
+                            return new OperationResult(OperationResultType.Error, "导入数据失败", ImportUtil.ParseToHtml(errors));
+                        }
+
+                        //插入或更新数据
+                        _TaxBaseByMonthRepository.InsertOrUpdate(record);
+                    }
+                }
+
                 return new OperationResult(OperationResultType.Success, "导入数据成功！");
             }
             catch (Exception ex)
             {
-                return new OperationResult(OperationResultType.Error, "导入数据失败!");
+                _log.Error(ex);
+                ImportFeedBack feedBack = new ImportFeedBack();
+                feedBack.ExceptionType = "未知错误";
+                feedBack.ExceptionContent.Add(ex.Message);
+                List<ImportFeedBack> erros = new List<ImportFeedBack>();
+                return new OperationResult(OperationResultType.Error, "导入数据失败!", ImportUtil.ParseToHtml(new List<ImportFeedBack>() { feedBack }));
             }
         }
+
+        
+
+        //public OperationResult Import(String fileName, Service.Excel.ColumnMap[] columns)
+        //{
+        //    try
+        //    {
+        //        var items = ExcelService.GetObjects<TaxBaseByMonth>(fileName, columns);
+        //        _TaxBaseByMonthRepository.InsertOrUpdate(items);
+        //        return new OperationResult(OperationResultType.Success, "导入数据成功！");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return new OperationResult(OperationResultType.Error, "导入数据失败!");
+        //    }
+        //}
 
         public Double GetBaseSalary(String certificateID) {
             Double baseSalary = _TaxBaseByMonthRepository.GetBaseSalary(certificateID);

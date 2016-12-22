@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Npgsql;
 using BEYON.Component.Data;
 using BEYON.Component.Data.EF;
 using BEYON.Component.Data.EF.Interface;
@@ -72,6 +73,60 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                 name = lists[0].Name;
             }
             return name;
+        }
+
+        public void InsertOrUpdate(TaxBaseByMonth record)
+        {
+            //1.构造插入或更新SQL
+            string[] columns = new string[]{
+                "CertificateID","Name","CertificateType","InitialEaring",
+                "TaxFree","AmountDeducted","InitialTaxPayable","InitialTax","Period",
+                "UpdateDate"
+            };
+            StringBuilder sql = new StringBuilder();
+            sql.Append("INSERT INTO dbo.\"TaxBaseByMonths\" ( ");
+            foreach (var column in columns)
+            {
+                sql.Append(String.Format("\"{0}\",", column));
+            }
+            sql.Remove(sql.Length - 1, 1);
+            sql.Append(" ) VALUES ( ");
+            //填充值
+            foreach (var column in columns)
+            {
+                sql.Append(String.Format(":{0},", column));
+            }
+            sql.Remove(sql.Length - 1, 1);
+            sql.Append(" )  ON CONFLICT (\"CertificateID\", \"CertificateType\") DO UPDATE SET ");
+
+            foreach (var column in columns)
+            {
+                sql.Append(String.Format("\"{0}\"=:{1},", column, column));
+            }
+            sql.Remove(sql.Length - 1, 1);
+
+            //2.添加参数变量
+            List<NpgsqlParameter> parameters = new List<NpgsqlParameter>();
+            foreach (var column in columns)
+            {
+                var value = PropertyUtil.GetPropValue(record, column);
+                if (value == null)
+                    value = "";
+                parameters.Add(new NpgsqlParameter(String.Format(":{0}", column), value));
+            }
+
+            //3.执行SQL
+            var connectString = System.Configuration.ConfigurationManager.ConnectionStrings["BeyonDBGuMu"];
+            using (var conntion = new NpgsqlConnection(connectString.ToString()))
+            {
+                conntion.Open();
+                using (var command = conntion.CreateCommand())
+                {
+                    command.CommandText = sql.ToString();
+                    command.Parameters.AddRange(parameters.ToArray());
+                    command.ExecuteNonQuery();
+                }
+            }
         }
 
     }

@@ -204,22 +204,35 @@ namespace BEYON.Web.Areas.BasicDataManagement.Controllers
                 fileName = tempName + Path.GetFileName(upload.FileName);
                 var path = Path.Combine(filePath, fileName);
                 upload.SaveAs(path);
+
                 //获取映射文件
-                ColumnMap[] columns;
                 ImportData importData;
                 if (!ExcelService.Get(Request.Path, out importData))
                 {
-                    columns = null;
-                }
-                else
-                {
-                    columns = importData.Columns;
+                    importData = null;
                 }
 
                 //实现文件导入
-                var result = _taxBaseByMonthService.Import(path, columns);
+                var result = _taxBaseByMonthService.Import(path, importData);
                 //删除临时创建文件
                 System.IO.File.Delete(path);
+
+                ////获取映射文件
+                //ColumnMap[] columns;
+                //ImportData importData;
+                //if (!ExcelService.Get(Request.Path, out importData))
+                //{
+                //    columns = null;
+                //}
+                //else
+                //{
+                //    columns = importData.Columns;
+                //}
+
+                ////实现文件导入
+                //var result = _taxBaseByMonthService.Import(path, columns);
+                ////删除临时创建文件
+                //System.IO.File.Delete(path);
 
                 result.Message = result.Message ?? result.ResultType.GetDescription();
 

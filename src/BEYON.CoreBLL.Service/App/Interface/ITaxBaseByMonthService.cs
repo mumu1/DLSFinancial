@@ -18,7 +18,7 @@ namespace BEYON.CoreBLL.Service.App.Interface
         OperationResult Delete(List<string> list);
         OperationResult Delete(TaxBaseByMonth model);
         OperationResult Update(TaxBaseByMonth model);
-        OperationResult Import(String fileName, Service.Excel.ColumnMap[] columns);
+        OperationResult Import(String fileName, Service.Excel.ImportData importData);
 
         Double GetBaseSalary(String certificateID);
 

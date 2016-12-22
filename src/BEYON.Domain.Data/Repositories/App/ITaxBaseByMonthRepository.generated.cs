@@ -37,5 +37,7 @@ namespace BEYON.Domain.Data.Repositories.App
         String GetNameByCerID(String certificateID);
 
         Double GetBaseTax(String certificateID);
+
+        void InsertOrUpdate(TaxBaseByMonth record);
     }
 }

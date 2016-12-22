@@ -82,7 +82,7 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
             List<NpgsqlParameter> parameters = new List<NpgsqlParameter>();
             foreach (var column in columns)
             {
-                var value = GetPropValue(record, column);
+                var value = PropertyUtil.GetPropValue(record, column);
                 if (value == null)
                     value = "";
                 parameters.Add(new NpgsqlParameter(String.Format(":{0}", column), value));
@@ -101,11 +101,6 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                 }
             }
 
-        }
-
-        private static object GetPropValue(object src, string propName)
-        {
-            return src.GetType().GetProperty(propName).GetValue(src, null);
         }
      }
 }
