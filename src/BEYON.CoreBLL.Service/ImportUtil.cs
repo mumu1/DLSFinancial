@@ -20,14 +20,35 @@ namespace BEYON.CoreBLL.Service
             var properties = personal.GetType().GetProperties();
             foreach (var property in properties)
             {
-                if (String.IsNullOrEmpty(ImportUtil.GetValue(record, map, property.Name)))
+                switch (property.Name)
                 {
-                    feedBack.ExceptionContent.Add(String.Format("第{0}行记录  {1}为空！", num, map[property.Name]));
+                    case "Id":
+                    case "DT_RowId":
+                        break;
+                    case "UpdateDate":
+                        if (!String.IsNullOrEmpty(ImportUtil.GetValue(record, map, property.Name)))
+                        {
+                            SetValue(property, personal, ImportUtil.GetValue(record, map, property.Name));
+                        }
+                        else
+                        {
+                            SetValue(property, personal, DateTime.Now.ToString());
+                        }
+                        break;
+                    default:
+                        {
+                            if (String.IsNullOrEmpty(ImportUtil.GetValue(record, map, property.Name)))
+                            {
+                                feedBack.ExceptionContent.Add(String.Format("第{0}行记录  {1}为空！", num, map[property.Name]));
+                            }
+                            else
+                            {
+                                SetValue(property, personal, ImportUtil.GetValue(record, map, property.Name));
+                            }
+                        }
+                        break;
                 }
-                else
-                {
-                    property.SetValue(personal, ImportUtil.GetValue(record, map, property.Name));
-                }
+                
             }
 
             if (feedBack.ExceptionContent.Count > 0)
@@ -38,16 +59,46 @@ namespace BEYON.CoreBLL.Service
             return list;
         }
 
+        private static void SetValue<T>(System.Reflection.PropertyInfo property, T t, String value)
+        {
+            if (String.IsNullOrEmpty(value))
+                return;
+
+            object newValue = value;
+            if(property.PropertyType == typeof(double))
+            {
+                newValue = double.Parse(value);
+            }
+            else if(property.PropertyType == typeof(float))
+            {
+                newValue = float.Parse(value);
+            }
+            else if(property.PropertyType == typeof(int))
+            {
+                newValue = int.Parse(value);
+            }
+            else if (property.PropertyType == typeof(DateTime))
+            {
+                newValue = DateTime.Parse(value);
+            }
+
+
+            property.SetValue(t, newValue);
+        }
+
         public static String GetValue(LinqToExcel.Row record, Dictionary<String, String> map, String name)
         {
+            var columnName = name;
             if (map.ContainsKey(name))
             {
-                return record[map[name]];
+                columnName = map[name];
+
             }
+
+            if (record.ColumnNames.Contains(columnName))
+                return record[columnName];
             else
-            {
-                return record[name];
-            }
+                return null;
         }
 
         public static Dictionary<String, String> GetColumns(ColumnMap[] colums, object record)

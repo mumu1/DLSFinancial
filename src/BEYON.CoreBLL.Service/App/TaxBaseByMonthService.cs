@@ -155,8 +155,6 @@ namespace BEYON.CoreBLL.Service.App
                 var items = ExcelService.GetObjects(fileName, columns);
                 if (importData != null)
                 {
-                    String serialNumber = importData.Parameters[0].Value;
-                    String paymentType = importData.Parameters[1].Value;
                     int num = 1;
                     foreach (var item in items)
                     {
