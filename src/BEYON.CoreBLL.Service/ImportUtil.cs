@@ -17,8 +17,25 @@ namespace BEYON.CoreBLL.Service
             feedBack = new ImportFeedBack();
             feedBack.ExceptionType = "空值";
 
-            var properties = personal.GetType().GetProperties();
-            foreach (var property in properties)
+            var requiredProps = personal.GetType().GetProperties().Where(
+                prop => Attribute.IsDefined(prop, typeof(System.ComponentModel.DataAnnotations.RequiredAttribute)));
+
+            var otherProperties = personal.GetType().GetProperties().Where(prop => !requiredProps.Contains(prop));
+
+            foreach (var property in requiredProps)
+            {
+                if (String.IsNullOrEmpty(ImportUtil.GetValue(record, map, property.Name)))
+                {
+                    feedBack.ExceptionContent.Add(String.Format("第{0}行记录  {1}为空！", num, map[property.Name]));
+                }
+                else
+                {
+                    SetValue(property, personal, ImportUtil.GetValue(record, map, property.Name));
+                }
+                
+            }
+
+            foreach (var property in otherProperties)
             {
                 switch (property.Name)
                 {
@@ -37,18 +54,14 @@ namespace BEYON.CoreBLL.Service
                         break;
                     default:
                         {
-                            if (String.IsNullOrEmpty(ImportUtil.GetValue(record, map, property.Name)))
-                            {
-                                feedBack.ExceptionContent.Add(String.Format("第{0}行记录  {1}为空！", num, map[property.Name]));
-                            }
-                            else
+                            if (!String.IsNullOrEmpty(ImportUtil.GetValue(record, map, property.Name)))
                             {
                                 SetValue(property, personal, ImportUtil.GetValue(record, map, property.Name));
                             }
                         }
                         break;
                 }
-                
+
             }
 
             if (feedBack.ExceptionContent.Count > 0)
