@@ -217,26 +217,14 @@ namespace BEYON.Web.Areas.BasicDataManagement.Controllers
                 //删除临时创建文件
                 System.IO.File.Delete(path);
 
-                ////获取映射文件
-                //ColumnMap[] columns;
-                //ImportData importData;
-                //if (!ExcelService.Get(Request.Path, out importData))
-                //{
-                //    columns = null;
-                //}
-                //else
-                //{
-                //    columns = importData.Columns;
-                //}
-
-                ////实现文件导入
-                //var result = _taxBaseByMonthService.Import(path, columns);
-                ////删除临时创建文件
-                //System.IO.File.Delete(path);
-
-                result.Message = result.Message ?? result.ResultType.GetDescription();
-
-                return Json(new { erro = result.Message });
+                if (result.ResultType != OperationResultType.Success)
+                {
+                    return Json(new { error = result.LogMessage });
+                }
+                else
+                {
+                    return Json(new { });
+                }
             }
 
             return Json(new { erro = "上传数据失败！" });
