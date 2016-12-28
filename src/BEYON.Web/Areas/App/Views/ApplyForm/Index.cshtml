@@ -126,6 +126,7 @@
             },
             {
                 text: "输出打印", action: function (e, dt, node, config) {
+                    toastr.info('执行输出打印处理，请稍等候。。。');
                     var rowData = dt.rows({ selected: true }).data();
                     $.each($(rowData), function (key, value) {
                         $.ajax({
