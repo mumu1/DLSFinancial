@@ -212,6 +212,11 @@ namespace BEYON.CoreBLL.Service.App
                         record.SerialNumber = serialNumber;
                         record.PaymentType = paymentType;
                         if (paymentType.Equals("银行转账")) {
+                            if (item.Count < 13)
+                            {
+                                return new OperationResult(OperationResultType.Error, "导入数据失败", "<li>请增加银行账户等相关信息或修改为现金支付类型</li>");
+                            }
+
                             record.AccountName = item[0];
                             record.Bank = item[10];
                             record.AccountNumber = item[11];
