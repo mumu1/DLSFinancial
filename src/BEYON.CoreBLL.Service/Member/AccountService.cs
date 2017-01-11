@@ -67,7 +67,8 @@ namespace BEYON.CoreBLL.Service.Member
             else
             {
                 var roleIdsByUser = user.Roles.Select(r => r.Id).ToList();
-
+                /*
+                //采用设置系统封闭时间方式 begin
                 //若没有特别设定指定一到五日系统维护，普通用户无法登陆
                 var now = DateTime.Now;
                 var startTime = new DateTime(now.Year, now.Month, 1);
@@ -91,7 +92,27 @@ namespace BEYON.CoreBLL.Service.Member
                         }
                     }
                 }
-                
+                //采用设置系统封闭时间方式 end
+                */
+
+                //采用设置系统开放时间方式 begin
+                var now = DateTime.Now;
+                //从数据库表SafeguardTime获取用户保存的系统维护时间
+                var saveStartTime = _SafeguardTimeService.SafeguardTimes.First().StartTime;
+                var saveEndTime = _SafeguardTimeService.SafeguardTimes.First().EndTime;
+                if (!(now >= saveStartTime && now <= saveEndTime))
+                {
+                    foreach (var roleId in roleIdsByUser)
+                    {
+                        Role role = _RoleService.Roles.FirstOrDefault(r => r.Id == roleId);
+                        if (role != null && role.RoleName == "普通用户")
+                        {
+                            return new OperationResult(OperationResultType.Warning, "系统维护状态中。。。请于本月" + saveStartTime.ToShortDateString() + "日与"+saveEndTime.ToShortDateString() +"之间使用。");
+                        }
+                    }
+                }
+                //采用设置系统开放时间方式 end
+
                 result = new OperationResult(OperationResultType.Success, "登录成功。", user);
                 #region 设置用户权限缓存
                 

@@ -43,12 +43,12 @@
     </div>
 
     <div id="importDataDialog"></div>
-    <div id="dialog-setSafeguardTime" title="更新系统维护时间" style="display:none;">
-        <p class="validateTips">请设置系统本月的维护时间，结束时间需晚于开始时间。</p>
+    <div id="dialog-setSafeguardTime" title="更新系统开放时间" style="display:none;">
+        <p class="validateTips">请设置系统本月的普通用户开放时间，结束时间需晚于开始时间。</p>
         <form>
             <fieldset>
                 <div>
-                    <label class="control-labe" id="recentSafeguardTime">当前系统维护时间区间：</label>
+                    <label class="control-labe" id="recentSafeguardTime">当前系统开放时间区间：</label>
                 </div>
                     <div id="starttime_main" class="control-group">
                         <label class="control-label" for="starttime">开始时间：</label>
@@ -95,7 +95,7 @@
                // var bValid = true;
                 var startTime = $('#starttime').val();
                 var endTime = $('#endtime').val();
-                if (startTime >= endTime) {
+                if (startTime > endTime) {
                     $.jAlert({ //this is the normal usage
                         'title': '起止日期范围有误',
                         'content': '结束日期小于开始日期！请重新填写正确的起止日期范围。',
@@ -113,10 +113,10 @@
                         contentType: "application/json; charset=utf-8",
                         datatype: "json",
                         success: function (data) {
-                            toastr.info('更新维护时间成功！');
+                            toastr.info('更新开放时间成功！');
                         },
                         error: function () {
-                            toastr.error('更新维护时间失败！');
+                            toastr.error('更新开放时间失败！');
                         }
                     });                
                     $(this).dialog("close");
@@ -230,8 +230,14 @@
                     //    { text: "打印", extend: 'print' }
                     ]
                 },
+                 {
+                     text: "5刷新",
+                     action: function (e, dt, node, config) {
+                         dt.ajax.reload();
+                     }
+                 },
                 {
-                    text: "导入",
+                    text: "4导入",
                     action: function (e, dt, node, config) {
                         var ColumnDatas = [];
                         var columns = dt.settings().init().columns;
@@ -258,15 +264,9 @@
                         dt.ajax.reload();
                         //$('#importDataDialog').load('../App/Import/ImportData', );
                     }
-                },
+                },              
                 {
-                    text: "刷新",
-                    action: function (e, dt, node, config) {
-                        dt.ajax.reload();
-                    }
-                },
-                {
-                    text: "清空",
+                    text: "3清空",
                     action: function (e, dt, node, config) {
                         $.ajax({
                             type: "POST",
@@ -286,7 +286,7 @@
                     }
                 },
                 {
-                    text: "备份计税数据",
+                    text: "2备份计税数据",
                     action: function (e, dt, node, config) {
                         $.ajax({
                             type: "POST",
@@ -305,7 +305,7 @@
                     }
                 },
                  {
-                     text: "更新维护时间",
+                     text: "1更新开放时间",
                      action: function (e, dt, node, config) {
                          openSafeguardTimeDialog();                       
                      }
@@ -387,10 +387,10 @@
             contentType: "application/json; charset=utf-8",
             datatype: "text",
             success: function (data) {
-                $('#recentSafeguardTime').text("当前系统维护时间区间：" + data);
+                $('#recentSafeguardTime').text("当前系统开放时间区间：" + data);
             },
             error: function () {
-                toastr.error('获取维护时间失败！');
+                toastr.error('获取开放时间失败！');
             }
         });
 
