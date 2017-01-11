@@ -6,6 +6,12 @@
     </div>
 </div>
 <div id="modal-content"></div>
+<div id="dialog-DownloadBook" title="下载系统使用说明" style="display:none;">
+    <p>系统使用说明：</p><br />
+    <label>1：中科院地理所财务计税系统_用户手册（普通用户）</label><a href="@Url.Content("~/Scripts/中科院地理所财务计税系统_用户手册（普通用户）.doc")">点我下载</a><br />
+    <label>2：财务计税系统使用流程</label><a href="@Url.Content("~/Scripts/财务计税系统使用流程.pdf")">点我打开</a><br />
+
+</div>
 
 <script src="@Url.Content("~/Scripts/jquery.validate.min.js")"></script>
 <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")"></script>
@@ -174,7 +180,14 @@
             {
                 text: "列显示",
                 extend: 'colvis'
-            }
+            },
+             {
+                 text: "系统使用说明下载", action: function (e, dt, node, config) {
+                     $("#dialog-DownloadBook").css("display", "block");
+                     $("#dialog-DownloadBook").dialog("open");
+                 }
+
+             }
         ];
 
         //如果是管理员
@@ -506,6 +519,19 @@
             ShowModal(actionUrl, serialNumbers, "审核申请单");
         }
     }
+
+    //系统使用说明下载
+    $("#dialog-DownloadBook").dialog({
+        autoOpen: false,
+        height: 320,
+        width: 400,
+        modal: true,
+        buttons: {
+            "关闭": function () {
+                $(this).dialog("close");
+            }
+        }
+    });
 </script>
 
 

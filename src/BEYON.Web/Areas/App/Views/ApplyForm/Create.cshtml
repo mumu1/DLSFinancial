@@ -173,6 +173,11 @@
     </div>
     <!-- end widget div -->
     <div id="importDataDialog"></div>
+    <div id="dialog-DownloadTemp" title="下载人员导入模板" style="display:none;">
+        <p>请根据本申请单选择的支付类型下载相应的模板</p><br />
+        <label>人员导入模板1：银行转账</label><a href="@Url.Content("~/Scripts/银行转账模板.xls")">点我下载</a><br/><br />
+        <label>人员导入模板2：现金支付</label><a href="@Url.Content("~/Scripts/现金支付模板.xls")">点我下载</a><br/>
+    </div>
 </section>
 
 <link rel="stylesheet" href="@Url.Content("~/Content/css/jAlert-v3.css")">
@@ -570,6 +575,13 @@
                 },
                 title: '人员信息表',
             },
+             {
+                 text: "下载导入模板", action: function (e, dt, node, config) {
+                     $("#dialog-DownloadTemp").css("display", "block");
+                     $("#dialog-DownloadTemp").dialog("open");
+                 }                    
+       
+            },
             {
                 text: "导入", action: function (e, dt, node, config) {
                     var ColumnDatas = [];
@@ -881,5 +893,17 @@
         });
     }
 
+    //人员导入模板下载
+    $("#dialog-DownloadTemp").dialog({
+        autoOpen: false,
+        height: 320,
+        width: 400,
+        modal: true,
+        buttons: {         
+            "关闭": function () {
+                $(this).dialog("close");
+            }
+        }
+    });
 
 </script>
