@@ -91,6 +91,12 @@ namespace BEYON.CoreBLL.Service.Excel
             Worksheet worksheet = workBook.ActiveSheet as Worksheet;
             worksheet.Cells.NumberFormat = "@";     //文本输出格式
 
+            worksheet.PageSetup.Orientation = XlPageOrientation.xlLandscape;//页面方向横向
+
+            worksheet.PageSetup.Zoom =false ; //打印时页面设置,必须设置为false,下面的二行页高,页宽才有效
+            worksheet.PageSetup.FitToPagesWide = 1; //页宽
+            worksheet.PageSetup.FitToPagesTall = false; //页高
+           
             //银行转账支付方式，多银行信息等列需打印
             if (applicationForm.PaymentType.Equals("银行转账"))
             {
@@ -458,7 +464,7 @@ namespace BEYON.CoreBLL.Service.Excel
                 signRange.HorizontalAlignment = XlHAlign.xlHAlignLeft; //水平靠左
                 signRange.Value = " 单位负责人:                               部门负责人:                              项目负责人:                              课题负责人:                              经办人:                              ";
       
-            }
+            }          
 
             try
             {
