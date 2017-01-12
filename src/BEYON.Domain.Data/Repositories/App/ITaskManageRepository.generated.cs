@@ -34,6 +34,8 @@ namespace BEYON.Domain.Data.Repositories.App
     public partial interface ITaskManageRepository : IRepository<TaskManage, Int32>
     {
         TaskManage GetTaskByNumber(String projectNumber);
+
+        List<TaskManage> GetTaskByTaskLeader(String taskLeader);
     }
    
 }

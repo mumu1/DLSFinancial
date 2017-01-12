@@ -150,5 +150,10 @@ namespace BEYON.CoreBLL.Service.App
         {           
            return  _TaskManageRepository.GetTaskByNumber(projectNumber);           
         }
+
+        public List<TaskManage> GetTaskByTaskLeader(String taskLeader)
+        {
+            return _TaskManageRepository.GetTaskByTaskLeader(taskLeader);
+        }
     }
 }

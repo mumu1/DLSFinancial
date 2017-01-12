@@ -49,6 +49,14 @@ namespace BEYON.Web.Areas.BasicDataManagement.Controllers
 
         }
 
+        // GET: /BasicDataManagement/TaskManage/GetTaskByTaskLeader/
+        public ActionResult GetTaskByTaskLeader(String taskLeader)
+        {
+            var result = this._taskManageService.GetTaskByTaskLeader(taskLeader);
+            return Json(new { total = result.Count, data = result }, JsonRequestBehavior.AllowGet);
+
+        }
+
         // GET: /BasicDataManagement/TaskManage/GetDataByID/
         public String GetDataByID(String projectNumber) {
             TaskManage result = this._taskManageService.GetTaskByNumber(projectNumber);

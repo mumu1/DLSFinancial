@@ -21,5 +21,6 @@ namespace BEYON.CoreBLL.Service.App.Interface
         OperationResult Import(String fileName, Service.Excel.ColumnMap[] columns);
 
         TaskManage GetTaskByNumber(String projectNumber);
+        List<TaskManage> GetTaskByTaskLeader(String taskLeader);
     }
 }

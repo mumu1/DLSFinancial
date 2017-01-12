@@ -54,6 +54,24 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
             else
                 return null;
         }
-    
+        public List<TaskManage> GetTaskByTaskLeader(String taskLeader)
+        {
+            //TaskManage taskManage = null;
+            var taskManage = from p in Context.TaskManages.Where(w => w.TaskLeader == taskLeader)
+                             select new { TaskID = p.TaskID, TaskName = p.TaskName, TaskLeader = p.TaskLeader };
+            var listsTemp = taskManage.ToList();
+            List<TaskManage> list = new List<TaskManage>();
+            for (var i = 0; i < listsTemp.Count; i++)
+            {
+                TaskManage t = new TaskManage();
+
+                t.TaskID = listsTemp[i].TaskID;
+                t.TaskName = listsTemp[i].TaskName;
+                t.TaskLeader = listsTemp[i].TaskLeader;
+                list.Add(t);
+            }           
+            return list;
+                       
+        }
      }
 }
