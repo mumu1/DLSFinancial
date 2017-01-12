@@ -43,6 +43,15 @@
     </div>
 
     <div id="importDataDialog"></div>
+    <!--确认备份本月算税记录对话框-->
+    <div id="confirmDialog_backupTax" title="确认备份本月算税记录">
+        备份计税数据后本月算税记录会被清空，当前的算税记录会全部转存到历史算税记录中，该操作应该在当月初始化工资表导入前进行。您确定要备份计税数据吗？
+    </div>​
+    <!--确认清空初始化工资表对话框-->
+    <div id="confirmDialog_clearVageBase" title="确认清空当前基础工资表">
+        点击确认后初始化基础工资表（即下表）记录会被清空，该操作应该在当月初始化工资表导入前进行。您确定要清空基础工资表吗？
+    </div>​
+    <!--更新系统开放时间对话框-->
     <div id="dialog-setSafeguardTime" title="更新系统开放时间" style="display:none;">
         <p class="validateTips">请设置系统本月的普通用户开放时间，结束时间需晚于开始时间。</p>
         <form>
@@ -239,6 +248,7 @@
                 {
                     text: "4导入",
                     action: function (e, dt, node, config) {
+                        alert("若为当月初始化整表导入，请先执行清空，再导入。");
                         var ColumnDatas = [];
                         var columns = dt.settings().init().columns;
                         dt.columns().every(function (index) {
@@ -254,7 +264,7 @@
                             dataType: 'html',
                             success: function (data) {
                                 $('#importDataDialog').html(data);
-                                dt.ajax.reload();
+                                
 
                             },
                             error: function (xhr) {
@@ -268,40 +278,18 @@
                 {
                     text: "3清空",
                     action: function (e, dt, node, config) {
-                        $.ajax({
-                            type: "POST",
-                            async: false,
-                            url: "../BasicDataManagement/WageBaseTable/DeleteAll",
-                            //data: params,
-                            contentType: "application/json; charset=utf-8",
-                            datatype: "json",
-                            success: function (data) {
-                                dt.ajax.reload();
-                                toastr.info("工资基础表清空成功");
-                            },
-                            error: function () {
-                                toastr.error('工资基础表清空失败！');
-                            }
-                        });
+                        clearWageBase(dt);
+                        //$("#confirmDialog_clearVageBase").dialog("open");
+                        //e.preventDefault();
+                        //dt.ajax.reload();
+                                               
                     }
                 },
                 {
                     text: "2备份计税数据",
                     action: function (e, dt, node, config) {
-                        $.ajax({
-                            type: "POST",
-                            async: false,
-                            url: "../BasicDataManagement/WageBaseTable/TaxPerOrderBackUp",
-                            //data: params,
-                            contentType: "application/json; charset=utf-8",
-                            datatype: "json",
-                            success: function (data) {
-                                toastr.info("计税数据备份成功");
-                            },
-                            error: function () {
-                                toastr.error('计税数据备份失败！');
-                            }
-                        });
+                        $("#confirmDialog_backupTax").dialog("open");
+                           
                     }
                 },
                  {
@@ -398,5 +386,66 @@
         $("#dialog-setSafeguardTime").dialog("open");
 
     }
+
+    //备份本月算税记录的确认对话框
+    $("#confirmDialog_backupTax").dialog({
+        autoOpen: false,
+        modal: true,
+        buttons: {
+            "确认": function () {
+                $.ajax({
+                    type: "POST",
+                    async: false,
+                    url: "../BasicDataManagement/WageBaseTable/TaxPerOrderBackUp",
+                    //data: params,
+                    contentType: "application/json; charset=utf-8",
+                    datatype: "json",
+                    success: function (data) {
+                        toastr.info("计税数据备份成功");
+                    },
+                    error: function () {
+                        toastr.error('计税数据备份失败！');
+                    }
+                });
+                $(this).dialog("close");
+            },
+            "取消": function () {
+                $(this).dialog("close");
+            }
+        }
+    });
+
+    //清空初始化工资表确认对话框       
+    function clearWageBase(dt) {
+        $("#confirmDialog_clearVageBase").dialog({
+            autoOpen: false,
+            modal: true,
+            buttons: {
+                "确认": function () {
+                    $.ajax({
+                        type: "POST",
+                        async: false,
+                        url: "../BasicDataManagement/WageBaseTable/DeleteAll",
+                        //data: params,
+                        contentType: "application/json; charset=utf-8",
+                        datatype: "json",
+                        success: function (data) {
+                            dt.ajax.reload();                      
+                            toastr.info("工资基础表清空成功");
+                        },
+                        error: function () {
+                            toastr.error('工资基础表清空失败！');
+                        }
+                    });
+                    $(this).dialog("close");
+                },
+                "取消": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+        $("#confirmDialog_clearVageBase").dialog("open");
+    }
+    
 
 </script>
