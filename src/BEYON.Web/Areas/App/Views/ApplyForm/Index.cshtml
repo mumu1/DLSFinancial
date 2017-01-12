@@ -452,6 +452,7 @@
                 data: JSON.stringify(serialNumbers),
                 beforeSend: function () {
                     //审核前再次检查现金发放次数是否已满三次
+                    /*
                     $.ajax({
                         type: "GET",
                         async: false,
@@ -473,6 +474,7 @@
                             toastr.error('审核前再次检查现金发放次数失败！');
                         }
                     });
+                    */
                 },
                 success: function (result) {
                     $("#modal-content").html(result);

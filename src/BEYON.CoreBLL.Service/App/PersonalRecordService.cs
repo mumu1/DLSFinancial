@@ -444,6 +444,7 @@ namespace BEYON.CoreBLL.Service.App
             }
 
             //现金发放次数验证
+            /*
             feedBack = new ImportFeedBack();
             feedBack.ExceptionType = "现金发放次数超过3次";
             int count = _TaxPerOrderRepository.GetCashCount(personal.CertificateID);
@@ -455,6 +456,7 @@ namespace BEYON.CoreBLL.Service.App
             {
                 list.Add(feedBack);
             }
+             * */
             return list;
         }
 

@@ -89,10 +89,13 @@
                             <section class="col col-3">
                                 <label class="label">课题号</label>
                                 <label class="input">
-                                    <i class="icon-prepend fa fa-info"></i>
-                                    <input type="text" id="ProjectNumber" required="required" name="ProjectNumber" placeholder="课题号" value="@Model.ProjectNumber">
-                                </label>
-                            </section>
+                <i class="icon-prepend fa fa-info"></i>
+                <input type="text" id="ProjectNumber" required="required" name="ProjectNumber" placeholder="课题号" value="@Model.ProjectNumber">
+            </label>
+                                @*<label class="select">
+                                    <select id="ProjectNumber" name="ProjectNumber"></select> <i></i>
+                                </label>*@
+                            </section>    
                             <section class="col col-2">
                                 <label class="label">课题负责人</label>
                                 <label class="input">
@@ -100,6 +103,7 @@
                                     <input type="text" id="projectDirector" name="ProjectDirector" placeholder="课题负责人" value="@Model.ProjectDirector">
                                 </label>
                             </section>
+                                                  
                         </div>
                         <div class="row">
                             <section class="col col-3">
@@ -260,7 +264,13 @@
             }
         });
     });
-
+    
+    //输入课题负责人，设置课题号下拉列表
+    /*
+    $("#ProjectNumber").focus(function () {
+        registerProjectNumber();
+    });
+    */
 
     var editor = new $.fn.dataTable.Editor({
         "ajaxUrl": {
@@ -478,6 +488,7 @@
             });
 
             //4.验证现金支付是否大于3次
+            /*
             if (paymentType == "现金支付") {
                 $.ajax({
                     type: "GET",
@@ -496,6 +507,7 @@
                     }
                 });
             }
+            */
 
             //银行卡号验证
             if (paymentType === "银行转账") {
@@ -889,6 +901,41 @@
             },
             error: function () {
                 toastr.error('获取部门数据失败！');
+            }
+        });
+    }
+
+    function registerProjectNumber() {
+        var projectDirector = $('#projectDirector').val();
+        $.ajax({
+            type: "GET",
+            async: false,
+            url: "../BasicDataManagement/TaskManage/GetTaskByTaskLeader?taskLeader=" + projectDirector,
+            //data: params,
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            success: function (data) {
+                $("#ProjectNumber").html("");
+                if (data.total == 0) {
+                    $.jAlert({ //this is the normal usage
+                        'title': '课题确认',
+                        'content': projectDirector + '名下暂无课题，请检查课题负责人姓名填写是否正确。',
+                        'theme': 'black',
+                        'size': 'xsm',
+                        'options':'confirm'
+                    });
+                }
+                $.each(data.data, function (k, v) {                       
+                        $("#ProjectNumber").append("<option>" + v.TaskID + " | " + v.TaskName + "</option>");                 
+                })
+               
+                      
+                
+                if ('@Model.ProjectNumber' != "")
+                    $("#ProjectNumber").find("option:contains('@Model.ProjectNumber')").attr("selected", true);
+            },
+            error: function () {
+                toastr.error('获取课题数据失败！');
             }
         });
     }
