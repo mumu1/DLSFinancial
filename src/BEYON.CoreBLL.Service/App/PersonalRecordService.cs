@@ -388,7 +388,7 @@ namespace BEYON.CoreBLL.Service.App
             //Regex regCerficateID = new Regex("^[1-9]\\d{5}[1-9]9\\d{4}3[0-1]\\d{4}$|^[1-9]\\d{5}[1-9]9\\d{4}[0-2][0-9]\\d{4}$|^[1-9]\\d{5}[1-9]9\\d{4}3[0-1]\\d{3}X$|^[1-9]\\d{5}[1-9]9\\d{4}[0-2][0-9]\\d{3}X$|^[1-9]\\d{5}\\d{4}3[0-1]\\d{4}$|^[1-9]\\d{5}\\d{4}[0-2][0-9]\\d{4}$|^[1-9]\\d{5}\\d{4}3[0-1]\\d{3}X$|^[1-9]\\d{5}\\d{4}[0-2][0-9]\\d{3}X$");
             //^[1-9]\d{5}[1-9]9\d{4}3[0-1]\d{4}$|^[1-9]\d{5}[1-9]9\d{4}[0-2][0-9]\d{4}$|^[1-9]\d{5}[1-9]9\d{4}3[0-1]\d{3}X$|^[1-9]\d{5}[1-9]9\d{4}[0-2][0-9]\d{3}X$|^[1-9]\d{5}\d{4}3[0-1]\d{4}$|^[1-9]\d{5}\d{4}[0-2][0-9]\d{4}$|^[1-9]\d{5}\d{4}3[0-1]\d{3}X$|^[1-9]\d{5}\d{4}[0-2][0-9]\d{3}X$
 
-            if (personal.CertificateType.Equals("居民身份证"))
+            if (!String.IsNullOrEmpty(personal.CertificateType) && personal.CertificateType.Equals("居民身份证"))
             {
                 if (CheckIDCard18(personal.CertificateID) == false && CheckIDCard15(personal.CertificateID) == false && CheckIDCardFormat(personal.CertificateID) == false)
                 {
@@ -406,7 +406,7 @@ namespace BEYON.CoreBLL.Service.App
             //银行卡号
             Regex regAccountNumber1 = new Regex("^(\\d{4}[\\s\\-]?){4,5}\\d{3}$");
             Regex regAccountNumber2 = new Regex("^(\\d{16}|\\d{17}|\\d{18}|\\d{19}|\\d{20}|\\d{21})$");
-            if (personal.PaymentType.Equals("银行转账"))
+            if (!String.IsNullOrEmpty(personal.PaymentType) && personal.PaymentType.Equals("银行转账"))
             {
                 if (String.IsNullOrEmpty(personal.AccountNumber) || !regAccountNumber1.IsMatch(personal.AccountNumber))
                 {
@@ -424,7 +424,7 @@ namespace BEYON.CoreBLL.Service.App
             feedBack = new ImportFeedBack();
             feedBack.ExceptionType = "所内所外姓名验证";
             String name = _TaxBaseByMonthRepository.GetNameByCerID(personal.CertificateID);
-            if (name.Equals(""))
+            if (String.IsNullOrEmpty(name))
             {
                 if (personal.PersonType.Equals("所内") && name.Equals(""))
                 {
