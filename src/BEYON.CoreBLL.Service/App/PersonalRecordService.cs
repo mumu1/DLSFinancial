@@ -388,7 +388,7 @@ namespace BEYON.CoreBLL.Service.App
             //Regex regCerficateID = new Regex("^[1-9]\\d{5}[1-9]9\\d{4}3[0-1]\\d{4}$|^[1-9]\\d{5}[1-9]9\\d{4}[0-2][0-9]\\d{4}$|^[1-9]\\d{5}[1-9]9\\d{4}3[0-1]\\d{3}X$|^[1-9]\\d{5}[1-9]9\\d{4}[0-2][0-9]\\d{3}X$|^[1-9]\\d{5}\\d{4}3[0-1]\\d{4}$|^[1-9]\\d{5}\\d{4}[0-2][0-9]\\d{4}$|^[1-9]\\d{5}\\d{4}3[0-1]\\d{3}X$|^[1-9]\\d{5}\\d{4}[0-2][0-9]\\d{3}X$");
             //^[1-9]\d{5}[1-9]9\d{4}3[0-1]\d{4}$|^[1-9]\d{5}[1-9]9\d{4}[0-2][0-9]\d{4}$|^[1-9]\d{5}[1-9]9\d{4}3[0-1]\d{3}X$|^[1-9]\d{5}[1-9]9\d{4}[0-2][0-9]\d{3}X$|^[1-9]\d{5}\d{4}3[0-1]\d{4}$|^[1-9]\d{5}\d{4}[0-2][0-9]\d{4}$|^[1-9]\d{5}\d{4}3[0-1]\d{3}X$|^[1-9]\d{5}\d{4}[0-2][0-9]\d{3}X$
 
-            if (CheckIDCard18(personal.CertificateID)== false && CheckIDCard15(personal.CertificateID) == false)
+            if (CheckIDCard18(personal.CertificateID) == false && CheckIDCard15(personal.CertificateID) == false && CheckIDCardFormat(personal.CertificateID) == false)
             {
                 feedBack.ExceptionContent.Add("第" + num + "行记录  证件号码格式有误！");
             }
@@ -398,15 +398,19 @@ namespace BEYON.CoreBLL.Service.App
            // if (!regPhone.IsMatch(personal.Tele) && !regMobile.IsMatch(personal.Tele))
             if (String.IsNullOrEmpty(personal.Tele) || System.Text.RegularExpressions.Regex.IsMatch(personal.Tele, @"^(\d{3,4}-)?\d{6,8}$"))
             {
-                feedBack.ExceptionContent.Add("第" + num + "行记录  联系电话格式有误！");
+                feedBack.ExceptionContent.Add("第" + num + "行记录  联系电话格式有误！若为座机请填写区号，如01082306380");
             }
             //银行卡号
-            Regex regAccountNumber = new Regex("^(\\d{4}[\\s\\-]?){4,5}\\d{3}$");
+            Regex regAccountNumber1 = new Regex("^(\\d{4}[\\s\\-]?){4,5}\\d{3}$");
+            Regex regAccountNumber2 = new Regex("^(\\d{16}|\\d{17}|\\d{18}|\\d{19}|\\d{20}|\\d{21})$");
             if (personal.PaymentType.Equals("银行转账"))
             {
-                if (String.IsNullOrEmpty(personal.AccountNumber) || !regAccountNumber.IsMatch(personal.AccountNumber))
+                if (String.IsNullOrEmpty(personal.AccountNumber) || !regAccountNumber1.IsMatch(personal.AccountNumber))
                 {
-                    feedBack.ExceptionContent.Add("第" + num + "行记录  银行卡号格式有误！");
+                    if (String.IsNullOrEmpty(personal.AccountNumber) || !regAccountNumber2.IsMatch(personal.AccountNumber))
+                    {
+                        feedBack.ExceptionContent.Add("第" + num + "行记录  银行卡号格式有误！");
+                    }
                 }
             }
             if (feedBack.ExceptionContent.Count > 0)
@@ -524,6 +528,17 @@ namespace BEYON.CoreBLL.Service.App
 
             return true;//符合15位身份证标准
 
+        }
+
+        //仅格式验证，为了防止以上两种验证均不通过的情况
+        private bool CheckIDCardFormat(string Id)
+        {
+            Regex regCID = new Regex("^[1-9]\\d{7}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])\\d{3}$|^[1-9]\\d{5}[1-9]\\d{3}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])\\d{3}([0-9]|X)$");
+            if (!regCID.IsMatch(Id))
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

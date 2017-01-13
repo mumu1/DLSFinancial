@@ -448,7 +448,11 @@
             if (CertificateType.val() === '居民身份证') {
                 var Validator = new IDValidator();
                 if (!Validator.isValid(CertificateID.val())) {
-                    CertificateID.error('身份证号码不正确');
+                    isIDCard1 = /^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$|^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}([0-9]|X)$/;
+                    var checkagain = isIDCard1.test(CertificateID.val());
+                    if (checkagain != true) {
+                        CertificateID.error('身份证号码不正确');
+                    }
                 }
             }
 
@@ -511,12 +515,15 @@
 
             //银行卡号验证
             if (paymentType === "银行转账") {
-                var regex = /^(\d{4}[\s\-]?){4,5}\d{3}$/g;
+                var regex1 = /^(\d{4}[\s\-]?){4,5}\d{3}$/g;
+                var regex2 = /^(\d{16}|\d{17}|\d{18}|\d{19}|\d{20}|\d{21})$/;
                 var str1 = AccountNumber.val();
-                var arr1 = regex.test(str1);
+                var arr1 = regex1.test(str1);
                 //alert(arr);
                 if (arr1 !== true) {
-                    AccountNumber.error("银行卡号有误，请检查！");
+                    if (regex2.test(str1) !== true) {
+                        AccountNumber.error("银行卡号有误，请检查！");
+                    }
                 }
             }
 
