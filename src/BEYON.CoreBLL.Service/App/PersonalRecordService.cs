@@ -388,9 +388,12 @@ namespace BEYON.CoreBLL.Service.App
             //Regex regCerficateID = new Regex("^[1-9]\\d{5}[1-9]9\\d{4}3[0-1]\\d{4}$|^[1-9]\\d{5}[1-9]9\\d{4}[0-2][0-9]\\d{4}$|^[1-9]\\d{5}[1-9]9\\d{4}3[0-1]\\d{3}X$|^[1-9]\\d{5}[1-9]9\\d{4}[0-2][0-9]\\d{3}X$|^[1-9]\\d{5}\\d{4}3[0-1]\\d{4}$|^[1-9]\\d{5}\\d{4}[0-2][0-9]\\d{4}$|^[1-9]\\d{5}\\d{4}3[0-1]\\d{3}X$|^[1-9]\\d{5}\\d{4}[0-2][0-9]\\d{3}X$");
             //^[1-9]\d{5}[1-9]9\d{4}3[0-1]\d{4}$|^[1-9]\d{5}[1-9]9\d{4}[0-2][0-9]\d{4}$|^[1-9]\d{5}[1-9]9\d{4}3[0-1]\d{3}X$|^[1-9]\d{5}[1-9]9\d{4}[0-2][0-9]\d{3}X$|^[1-9]\d{5}\d{4}3[0-1]\d{4}$|^[1-9]\d{5}\d{4}[0-2][0-9]\d{4}$|^[1-9]\d{5}\d{4}3[0-1]\d{3}X$|^[1-9]\d{5}\d{4}[0-2][0-9]\d{3}X$
 
-            if (CheckIDCard18(personal.CertificateID) == false && CheckIDCard15(personal.CertificateID) == false && CheckIDCardFormat(personal.CertificateID) == false)
+            if (personal.CertificateType.Equals("居民身份证"))
             {
-                feedBack.ExceptionContent.Add("第" + num + "行记录  证件号码格式有误！");
+                if (CheckIDCard18(personal.CertificateID) == false && CheckIDCard15(personal.CertificateID) == false && CheckIDCardFormat(personal.CertificateID) == false)
+                {
+                    feedBack.ExceptionContent.Add("第" + num + "行记录  证件号码格式有误！");
+                }
             }
             //联系电话
             Regex regPhone = new Regex("^0\\d{2,3}-?\\d{7,8}$");
