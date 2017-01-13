@@ -396,7 +396,7 @@ namespace BEYON.CoreBLL.Service.App
             Regex regPhone = new Regex("^0\\d{2,3}-?\\d{7,8}$");
             Regex regMobile = new Regex("^1[34578]\\d{9}$");
            // if (!regPhone.IsMatch(personal.Tele) && !regMobile.IsMatch(personal.Tele))
-            if (System.Text.RegularExpressions.Regex.IsMatch(personal.Tele, @"^(\d{3,4}-)?\d{6,8}$"))
+            if (String.IsNullOrEmpty(personal.Tele) || System.Text.RegularExpressions.Regex.IsMatch(personal.Tele, @"^(\d{3,4}-)?\d{6,8}$"))
             {
                 feedBack.ExceptionContent.Add("第" + num + "行记录  联系电话格式有误！");
             }
@@ -404,7 +404,7 @@ namespace BEYON.CoreBLL.Service.App
             Regex regAccountNumber = new Regex("^(\\d{4}[\\s\\-]?){4,5}\\d{3}$");
             if (personal.PaymentType.Equals("银行转账"))
             {
-                if (!regAccountNumber.IsMatch(personal.AccountNumber))
+                if (String.IsNullOrEmpty(personal.AccountNumber) || !regAccountNumber.IsMatch(personal.AccountNumber))
                 {
                     feedBack.ExceptionContent.Add("第" + num + "行记录  银行卡号格式有误！");
                 }
