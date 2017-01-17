@@ -109,7 +109,7 @@ namespace BEYON.CoreBLL.Service.Excel
                 titleRange.Merge(true);//合并单元格
                 titleRange.Value = String.Format("发放      {0}      明细表", applicationForm.RefundType); //设置单元格内文本
                 titleRange.Font.Name = "黑体";//设置字体
-                titleRange.Font.Size = 14;//字体大小
+                titleRange.Font.Size = 15;//字体大小
                 titleRange.Font.Bold = true;//加粗显示
                 titleRange.Font.Underline = true;
                 titleRange.HorizontalAlignment = XlHAlign.xlHAlignCenter; //水平居中
@@ -123,7 +123,7 @@ namespace BEYON.CoreBLL.Service.Excel
                 tipRange.Merge(true);//合并单元格
                 tipRange.Value = "我声明，以下填写的内容是完全真实的，如有不实，由此产生的一切后果由本人承担。---声明人签字:"; //设置单元格内文本
                 tipRange.Font.Name = "宋体";//设置字体
-                tipRange.Font.Size = 10;//字体大小
+                tipRange.Font.Size = 12;//字体大小
                 tipRange.Font.Bold = true;//加粗显示
                 tipRange.HorizontalAlignment = XlHAlign.xlHAlignLeft;//水平居中
                 tipRange.VerticalAlignment = XlVAlign.xlVAlignCenter;//垂直居中
@@ -133,7 +133,7 @@ namespace BEYON.CoreBLL.Service.Excel
                 SerRange.Merge(true);
                 SerRange.Value = String.Format("流水号：  {0}", applicationForm.SerialNumber); //设置单元格内文本
                 SerRange.Font.Name = "黑体";//设置字体
-                SerRange.Font.Size = 12;//字体大小
+                SerRange.Font.Size = 13;//字体大小
                 SerRange.Font.Bold = true;//加粗显示
                 SerRange.HorizontalAlignment = XlHAlign.xlHAlignRight; //水平靠右
                 SerRange.VerticalAlignment = XlVAlign.xlVAlignCenter;   //垂直居中
@@ -142,10 +142,10 @@ namespace BEYON.CoreBLL.Service.Excel
                 Range infoRange = worksheet.get_Range(worksheet.Cells[5, 1], worksheet.Cells[5, columnCount]);//选取单元格
                 infoRange.MergeCells = true;
                 infoRange.Font.Name = "黑体";//设置字体
-                infoRange.Font.Size = 10;//字体大小
+                infoRange.Font.Size = 12;//字体大小
                 infoRange.VerticalAlignment = XlVAlign.xlVAlignTop;//垂直居中
                 infoRange.HorizontalAlignment = XlHAlign.xlHAlignLeft; //水平靠左
-                infoRange.Value = String.Format("课题号：  {0}                   课题负责人：  {1}                   经办人：  {2}                   支付类型：  {3}                   合计金额：  {4} 元", applicationForm.ProjectNumber, applicationForm.ProjectDirector, applicationForm.Agent, applicationForm.PaymentType,applicationForm.Summation); //设置单元格内文本
+                infoRange.Value = String.Format("课题号：  {0}         课题负责人：  {1}         经办人：  {2}         支付类型：  {3}         合计金额：  {4} 元", applicationForm.ProjectNumber, applicationForm.ProjectDirector, applicationForm.Agent, applicationForm.PaymentType,applicationForm.Summation); //设置单元格内文本
                   
 
                 //2.设置申请单常规信息格式
@@ -180,14 +180,14 @@ namespace BEYON.CoreBLL.Service.Excel
                
 
                 //2.设置表头
-                string[] strHead = new string[columnCount] { "序号", "姓名", "证件类型", "身份证件号码", "单位", "联系电话", "国籍", "职称", "人员类型", "金额(元)", "是否含税", "开户银行", "银行存折帐号", "开户银行详细名称", "领取人签字" };
-                int[] columnWidth = new int[columnCount] { 4, 10, 10, 20, 20, 12, 10, 12, 10, 10, 10, 10, 20, 20, 12 };
+                string[] strHead = new string[columnCount] { "序号", "姓名", "证件类型", "证件号码", "单位", "联系电话", "国籍", "职称", "人员类型", "金额(元)", "是否含税", "开户银行", "银行存折帐号", "开户银行详细名称", "领取人签字" };
+                int[] columnWidth = new int[columnCount] { 4, 10, 12, 14, 20, 12, 8, 8, 10, 10, 10, 10, 16, 16, 12 };
                 for (int i = 0; i < columnCount; i++)
                 {
                     Range headRange = worksheet.Cells[6, i + 1] as Range;//获取表头单元格,不用标题则从1开始
                     headRange.Value2 = strHead[i];//设置单元格文本
                     headRange.Font.Name = "宋体";//设置字体
-                    headRange.Font.Size = 12;//字体大小
+                    headRange.Font.Size = 13;//字体大小
                     headRange.Font.Bold = true;//加粗显示
                     headRange.HorizontalAlignment = XlHAlign.xlHAlignCenter;//水平居中
                     headRange.VerticalAlignment = XlVAlign.xlVAlignCenter;//垂直居中
@@ -235,6 +235,9 @@ namespace BEYON.CoreBLL.Service.Excel
                 contentRange.Borders.Weight = XlBorderWeight.xlThin;//边框常规粗细
                 contentRange.HorizontalAlignment = XlHAlign.xlHAlignCenter;//水平居中
                 contentRange.VerticalAlignment = XlVAlign.xlVAlignCenter;//垂直居中
+                //contentRange.Font.Name = "宋体";//设置字体
+                //contentRange.Font.Size = 13;//字体大小
+                //contentRange.Font.Bold = false;//加粗显示
                 contentRange.WrapText = true;
 
                 Range work = worksheet.get_Range(worksheet.Cells[nMax + 3, 1], worksheet.Cells[nMax + 7, columnCount]);//选取单元格
@@ -244,21 +247,23 @@ namespace BEYON.CoreBLL.Service.Excel
                 work.HorizontalAlignment = XlHAlign.xlHAlignLeft;//水平居中
                 work.VerticalAlignment = XlVAlign.xlVAlignTop;//垂直居中
                 work.Font.Name = "宋体";//设置字体
-                work.Font.Size = 11;//字体大小
+                work.Font.Size = 13;//字体大小
                 work.Font.Bold = false;//加粗显示
                 StringBuilder sb = new StringBuilder();
                 sb.Append("关于工作内容、工作时间等的描述（必填）：\n");
-                string content = String.Format("    {0}", applicationForm.ApplyDesp);
+                string content = String.Format("    {0}", applicationForm.ApplyDesp.Replace("\n", " "));
+                
                 int padlen = 130;
                 sb.Append(content);
                 if (content.Length < 76)
-                    sb.Append("\n\n\n");
-                else if (content.Length < 151)
                     sb.Append("\n\n");
+                else if (content.Length < 151)
+                    sb.Append("\n");
                 else if (content.Length < 226)
                     sb.Append("\n");
                 else
                     padlen = padlen - (content.Length - 225) * 2;
+                padlen = 100;
                 String time = applicationForm.SubmitTime.ToString("yyyy年MM月dd日");
                 if (padlen > 0)
                     time = time.PadLeft(padlen, ' ');
@@ -274,15 +279,15 @@ namespace BEYON.CoreBLL.Service.Excel
                 noteRange.Font.Name = "宋体";//设置字体
                 noteRange.Font.Size = 9;//字体大小
                 noteRange.Font.Bold = false;//加粗显示
-                noteRange.Value = "填表说明:1.各类劳务费应由领款本人签收并经课题负责人、部门负责人、单位负责人、经办人签字。\n     2.现金和转账发放都可使用该表，如通过银行转账发放，请准确填写收款本人的银行账户、开户银行、账户名称等信息。\n     3.单位填写分类：所内在职职工、所内注册学生、所内劳务流程。客座学生和外单位人员填写具体工作单位。";
+                noteRange.Value = "填表说明:1.各类劳务费应由领款本人签收并经课题负责人、部门负责人、单位负责人、经办人签字。\n         2.现金和转账发放都可使用该表，如通过银行转账发放，请准确填写收款本人的银行账户、开户银行、账户名称等信息。\n         3.单位填写分类：所内在职职工、所内注册学生、所内劳务流程。客座学生和外单位人员填写具体工作单位。";
 
                 Range signRange = worksheet.get_Range(worksheet.Cells[nMax + 11, 1], worksheet.Cells[nMax + 12, columnCount]);//选取单元格
                 signRange.MergeCells = true;
                 signRange.Font.Name = "黑体";//设置字体
-                signRange.Font.Size = 10;//字体大小
+                signRange.Font.Size = 13;//字体大小
                 signRange.VerticalAlignment = XlVAlign.xlVAlignTop;//垂直居中
                 signRange.HorizontalAlignment = XlHAlign.xlHAlignLeft; //水平靠左
-                signRange.Value = " 单位负责人:                                  部门负责人:                                 项目负责人:                                 课题负责人:                                 经办人:                                 ";
+                signRange.Value = " 单位负责人:                       部门负责人:                      项目负责人:                      课题负责人:                      经办人:                      ";
             }
             else if (applicationForm.PaymentType.Equals("现金支付"))
             {
@@ -296,7 +301,7 @@ namespace BEYON.CoreBLL.Service.Excel
                 titleRange.Merge(true);//合并单元格
                 titleRange.Value = String.Format("发放      {0}      明细表", applicationForm.RefundType); //设置单元格内文本
                 titleRange.Font.Name = "黑体";//设置字体
-                titleRange.Font.Size = 14;//字体大小
+                titleRange.Font.Size = 13;//字体大小
                 titleRange.Font.Bold = true;//加粗显示
                 titleRange.Font.Underline = true;
                 titleRange.HorizontalAlignment = XlHAlign.xlHAlignCenter; //水平居中
@@ -320,7 +325,7 @@ namespace BEYON.CoreBLL.Service.Excel
                 SerRange.Merge(true);
                 SerRange.Value = String.Format("流水号：  {0}", applicationForm.SerialNumber); //设置单元格内文本
                 SerRange.Font.Name = "黑体";//设置字体
-                SerRange.Font.Size = 12;//字体大小
+                SerRange.Font.Size = 11;//字体大小
                 SerRange.Font.Bold = true;//加粗显示
                 SerRange.HorizontalAlignment = XlHAlign.xlHAlignRight; //水平靠右
                 SerRange.VerticalAlignment = XlVAlign.xlVAlignCenter;   //垂直居中
@@ -332,7 +337,7 @@ namespace BEYON.CoreBLL.Service.Excel
                 infoRange.Font.Size = 10;//字体大小
                 infoRange.VerticalAlignment = XlVAlign.xlVAlignTop;//垂直居中
                 infoRange.HorizontalAlignment = XlHAlign.xlHAlignLeft; //水平靠左
-                infoRange.Value = String.Format("课题号：  {0}                   课题负责人：  {1}                   经办人：  {2}                   支付类型：  {3}                   合计金额：  {4} 元", applicationForm.ProjectNumber, applicationForm.ProjectDirector, applicationForm.Agent, applicationForm.PaymentType, applicationForm.Summation); //设置单元格内文本
+                infoRange.Value = String.Format("课题号：  {0}     课题负责人：  {1}       经办人：  {2}       支付类型：  {3}       合计金额：  {4} 元", applicationForm.ProjectNumber, applicationForm.ProjectDirector, applicationForm.Agent, applicationForm.PaymentType, applicationForm.Summation); //设置单元格内文本
                   
                 //worksheet.Cells[3, 1] = "流水号";
                 //worksheet.Cells[3, 2] = applicationForm.SerialNumber;
@@ -360,14 +365,14 @@ namespace BEYON.CoreBLL.Service.Excel
                 //Range2.Merge(true);
 
                 //2.设置表头
-                string[] strHead = new string[columnCount] { "序号", "姓名", "证件类型", "身份证件号码", "单位", "联系电话", "国籍", "职称", "人员类型", "金额(元)", "是否含税", "领取人签字" };
-                int[] columnWidth = new int[columnCount] { 6, 20, 10, 20, 20, 12, 10, 12, 10, 10, 10,  12 };
+                string[] strHead = new string[columnCount] { "序号", "姓名", "证件类型", "证件号码", "单位", "联系电话", "国籍", "职称", "人员类型", "金额(元)", "是否含税", "领取人签字" };
+                int[] columnWidth = new int[columnCount] { 4, 10, 10, 14, 16, 12, 8, 10, 10, 10, 10,  12 };
                 for (int i = 0; i < columnCount; i++)
                 {
                     Range headRange = worksheet.Cells[6, i + 1] as Range;//获取表头单元格,不用标题则从1开始
                     headRange.Value2 = strHead[i];//设置单元格文本
                     headRange.Font.Name = "宋体";//设置字体
-                    headRange.Font.Size = 12;//字体大小
+                    headRange.Font.Size = 11;//字体大小
                     headRange.Font.Bold = true;//加粗显示
                     headRange.HorizontalAlignment = XlHAlign.xlHAlignCenter;//水平居中
                     headRange.VerticalAlignment = XlVAlign.xlVAlignCenter;//垂直居中
@@ -415,6 +420,9 @@ namespace BEYON.CoreBLL.Service.Excel
                 contentRange.Borders.Weight = XlBorderWeight.xlThin;//边框常规粗细
                 contentRange.HorizontalAlignment = XlHAlign.xlHAlignCenter;//水平居中
                 contentRange.VerticalAlignment = XlVAlign.xlVAlignCenter;//垂直居中
+                //contentRange.Font.Name = "宋体";//设置字体
+                //contentRange.Font.Size = 13;//字体大小
+                //contentRange.Font.Bold = false;//加粗显示
                 contentRange.WrapText = true;
 
                 Range work = worksheet.get_Range(worksheet.Cells[nMax + 3, 1], worksheet.Cells[nMax + 7, columnCount]);//选取单元格
@@ -424,21 +432,23 @@ namespace BEYON.CoreBLL.Service.Excel
                 work.HorizontalAlignment = XlHAlign.xlHAlignLeft;//水平居中
                 work.VerticalAlignment = XlVAlign.xlVAlignTop;//垂直居中
                 work.Font.Name = "宋体";//设置字体
-                work.Font.Size = 11;//字体大小
+                work.Font.Size = 10;//字体大小
                 work.Font.Bold = false;//加粗显示
                 StringBuilder sb = new StringBuilder();
                 sb.Append("关于工作内容、工作时间等的描述（必填）：\n");
-                string content = String.Format("    {0}", applicationForm.ApplyDesp);
+                string content = String.Format("    {0}", applicationForm.ApplyDesp.Replace("\n", " "));
+                
                 int padlen = 130;
                 sb.Append(content);
                 if (content.Length < 76)
-                    sb.Append("\n\n\n");
-                else if (content.Length < 151)
                     sb.Append("\n\n");
+                else if (content.Length < 151)
+                    sb.Append("\n");
                 else if (content.Length < 226)
                     sb.Append("\n");
                 else
                     padlen = padlen - (content.Length - 225) * 2;
+                padlen = 100;
                 String time = applicationForm.SubmitTime.ToString("yyyy年MM月dd日");
                 if (padlen > 0)
                     time = time.PadLeft(padlen, ' ');
@@ -454,7 +464,7 @@ namespace BEYON.CoreBLL.Service.Excel
                 noteRange.Font.Name = "宋体";//设置字体
                 noteRange.Font.Size = 9;//字体大小
                 noteRange.Font.Bold = false;//加粗显示
-                noteRange.Value = "填表说明:1.各类劳务费应由领款本人签收并经课题负责人、部门负责人、单位负责人、经办人签字。\n     2.现金和转账发放都可使用该表，如通过银行转账发放，请准确填写收款本人的银行账户、开户银行、账户名称等信息。\n     3.单位填写分类：所内在职职工、所内注册学生、所内劳务流程。客座学生和外单位人员填写具体工作单位。";
+                noteRange.Value = "填表说明:1.各类劳务费应由领款本人签收并经课题负责人、部门负责人、单位负责人、经办人签字。\n         2.现金和转账发放都可使用该表，如通过银行转账发放，请准确填写收款本人的银行账户、开户银行、账户名称等信息。\n         3.单位填写分类：所内在职职工、所内注册学生、所内劳务流程。客座学生和外单位人员填写具体工作单位。";
 
                 Range signRange = worksheet.get_Range(worksheet.Cells[nMax + 11, 1], worksheet.Cells[nMax + 12, columnCount]);//选取单元格
                 signRange.MergeCells = true;
@@ -462,7 +472,7 @@ namespace BEYON.CoreBLL.Service.Excel
                 signRange.Font.Size = 10;//字体大小
                 signRange.VerticalAlignment = XlVAlign.xlVAlignTop;//垂直居中
                 signRange.HorizontalAlignment = XlHAlign.xlHAlignLeft; //水平靠左
-                signRange.Value = " 单位负责人:                               部门负责人:                              项目负责人:                              课题负责人:                              经办人:                              ";
+                signRange.Value = " 单位负责人:               部门负责人:                项目负责人:                课题负责人:                经办人:                 ";
       
             }          
 
