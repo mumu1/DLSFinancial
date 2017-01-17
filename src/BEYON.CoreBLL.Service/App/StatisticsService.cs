@@ -19,7 +19,7 @@ namespace BEYON.CoreBLL.Service.App
             this._statisticsRepository = statisticsRepository;
         }
 
-        #region 按人统计明细表
+        #region 按工资统计明细表
         public Column[] GetPerPersonDetailColumns()
         {
             List<Column> columns = new List<Column>();
@@ -34,7 +34,11 @@ namespace BEYON.CoreBLL.Service.App
             columns.Add(new Column("C7", "基本扣除"));
             columns.Add(new Column("C8", "已扣缴税额"));
             columns.Add(new Column("C9", "应纳税额"));
-            columns.Add(new Column("C10", "次数"));
+            columns.Add(new Column("C10", "联系电话"));
+            columns.Add(new Column("C11", "国籍"));
+            columns.Add(new Column("C12", "单位"));
+            columns.Add(new Column("C13", "职称"));
+            columns.Add(new Column("C14", "次数"));
             int count = _statisticsRepository.GetMaxCountPerMonthPerPerson();
             for (var i = 0; i < count; i++)
             {
@@ -67,7 +71,11 @@ namespace BEYON.CoreBLL.Service.App
             columns.Add(new Column("C7", "基本扣除"));
             columns.Add(new Column("C8", "已扣缴税额"));
             columns.Add(new Column("C9", "应纳税额"));
-            columns.Add(new Column("C10", "次数"));
+            columns.Add(new Column("C10", "联系电话"));
+            columns.Add(new Column("C11", "国籍"));
+            columns.Add(new Column("C12", "单位"));
+            columns.Add(new Column("C13", "职称"));
+            columns.Add(new Column("C14", "次数"));
             int count = _statisticsRepository.GetMaxCountLaborStatistics();
             for (var i = 0; i < count; i++)
             {
@@ -85,6 +93,7 @@ namespace BEYON.CoreBLL.Service.App
         #endregion
 
         #region 按课题统计明细表
+       /*
         public Column[] GetTaskStatisticsColumns()
         {
             List<Column> columns = new List<Column>();
@@ -103,6 +112,47 @@ namespace BEYON.CoreBLL.Service.App
         public List<Object> GetTaskStatisticsDetail()
         {
             return this._statisticsRepository.GetTaskStatisticsDetail();
+        }
+        * */
+        #endregion
+
+        #region 按课题统计明细表(修改)
+        public Column[] GetTaskStatisticsColumns()
+        {
+            List<Column> columns = new List<Column>();
+            columns.Add(new Column("C0", "序号"));
+            columns.Add(new Column("C1", "期间"));
+            columns.Add(new Column("C2", "课题号"));
+            columns.Add(new Column("C3", "课题负责人"));
+            columns.Add(new Column("C4", "报销事由"));           
+            //columns.Add(new Column("C6", "工资薪金税额"));
+            //columns.Add(new Column("C7", "劳务费税额"));
+            columns.Add(new Column("C5", "会计科目代码"));
+            columns.Add(new Column("C6", "课题支付金额（银行转账）"));
+            columns.Add(new Column("C7", "劳务税金（银行转账）"));
+            columns.Add(new Column("C8", "工资税金（银行转账）"));
+            columns.Add(new Column("C9", "总税金（银行转账）"));           
+
+            //columns.Add(new Column("C0", "序号"));
+            //columns.Add(new Column("C1", "期间"));
+            //columns.Add(new Column("C2", "课题号"));
+            //columns.Add(new Column("C8", "会计科目代码"));
+            //columns.Add(new Column("C4", "报销事由"));
+            //columns.Add(new Column("C5", "课题负责人"));
+            //columns.Add(new Column("C6", "工资薪金税额"));        //=全部所内该课题的Tax和
+            //columns.Add(new Column("C7", "劳务费税额"));            //=全部所外该课题的Tax和
+            //columns.Add(new Column("C9", "银行转账总金额"));    //=全部银行转账该课题的Amount(填报)和
+            //columns.Add(new Column("C10", "现金支付总金额"));  //=全部现金支付该课题的Amount(填报)和
+            //columns.Add(new Column("C11", "含税总金额"));        //=全部含税该课题的Amount和
+            //columns.Add(new Column("C12", "不含税总金额"));    //=全部不含税该课题的Amount和
+            //columns.Add(new Column("C13", "总税额"));             //=全部该课题的Tax和
+            //columns.Add(new Column("C14", "课题支付总额"));     
+            return columns.ToArray();
+        }
+
+        public List<Object> GetTaskStatisticsDetail()
+        {
+            return this._statisticsRepository.GetTaskStatisticsDetail1();
         }
         #endregion
 

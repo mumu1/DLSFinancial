@@ -142,5 +142,12 @@ namespace BEYON.CoreBLL.Service.App
                 return new OperationResult(OperationResultType.Error, "导入数据失败!");
             }
         }
+
+        //获取会计代码（即RefundTypeCode）
+        public String GetRefundTypeCode(String refundType) {
+            String RefundTypeCode = "";
+            RefundTypeCode = _RefundTypeRepository.GetRefundTypeCode(refundType);
+            return RefundTypeCode;
+        }
     }
 }

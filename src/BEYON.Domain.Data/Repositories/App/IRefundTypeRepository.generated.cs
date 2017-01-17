@@ -32,5 +32,7 @@ namespace BEYON.Domain.Data.Repositories.App
     ///   仓储操作层接口——用户信息
     /// </summary>
     public partial interface IRefundTypeRepository : IRepository<RefundType, Int32>
-    { }
+    {
+        String GetRefundTypeCode(String refundType);
+    }
 }

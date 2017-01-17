@@ -37,5 +37,16 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
         public RefundTypeRepository(IUnitOfWork unitOfWork)
             : base()
         { }
+
+        public String GetRefundTypeCode(String refundType) {
+            var refundTypeCode = from p in Context.RefundTypes.Where(w => w.RefundTypeName == refundType)
+                                 select new { RefundTypeCode = p.RefundTypeCode, RefundTypeName = p.RefundTypeName };
+            var lists = refundTypeCode.ToList();
+
+            if (lists.Count > 0)
+                return lists[0].RefundTypeCode.ToString();
+            else
+                return "";
+        }
      }
 }

@@ -22,5 +22,7 @@ namespace BEYON.CoreBLL.Service.App.Interface
 
         OperationResult Import(String fileName, Service.Excel.ColumnMap[] columns);
 
+        String GetRefundTypeCode(String refundType);
+
     }
 }
