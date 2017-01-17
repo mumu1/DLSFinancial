@@ -54,21 +54,21 @@ namespace BEYON.CoreBLL.Service.App
                 var entity = new PersonalRecord
                 {
                     SerialNumber = model.SerialNumber,
-                    Name = model.Name,
-                    CertificateID = model.CertificateID,
-                    CertificateType = model.CertificateType,
-                    Company = model.Company,
-                    Tele = model.Tele,
-                    PersonType = model.PersonType,
-                    Nationality = model.Nationality,
-                    Title = model.Title,
+                    Name = model.Name.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", ""),
+                    CertificateID = model.CertificateID.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", ""),
+                    CertificateType = model.CertificateType.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", ""),
+                    Company = model.Company.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", ""),
+                    Tele = model.Tele.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", ""),
+                    PersonType = model.PersonType.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", ""),
+                    Nationality = model.Nationality.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", ""),
+                    Title = model.Title.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", ""),
                     Amount = model.Amount,
-                    TaxOrNot = model.TaxOrNot,
-                    Bank = model.Bank,
-                    BankDetailName = model.BankDetailName,
-                    AccountName = model.AccountName,
-                    AccountNumber = model.AccountNumber,
-                    PaymentType = model.PaymentType,
+                    TaxOrNot = model.TaxOrNot.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", ""),
+                    Bank = model.Bank.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", ""),
+                    BankDetailName = model.BankDetailName.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", ""),
+                    AccountName = model.AccountName.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", ""),
+                    AccountNumber = model.AccountNumber.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", ""),
+                    PaymentType = model.PaymentType.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", ""),
                     UpdateDate = DateTime.Now
                 };
                 _PersonalRecordRepository.Insert(entity, isSave);
@@ -91,21 +91,21 @@ namespace BEYON.CoreBLL.Service.App
                     throw new Exception();
                 }
                 personalRecord.SerialNumber = model.SerialNumber;
-                personalRecord.Name = model.Name;
-                personalRecord.CertificateID = model.CertificateID;
-                personalRecord.CertificateType = model.CertificateType;
-                personalRecord.Company = model.Company;
-                personalRecord.Tele = model.Tele;
-                personalRecord.PersonType = model.PersonType;
-                personalRecord.Nationality = model.Nationality;
-                personalRecord.Title = model.Title;
+                personalRecord.Name = model.Name.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", "");
+                personalRecord.CertificateID = model.CertificateID.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", "");
+                personalRecord.CertificateType = model.CertificateType.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", "");
+                personalRecord.Company = model.Company.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", "");
+                personalRecord.Tele = model.Tele.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", "");
+                personalRecord.PersonType = model.PersonType.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", "");
+                personalRecord.Nationality = model.Nationality.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", "");
+                personalRecord.Title = model.Title.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", "");
                 personalRecord.Amount = model.Amount;
-                personalRecord.TaxOrNot = model.TaxOrNot;
-                personalRecord.Bank = model.Bank;
-                personalRecord.BankDetailName = model.BankDetailName;
-                personalRecord.AccountName = model.AccountName;
-                personalRecord.AccountNumber = model.AccountNumber;
-                personalRecord.PaymentType = model.PaymentType;
+                personalRecord.TaxOrNot = model.TaxOrNot.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", "");
+                personalRecord.Bank = model.Bank.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", "");
+                personalRecord.BankDetailName = model.BankDetailName.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", "");
+                personalRecord.AccountName = model.AccountName.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", "");
+                personalRecord.AccountNumber = model.AccountNumber.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", "");
+                personalRecord.PaymentType = model.PaymentType.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", "");
                 personalRecord.UpdateDate = DateTime.Now;
                 _PersonalRecordRepository.Update(personalRecord, isSave);
                 return new OperationResult(OperationResultType.Success, "更新数据成功！");
