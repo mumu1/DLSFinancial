@@ -87,7 +87,10 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                     value = "";
                 if (!(column.Equals("Amount") || column.Equals("UpdateDate")))
                 {
-                    value = value.ToString().Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", "");
+                    if (!String.IsNullOrEmpty(value.ToString())) {
+                        value = value.ToString().Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", "");
+                    }
+                    
                 }
                 parameters.Add(new NpgsqlParameter(String.Format(":{0}", column), value));
             }
