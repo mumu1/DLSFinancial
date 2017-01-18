@@ -27,14 +27,17 @@ namespace BEYON.CoreBLL.Service.Excel
 
         public static IQueryable<Row> GetObjects(string filePath, ColumnMap[] maps = null)
         {
-            var excel = new ExcelQueryFactory(filePath);
-            for (var i = 0; maps != null && i < maps.Length; i++)
-            {
-                var map = maps[i];
-                map.TitleName = map.TitleName != null ? map.TitleName : map.ColumnName;
-                excel.AddMapping(map.ColumnName, map.TitleName);
-            }
-            var items = from c in excel.Worksheet<Row>(0) select c;
+            //var excel = new ExcelQueryFactory(filePath);
+            //for (var i = 0; maps != null && i < maps.Length; i++)
+            //{
+            //    var map = maps[i];
+            //    map.TitleName = map.TitleName != null ? map.TitleName : map.ColumnName;
+            //    excel.AddMapping(map.ColumnName, map.TitleName);
+            //}
+            //var items = from c in excel.Worksheet<Row>(0) select c;
+            //return items;
+            var items = from c in ExcelQueryFactory.Worksheet<Row>(0, filePath)
+                            select c ;
             return items;
         }
 
