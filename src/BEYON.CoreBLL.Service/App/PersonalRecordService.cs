@@ -54,21 +54,21 @@ namespace BEYON.CoreBLL.Service.App
                 var entity = new PersonalRecord
                 {
                     SerialNumber = model.SerialNumber,
-                    Name = model.Name.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", ""),
-                    CertificateID = model.CertificateID.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", ""),
-                    CertificateType = model.CertificateType.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", ""),
-                    Company = model.Company.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", ""),
-                    Tele = model.Tele.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", ""),
-                    PersonType = model.PersonType.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", ""),
-                    Nationality = model.Nationality.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", ""),
-                    Title = model.Title.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", ""),
+                    Name = GetReplaceString(model.Name),
+                    CertificateID = GetReplaceString(model.CertificateID),
+                    CertificateType = GetReplaceString(model.CertificateType),
+                    Company = GetReplaceString(model.Company),
+                    Tele = GetReplaceString(model.Tele),
+                    PersonType = GetReplaceString(model.PersonType),
+                    Nationality = GetReplaceString(model.Nationality),
+                    Title = GetReplaceString(model.Title),
                     Amount = model.Amount,
-                    TaxOrNot = model.TaxOrNot.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", ""),
-                    Bank = model.Bank.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", ""),
-                    BankDetailName = model.BankDetailName.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", ""),
-                    AccountName = model.AccountName.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", ""),
-                    AccountNumber = model.AccountNumber.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", ""),
-                    PaymentType = model.PaymentType.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", ""),
+                    TaxOrNot = GetReplaceString(model.TaxOrNot),
+                    Bank = GetReplaceString(model.Bank),
+                    BankDetailName = GetReplaceString(model.BankDetailName),
+                    AccountName = GetReplaceString(model.AccountName),
+                    AccountNumber = GetReplaceString(model.AccountNumber),
+                    PaymentType = GetReplaceString(model.PaymentType),
                     UpdateDate = DateTime.Now
                 };
                 _PersonalRecordRepository.Insert(entity, isSave);
@@ -81,6 +81,16 @@ namespace BEYON.CoreBLL.Service.App
                 return new OperationResult(OperationResultType.Error, "新增数据失败：" + ex.Message);
             }
         }
+
+        private String GetReplaceString(String modelString) { 
+            if(String.IsNullOrEmpty(modelString)){
+                return modelString;
+            }else{
+                return modelString.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", "");
+            }
+           
+        }
+
         public OperationResult Update(PersonalRecordVM model, bool isSave)
         {
             try
@@ -91,21 +101,21 @@ namespace BEYON.CoreBLL.Service.App
                     throw new Exception();
                 }
                 personalRecord.SerialNumber = model.SerialNumber;
-                personalRecord.Name = model.Name.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", "");
-                personalRecord.CertificateID = model.CertificateID.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", "");
-                personalRecord.CertificateType = model.CertificateType.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", "");
-                personalRecord.Company = model.Company.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", "");
-                personalRecord.Tele = model.Tele.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", "");
-                personalRecord.PersonType = model.PersonType.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", "");
-                personalRecord.Nationality = model.Nationality.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", "");
-                personalRecord.Title = model.Title.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", "");
+                personalRecord.Name = GetReplaceString(model.Name);
+                personalRecord.CertificateID = GetReplaceString(model.CertificateID);
+                personalRecord.CertificateType = GetReplaceString(model.CertificateType);
+                personalRecord.Company = GetReplaceString(model.Company);
+                personalRecord.Tele = GetReplaceString(model.Tele);
+                personalRecord.PersonType = GetReplaceString(model.PersonType);
+                personalRecord.Nationality = GetReplaceString(model.Nationality);
+                personalRecord.Title = GetReplaceString(model.Title);
                 personalRecord.Amount = model.Amount;
-                personalRecord.TaxOrNot = model.TaxOrNot.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", "");
-                personalRecord.Bank = model.Bank.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", "");
-                personalRecord.BankDetailName = model.BankDetailName.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", "");
-                personalRecord.AccountName = model.AccountName.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", "");
-                personalRecord.AccountNumber = model.AccountNumber.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", "");
-                personalRecord.PaymentType = model.PaymentType.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", "");
+                personalRecord.TaxOrNot = GetReplaceString(model.TaxOrNot);
+                personalRecord.Bank = GetReplaceString(model.Bank);
+                personalRecord.BankDetailName = GetReplaceString(model.BankDetailName);
+                personalRecord.AccountName = GetReplaceString(model.AccountName);
+                personalRecord.AccountNumber = GetReplaceString(model.AccountNumber);
+                personalRecord.PaymentType = GetReplaceString(model.PaymentType);
                 personalRecord.UpdateDate = DateTime.Now;
                 _PersonalRecordRepository.Update(personalRecord, isSave);
                 return new OperationResult(OperationResultType.Success, "更新数据成功！");
@@ -423,17 +433,26 @@ namespace BEYON.CoreBLL.Service.App
             //若为所内：姓名、身份证验证
             feedBack = new ImportFeedBack();
             feedBack.ExceptionType = "所内所外姓名验证";
-            String name = _TaxBaseByMonthRepository.GetNameByCerID(personal.CertificateID);
-            if (String.IsNullOrEmpty(name))
+            String nameAndStatus = _TaxBaseByMonthRepository.GetNameByCerID(personal.CertificateID);
+            string[] names = nameAndStatus.Split(',');
+            if (names[1].Equals("upper"))
             {
-                if (personal.PersonType.Equals("所内") && name.Equals(""))
+                feedBack.ExceptionContent.Add("第" + num + "行记录  该人员证件号码中的字母需从小写修改为大写！");
+            }
+            else if (names[1].Equals("lower"))
+            {
+                feedBack.ExceptionContent.Add("第" + num + "行记录  该人员证件号码中的字母需从大写修改为小写！");
+            }
+            if (String.IsNullOrEmpty(names[0]))
+            {
+                if (personal.PersonType.Equals("所内") && names[0].Equals(""))
                 {
                     feedBack.ExceptionContent.Add("第" + num + "行记录  该人员不是所内人员，人员类型需要填写为【所外】！");
                 }
             }
             else
             {
-                if (personal.PersonType.Equals("所内") && !name.Equals(personal.Name))
+                if (personal.PersonType.Equals("所内") && !names[0].Equals(personal.Name))
                 {
                     feedBack.ExceptionContent.Add("第" + num + "行记录  该该证件号码与人员不符，请检查！");
                 }

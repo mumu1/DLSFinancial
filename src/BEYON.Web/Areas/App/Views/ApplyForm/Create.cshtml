@@ -471,13 +471,21 @@
                 contentType: "application/json; charset=utf-8",
                 datatype: "text",
                 success: function (data) {
-                    if (data == "") {
+                    var nameArray = data.split(",");
+                    if (nameArray[1] == "upper")
+                    {
+                        CertificateID.error("该证件号码中的字母需从小写修改为大写！");
+                    } else if (nameArray[1] == "lower") {
+                        CertificateID.error("该证件号码中的字母需从大写修改为小写！");
+                    }
+
+                    if (nameArray[0] == "") {
                         if (PersonType.val() == "所内") {
                             PersonType.error("该人员不是所内人员，需要选择所外");
                         }
                     }
                     else {
-                        if (data != personName.val() && PersonType.val() == "所内") {
+                        if (nameArray[0] != personName.val() && PersonType.val() == "所内") {
                             CertificateID.error('该证件号码与人员不符，请检查');
                         } else {
                             if (PersonType.val() == "所外") {
