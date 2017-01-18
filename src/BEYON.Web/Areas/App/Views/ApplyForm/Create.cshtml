@@ -447,7 +447,7 @@
 
             if (CertificateType.val() === '居民身份证') {
                 var Validator = new IDValidator();
-                if (!Validator.isValid(CertificateID.val())) {
+                if (!Validator.isValid(CertificateID.val().trim())) {
                     isIDCard1 = /^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$|^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}([0-9]|X)$/;
                     var checkagain = isIDCard1.test(CertificateID.val());
                     if (checkagain != true) {
@@ -485,7 +485,9 @@
                         }
                     }
                     else {
-                        if (nameArray[0] != personName.val() && PersonType.val() == "所内") {
+                        var fillName = personName.val().trim();
+                        
+                        if (nameArray[0] != fillName.replace("\n", "").replace(" ", "").replace("\t", "").replace("\r", "") && PersonType.val() == "所内") {
                             CertificateID.error('该证件号码与人员不符，请检查');
                         } else {
                             if (PersonType.val() == "所外") {

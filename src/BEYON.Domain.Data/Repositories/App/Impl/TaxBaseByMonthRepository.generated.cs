@@ -67,7 +67,7 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
         public String GetNameByCerID(String certificateID) {
             String name = ",";     
             //验证完全一致
-            var record = from p in Context.TaxBaseByMonths.Where(w => w.CertificateID == certificateID.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", ""))
+            var record = from p in Context.TaxBaseByMonths.Where(w => w.CertificateID == certificateID.Trim().Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", ""))
                          select p;
             var lists = record.ToList();
             if (lists.Count > 0)
@@ -76,7 +76,7 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
             }
             //验证身份证尾号X大小写完全一致
             else {
-                var record2 = from p in Context.TaxBaseByMonths.Where(w => w.CertificateID.ToUpper() == certificateID.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", ""))
+                var record2 = from p in Context.TaxBaseByMonths.Where(w => w.CertificateID.ToUpper() == certificateID.Trim().Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", ""))
                              select p;
                 var lists2 = record2.ToList();
                 if (lists2.Count > 0)
@@ -84,7 +84,7 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                     name = lists2[0].Name + ",lower";
                 }
                 else {
-                    var record3 = from p in Context.TaxBaseByMonths.Where(w => w.CertificateID.ToLower() == certificateID.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", ""))
+                    var record3 = from p in Context.TaxBaseByMonths.Where(w => w.CertificateID.ToLower() == certificateID.Trim().Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", ""))
                                   select p;
                     var lists3 = record3.ToList();
                     if (lists3.Count > 0)

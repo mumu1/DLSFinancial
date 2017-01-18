@@ -86,7 +86,7 @@ namespace BEYON.CoreBLL.Service.App
             if(String.IsNullOrEmpty(modelString)){
                 return modelString;
             }else{
-                return modelString.Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", "");
+                return modelString.Trim().Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", "");
             }
            
         }
@@ -218,6 +218,10 @@ namespace BEYON.CoreBLL.Service.App
                     int num = 1;
                     foreach (var item in items)
                     {
+                        if (CheckAllNull(item[0]) && CheckAllNull(item[1]) && CheckAllNull(item[2]) && CheckAllNull(item[3]) && CheckAllNull(item[4]) && CheckAllNull(item[5]) && CheckAllNull(item[6]) && CheckAllNull(item[7]) && CheckAllNull(item[8]))
+                        {
+                            continue;
+                        }
                         PersonalRecord record = new PersonalRecord();
                         record.SerialNumber = serialNumber;
                         record.PaymentType = paymentType;
@@ -232,6 +236,7 @@ namespace BEYON.CoreBLL.Service.App
                             record.AccountNumber = item[11];
                             record.BankDetailName = item[12];
                         }
+                        
                         List<ImportFeedBack> errors = ValidatePersonalRecord(item,  num++, maps, ref record);
                         if(errors.Count > 0)
                         {
@@ -255,6 +260,19 @@ namespace BEYON.CoreBLL.Service.App
                 return new OperationResult(OperationResultType.Error, "导入数据失败!", ImportUtil.ParseToHtml(new List<ImportFeedBack>() { feedBack }));
             }
         }
+
+        private Boolean CheckAllNull(String item)
+        {
+            if (String.IsNullOrEmpty(item))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
 
         private List<ImportFeedBack> ValidatePersonalRecord(LinqToExcel.Row record, int num, Dictionary<String, String> map, ref PersonalRecord personal)
         {
@@ -443,7 +461,7 @@ namespace BEYON.CoreBLL.Service.App
             {
                 feedBack.ExceptionContent.Add("第" + num + "行记录  该人员证件号码中的字母需从大写修改为小写！");
             }
-            if (String.IsNullOrEmpty(names[0]))
+            if (String.IsNullOrEmpty(names[0]) && !String.IsNullOrEmpty(personal.PersonType))
             {
                 if (personal.PersonType.Equals("所内") && names[0].Equals(""))
                 {
@@ -452,14 +470,18 @@ namespace BEYON.CoreBLL.Service.App
             }
             else
             {
-                if (personal.PersonType.Equals("所内") && !names[0].Equals(personal.Name))
+                if (!String.IsNullOrEmpty(personal.PersonType))
                 {
-                    feedBack.ExceptionContent.Add("第" + num + "行记录  该该证件号码与人员不符，请检查！");
-                }
-                else {
-                    if (personal.PersonType.Equals("所外"))
+                    if (personal.PersonType.Equals("所内") && !names[0].Equals(GetReplaceString(personal.Name)))
                     {
-                        feedBack.ExceptionContent.Add("第" + num + "行记录  该人员是所内人员，人员类型需要填写为【所内】！");
+                        feedBack.ExceptionContent.Add("第" + num + "行记录  该该证件号码与人员不符，请检查！");
+                    }
+                    else
+                    {
+                        if (personal.PersonType.Equals("所外"))
+                        {
+                            feedBack.ExceptionContent.Add("第" + num + "行记录  该人员是所内人员，人员类型需要填写为【所内】！");
+                        }
                     }
                 }
             }
