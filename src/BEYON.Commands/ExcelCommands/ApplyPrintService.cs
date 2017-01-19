@@ -22,14 +22,22 @@ namespace ExcelCommands
 
         public void ApplyExcel(String filePath, String fileName, String serialNumber)
         {
-            using (var connect = new Npgsql.NpgsqlConnection("Server=192.168.1.96;port=5432;Database=financial05;User Id=beyondb;Password=123456;pooling=true"))
+            try
             {
-                if (connect.State == System.Data.ConnectionState.Closed)
-                    connect.Open();
-                var applicationform = ExecuteSQL(connect, String.Format("SELECT * FROM dbo.\"ApplicationForms\" WHERE \"SerialNumber\" = '{0}'", serialNumber));
-                var personalRecords = ExecuteSQL(connect, String.Format("SELECT * FROM dbo.\"PersonalRecords\" WHERE \"SerialNumber\" = '{0}'", serialNumber));
-                SaveExcel(filePath, fileName, applicationform, personalRecords);
+                using (var connect = new Npgsql.NpgsqlConnection("Server=localhost;port=5433;Database=financial01;User Id=beyondb;Password=123456;pooling=true"))
+                {
+                    if (connect.State == System.Data.ConnectionState.Closed)
+                        connect.Open();
+                    var applicationform = ExecuteSQL(connect, String.Format("SELECT * FROM dbo.\"ApplicationForms\" WHERE \"SerialNumber\" = '{0}'", serialNumber));
+                    var personalRecords = ExecuteSQL(connect, String.Format("SELECT * FROM dbo.\"PersonalRecords\" WHERE \"SerialNumber\" = '{0}'", serialNumber));
+                    SaveExcel(filePath, fileName, applicationform, personalRecords);
+                }
             }
+            catch(Exception ex)
+            {
+                _log.Error(ex);
+            }
+            
         }
 
         private System.Data.DataTable ExecuteSQL(NpgsqlConnection connection, String sql)

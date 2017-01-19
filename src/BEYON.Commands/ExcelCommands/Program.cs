@@ -8,6 +8,7 @@ namespace ExcelCommands
 {
     class Program
     {
+        
         static void Main(string[] args)
         {
             if(args == null || args.Length < 1)
@@ -47,8 +48,16 @@ namespace ExcelCommands
                 String.IsNullOrEmpty(serialNumber))
                 return;
 
-            ApplyPrintService service = new ApplyPrintService();
-            service.ApplyExcel(filePath, fileName, serialNumber);
+            try
+            {
+                ApplyPrintService service = new ApplyPrintService();
+                service.ApplyExcel(filePath, fileName, serialNumber);
+            }
+            catch(Exception ex)
+            {
+                
+            }
+            
         }
     }
 }
