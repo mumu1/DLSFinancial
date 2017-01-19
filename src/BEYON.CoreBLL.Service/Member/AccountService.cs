@@ -60,6 +60,10 @@ namespace BEYON.CoreBLL.Service.Member
             {
                 result = new OperationResult(OperationResultType.QueryNull, "指定账号的用户不存在");
             }
+            else if (String.IsNullOrEmpty(loginVM.Password))
+            {
+                result = new OperationResult(OperationResultType.QueryNull, "请输入密码");
+            }
             else if (user.Password != EncryptionHelper.GetMd5Hash(loginVM.Password.Trim()))
             {
                 result = new OperationResult(OperationResultType.Warning, "登录密码不正确。");
