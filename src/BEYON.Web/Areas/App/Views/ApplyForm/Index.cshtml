@@ -143,6 +143,12 @@
                             contentType: "application/json; charset=utf-8",
                             data: JSON.stringify({ SerialNumber: value["SerialNumber"] }),
                             success: function (result) {
+                                if (result == undefined || result == "")
+                                {
+                                    toastr.success('服务器无法执行Excel输出！');
+                                    return;
+                                }
+                                    
                                 fileDownload('../App/ApplyForm/DownloadFile', result);
                                 toastr.success('数据导出完成');
                                 @*$.ajax({
