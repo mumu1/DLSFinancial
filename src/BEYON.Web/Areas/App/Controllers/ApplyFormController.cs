@@ -83,10 +83,11 @@ namespace BEYON.Web.Areas.App.Controllers
         {
             //申请单流水号
             var timeNow = System.DateTime.Now;
-            var serialNumber = String.Format("S{0}", timeNow.ToString("yyyyMMddHHmmssffff"));
+            string userid = ((System.Web.Security.FormsIdentity)(System.Web.HttpContext.Current.User.Identity)).Ticket.UserData;
+            var serialNumber = String.Format("S{0}_{1}", userid, timeNow.ToString("yyyyMMddHHmmssffff"));
 
             //获取登录用户名
-            string userid = ((System.Web.Security.FormsIdentity)(System.Web.HttpContext.Current.User.Identity)).Ticket.UserData;
+            //string userid = ((System.Web.Security.FormsIdentity)(System.Web.HttpContext.Current.User.Identity)).Ticket.UserData;
             var userID = Int32.Parse(userid);
             User user = this._userService.Users.FirstOrDefault(t => t.Id == userID);
 
