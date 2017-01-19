@@ -418,9 +418,18 @@ namespace BEYON.CoreBLL.Service.App
 
             if (!String.IsNullOrEmpty(personal.CertificateType) && personal.CertificateType.Equals("居民身份证"))
             {
-                if (CheckIDCard18(personal.CertificateID) == false && CheckIDCard15(personal.CertificateID) == false && CheckIDCardFormat(personal.CertificateID) == false)
+                if (personal.CertificateID.Length == 18) {
+                    if (CheckIDCard18(personal.CertificateID) == false && CheckIDCardFormat(personal.CertificateID) == false)
+                    {
+                        feedBack.ExceptionContent.Add("第" + num + "行记录  证件号码格式有误！");
+                    }
+                }
+                else if (personal.CertificateID.Length == 15)
                 {
-                    feedBack.ExceptionContent.Add("第" + num + "行记录  证件号码格式有误！");
+                    if (CheckIDCard15(personal.CertificateID) == false && CheckIDCardFormat(personal.CertificateID) == false)
+                    {
+                        feedBack.ExceptionContent.Add("第" + num + "行记录  证件号码格式有误！");
+                    }
                 }
             }
             //联系电话
