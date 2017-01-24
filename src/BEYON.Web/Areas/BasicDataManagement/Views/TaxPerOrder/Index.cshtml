@@ -86,7 +86,7 @@
                     buttons: [
                         //{ text: "拷贝", extend: 'copy' },
                         { text: "EXCEL表格", extend: 'excel' },
-                        { text: "CSV表格", extend: 'csv' },
+                        //{ text: "CSV表格", extend: 'csv' },
                         //{ text: "PDF文档", extend: 'pdf' },
                         //{ text: "打印", extend: 'print' }
                     ]
@@ -121,11 +121,7 @@
                                     { data: "Name", title: "姓名" },
                                     { data: "PersonType", title: "人员类型" },
                                     { data: "CertificateType", title: "证件类型" },
-                                    {
-                                        data: "CertificateID", title: "证件号码", render: function (data, type, row) {
-                                            return ' ' + data;
-                                        }
-                                    },
+                                    { data: "CertificateID", title: "证件号码" },
                                     { data: "PaymentType", title: "支付类型" },
                                     { data: "Amount", title: "金额" },
                                     { data: "TaxOrNot", title: "是否含税" },
