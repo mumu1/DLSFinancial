@@ -201,17 +201,17 @@ namespace BEYON.CoreBLL.Service.App
                             tax = (interval - baseSalary) * 0.2 - deductTaxSum;
                         }
                         //超过4000至25000元，税率20%，速算扣除数0
-                        else if (interval > 4000 && interval <= 25000)
+                        else if (interval > 4000 && interval <= 20000)
                         {
                             tax = (interval - interval * 0.2) * 0.2 - deductTaxSum;
                         }
                         //超过25000至62500元，税率30%，速算扣除数2000
-                        else if (interval > 25000 && interval <= 62500)
+                        else if (interval > 20000 && interval <= 50000)
                         {
                             tax = (interval - interval * 0.2) * 0.3 - 2000 - deductTaxSum;
                         }
                         //超过62500元，税率40%，速算扣除数7000
-                        else if (interval > 62500)
+                        else if (interval > 50000)
                         {
                             tax = (interval - interval * 0.2) * 0.4 - 7000 - deductTaxSum;
                         }
@@ -225,22 +225,22 @@ namespace BEYON.CoreBLL.Service.App
                             tax = 0.0;
                         }
                         //超过800至4000元，税率20%，速算扣除数0
-                        else if (interval > 800 && interval <= 4000)
+                        else if (interval > 800 && interval <= 3360)
                         {
                             tax = ((interval - baseSalary) / (1 - 0.2)) * 0.2 - deductTaxSum;
                         }
                         //超过4000至25000元，税率20%，速算扣除数0
-                        else if (interval > 4000 && interval <= 25000)
+                        else if (interval > 3360 && interval <= 21000)
                         {
                             tax = (interval * (1 - 0.2) * 0.2) / (1 - (1 - 0.2) * 0.2) - deductTaxSum;
                         }
                         //超过25000至62500元，税率30%，速算扣除数2000
-                        else if (interval > 25000 && interval <= 62500)
+                        else if (interval > 21000 && interval <= 49500)
                         {
                             tax = (interval * (1 - 0.2) * 0.3 - 2000) / (1 - (1 - 0.2) * 0.3) - deductTaxSum;
                         }
                         //超过62500元，税率40%，速算扣除数7000
-                        else if (interval > 62500)
+                        else if (interval > 49500)
                         {
                             tax = (interval * (1 - 0.2) * 0.4 - 7000) / (1 - (1 - 0.2) * 0.4) - deductTaxSum;
                         }
