@@ -157,7 +157,7 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                                     result["C6"] = taxFree;
                                     result["C7"] = reader["C7"].ToString();
                                     result["C8"] = initialTax + tax;
-                                    result["C9"] =0;
+                                    result["C9"] =0.0;
                                     if (PersonalRecord != null)
                                     {
                                         if (!String.IsNullOrEmpty(PersonalRecord.Tele))
@@ -212,7 +212,7 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                                     JObject jsonObject = objects[certificateID] as JObject;
                                     jsonObject["C5"] = jsonObject["C5"].ToObject<float>() + amountY;
                                     jsonObject["C8"] = jsonObject["C8"].ToObject<float>() + tax;
-                                    jsonObject["C9"] = jsonObject["C9"].ToObject<float>() + 0;
+                                    jsonObject["C9"] = jsonObject["C9"].ToObject<float>() ;
                                     int repetTimes = jsonObject["C14"].ToObject<int>() + 1;
                                     jsonObject["C14"] = repetTimes;
 
@@ -228,7 +228,7 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                             {
                                 if (obj.Value["C5"].ToObject<float>() - obj.Value["C6"].ToObject<float>() - obj.Value["C7"].ToObject<float>() < 0)
                                 {
-                                    obj.Value["C9"] = 0;
+                                    obj.Value["C9"] = 0.0;
                                 }
                                 else
                                 {
@@ -367,7 +367,7 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                                     result["C6"] = 800;
                                     result["C7"] = 800;
                                     result["C8"] = tax;
-                                    result["C9"] = 0;
+                                    result["C9"] = 0.0;
                                     if (PersonalRecord != null)
                                     {
                                         if (!String.IsNullOrEmpty(PersonalRecord.Tele))
@@ -424,7 +424,7 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                                     JObject jsonObject = objects[certificateID] as JObject;
                                     jsonObject["C5"] = jsonObject["C5"].ToObject<float>() + amountY;
                                     jsonObject["C8"] = jsonObject["C8"].ToObject<float>() + tax;
-                                    jsonObject["C9"] = jsonObject["C9"].ToObject<float>() + 0;
+                                    jsonObject["C9"] = jsonObject["C9"].ToObject<float>() ;
                                     int repetTimes = jsonObject["C14"].ToObject<int>() + 1;
                                     jsonObject["C14"] = repetTimes;
 
@@ -438,8 +438,14 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                             //计算应纳税所得额    =收入额C5-基本扣除C7
                             foreach (var obj in objects)
                             {
-
-                                obj.Value["C9"] = obj.Value["C5"].ToObject<float>() - obj.Value["C7"].ToObject<float>();
+                                if (obj.Value["C5"].ToObject<float>() - obj.Value["C7"].ToObject<float>() < 0)
+                                {
+                                    obj.Value["C9"] = 0.0;
+                                }
+                                else
+                                {
+                                    obj.Value["C9"] = obj.Value["C5"].ToObject<float>() - obj.Value["C7"].ToObject<float>();
+                                }
                             }
 
                         }
