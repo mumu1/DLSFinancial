@@ -153,11 +153,11 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                                     result["C2"] = reader["C2"].ToString();
                                     result["C3"] = reader["C3"].ToString();
                                     result["C4"] = certificateID;
-                                    result["C5"] = initialEaring + amountX;
+                                    result["C5"] = initialEaring + amountY;
                                     result["C6"] = taxFree;
                                     result["C7"] = reader["C7"].ToString();
                                     result["C8"] = initialTax + tax;
-                                    result["C9"] = initialTaxPayable + amountY;
+                                    result["C9"] =0;
                                     if (PersonalRecord != null)
                                     {
                                         if (!String.IsNullOrEmpty(PersonalRecord.Tele))
@@ -210,9 +210,9 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                                 else
                                 {
                                     JObject jsonObject = objects[certificateID] as JObject;
-                                    jsonObject["C5"] = jsonObject["C5"].ToObject<float>() + amountX;
+                                    jsonObject["C5"] = jsonObject["C5"].ToObject<float>() + amountY;
                                     jsonObject["C8"] = jsonObject["C8"].ToObject<float>() + tax;
-                                    jsonObject["C9"] = jsonObject["C9"].ToObject<float>() + amountY;
+                                    jsonObject["C9"] = jsonObject["C9"].ToObject<float>() + 0;
                                     int repetTimes = jsonObject["C14"].ToObject<int>() + 1;
                                     jsonObject["C14"] = repetTimes;
 
@@ -221,6 +221,18 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                                     jsonObject[String.Format("C{0}", 17 + (repetTimes - 1) * 3)] = tax;
 
                                     objects[certificateID] = jsonObject;
+                                }
+                            }
+                            //计算应纳税所得额    =收入额C5-免税金额C6-基本扣除C7，若值<0,则改为0
+                            foreach (var obj in objects)
+                            {
+                                if (obj.Value["C5"].ToObject<float>() - obj.Value["C6"].ToObject<float>() - obj.Value["C7"].ToObject<float>() < 0)
+                                {
+                                    obj.Value["C9"] = 0;
+                                }
+                                else
+                                {
+                                    obj.Value["C9"] = obj.Value["C5"].ToObject<float>() - obj.Value["C6"].ToObject<float>() - obj.Value["C7"].ToObject<float>();
                                 }
                             }
                         }
@@ -351,11 +363,11 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                                     result["C2"] = reader["C2"].ToString();
                                     result["C3"] = reader["C3"].ToString();
                                     result["C4"] = certificateID;
-                                    result["C5"] = amountX;
+                                    result["C5"] = amountY;
                                     result["C6"] = 800;
                                     result["C7"] = 800;
                                     result["C8"] = tax;
-                                    result["C9"] = amountY;
+                                    result["C9"] = 0;
                                     if (PersonalRecord != null)
                                     {
                                         if (!String.IsNullOrEmpty(PersonalRecord.Tele))
@@ -410,9 +422,9 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                                 else
                                 {
                                     JObject jsonObject = objects[certificateID] as JObject;
-                                    jsonObject["C5"] = jsonObject["C5"].ToObject<float>() + amountX;
+                                    jsonObject["C5"] = jsonObject["C5"].ToObject<float>() + amountY;
                                     jsonObject["C8"] = jsonObject["C8"].ToObject<float>() + tax;
-                                    jsonObject["C9"] = jsonObject["C9"].ToObject<float>() + amountY;
+                                    jsonObject["C9"] = jsonObject["C9"].ToObject<float>() + 0;
                                     int repetTimes = jsonObject["C14"].ToObject<int>() + 1;
                                     jsonObject["C14"] = repetTimes;
 
@@ -423,6 +435,13 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                                     objects[certificateID] = jsonObject;
                                 }
                             }
+                            //计算应纳税所得额    =收入额C5-基本扣除C7
+                            foreach (var obj in objects)
+                            {
+
+                                obj.Value["C9"] = obj.Value["C5"].ToObject<float>() - obj.Value["C7"].ToObject<float>();
+                            }
+
                         }
                     }
                 }
@@ -735,7 +754,7 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                                     if (!String.IsNullOrEmpty(paymentType) && paymentType.Equals("银行转账")) {
                                         if (!String.IsNullOrEmpty(taxOrNot) && taxOrNot.Equals("含税"))
                                         {
-                                            result["C6"] = amount - tax;
+                                            result["C6"] = amount;
                                         }
                                         else if (!String.IsNullOrEmpty(taxOrNot) && taxOrNot.Equals("不含税"))
                                         {
@@ -760,7 +779,7 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                                     if (!String.IsNullOrEmpty(paymentType) && paymentType.Equals("银行转账")) {
                                         if (!String.IsNullOrEmpty(taxOrNot) && taxOrNot.Equals("含税"))
                                         {
-                                            jsonObject["C6"] =  jsonObject["C6"].ToObject<float>() + amount - tax;
+                                            jsonObject["C6"] =  jsonObject["C6"].ToObject<float>() + amount ;
                                         }
                                         else if (!String.IsNullOrEmpty(taxOrNot) && taxOrNot.Equals("不含税"))
                                         {

@@ -33,7 +33,8 @@ namespace BEYON.CoreBLL.Service.App
             columns.Add(new Column("C6", "免税金额"));
             columns.Add(new Column("C7", "基本扣除"));
             columns.Add(new Column("C8", "已扣缴税额"));
-            columns.Add(new Column("C9", "应纳税额"));
+            columns.Add(new Column("C9", "应纳税所得额"));//从应纳税额改过来20170214
+            //应纳税所得额=收入额C5-免税金额C6-基本扣除C7，若值<0,则改为0
             columns.Add(new Column("C10", "联系电话"));
             columns.Add(new Column("C11", "国籍"));
             columns.Add(new Column("C12", "单位"));
@@ -70,7 +71,8 @@ namespace BEYON.CoreBLL.Service.App
             columns.Add(new Column("C6", "免税金额"));
             columns.Add(new Column("C7", "基本扣除"));
             columns.Add(new Column("C8", "已扣缴税额"));
-            columns.Add(new Column("C9", "应纳税额"));
+            columns.Add(new Column("C9", "应纳税所得额"));//从应纳税额改过来20170214
+            //应纳税所得额=收入额C5-基本扣除C7
             columns.Add(new Column("C10", "联系电话"));
             columns.Add(new Column("C11", "国籍"));
             columns.Add(new Column("C12", "单位"));
