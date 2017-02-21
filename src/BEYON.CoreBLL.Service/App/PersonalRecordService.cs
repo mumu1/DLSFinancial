@@ -54,7 +54,7 @@ namespace BEYON.CoreBLL.Service.App
                 var entity = new PersonalRecord
                 {
                     SerialNumber = model.SerialNumber,
-                    Name = GetReplaceString(model.Name),
+                    Name = model.Name.Trim().Replace("\n", "").Replace("\t", "").Replace("\r", ""),
                     CertificateID = GetReplaceString(model.CertificateID),
                     CertificateType = GetReplaceString(model.CertificateType),
                     Company = GetReplaceString(model.Company),
@@ -101,7 +101,7 @@ namespace BEYON.CoreBLL.Service.App
                     throw new Exception();
                 }
                 personalRecord.SerialNumber = model.SerialNumber;
-                personalRecord.Name = GetReplaceString(model.Name);
+                personalRecord.Name = model.Name.Trim().Replace("\n", "").Replace("\t", "").Replace("\r", "");
                 personalRecord.CertificateID = GetReplaceString(model.CertificateID);
                 personalRecord.CertificateType = GetReplaceString(model.CertificateType);
                 personalRecord.Company = GetReplaceString(model.Company);
@@ -481,9 +481,9 @@ namespace BEYON.CoreBLL.Service.App
             {
                 if (!String.IsNullOrEmpty(personal.PersonType))
                 {
-                    if (personal.PersonType.Equals("所内") && !names[0].Equals(GetReplaceString(personal.Name)))
+                    if (personal.PersonType.Equals("所内") && !names[0].Equals(personal.Name.Trim()))
                     {
-                        feedBack.ExceptionContent.Add("第" + num + "行记录  该该证件号码与人员不符，请检查！");
+                        feedBack.ExceptionContent.Add("第" + num + "行记录  该证件号码与人员不符，请检查！");
                     }
                     else
                     {

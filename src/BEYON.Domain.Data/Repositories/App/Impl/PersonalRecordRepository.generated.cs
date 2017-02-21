@@ -88,7 +88,13 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                 if (!(column.Equals("Amount") || column.Equals("UpdateDate")))
                 {
                     if (!String.IsNullOrEmpty(value.ToString())) {
-                        value = value.ToString().Trim().Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", "");
+                        if (!column.Equals("Name"))
+                        {
+                            value = value.ToString().Trim().Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", "");
+                        }
+                        else {
+                            value = value.ToString().Trim().Replace("\n", "").Replace("\t", "").Replace("\r", "");                    
+                        }                                              
                     }
                     
                 }

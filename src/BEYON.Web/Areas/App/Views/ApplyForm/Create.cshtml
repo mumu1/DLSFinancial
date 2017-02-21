@@ -486,8 +486,8 @@
                     }
                     else {
                         var fillName = personName.val().trim();
-                        
-                        if (nameArray[0] != fillName.replace("\n", "").replace(" ", "").replace("\t", "").replace("\r", "") && PersonType.val() == "所内") {
+                        alert(nameArray[0]);
+                        if (nameArray[0] != fillName.replace("\n", "").replace("\t", "").replace("\r", "") && PersonType.val() == "所内") {
                             CertificateID.error('该证件号码与人员不符，请检查');
                         } else {
                             if (PersonType.val() == "所外") {
