@@ -52,19 +52,20 @@
 
     //加载职称列表
     function loadTableData() {
-        $.ajax({
-            type: "GET",
-            url: "../BasicDataManagement/TaxPerOrderHistory/GetAllData",
-            //data: params,
-            contentType: "application/json; charset=utf-8",
-            datatype: "json",
-            success: function (data) {
-                initTable(data);
-            },
-            error: function () {
-                toastr.error('获取历史算税数据失败！');
-            }
-        });
+        initTable(null);
+        //$.ajax({
+        //    type: "GET",
+        //    url: "../BasicDataManagement/TaxPerOrderHistory/GetAllData",
+        //    //data: params,
+        //    contentType: "application/json; charset=utf-8",
+        //    datatype: "json",
+        //    success: function (data) {
+        //        initTable(data);
+        //    },
+        //    error: function () {
+        //        toastr.error('获取历史算税数据失败！');
+        //    }
+        //});
     }
 
     function initTable(data) {
@@ -140,6 +141,8 @@
             autoWidth: true,
             bProcessing: true,
             paging: true,
+            bServerSide: true,
+            sAjaxSource: '@Url.Action("GetAllData")',
             order: [[1, "desc"]],
             "sScrollY": "100%",
             "sScrollX": "200%",
@@ -166,6 +169,21 @@
                                     { data: "AccountNumber", title: "银行账号" },
                                     { data: "BankDetailName", title: "开户行详细名称" }
             ],
+            "fnServerData" : function(sSource, aoData, fnCallback) {  
+                $.ajax({  
+                    "type" : 'get',  
+                    "url" : sSource,  
+                    "dataType": 'json',
+                    "contentType": "application/json; charset=utf-8",
+                    "data": aoData,
+                    //"data" : {  
+                    //    aoData : JSON.stringify(aoData)  
+                    //},  
+                    "success" : function(resp) {  
+                        fnCallback(resp);  
+                    }  
+                });  
+            },
             oLanguage: {
                 "sLengthMenu": "每页显示 _MENU_ 条记录",
                 "sZeroRecords": "抱歉， 没有找到",
