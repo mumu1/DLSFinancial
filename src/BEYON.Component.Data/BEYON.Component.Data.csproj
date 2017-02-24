@@ -68,6 +68,7 @@
   <ItemGroup>
     <Compile Include="Configurations\App\AuditOpinionConfiguration.generated.cs" />
     <Compile Include="Configurations\App\AuditStatusConfiguration.generated.cs" />
+    <Compile Include="Configurations\App\TopContactsConfiguration.generated.cs" />
     <Compile Include="Configurations\App\SafeguardTimeConfiguration.generated.cs" />
     <Compile Include="Configurations\App\DepartmentConfiguration.generated.cs" />
     <Compile Include="Configurations\App\TaskManageConfiguration.generated.cs" />

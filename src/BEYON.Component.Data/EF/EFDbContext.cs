@@ -41,6 +41,8 @@ namespace BEYON.Component.Data.EF
 
         public DbSet<PersonalRecord> PersonalRecords { get; set; }
 
+        public DbSet<TopContacts> TopContactss { get; set; }
+
         public DbSet<TaxPerOrder> TaxPerOrders { get; set; }
 
         public DbSet<TaxPerOrderHistory> TaxPerOrderHistorys { get; set; }
@@ -91,6 +93,7 @@ namespace BEYON.Component.Data.EF
             //地理所财务
             modelBuilder.Configurations.Add(new ApplicationFormConfiguration());
             modelBuilder.Configurations.Add(new PersonalRecordConfiguration());
+            modelBuilder.Configurations.Add(new TopContactsConfiguration());
             modelBuilder.Configurations.Add(new TaxPerOrderConfiguration());
             modelBuilder.Configurations.Add(new TaxPerOrderHistoryConfiguration());
             modelBuilder.Configurations.Add(new PersonalSalaryConfiguration());

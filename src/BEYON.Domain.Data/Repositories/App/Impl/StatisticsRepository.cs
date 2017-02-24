@@ -733,6 +733,15 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                             while (reader.Read())
                             {
                                 var projectNumber = reader["C2"].ToString();
+                                string[] projectNumberSep;
+                                if (!projectNumber.Equals("无"))
+                                {
+                                    projectNumberSep = projectNumber.Split('|');
+                                }
+                                else { 
+                                    projectNumberSep =new string[] {"无","无"};
+                                }
+                                
                                 var amountY = String.IsNullOrEmpty(reader["C3"].ToString()) ? 0 : Convert.ToSingle(reader["C3"]);
                                 var refundType = reader["C4"].ToString();
                                 //通过refundType获取refundTypeCode
@@ -749,7 +758,8 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                                 {
                                     JObject result = new JObject();
                                     result["C1"] = period;
-                                    result["C2"] = projectNumber;
+                                    result["C2"] = projectNumberSep[0].Trim();
+                                    result["C10"] = projectNumberSep[1].Trim();
                                     result["C3"] = projectDirector;
                                     result["C4"] = refundType;
                                     result["C5"] = refundTypeCode;

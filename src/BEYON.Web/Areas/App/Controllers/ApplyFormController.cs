@@ -30,12 +30,13 @@ namespace BEYON.Web.Areas.App.Controllers
         private readonly log4net.ILog _log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private readonly IApplicationFormService _applicationFormService;
         private readonly IPersonalRecordService _personalRecordService;
+        private readonly ITopContactsService _topContactsService;
         private readonly IUserService _userService;
         private readonly IApplyPrintService _applyPrintService;
         private readonly IAuditOpinionService _auditOpinionService;
         private readonly ITaxPerOrderService _taxPerOrderService;
         public ApplyFormController(IApplicationFormService applicationFormService, IPersonalRecordService personalRecordService,
-            IUserService userService, IApplyPrintService applyPrintService, IAuditOpinionService auditOpinionService, ITaxPerOrderService taxPerOrderService)
+            IUserService userService, IApplyPrintService applyPrintService, IAuditOpinionService auditOpinionService, ITaxPerOrderService taxPerOrderService, ITopContactsService topContactsService)
         {
             this._applicationFormService = applicationFormService;
             this._personalRecordService = personalRecordService;
@@ -43,6 +44,7 @@ namespace BEYON.Web.Areas.App.Controllers
             this._applyPrintService = applyPrintService;
             this._auditOpinionService = auditOpinionService;
             this._taxPerOrderService = taxPerOrderService;
+            this._topContactsService = topContactsService;
         }
 
         //
@@ -318,6 +320,7 @@ namespace BEYON.Web.Areas.App.Controllers
                 foreach (var data in datas)
                 {
                     _personalRecordService.Insert(data);
+                   
                 }
             }
             return Json(new { }, JsonRequestBehavior.AllowGet);
@@ -427,12 +430,17 @@ namespace BEYON.Web.Areas.App.Controllers
                 ApplicationForm form = _applicationFormService.ApplicationForms.FirstOrDefault(t => t.SerialNumber == serialNumber);
                 if (form != null)
                 {
+                    if (form.AuditStatus.Equals("审核通过") && formVM.AuditStatus.Equals("审核通过"))
+                    {
+                        continue;
+                    }
                     form.AuditStatus = formVM.AuditStatus;
                     if (!string.IsNullOrEmpty(formVM.AuditOpinion))
                     {
                         form.AuditOpinion = formVM.AuditOpinion;
                         form.AuditTime = DateTime.Now;
                     }
+                    
                     //若审核通过，开始算税，单笔税保存在TaxPerOrder表
                     if (formVM.AuditStatus.Equals("审核通过"))
                     {
@@ -444,8 +452,16 @@ namespace BEYON.Web.Areas.App.Controllers
                             {
                                 taxPerOrder = new TaxPerOrder();
                                 taxPerOrder.SerialNumber = form.SerialNumber;
-                                taxPerOrder.ProjectNumber = form.ProjectNumber;
-                                taxPerOrder.TaskName = form.TaskName;
+                                if (!String.IsNullOrEmpty(form.ProjectNumber) && !form.ProjectNumber.Equals("无"))
+                                {
+                                    string[] projectSep = form.ProjectNumber.Split('|');
+                                    taxPerOrder.ProjectNumber = projectSep[0].Trim();
+                                    taxPerOrder.TaskName = projectSep[1].Trim();
+                                }
+                                else {
+                                    taxPerOrder.ProjectNumber = "无";
+                                    taxPerOrder.TaskName = "无";
+                                }                                                                                         
                                 taxPerOrder.RefundType = form.RefundType;
                                 taxPerOrder.ProjectDirector = form.ProjectDirector;
                                 taxPerOrder.Agent = form.Agent;

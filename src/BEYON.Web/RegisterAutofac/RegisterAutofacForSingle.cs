@@ -83,6 +83,8 @@ namespace BEYON.Web
             builder.RegisterType<TaxBaseByMonthRepository>().As<ITaxBaseByMonthRepository>().InstancePerHttpRequest();
             builder.RegisterType<PersonalRecordService>().As<IPersonalRecordService>().InstancePerHttpRequest();
             builder.RegisterType<PersonalRecordRepository>().As<IPersonalRecordRepository>().InstancePerHttpRequest();
+            builder.RegisterType<TopContactsService>().As<ITopContactsService>().InstancePerHttpRequest();
+            builder.RegisterType<TopContactsRepository>().As<ITopContactsRepository>().InstancePerHttpRequest();
             builder.RegisterType<TaxPerOrderService>().As<ITaxPerOrderService>().InstancePerHttpRequest();
             builder.RegisterType<TaxPerOrderRepository>().As<ITaxPerOrderRepository>().InstancePerHttpRequest();
             builder.RegisterType<TaxPerOrderHistoryService>().As<ITaxPerOrderHistoryService>().InstancePerHttpRequest();

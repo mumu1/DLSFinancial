@@ -20,17 +20,19 @@ namespace BEYON.CoreBLL.Service.App
     {
         private readonly log4net.ILog _log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private readonly IPersonalRecordRepository _PersonalRecordRepository;
+        private readonly ITopContactsService _TopContactsService;
         private readonly ITaxPerOrderRepository _TaxPerOrderRepository;
         private readonly ITaxBaseByMonthRepository _TaxBaseByMonthRepository;
 
 
 
-        public PersonalRecordService(IPersonalRecordRepository personalRecordRepository, ITaxPerOrderRepository taxPerOrderRepository, ITaxBaseByMonthRepository taxBaseByMonthRepository, IUnitOfWork unitOfWork)
+        public PersonalRecordService(IPersonalRecordRepository personalRecordRepository, ITaxPerOrderRepository taxPerOrderRepository, ITaxBaseByMonthRepository taxBaseByMonthRepository,ITopContactsService topContactsService, IUnitOfWork unitOfWork)
             : base(unitOfWork)
         {
             this._PersonalRecordRepository = personalRecordRepository;
             this._TaxPerOrderRepository = taxPerOrderRepository;
             this._TaxBaseByMonthRepository = taxBaseByMonthRepository;
+            this._TopContactsService = topContactsService;
         }
         public IQueryable<PersonalRecord> PersonalRecords
         {
@@ -41,6 +43,7 @@ namespace BEYON.CoreBLL.Service.App
         {
             try
             {
+                string userid = ((System.Web.Security.FormsIdentity)(System.Web.HttpContext.Current.User.Identity)).Ticket.UserData;
                 //1.检查是否有重复字段
                 PersonalRecord[] personalRecords = _PersonalRecordRepository.Entities.Where(w => w.SerialNumber == model.SerialNumber && w.CertificateID == model.CertificateID.Trim()).ToArray();
                 if (personalRecords != null && personalRecords.Length > 0)
@@ -72,6 +75,31 @@ namespace BEYON.CoreBLL.Service.App
                     UpdateDate = DateTime.Now
                 };
                 _PersonalRecordRepository.Insert(entity, isSave);
+
+                //保存时同步向常用领款人表TopContacts中保存
+                TopContacts contact = new TopContacts();
+                contact.UserID = userid;
+                contact.Name = GetReplaceString(model.Name);
+                contact.CertificateType = GetReplaceString(model.CertificateType);
+                contact.CertificateID = GetReplaceString(model.CertificateID);
+                contact.Nationality = GetReplaceString(model.Nationality);
+                contact.PersonType = GetReplaceString(model.PersonType);
+                contact.Tele = GetReplaceString(model.Tele);
+                contact.Title = GetReplaceString(model.Title);
+                contact.Company = GetReplaceString(model.Company);
+                if (!String.IsNullOrEmpty(model.Bank))
+                {
+                    contact.Bank = GetReplaceString(model.Bank);
+                }
+                if (!String.IsNullOrEmpty(model.BankDetailName))
+                {
+                    contact.BankDetailName = GetReplaceString(model.BankDetailName);
+                }
+                if (!String.IsNullOrEmpty(model.AccountNumber))
+                {
+                    contact.AccountNumber = GetReplaceString(model.AccountNumber);
+                }
+                _TopContactsService.Insert(contact);    
 
                 return new OperationResult(OperationResultType.Success, "新增数据成功！", entity);
             }
@@ -208,6 +236,8 @@ namespace BEYON.CoreBLL.Service.App
         {
             try
             {
+                string userid = ((System.Web.Security.FormsIdentity)(System.Web.HttpContext.Current.User.Identity)).Ticket.UserData;
+                
                 var columns = importData == null ? null : importData.Columns;
                 var maps = ImportUtil.GetColumns(columns, new PersonalRecord());
                 var items = ExcelService.GetObjects(fileName, columns);
@@ -245,6 +275,31 @@ namespace BEYON.CoreBLL.Service.App
 
                         //插入或更新数据
                         _PersonalRecordRepository.InsertOrUpdate(record);
+
+                        //保存时同步向常用领款人表TopContacts中保存
+                        TopContacts contact = new TopContacts();
+                        contact.UserID = userid;
+                        contact.Name = GetReplaceString(record.Name);
+                        contact.CertificateType = GetReplaceString(record.CertificateType);
+                        contact.CertificateID = GetReplaceString(record.CertificateID);
+                        contact.Nationality = GetReplaceString(record.Nationality);
+                        contact.PersonType = GetReplaceString(record.PersonType);
+                        contact.Tele = GetReplaceString(record.Tele);
+                        contact.Title = GetReplaceString(record.Title);
+                        contact.Company = GetReplaceString(record.Company);
+                        if (!String.IsNullOrEmpty(record.Bank))
+                        {
+                            contact.Bank = GetReplaceString(record.Bank);
+                        }
+                        if (!String.IsNullOrEmpty(record.BankDetailName))
+                        {
+                            contact.BankDetailName = GetReplaceString(record.BankDetailName);
+                        }
+                        if (!String.IsNullOrEmpty(record.AccountNumber))
+                        {
+                            contact.AccountNumber = GetReplaceString(record.AccountNumber);
+                        }
+                        _TopContactsService.Insert(contact);    
                     }
                 }
 

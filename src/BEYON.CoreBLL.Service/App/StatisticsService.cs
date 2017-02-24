@@ -133,8 +133,8 @@ namespace BEYON.CoreBLL.Service.App
             columns.Add(new Column("C6", "课题支付金额（银行转账）"));
             columns.Add(new Column("C7", "劳务税金（银行转账）"));
             columns.Add(new Column("C8", "工资税金（银行转账）"));
-            columns.Add(new Column("C9", "总税金（银行转账）"));           
-
+            columns.Add(new Column("C9", "总税金（银行转账）"));
+            columns.Add(new Column("C10", "课题名称"));
             //columns.Add(new Column("C0", "序号"));
             //columns.Add(new Column("C1", "期间"));
             //columns.Add(new Column("C2", "课题号"));
@@ -174,6 +174,7 @@ namespace BEYON.CoreBLL.Service.App
             columns.Add(new Column("C9", "课题负责人"));
             columns.Add(new Column("C10", "经办人"));
             columns.Add(new Column("C11", "更新时间"));
+            
             return columns.ToArray();
         }
 

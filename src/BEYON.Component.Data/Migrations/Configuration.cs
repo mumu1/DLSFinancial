@@ -38,6 +38,7 @@ namespace BEYON.Component.Data.Migrations
             {
                 new Module { Id = 1, ParentId = null, Name = "财务申请单", LinkUrl = "#",  Code = 100,  Description = null, IsMenu = true, Enabled = true,  UpdateDate = DateTime.Now, Icon = "fa-globe"},
                 new Module { Id = 2, ParentId = 1, Name = "申请单管理", LinkUrl = "~/App/ApplyForm/Index",  Code = 101,  Description = null, IsMenu = true, Enabled = true,  UpdateDate = DateTime.Now},
+                new Module { Id = 39, ParentId = 1, Name = "常用领款人信息管理", LinkUrl = "~/App/TopContacts/Index",  Code = 102,  Description = null, IsMenu = true, Enabled = true,  UpdateDate = DateTime.Now},
                 new Module { Id = 3, ParentId = null, Name = "财务统计", LinkUrl = "#",  Code = 200,  Description = null, IsMenu = true, Enabled = true,  UpdateDate = DateTime.Now, Icon = "fa-thumb-tack"},
                 new Module { Id = 4, ParentId = 3, Name = "人员劳务月统计报表", LinkUrl = "~/App/Statistics/Monthly",  Code = 201,  Description = null, IsMenu = true, Enabled = true,  UpdateDate = DateTime.Now },
                 new Module { Id = 5, ParentId = 3, Name = "人员工资月统计报表", LinkUrl = "~/App/Statistics/PerPersonDetail",  Code = 202,  Description = null, IsMenu = true, Enabled = true,  UpdateDate = DateTime.Now },
@@ -71,6 +72,7 @@ namespace BEYON.Component.Data.Migrations
             {
             #region 财务申请单
                 new Permission{Id=1, Name="管理",Code=EnumPermissionCode.QuerySystemLog.ToString(), Description="申请单管理" ,Enabled=true,UpdateDate=DateTime.Now,module=modules[1]},
+                new Permission{Id=39, Name="管理",Code=EnumPermissionCode.QuerySystemLog.ToString(), Description="常用领款人信息管理" ,Enabled=true,UpdateDate=DateTime.Now,module=modules[1]},
             #endregion
 
             #region 财务统计
@@ -172,25 +174,25 @@ namespace BEYON.Component.Data.Migrations
             #endregion
 
             #region 职称--title
-            List<Title> titles = new List<Title>
-            {
-                new Title { TitleCode="1000", TitleName = "研究员" },
-                new Title { TitleCode="1001", TitleName = "副研究员" },
-                new Title { TitleCode="1002", TitleName = "高工" },
-                new Title { TitleCode="1003", TitleName = "工程师" },
-                new Title { TitleCode="1004", TitleName = "助理工程师" },
-                new Title { TitleCode="1005", TitleName = "职员" },
-                new Title { TitleCode="1006", TitleName = "教授" },
-                new Title { TitleCode="1007", TitleName = "副教授" },
-                new Title { TitleCode="1008", TitleName = "讲师" },
-                new Title { TitleCode="1009", TitleName = "博士后" },
-                new Title { TitleCode="1010", TitleName = "博士" },
-                new Title { TitleCode="1011", TitleName = "研究生" },
-                new Title { TitleCode="1012", TitleName = "其他" }
-            };
-            DbSet<Title> titlesSet = context.Set<Title>();
-            titlesSet.AddOrUpdate(m => new { m.TitleCode }, titles.ToArray());
-            context.SaveChanges();
+            //List<Title> titles = new List<Title>
+            //{
+            //    new Title { TitleCode="1000", TitleName = "研究员" },
+            //    new Title { TitleCode="1001", TitleName = "副研究员" },
+            //    new Title { TitleCode="1002", TitleName = "高工" },
+            //    new Title { TitleCode="1003", TitleName = "工程师" },
+            //    new Title { TitleCode="1004", TitleName = "助理工程师" },
+            //    new Title { TitleCode="1005", TitleName = "职员" },
+            //    new Title { TitleCode="1006", TitleName = "教授" },
+            //    new Title { TitleCode="1007", TitleName = "副教授" },
+            //    new Title { TitleCode="1008", TitleName = "讲师" },
+            //    new Title { TitleCode="1009", TitleName = "博士后" },
+            //    new Title { TitleCode="1010", TitleName = "博士" },
+            //    new Title { TitleCode="1011", TitleName = "研究生" },
+            //    new Title { TitleCode="1012", TitleName = "其他" }
+            //};
+            //DbSet<Title> titlesSet = context.Set<Title>();
+            //titlesSet.AddOrUpdate(m => new { m.TitleCode }, titles.ToArray());
+            //context.SaveChanges();
             #endregion
 
             #region 维护时间--SafeguardTime
