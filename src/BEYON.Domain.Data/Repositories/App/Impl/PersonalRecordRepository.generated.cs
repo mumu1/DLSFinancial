@@ -27,6 +27,7 @@ using BEYON.Component.Data;
 using BEYON.Component.Data.EF;
 using BEYON.Component.Data.EF.Interface;
 using BEYON.Domain.Model.App;
+using System.Text.RegularExpressions;
 
 
 namespace BEYON.Domain.Data.Repositories.App.Impl
@@ -46,6 +47,15 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                     select p;
             return q.ToList();
         }
+
+        /// <summary>  
+        /// 判断输入的字符串是否只包含英文字母      
+        public bool IsEnCh(string input)
+        {
+            string pattern = @"^[a-zA-Z \./']+$";
+            Regex regex = new Regex(pattern);
+            return regex.IsMatch(input);
+        }   
 
         public void InsertOrUpdate(PersonalRecord record)
         {
@@ -93,7 +103,17 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                             value = value.ToString().Trim().Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", "");
                         }
                         else {
-                            value = value.ToString().Trim().Replace("\n", "").Replace("\t", "").Replace("\r", "");                    
+                            //若姓名为英文字母，不需去除字符串中的空格，若为中文，需去除空格
+                         
+                            if (IsEnCh(value.ToString().Trim()))
+                            {
+                                value = value.ToString().Trim().Replace("\n", "").Replace("\t", "").Replace("\r", "");                              
+                            }
+                            else
+                            {
+                                value = value.ToString().Trim().Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", "");
+                            }
+                                                
                         }                                              
                     }
                     

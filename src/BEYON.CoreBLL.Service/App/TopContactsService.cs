@@ -59,11 +59,19 @@ namespace BEYON.CoreBLL.Service.App
 
                 if (String.IsNullOrEmpty(model.CertificateID))
                     return new OperationResult(OperationResultType.Warning, "证件号码不能为空，请修改后重新提交！");
-
+                //若姓名为英文字母，不需去除字符串中的空格，若为中文，需去除空格
+                String nameFormat = "";
+                if (IsEnCh(model.Name.Trim()))
+                {
+                    nameFormat = model.Name.Trim().Replace("\n", "").Replace("\t", "").Replace("\r", "");
+                }
+                else {
+                    nameFormat = GetReplaceString(model.Name);
+                }
                 var entity = new TopContacts
                 {
                     UserID = model.UserID,
-                    Name = GetReplaceString(model.Name),
+                    Name = nameFormat,
                     CertificateID = GetReplaceString(model.CertificateID),
                     CertificateType = GetReplaceString(model.CertificateType),
                     Company = GetReplaceString(model.Company),
@@ -102,11 +110,20 @@ namespace BEYON.CoreBLL.Service.App
                 {
                     return new OperationResult(OperationResultType.Warning, "常用领款人列表中已经存在相同的人员信息，请修改后重新提交！");
                 }
-
+                //若姓名为英文字母，不需去除字符串中的空格，若为中文，需去除空格
+                String nameFormat = "";
+                if (IsEnCh(model.Name.Trim()))
+                {
+                    nameFormat = model.Name.Trim().Replace("\n", "").Replace("\t", "").Replace("\r", "");
+                }
+                else
+                {
+                    nameFormat = GetReplaceString(model.Name);
+                }
                 var entity = new TopContacts
                 {
                     UserID = model.UserID,
-                    Name = GetReplaceString(model.Name),
+                    Name = nameFormat,
                     CertificateID = GetReplaceString(model.CertificateID),
                     CertificateType = GetReplaceString(model.CertificateType),
                     Company = GetReplaceString(model.Company),
@@ -165,6 +182,15 @@ namespace BEYON.CoreBLL.Service.App
 
         }
 
+        /// <summary>  
+        /// 判断输入的字符串是否只包含英文字母      
+        public  bool IsEnCh(string input)
+        {
+            string pattern = @"^[a-zA-Z \./']+$";
+            Regex regex = new Regex(pattern);
+            return regex.IsMatch(input);
+        }   
+
         public OperationResult Update(TopContactsVM model)
         {
             try
@@ -177,8 +203,18 @@ namespace BEYON.CoreBLL.Service.App
                 {
                     throw new Exception();
                 }
+                //若姓名为英文字母，不需去除字符串中的空格，若为中文，需去除空格
+                String nameFormat = "";
+                if (IsEnCh(model.Name.Trim()))
+                {
+                    nameFormat = model.Name.Trim().Replace("\n", "").Replace("\t", "").Replace("\r", "");
+                }
+                else
+                {
+                    nameFormat = GetReplaceString(model.Name);
+                }
                 topContacts.UserID = model.UserID;
-                topContacts.Name = GetReplaceString(model.Name);
+                topContacts.Name = nameFormat;
                 topContacts.CertificateID = GetReplaceString(model.CertificateID);
                 topContacts.CertificateType = GetReplaceString(model.CertificateType);
                 topContacts.Company = GetReplaceString(model.Company);
@@ -225,10 +261,20 @@ namespace BEYON.CoreBLL.Service.App
         {
             try
             {
+                //若姓名为英文字母，不需去除字符串中的空格，若为中文，需去除空格
+                String nameFormat = "";
+                if (IsEnCh(model.Name.Trim()))
+                {
+                    nameFormat = model.Name.Trim().Replace("\n", "").Replace("\t", "").Replace("\r", "");
+                }
+                else
+                {
+                    nameFormat = GetReplaceString(model.Name);
+                }
                 model.UpdateDate = DateTime.Now;
                 model.AccountNumber = GetReplaceString(model.AccountNumber);
                 model.BankDetailName = GetReplaceString(model.BankDetailName);
-                model.Name = GetReplaceString(model.Name);
+                model.Name = nameFormat;
                 model.Nationality = GetReplaceString(model.Nationality);
                 model.Tele = GetReplaceString(model.Tele);
                 model.CertificateID = GetReplaceString(model.CertificateID);

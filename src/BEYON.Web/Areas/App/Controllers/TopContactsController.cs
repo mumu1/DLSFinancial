@@ -14,6 +14,7 @@ using BEYON.Web.Extension.Filters;
 using BEYON.Domain.Model.App;
 using BEYON.ViewModel.App;
 using System.IO;
+using System.Text.RegularExpressions;
 
 
 namespace BEYON.Web.Areas.App.Controllers
@@ -48,10 +49,29 @@ namespace BEYON.Web.Areas.App.Controllers
         // GET: /App/TopContacts/GetContactsByName/
         public ActionResult GetContactsByName(String name)
         {
-            var result = this._topContactsService.GetTopContactsByName(name.Trim().Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", ""));
+            //若姓名为英文字母，不需去除字符串中的空格，若为中文，需去除空格
+            String nameFormat = "";
+            if (IsEnCh(name.Trim()))
+            {
+                nameFormat = name.Trim().Replace("\n", "").Replace("\t", "").Replace("\r", "");
+            }
+            else
+            {
+                nameFormat = name.Trim().Replace("\n", "").Replace("\t", "").Replace("\r", "").Replace(" ", "");
+            }
+            var result = this._topContactsService.GetTopContactsByName(nameFormat);
             return Json(new { total = result.Count, data = result }, JsonRequestBehavior.AllowGet);
 
         }
+
+        /// <summary>  
+        /// 判断输入的字符串是否只包含英文字母      
+        public bool IsEnCh(string input)
+        {
+            string pattern = @"^[a-zA-Z \./']+$";
+            Regex regex = new Regex(pattern);
+            return regex.IsMatch(input);
+        }   
 
         // POST: /App/TopContacts/Create/
         [HttpPost]

@@ -53,11 +53,20 @@ namespace BEYON.CoreBLL.Service.App
 
                 if (String.IsNullOrEmpty(model.CertificateID))
                     return new OperationResult(OperationResultType.Warning, "证件号码不能为空，请修改后重新提交！");
-
+                //若姓名为英文字母，不需去除字符串中的空格，若为中文，需去除空格
+                String nameFormat = "";
+                if (IsEnCh(model.Name.Trim()))
+                {
+                    nameFormat = model.Name.Trim().Replace("\n", "").Replace("\t", "").Replace("\r", "");
+                }
+                else
+                {
+                    nameFormat = GetReplaceString(model.Name);
+                }
                 var entity = new PersonalRecord
                 {
                     SerialNumber = model.SerialNumber,
-                    Name = model.Name.Trim().Replace("\n", "").Replace("\t", "").Replace("\r", ""),
+                    Name = nameFormat,
                     CertificateID = GetReplaceString(model.CertificateID),
                     CertificateType = GetReplaceString(model.CertificateType),
                     Company = GetReplaceString(model.Company),
@@ -79,7 +88,7 @@ namespace BEYON.CoreBLL.Service.App
                 //保存时同步向常用领款人表TopContacts中保存
                 TopContacts contact = new TopContacts();
                 contact.UserID = userid;
-                contact.Name = GetReplaceString(model.Name);
+                contact.Name = nameFormat;
                 contact.CertificateType = GetReplaceString(model.CertificateType);
                 contact.CertificateID = GetReplaceString(model.CertificateID);
                 contact.Nationality = GetReplaceString(model.Nationality);
@@ -119,6 +128,15 @@ namespace BEYON.CoreBLL.Service.App
            
         }
 
+        /// <summary>  
+        /// 判断输入的字符串是否只包含英文字母      
+        public bool IsEnCh(string input)
+        {
+            string pattern = @"^[a-zA-Z \./']+$";
+            Regex regex = new Regex(pattern);
+            return regex.IsMatch(input);
+        }   
+
         public OperationResult Update(PersonalRecordVM model, bool isSave)
         {
             try
@@ -128,8 +146,18 @@ namespace BEYON.CoreBLL.Service.App
                 {
                     throw new Exception();
                 }
+                //若姓名为英文字母，不需去除字符串中的空格，若为中文，需去除空格
+                String nameFormat = "";
+                if (IsEnCh(model.Name.Trim()))
+                {
+                    nameFormat = model.Name.Trim().Replace("\n", "").Replace("\t", "").Replace("\r", "");
+                }
+                else
+                {
+                    nameFormat = GetReplaceString(model.Name);
+                }
                 personalRecord.SerialNumber = model.SerialNumber;
-                personalRecord.Name = model.Name.Trim().Replace("\n", "").Replace("\t", "").Replace("\r", "");
+                personalRecord.Name = nameFormat;
                 personalRecord.CertificateID = GetReplaceString(model.CertificateID);
                 personalRecord.CertificateType = GetReplaceString(model.CertificateType);
                 personalRecord.Company = GetReplaceString(model.Company);
@@ -272,14 +300,23 @@ namespace BEYON.CoreBLL.Service.App
                         {
                             return new OperationResult(OperationResultType.Error, "导入数据失败", ImportUtil.ParseToHtml(errors));
                         }
-
+                        //若姓名为英文字母，不需去除字符串中的空格，若为中文，需去除空格
+                        String nameFormat = "";
+                        if (IsEnCh(record.Name.Trim()))
+                        {
+                            nameFormat = record.Name.Trim().Replace("\n", "").Replace("\t", "").Replace("\r", "");
+                        }
+                        else
+                        {
+                            nameFormat = GetReplaceString(record.Name);
+                        }
                         //插入或更新数据
                         _PersonalRecordRepository.InsertOrUpdate(record);
 
                         //保存时同步向常用领款人表TopContacts中保存
                         TopContacts contact = new TopContacts();
                         contact.UserID = userid;
-                        contact.Name = GetReplaceString(record.Name);
+                        contact.Name = nameFormat;
                         contact.CertificateType = GetReplaceString(record.CertificateType);
                         contact.CertificateID = GetReplaceString(record.CertificateID);
                         contact.Nationality = GetReplaceString(record.Nationality);

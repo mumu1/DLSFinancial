@@ -86,24 +86,24 @@
                                     </select> <i></i>
                                 </label>
                             </section>
-                            <section class="col col-3">
-                                <label class="label">课题号</label>
-                                <label class="input">
-                <i class="icon-prepend fa fa-info"></i>
-                <input type="text" id="ProjectNumber" required="required" name="ProjectNumber" placeholder="课题号" value="@Model.ProjectNumber">
-            </label>
-                                @*<label class="select">
-                                    <select id="ProjectNumber" name="ProjectNumber"></select> <i></i>
-                                </label>*@
-                            </section>    
+
                             <section class="col col-2">
                                 <label class="label">课题负责人</label>
                                 <label class="input">
                                     <i class="icon-prepend fa fa-user"></i>
-                                    <input type="text" id="projectDirector" name="ProjectDirector" placeholder="课题负责人" value="@Model.ProjectDirector">
+                                    <input type="text" id="projectDirector" name="ProjectDirector" required="required" placeholder="课题负责人" value="@Model.ProjectDirector">
                                 </label>
                             </section>
-                                                  
+                            <section class="col col-4">
+                                <label class="label">课题号</label>
+                                @*<label class="input">
+                                        <i class="icon-prepend fa fa-info"></i>
+                                        <input type="text" id="ProjectNumber" required="required" name="ProjectNumber" placeholder="课题号" value="@Model.ProjectNumber">
+                                    </label>*@
+                                <label class="select">
+                                    <select id="projectNumber" name="ProjectNumber" required="required"></select> <i></i>
+                                </label>
+                            </section>
                         </div>
                         <div class="row">
                             <section class="col col-3">
@@ -150,7 +150,7 @@
                                 <textarea rows="2" name="ApplyDesp" required="required" style="float:left;" placeholder=" 关于工作内容、工作时间等的描述(必填)">@Model.ApplyDesp</textarea>
                             </label>
                         </section>
-                       
+
                     </fieldset>
                     <fieldset>
                         <section>
@@ -179,8 +179,13 @@
     <div id="importDataDialog"></div>
     <div id="dialog-DownloadTemp" title="下载人员导入模板" style="display:none;">
         <p>请根据本申请单选择的支付类型下载相应的模板</p><br />
-        <label>人员导入模板1：银行转账</label><a href="@Url.Content("~/Scripts/银行转账模板.xls")">点我下载</a><br/><br />
-        <label>人员导入模板2：现金支付</label><a href="@Url.Content("~/Scripts/现金支付模板.xls")">点我下载</a><br/>
+        <label>人员导入模板1：银行转账</label><a href="@Url.Content("~/Scripts/银行转账模板.xls")">点我下载</a><br /><br />
+        <label>人员导入模板2：现金支付</label><a href="@Url.Content("~/Scripts/现金支付模板.xls")">点我下载</a><br />
+    </div>
+
+    <!--常用联系人选择对话框-->
+    <div id="dialog-ShowContacts" title="请从常用联系人列表选择" style="display:none;">
+        <table id="datatable_choose_contacts" class="table table-striped table-bordered table-hover" width="100%"></table>
     </div>
 </section>
 
@@ -200,7 +205,9 @@
     registerTitle();                //从数据库读取职称下拉菜单对应数组
     registerRefundType();   //从数据库读取报销事由下拉菜单对应数组
     registerDepartment();   //从数据库读取部门下拉菜单对应数组
-
+    var contactsTable;      //保存联系人选择列表
+    var rowDataContacts;
+    registerProjectNumber();
 
     var userName = "@Model.UserName";
 
@@ -228,6 +235,7 @@
     });
 
     //根据输入课题号，提示用户课题名称是否正确
+    /*
     $("#ProjectNumber").blur(function () {
         var projectNumber = $('#ProjectNumber').val();
         $.ajax({
@@ -264,13 +272,14 @@
             }
         });
     });
-    
-    //输入课题负责人，设置课题号下拉列表
-    /*
-    $("#ProjectNumber").focus(function () {
-        registerProjectNumber();
-    });
     */
+
+    //输入课题负责人，设置课题号下拉列表
+
+    $("#projectNumber").focus(function () {
+        getProjectNumber();
+    });
+
 
     var editor = new $.fn.dataTable.Editor({
         "ajaxUrl": {
@@ -282,7 +291,11 @@
         fields: [
             { name: "Id", label: "编号:", type: "hidden" },
             { name: "SerialNumber", label: "申请单流水号:", type: "hidden" },
-            { name: "Name", label: "姓名:", type: "text" },
+            {
+                name: "Name",
+                label: "姓名:",
+                type: "text",
+            },
             { name: "Company", label: "单位:", type: "text" },
             {
                 name: "CertificateType",
@@ -326,9 +339,9 @@
              { name: "Amount", label: "金额(元):", type: "text" },
               {
                   name: "TaxOrNot",
-                  label: "是否含税:",               
+                  label: "是否含税:",
                   type: "radio",
-                  options: [                   
+                  options: [
                       { label: "不含税", value: "不含税" },
                       { label: "含税", value: "含税" }
                   ],
@@ -379,7 +392,8 @@
     editor.on('onInitCreate', function () {
         //      editor.disable('Amount');
         var paymentType = $('#paymentType').val();
-        editor.field('PaymentType').val(paymentType);       
+        editor.field('PaymentType').val(paymentType);
+
         return true;
     });
 
@@ -387,8 +401,9 @@
 
     //初始化编辑框显示
     editor.on('onInitEdit', function () {
-        var CertificateType = editor.field('CertificateType');            
+        var CertificateType = editor.field('CertificateType');
         //    editor.disable('Amount');
+
     });
 
     //提交前条件判断
@@ -401,7 +416,7 @@
             var personName = editor.field('Name');
             //var PaymentType = editor.field('PaymentType');
             var paymentType = $('#paymentType').val();
-            //alert(paymentType);                 
+            //alert(paymentType);
             var Bank = editor.field('Bank');
             var Company = editor.field('Company');
             var AccountNumber = editor.field('AccountNumber');
@@ -417,7 +432,7 @@
                 AccountNumber.error("请填写银行账号");
             }
             if (Bank.val().trim() !== "工商银行") {
-                if (BankDetailName.val().trim() == ""  ) {
+                if (BankDetailName.val().trim() == "") {
                     BankDetailName.error("请填写开户行详细名称");
                 }
             }
@@ -472,8 +487,7 @@
                 datatype: "text",
                 success: function (data) {
                     var nameArray = data.split(",");
-                    if (nameArray[1] == "upper")
-                    {
+                    if (nameArray[1] == "upper") {
                         CertificateID.error("该证件号码中的字母需从小写修改为大写！");
                     } else if (nameArray[1] == "lower") {
                         CertificateID.error("该证件号码中的字母需从大写修改为小写！");
@@ -486,7 +500,7 @@
                     }
                     else {
                         var fillName = personName.val().trim();
-                        alert(nameArray[0]);
+                                       
                         if (nameArray[0] != fillName.replace("\n", "").replace("\t", "").replace("\r", "") && PersonType.val() == "所内") {
                             CertificateID.error('该证件号码与人员不符，请检查');
                         } else {
@@ -567,7 +581,7 @@
                 //var sumBefore = $('#summation').val();
                 //var amountBefore = $('#datatable_create_form').DataTable().rows('.selected').data()[0].Amount;
                 //$('#summation').val(new Number(sumBefore) - new Number(amountBefore) + new Number(Amount.val()));
-               
+
             }
         } else if (action === 'remove') {
             //合计金额需减去
@@ -581,7 +595,7 @@
             //    $('#summation').val(sum);
             //}
         }
-     
+
     });
 
 
@@ -608,9 +622,9 @@
                  text: "下载导入模板", action: function (e, dt, node, config) {
                      $("#dialog-DownloadTemp").css("display", "block");
                      $("#dialog-DownloadTemp").dialog("open");
-                 }                    
-       
-            },
+                 }
+
+             },
             {
                 text: "导入", action: function (e, dt, node, config) {
                     var ColumnDatas = [];
@@ -660,18 +674,18 @@
                         contentType: 'application/json; charset=utf8',
                         cache: false,
                         dataType: 'html',
-                        success: function (data) {                       
-                            $('#importDataDialog').html(data);                        
-                            dt.ajax.reload();                            
+                        success: function (data) {
+                            $('#importDataDialog').html(data);
+                            dt.ajax.reload();
                         },
                         error: function (xhr) {
                             alert("出现错误，请稍后再试:" + xhr.responseText);
                             toastr.error("导入失败");
                         }
                     });
-                   
+
                 }
-       
+
             },
             {
                 text: "刷新",
@@ -683,7 +697,7 @@
 
         table = $('#datatable_create_form').dataTable({
             dom: 'Bfrtip',
-            colReorder: true,         
+            colReorder: true,
             ajax: {
                 url: '@Url.Action("GetPersonalData")',
                 type: "POST",
@@ -726,21 +740,21 @@
                 { data: "Signature", title: "领取人签字", visible: false }
 
             ],
-            "footerCallback": function ( row, data, start, end, display ) {
+            "footerCallback": function (row, data, start, end, display) {
                 var api = this.api(), data;
 
                 // Total over all pages
                 total = api
-                    .column( 10 )
+                    .column(10)
                     .data()
-                    .reduce( function (a, b) {
+                    .reduce(function (a, b) {
                         return a + b;
-                    }, 0 );
- 
+                    }, 0);
+
                 // Update summation
                 $('#summation').val(total);
             },
-            
+
             oLanguage: {
                 "sLengthMenu": "每页显示 _MENU_ 条记录",
                 "sZeroRecords": "抱歉， 没有找到",
@@ -758,10 +772,104 @@
                 }
             }
         });
+
+        var buttons_contancts = [];
+        contactsTable = $('#datatable_choose_contacts').dataTable({
+            dom: 'Bfrtip',
+            colReorder: true,
+            searching: false,
+            ordering: true,
+            select: true,
+            info: true,
+            paginate: false,    //是否显示（应用）分页器
+            sort: false,         //是否启动各个字段的排序功能
+            //stateSave: false,
+            //stateDuration: 60 * 60 * 12,
+            scrollX: true,
+            autoWidth: true,
+            bProcessing: true,
+            paging: false,
+            "sScrollY": "100%",
+            "sScrollX": "150%",
+            "sScrollXInner": "150%",
+            buttons: [
+            {
+                text: "确定选择该行信息", action: function (e, dt, node, config) {
+                    var rowData = dt.rows({ selected: true }).data();
+                    var paymentType = $('#paymentType').val();
+                    $.each($(rowData), function (key, value) {
+                        //alert(value["CertificateID"]);
+                        editor.field('CertificateID').val(value["CertificateID"]);
+                        editor.field('CertificateType').val(value["CertificateType"]);
+                        editor.field('PersonType').val(value["PersonType"]);
+                        editor.field('Tele').val(value["Tele"]);
+                        editor.field('Company').val(value["Company"]);
+                        editor.field('Nationality').val(value["Nationality"]);
+                        editor.field('Title').val(value["Title"]);
+                        if (paymentType == "银行转账") {
+                            editor.field('Bank').val(value["Bank"]);
+                            editor.field('BankDetailName').val(value["BankDetailName"]);
+                            editor.field('AccountNumber').val(value["AccountNumber"]);
+                        }
+                    });
+                    $("#dialog-ShowContacts").dialog("close");
+                }
+            },
+              {
+                  text: "取消", action: function (e, dt, node, config) {
+
+                      $("#dialog-ShowContacts").dialog("close");
+                  }
+              }],
+            columns: [
+                 //{
+                 //    data: null,
+                 //    defaultContent: '',
+                 //    className: 'select-checkbox',
+                 //    orderable: false
+                 //},
+                { data: "Name", title: "姓名" },
+                { data: "CertificateType", title: "证件类型" },
+                { data: "CertificateID", title: "证件号码" },
+                { data: "Company", title: "单位" },
+                { data: "Tele", title: "联系电话" },
+                { data: "PersonType", title: "人员类型" },
+                { data: "Nationality", title: "国籍" },
+                { data: "Title", title: "职称" },
+                { data: "Bank", title: "开户银行" },
+                { data: "AccountNumber", title: "银行账号" },
+                { data: "BankDetailName", title: "开户行详细名称" },
+
+            ],
+            //select: {
+            //    style: 'os',
+            //    selector: 'td:first-child'
+            //},
+            select: {
+                style: 'single'
+            },
+            oLanguage: {
+                "sLengthMenu": "每页显示 _MENU_ 条记录",
+                "sZeroRecords": "抱歉， 没有找到",
+                "sInfo": "显示 _START_ 到 _END_ 条记录，总共 _TOTAL_ 条记录",
+                "sInfoEmpty": "没有数据",
+                "sInfoFiltered": "(从 _MAX_ 条数据中检索)",
+                "sZeroRecords": "没有检索到数据",
+                "sSearch": "搜索名称:",
+                "sSelected": "选中 _TOTAL_ 条记录",
+                "oPaginate": {
+                    "sFirst": "首页",
+                    "sPrevious": "前一页",
+                    "sNext": "后一页",
+                    "sLast": "尾页"
+                }
+            }
+        });
+
     }
 
     initTable();
-  
+
     registerPaymentType();    //维护编辑状态的editor和table列的显示
 
     function closeFrom() {
@@ -921,9 +1029,45 @@
             }
         });
     }
-
+    //初始化与编辑显示projectNumber
     function registerProjectNumber() {
         var projectDirector = $('#projectDirector').val();
+        if ('@Model.ProjectNumber' != "") {
+            if (projectDirector != "") {
+                $.ajax({
+                    type: "GET",
+                    async: false,
+                    url: "../BasicDataManagement/TaskManage/GetTaskByTaskLeader?taskLeader=" + projectDirector,
+                    //data: params,
+                    contentType: "application/json; charset=utf-8",
+                    datatype: "json",
+                    success: function (data) {
+                        $("#projectNumber").html("");
+                        if (data.total == 0) {
+                            $("#projectNumber").append("<option>" + " 无 " + "</option>");
+
+                        }
+                        $.each(data.data, function (k, v) {
+                            $("#projectNumber").append("<option>" + v.TaskID + " | " + v.TaskName + "</option>");
+                        })
+
+                        if ('@Model.ProjectNumber' != "无")
+                            $("#projectNumber").find("option:contains('@Model.ProjectNumber')").attr("selected", true);
+                    },
+                    error: function () {
+                        toastr.error('获取课题数据失败！');
+                    }
+                });
+            }
+        }
+    }
+
+    function getProjectNumber() {
+        var projectDirector = $('#projectDirector').val();
+        if (projectDirector == "") {
+            alert("请先输入课题负责人姓名，再点击课题号列表，系统会自动获取该负责人的课题编号列表。");
+            return;
+        }
         $.ajax({
             type: "GET",
             async: false,
@@ -932,24 +1076,23 @@
             contentType: "application/json; charset=utf-8",
             datatype: "json",
             success: function (data) {
-                $("#ProjectNumber").html("");
+                $("#projectNumber").html("");
                 if (data.total == 0) {
+                    $("#projectNumber").append("<option>" + " 无 " + "</option>");
                     $.jAlert({ //this is the normal usage
                         'title': '课题确认',
                         'content': projectDirector + '名下暂无课题，请检查课题负责人姓名填写是否正确。',
                         'theme': 'black',
                         'size': 'xsm',
-                        'options':'confirm'
+                        'options': 'confirm'
                     });
                 }
-                $.each(data.data, function (k, v) {                       
-                        $("#ProjectNumber").append("<option>" + v.TaskID + " | " + v.TaskName + "</option>");                 
+                $.each(data.data, function (k, v) {
+                    $("#projectNumber").append("<option>" + v.TaskID + " | " + v.TaskName + "</option>");
                 })
-               
-                      
-                
-                if ('@Model.ProjectNumber' != "")
-                    $("#ProjectNumber").find("option:contains('@Model.ProjectNumber')").attr("selected", true);
+
+                if ('@Model.ProjectNumber' != "无")
+                    $("#projectNumber").find("option:contains('@Model.ProjectNumber')").attr("selected", true);
             },
             error: function () {
                 toastr.error('获取课题数据失败！');
@@ -963,11 +1106,112 @@
         height: 320,
         width: 400,
         modal: true,
-        buttons: {         
+        buttons: {
             "关闭": function () {
                 $(this).dialog("close");
             }
         }
     });
 
+    $('input', editor.field('Name').node()).on('blur', function () {
+        var input_name = editor.field('Name').val();
+        nameBlur(input_name);
+    });
+
+
+    //根据输入姓名，显示常用联系人信息
+    function nameBlur(input_name) {
+        var paymentType = $('#paymentType').val();
+        $.ajax({
+            type: "GET",
+            async: false,
+            url: "../App/TopContacts/GetContactsByName?name=" + input_name,
+            //data: params,
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            success: function (data) {
+                if (data.total == 1) {
+                    //若该姓名仅一个常用联系人，则将数据直接回显到各个控件
+                    $.each(data.data, function (k, v) {
+                        if (v.CertificateID != null) {
+                            editor.field('CertificateID').val(v.CertificateID);
+                        }
+                        if (v.CertificateType != null) {
+                            editor.field('CertificateType').val(v.CertificateType);
+                        }
+                        if (v.PersonType != null) {
+                            editor.field('PersonType').val(v.PersonType);
+                        }
+                        if (v.Tele != null) {
+                            editor.field('Tele').val(v.Tele);
+                        }
+                        if (v.Company != null) {
+                            editor.field('Company').val(v.Company);
+                        }
+                        if (v.Nationality != null) {
+                            editor.field('Nationality').val(v.Nationality);
+                        }
+                        if (v.Title != null) {
+                            editor.field('Title').val(v.Title);
+                        }
+
+                        if (paymentType == "银行转账") {
+                            if (v.Bank != null) {
+                                editor.field('Bank').val(v.Bank);
+                            }
+                            if (v.BankDetailName != null) {
+                                editor.field('BankDetailName').val(v.BankDetailName);
+                            }
+                            if (v.AccountNumber != null) {
+                                editor.field('AccountNumber').val(v.AccountNumber);
+                            }
+                        }
+                    })
+                } else if (data.total > 1) {
+                    //若该姓名存在多个常用联系人，则打开联系人选择列表对话框
+
+                    $("#dialog-ShowContacts").css("display", "block");
+                    $("#dialog-ShowContacts").dialog("open");
+                    reloadContactsTable(data);
+
+                }
+            },
+            error: function () {
+                toastr.error('获取常用领款人信息失败！');
+            }
+        });
+    }
+    $("#dialog-ShowContacts").dialog({
+        autoOpen: false,
+        height: 320,
+        width: 700,
+        modal: true,
+        //buttons: {
+        //    "确定": function () {
+
+
+        //        $(this).dialog("close");
+        //    },
+        //    "取消": function () {
+        //        $(this).dialog("close");
+        //    }
+        //}
+    });
+
+    function reloadContactsTable(data) {
+        //pageSetUp();
+        //更新数据
+        //if ($.fn.dataTable.isDataTable('#datatable_choose_contacts')) {
+        var oSettings = contactsTable.fnSettings();
+        contactsTable.fnClearTable(this);
+        for (var i = 0; i < data.total; i++) {
+            contactsTable.oApi._fnAddData(oSettings, data.data[i]);
+        }
+        //  oSettings.aiDisplay = oSettings.aiDisplayMaster.slice();
+        //$.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
+        contactsTable.fnDraw();
+        //return;
+        // }
+
+    }
 </script>
