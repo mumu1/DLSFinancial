@@ -44,8 +44,33 @@ namespace BEYON.Web.Areas.BasicDataManagement.Controllers
         // GET: /BasicDataManagement/TaxPerOrder/GetAllData/
         public ActionResult GetAllData()
         {
-            var result = this._taxPerOrderService.TaxPerOrders.ToList();
-            return Json(new { total = result.Count, data = result }, JsonRequestBehavior.AllowGet);
+            var echo = int.Parse(HttpContext.Request.Params["sEcho"]);
+            var displayLength = int.Parse(HttpContext.Request.Params["iDisplayLength"]);
+            var displayStart = int.Parse(HttpContext.Request.Params["iDisplayStart"]);
+            var sortOrder = HttpContext.Request.Params["sSortDir_0"].ToString();
+
+            var records = this._taxPerOrderService.TaxPerOrders.ToList();
+
+            var orderedResults = sortOrder == "asc"
+                              ? records.OrderBy(o => o.Id)
+                              : records.OrderByDescending(o => o.Id);
+
+            var itemsToSkip = displayStart == 0
+                              ? 0
+                              : displayStart + 1;
+
+            var pagedResults = orderedResults.Skip(itemsToSkip).Take(displayLength).ToList();
+
+
+            return Json(new
+            {
+                sEcho = echo,
+                recordsTotal = records.Count,
+                recordsFiltered = records.Count,
+                iTotalRecords = records.Count,
+                iTotalDisplayRecords = records.Count,
+                aaData = pagedResults
+            }, JsonRequestBehavior.AllowGet);
 
         }
     
