@@ -86,7 +86,15 @@
                     text: '导出',
                     buttons: [
                         //{ text: "拷贝", extend: 'copy' },
-                        { text: "EXCEL表格", extend: 'excel' },
+                        {
+                            text: '<span class="fa fa-file-excel-o"></span> Excel 表格',
+                            extend: 'excel',
+                            exportOptions: {
+                               modifier: {
+                                    page: 'all'
+                                }
+                            }
+                        },
                         //{ text: "CSV表格", extend: 'csv' },
                         //{ text: "PDF文档", extend: 'pdf' },
                         //{ text: "打印", extend: 'print' }
@@ -111,7 +119,7 @@
             autoWidth: true,
             bProcessing: true,
             paging: true,
-            bServerSide: true,
+            bServerSide: false,
             sAjaxSource: '@Url.Action("GetAllData")',
             order: [[0, "desc"]],
             "sScrollY": "100%",

@@ -313,6 +313,7 @@
             "sScrollY": "100%",
             "sScrollX": "100%",
             "sScrollXInner": "100%",
+            sAjaxSource: '@Url.Action("GetAllData")',
             order: [[11, "desc"]],
             buttons: buttons,
             columns: [
@@ -343,6 +344,21 @@
                 { data: "AuditOpinion", title: "审核意见", visible: false },
                 { data: "UpdateDate", title: "更新时间", visible: false }
             ],
+            "fnServerData": function (sSource, aoData, fnCallback) {
+                $.ajax({
+                    "type": 'get',
+                    "url": sSource,
+                    "dataType": 'json',
+                    "contentType": "application/json; charset=utf-8",
+                    "data": aoData,
+                    //"data" : {  
+                    //    aoData : JSON.stringify(aoData)  
+                    //},  
+                    "success": function (resp) {
+                        fnCallback(resp);
+                    }
+                });
+            },
             oLanguage: {
                 "sLengthMenu": "每页显示 _MENU_ 条记录",
                 "sZeroRecords": "抱歉， 没有找到",

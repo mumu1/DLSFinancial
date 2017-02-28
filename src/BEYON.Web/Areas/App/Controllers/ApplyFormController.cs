@@ -66,19 +66,84 @@ namespace BEYON.Web.Areas.App.Controllers
             var userID = Int32.Parse(userid);
             User user = this._userService.Users.FirstOrDefault(t => t.Id == userID);
             var role = user.Roles.First();
+
             if (role.RoleName == "系统管理员")
             {
                 var result = this._applicationFormService.GetApplicationFromByAdmin();
-                return Json(new { total = result.Count, data = result }, JsonRequestBehavior.AllowGet);
+                var jsonResult = Json(new { total = result.Count, data = result }, JsonRequestBehavior.AllowGet);
+                jsonResult.MaxJsonLength = Int32.MaxValue;
+                return jsonResult;
             }
             else
             {
                 var result = _applicationFormService.GetApplicationFromByUser(user.UserName);
                 //var result = this._applicationFormService.ApplicationForms.ToList();
-                return Json(new { total = result.Count, data = result }, JsonRequestBehavior.AllowGet);
+                var jsonResult = Json(new { total = result.Count, data = result }, JsonRequestBehavior.AllowGet);
+                jsonResult.MaxJsonLength = Int32.MaxValue;
+                return jsonResult;
             }
+
+            //var search = HttpContext.Request.Params["sSearch"].ToString();
+            //var sortOrder = HttpContext.Request.Params["sSortDir_0"].ToString();
+            //var sortCol = HttpContext.Request.Params["iSortCol_0"].ToString();
+            //var echo = int.Parse(HttpContext.Request.Params["sEcho"]);
+            //var displayLength = int.Parse(HttpContext.Request.Params["iDisplayLength"]);
+            //var displayStart = int.Parse(HttpContext.Request.Params["iDisplayStart"]);
+            //var itemsToSkip = displayStart == 0 ? 0 : displayStart + 1;
+            //var sortName = GetSortCol(sortCol);
+            //IList<ApplicationForm> records;
+            //if (role.RoleName == "系统管理员")
+            //{
+            //    records = this._applicationFormService.GetApplicationFromByAdmin(search, sortName, sortOrder);
+            //}
+            //else
+            //{
+            //    records = _applicationFormService.GetApplicationFromByUser(user.UserName, search, sortName, sortOrder);
+            //}
+
+     
+            //var orderedResults = sortOrder == "asc"
+            //                  ? records.OrderBy(o => o.UpdateDate)
+            //                  : records.OrderByDescending(o => o.UpdateDate);
+
+            //var pagedResults = orderedResults.Skip(itemsToSkip).Take(displayLength).ToList();
+
+            //return Json(new
+            //{
+            //    sEcho = echo,
+            //    recordsTotal = records.Count,
+            //    recordsFiltered = records.Count,
+            //    iTotalRecords = records.Count,
+            //    iTotalDisplayRecords = records.Count,
+            //    aaData = pagedResults
+            //}, JsonRequestBehavior.AllowGet);
         }
 
+        private String GetSortCol(String sortCol)
+        {
+            switch(sortCol)
+            {
+                case "8":
+                    return "\"AuditStatus\"";
+                case "7":
+                    return "\"SubmitTime\"";
+                case "6":
+                    return "\"PaymentType\"";
+                case "5":
+                    return "\"Summation\"";
+                case "4":
+                    return "\"Agent\"";
+                case "3":
+                    return "\"ProjectDirector\"";
+                case "2":
+                    return "\"RefundType\"";
+                case "1":
+                    return "\"ProjectNumber\"";
+                default:
+                    return "\"SerialNumber\"";
+            }
+
+        }
 
         // POST: /App/ApplyForm/Create/
         public ActionResult Create()
@@ -456,7 +521,10 @@ namespace BEYON.Web.Areas.App.Controllers
                                 {
                                     string[] projectSep = form.ProjectNumber.Split('|');
                                     taxPerOrder.ProjectNumber = projectSep[0].Trim();
-                                    taxPerOrder.TaskName = projectSep[1].Trim();
+                                    if (projectSep.Length > 1)
+                                        taxPerOrder.TaskName = projectSep[1].Trim();
+                                    else
+                                        taxPerOrder.TaskName = form.TaskName;
                                 }
                                 else {
                                     taxPerOrder.ProjectNumber = "无";
