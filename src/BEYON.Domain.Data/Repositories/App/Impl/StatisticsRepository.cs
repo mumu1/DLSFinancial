@@ -720,7 +720,7 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                 sb.Append(" FROM  dbo.\"TaxPerOrders\" a ");
                 //3.条件
                 sb.Append(" ORDER BY C2 ASC");
-
+                
                 var connectString = System.Configuration.ConfigurationManager.ConnectionStrings["BeyonDBGuMu"];
                 using (var conntion = new NpgsqlConnection(connectString.ToString()))
                 {
@@ -732,16 +732,8 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                         {
                             while (reader.Read())
                             {
-                                var projectNumber = reader["C2"].ToString();
-                                string[] projectNumberSep;
-                                if (!projectNumber.Equals("无"))
-                                {
-                                    projectNumberSep = projectNumber.Split('|');
-                                }
-                                else { 
-                                    projectNumberSep =new string[] {"无","无"};
-                                }
-                                
+                                var projectNumber = reader["C2"].ToString();                               
+
                                 var amountY = String.IsNullOrEmpty(reader["C3"].ToString()) ? 0 : Convert.ToSingle(reader["C3"]);
                                 var refundType = reader["C4"].ToString();
                                 //通过refundType获取refundTypeCode
@@ -758,8 +750,26 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                                 {
                                     JObject result = new JObject();
                                     result["C1"] = period;
-                                    result["C2"] = projectNumberSep[0].Trim();
-                                    result["C10"] = projectNumberSep[1].Trim();
+                                    
+                                    if (!String.IsNullOrEmpty(projectNumber) && !projectNumber.Equals("无") && projectNumber.Contains('|'))
+                                    {
+                                        string[] projectNumberSep = projectNumber.Split('|');
+                                        if (projectNumberSep.Length > 1)
+                                        {
+                                            result["C2"] = projectNumberSep[0].Trim();
+                                            result["C10"] = projectNumberSep[1].Trim();
+                                        }
+                                        else {
+                                            result["C2"] = projectNumber;
+                                            result["C10"] = "";
+                                        }
+                                    }
+                                    else
+                                    {
+                                        result["C2"] = projectNumber;
+                                        result["C10"] = "";
+                                    }
+                                
                                     result["C3"] = projectDirector;
                                     result["C4"] = refundType;
                                     result["C5"] = refundTypeCode;
