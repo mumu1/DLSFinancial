@@ -17,7 +17,7 @@ namespace BEYON.CoreBLL.Service.App.Interface
         OperationResult Delete(List<string> list, bool isSave = true);
         OperationResult Delete(TaxPerOrderHistory model, bool isSave = true);
         OperationResult Update(TaxPerOrderHistory model, bool isSave = true);
-      
 
+        void InsertOrUpdate(TaxPerOrderHistory contact);
     }
 }

@@ -100,6 +100,11 @@ namespace BEYON.CoreBLL.Service.App
                 return new OperationResult(OperationResultType.Error, "更新数据失败!");
             }
         }
-      
+
+
+        public void InsertOrUpdate(TaxPerOrderHistory contact)
+        {
+            this._TaxPerOrderHistoryRepository.InsertOrUpdate(contact);
+        }
     }
 }

@@ -25,7 +25,7 @@ using BEYON.Component.Data;
 using BEYON.Component.Data.EF;
 using BEYON.Component.Data.EF.Interface;
 using BEYON.Domain.Model.App;
-
+using Npgsql;
 
 namespace BEYON.Domain.Data.Repositories.App.Impl
 {
@@ -37,5 +37,67 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
         public TaxPerOrderHistoryRepository(IUnitOfWork unitOfWork)
             : base()
         { }
+
+        public void InsertOrUpdate(TaxPerOrderHistory contact)
+        {
+            //1.构造插入或更新SQL
+            string[] columns = new string[]{
+                "SerialNumber","ProjectNumber","TaskName","Period",
+                "RefundType","ProjectDirector","Agent","PersonType","CertificateType",
+                "CertificateID","Amount","TaxOrNot","Tax",
+                "AmountY","AmountX","Bank","BankDetailName",
+                "AccountNumber","AccountName","PaymentType","UpdateDate",
+                "Name"
+            };
+            StringBuilder sql = new StringBuilder();
+            sql.Append("INSERT INTO dbo.\"TaxPerOrderHistories\" ( ");
+            foreach (var column in columns)
+            {
+                sql.Append(String.Format("\"{0}\",", column));
+            }
+            sql.Remove(sql.Length - 1, 1);
+            sql.Append(" ) VALUES ( ");
+            //填充值
+            foreach (var column in columns)
+            {
+                sql.Append(String.Format(":{0},", column));
+            }
+            sql.Remove(sql.Length - 1, 1);
+            sql.Append(" )  ON CONFLICT (\"SerialNumber\", \"CertificateID\") DO UPDATE SET ");
+
+            foreach (var column in columns)
+            {
+                sql.Append(String.Format("\"{0}\"=:{1},", column, column));
+            }
+            sql.Remove(sql.Length - 1, 1);
+
+            //2.添加参数变量
+            List<NpgsqlParameter> parameters = new List<NpgsqlParameter>();
+            foreach (var column in columns)
+            {
+                var value = PropertyUtil.GetPropValue(contact, column);
+                if (value == null)
+                    value = "";
+                if (value is String && !String.IsNullOrEmpty(value.ToString()))
+                {
+                    value = value.ToString().Trim().Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", "");
+                }
+                parameters.Add(new NpgsqlParameter(String.Format(":{0}", column), value));
+            }
+
+            //3.执行SQL
+            var connectString = System.Configuration.ConfigurationManager.ConnectionStrings["BeyonDBGuMu"];
+            using (var conntion = new NpgsqlConnection(connectString.ToString()))
+            {
+                conntion.Open();
+                using (var command = conntion.CreateCommand())
+                {
+                    command.CommandText = sql.ToString();
+                    command.Parameters.AddRange(parameters.ToArray());
+                    command.ExecuteNonQuery();
+                }
+            }
+
+        }
      }
 }
