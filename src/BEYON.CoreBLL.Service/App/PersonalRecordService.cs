@@ -523,6 +523,19 @@ namespace BEYON.CoreBLL.Service.App
                         feedBack.ExceptionContent.Add("第" + num + "行记录  证件号码格式有误！");
                     }
                 }
+                else if (personal.CertificateID.Length != 15 && personal.CertificateID.Length != 18)
+                {
+                    feedBack.ExceptionContent.Add("第" + num + "行记录  证件号码格式有误！");
+                }
+                else if (personal.CertificateID.Length == 18)
+                {
+                    string tmp = personal.CertificateID.Substring(6, 2);
+                    if (!tmp.Equals("19") && !tmp.Equals("20"))
+                    {
+                        feedBack.ExceptionContent.Add("第" + num + "行记录  证件号码格式有误！");
+                    }
+                }
+
             }
             //联系电话
             Regex regPhone = new Regex("^0\\d{2,3}-?\\d{7,8}$");
@@ -682,6 +695,14 @@ namespace BEYON.CoreBLL.Service.App
             if (!regCID.IsMatch(Id))
             {
                 return false;
+            }else if(Id.Length != 18 && Id.Length != 15){
+                return false;
+            }
+            else if (Id.Length == 18) {
+                string tmp = Id.Substring(6,2);
+                if (!tmp.Equals("19") && !tmp.Equals("20")) {
+                    return false;
+                }
             }
             return true;
         }
