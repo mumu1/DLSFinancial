@@ -24,7 +24,8 @@ namespace ExcelCommands
         {
             try
             {
-                using (var connect = new Npgsql.NpgsqlConnection("Server=localhost;port=5433;Database=financial01;User Id=beyondb;Password=123456;pooling=true"))
+                String connectString = System.Configuration.ConfigurationManager.ConnectionStrings["BeyonDBGuMu"].ToString();
+                using (var connect = new Npgsql.NpgsqlConnection(connectString))
                 {
                     if (connect.State == System.Data.ConnectionState.Closed)
                         connect.Open();
