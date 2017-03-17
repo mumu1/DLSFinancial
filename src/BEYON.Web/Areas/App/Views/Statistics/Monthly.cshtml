@@ -60,6 +60,7 @@
             dataType: "json",
             contentType: "application/json; charset=utf-8",
             success: function (columns) {
+                $.fn.dataTable.ext.errMode = 'none'; //不显示任何错误信息
                 var table = $('#datatable_labor_statistics').dataTable({
                     dom: 'Bfrtip',
                     colReorder: true,

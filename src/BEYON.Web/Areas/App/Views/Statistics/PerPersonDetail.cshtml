@@ -75,6 +75,7 @@
             dataType: "json",
             contentType: "application/json; charset=utf-8",
             success: function (columns) {
+                $.fn.dataTable.ext.errMode = 'none'; //不显示任何错误信息
                 var table = $('#datatable_perperson_detail').dataTable({
                     dom: 'Bfrtip',
                     colReorder: true,
@@ -105,6 +106,7 @@
                         "sInfoFiltered": "(从 _MAX_ 条数据中检索)",
                         "sZeroRecords": "没有检索到数据",
                         "sSearch": "搜索名称:",
+                        "sProcessing": "正在加载数据...请耐心等待...",
                         "sSelected": "选中 _TOTAL_ 条记录",
                         "oPaginate": {
                             "sFirst": "首页",
