@@ -34,33 +34,33 @@ namespace BEYON.CoreBLL.Service.Excel
         {
             var fileName = GetFileName();
 
-            StringBuilder parameters = new StringBuilder("-p ");
-            parameters.Append(filePath);
-            parameters.Append(" -f ");
-            parameters.Append(fileName);
-            parameters.Append(" -s ");
-            parameters.Append(serialNumber);
+            //StringBuilder parameters = new StringBuilder("-p ");
+            //parameters.Append(filePath);
+            //parameters.Append(" -f ");
+            //parameters.Append(fileName);
+            //parameters.Append(" -s ");
+            //parameters.Append(serialNumber);
 
-            if(ExecuteProcess(filePath, "ExcelCommands.exe", parameters.ToString()))
-            {
-                String fullFileName = filePath + "\\" + fileName;
-                if(System.IO.File.Exists(fullFileName))
-                {
-                    return fileName;
-                }
+            //if(ExecuteProcess(filePath, "ExcelCommands.exe", parameters.ToString()))
+            //{
+            //    String fullFileName = filePath + "\\" + fileName;
+            //    if(System.IO.File.Exists(fullFileName))
+            //    {
+            //        return fileName;
+            //    }
                 
-            }
+            //}
 
-            return "";
-            //ShellExecute(IntPtr.Zero, new StringBuilder("Open"), new StringBuilder(filePath + @"\ExcelCommands.exe"), parameters, new StringBuilder(filePath), 0);
-            
-            
+            //return "";
+            ////ShellExecute(IntPtr.Zero, new StringBuilder("Open"), new StringBuilder(filePath + @"\ExcelCommands.exe"), parameters, new StringBuilder(filePath), 0);
 
-            //ApplicationForm applicationForm = _applicationFormRepository.Entities.FirstOrDefault(c => c.SerialNumber == serialNumber.Trim());
-            //if (applicationForm == null)
-            //    return null;
-            //IList<PersonalRecord> persons = _personalRecordRepository.GetPersonalRecordBySerialNumber(serialNumber);
-            //return SaveExcel(filePath, fileName, applicationForm, persons);
+
+
+            ApplicationForm applicationForm = _applicationFormRepository.Entities.FirstOrDefault(c => c.SerialNumber == serialNumber.Trim());
+            if (applicationForm == null)
+                return null;
+            IList<PersonalRecord> persons = _personalRecordRepository.GetPersonalRecordBySerialNumber(serialNumber);
+            return SaveExcel(filePath, fileName, applicationForm, persons);
         }
 
 
@@ -78,7 +78,7 @@ namespace BEYON.CoreBLL.Service.Excel
             Info.CreateNoWindow = true;
             Info.ErrorDialog = false;
             Info.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-            Info.WorkingDirectory  =path;
+            Info.WorkingDirectory  = path;
             //Response.Write(path);
  
             //声明一个程序类
