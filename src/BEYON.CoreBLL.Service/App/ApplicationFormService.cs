@@ -14,6 +14,8 @@ namespace BEYON.CoreBLL.Service.App
 {
     public class ApplicationFormService : CoreServiceBase, IApplicationFormService
     {
+        private readonly log4net.ILog _log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         private readonly IApplicationFormRepository _ApplicationFormRepository;
 
         public ApplicationFormService(IApplicationFormRepository applicationFormRepository, IUnitOfWork unitOfWork)
@@ -60,8 +62,9 @@ namespace BEYON.CoreBLL.Service.App
 
                 return new OperationResult(OperationResultType.Success, "新增数据成功！");
             }
-            catch
+            catch(Exception ex)
             {
+                _log.Error("导入申请表数据失败",ex);
                 return new OperationResult(OperationResultType.Error, "新增数据失败，数据库插入数据时发生了错误!");
             }
         }
@@ -93,8 +96,9 @@ namespace BEYON.CoreBLL.Service.App
                 _ApplicationFormRepository.Update(applicationForm);
                 return new OperationResult(OperationResultType.Success, "更新数据成功！");
             }
-            catch
+            catch(Exception ex)
             {
+                _log.Error("更新申请表数据失败", ex);
                 return new OperationResult(OperationResultType.Error, "更新数据失败!");
             }
         }
@@ -120,8 +124,9 @@ namespace BEYON.CoreBLL.Service.App
                     return new OperationResult(OperationResultType.ParamError, "参数错误，请选择需要删除的数据!");
                 }
             }
-            catch
+            catch(Exception ex)
             {
+                _log.Error("删除申请表数据失败", ex);
                 return new OperationResult(OperationResultType.Error, "删除数据失败!");
             }
         }
@@ -148,8 +153,9 @@ namespace BEYON.CoreBLL.Service.App
                 _ApplicationFormRepository.Update(model);
                 return new OperationResult(OperationResultType.Success, "更新申请单数据成功！");
             }
-            catch
+            catch(Exception ex)
             {
+                _log.Error("更新申请表数据失败", ex);
                 return new OperationResult(OperationResultType.Error, "更新申请单数据失败!");
             }
         }
@@ -177,8 +183,9 @@ namespace BEYON.CoreBLL.Service.App
                 _ApplicationFormRepository.Delete(model);
                 return new OperationResult(OperationResultType.Success, "更新申请单数据成功！");
             }
-            catch
+            catch(Exception ex)
             {
+                _log.Error("删除申请表数据失败", ex);
                 return new OperationResult(OperationResultType.Error, "更新申请单数据失败!");
             }
         }
@@ -193,6 +200,7 @@ namespace BEYON.CoreBLL.Service.App
             }
             catch (Exception ex)
             {
+                _log.Error("导入申请表数据失败", ex);
                 return new OperationResult(OperationResultType.Error, "导入数据失败!");
             }
         }

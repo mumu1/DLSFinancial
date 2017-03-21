@@ -29,7 +29,7 @@ namespace BEYON.Domain.Model.App
         public string SerialNumber { get; set; }
 
         [Display(Name = "课题号")]
-        [StringLength(36)]
+        [StringLength(128)]
         public string ProjectNumber { get; set; }
 
         [Display(Name = "课题名称")]
