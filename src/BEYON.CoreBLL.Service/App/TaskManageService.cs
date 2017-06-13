@@ -44,7 +44,7 @@ namespace BEYON.CoreBLL.Service.App
                 {
                     TaskID = model.TaskID,
                     TaskName = model.TaskName,
-                    TaskLeader = model.TaskLeader,
+                    TaskLeader = model.TaskLeader.Trim(),
                     UpdateDate = DateTime.Now
                 };
                 _TaskManageRepository.Insert(entity);
@@ -67,7 +67,7 @@ namespace BEYON.CoreBLL.Service.App
                 }
                 task.TaskID = model.TaskID;
                 task.TaskName = model.TaskName;
-                task.TaskLeader = model.TaskLeader;
+                task.TaskLeader = model.TaskLeader.Trim();
                 task.UpdateDate = DateTime.Now;
                 _TaskManageRepository.Update(task);
                 return new OperationResult(OperationResultType.Success, "更新数据成功！");

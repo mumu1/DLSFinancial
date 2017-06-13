@@ -116,6 +116,8 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                 sb.Append("a.\"AmountX\" as C11,");
                 sb.Append("a.\"Tax\" as C12,");
                 sb.Append("a.\"AmountY\" as C13,");
+                sb.Append("a.\"ProjectNumber\" as C14,");
+                sb.Append("a.\"ProjectDirector\" as C15,");
                 sb.Append("a.\"UpdateDate\" updateDate ");
                 //2.添加表
                 sb.Append(" FROM dbo.\"TaxBaseByMonths\" b ");
@@ -144,7 +146,8 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                                 var amountX = String.IsNullOrEmpty(reader["C11"].ToString()) ? 0 : Convert.ToSingle(reader["C11"]);
                                 var tax = String.IsNullOrEmpty(reader["C12"].ToString()) ? 0 : Convert.ToSingle(reader["C12"]);
                                 var amountY = String.IsNullOrEmpty(reader["C13"].ToString()) ? 0 : Convert.ToSingle(reader["C13"]);
-
+                                var projectNumber = reader["C14"].ToString();
+                                var projectDirector = reader["C15"].ToString();
                                 //返回前端显示结果数据
                                 if (!objects.ContainsKey(certificateID))
                                 {
@@ -199,11 +202,15 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                                     result["C15"] = amountY;
                                     result["C16"] = amountX;
                                     result["C17"] = tax;
+                                    result["C18"] = projectNumber;
+                                    result["C19"] = projectDirector;
                                     for (var i = 1; i < addColumns; i++)
                                     {
-                                        result[String.Format("C{0}", 15 + i * 3)] = "";
-                                        result[String.Format("C{0}", 16 + i * 3)] = "";
-                                        result[String.Format("C{0}", 17 + i * 3)] = "";
+                                        result[String.Format("C{0}", 15 + i * 5)] = "";
+                                        result[String.Format("C{0}", 16 + i * 5)] = "";
+                                        result[String.Format("C{0}", 17 + i * 5)] = "";
+                                        result[String.Format("C{0}", 18 + i * 5)] = "";
+                                        result[String.Format("C{0}", 19 + i * 5)] = "";
                                     }
                                     objects.Add(certificateID, result);
                                 }
@@ -216,9 +223,18 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                                     int repetTimes = jsonObject["C14"].ToObject<int>() + 1;
                                     jsonObject["C14"] = repetTimes;
 
-                                    jsonObject[String.Format("C{0}", 15 + (repetTimes - 1) * 3)] = amountY;
-                                    jsonObject[String.Format("C{0}", 16 + (repetTimes - 1) * 3)] = amountX;
-                                    jsonObject[String.Format("C{0}", 17 + (repetTimes - 1) * 3)] = tax;
+                                    jsonObject[String.Format("C{0}", 15 + (repetTimes - 1) * 5)] = amountY;
+                                    jsonObject[String.Format("C{0}", 16 + (repetTimes - 1) * 5)] = amountX;
+                                    jsonObject[String.Format("C{0}", 17 + (repetTimes - 1) * 5)] = tax;
+                                    if (!String.IsNullOrEmpty(projectNumber))
+                                    {
+                                        jsonObject[String.Format("C{0}", 18 + (repetTimes - 1) * 5)] = projectNumber;
+                                        
+                                    }
+                                    if (!String.IsNullOrEmpty(projectDirector))
+                                    {
+                                        jsonObject[String.Format("C{0}", 19 + (repetTimes - 1) * 5)] = projectDirector;
+                                    }
 
                                     objects[certificateID] = jsonObject;
                                 }
@@ -330,6 +346,8 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                 sb.Append("a.\"AmountX\" as C5,");
                 sb.Append("a.\"Tax\" as C6,");
                 sb.Append("a.\"AmountY\" as C7,");
+                sb.Append("a.\"ProjectNumber\" as C8,");
+                sb.Append("a.\"ProjectDirector\" as C9,");
                 sb.Append("a.\"UpdateDate\" updateDate ");
                 //2.添加表
                 sb.Append(" FROM  dbo.\"TaxPerOrders\" a WHERE  \"PersonType\" = '所外' ");
@@ -354,6 +372,8 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                                 var amountX = String.IsNullOrEmpty(reader["C5"].ToString()) ? 0 : Convert.ToSingle(reader["C5"]);
                                 var tax = String.IsNullOrEmpty(reader["C6"].ToString()) ? 0 : Convert.ToSingle(reader["C6"]);
                                 var amountY = String.IsNullOrEmpty(reader["C7"].ToString()) ? 0 : Convert.ToSingle(reader["C7"]);
+                                var projectNumber = reader["C8"].ToString();
+                                var projectDirector = reader["C9"].ToString();
 
                                 //返回前端显示结果数据
                                 if (!objects.ContainsKey(certificateID))
@@ -411,11 +431,15 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                                     result["C15"] = amountY;
                                     result["C16"] = amountX;
                                     result["C17"] = tax;
+                                    result["C18"] = projectNumber;
+                                    result["C19"] = projectDirector;
                                     for (var i = 1; i < addColumns; i++)
                                     {
-                                        result[String.Format("C{0}", 15 + i * 3)] = "";
-                                        result[String.Format("C{0}", 16 + i * 3)] = "";
-                                        result[String.Format("C{0}", 17 + i * 3)] = "";
+                                        result[String.Format("C{0}", 15 + i * 5)] = "";
+                                        result[String.Format("C{0}", 16 + i * 5)] = "";
+                                        result[String.Format("C{0}", 17 + i * 5)] = "";
+                                        result[String.Format("C{0}", 18 + i * 5)] = "";
+                                        result[String.Format("C{0}", 19 + i * 5)] = "";
                                     }
                                     objects.Add(certificateID, result);
                                 }
@@ -428,9 +452,18 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                                     int repetTimes = jsonObject["C14"].ToObject<int>() + 1;
                                     jsonObject["C14"] = repetTimes;
 
-                                    jsonObject[String.Format("C{0}", 15 + (repetTimes - 1) * 3)] = amountY;
-                                    jsonObject[String.Format("C{0}", 16 + (repetTimes - 1) * 3)] = amountX;
-                                    jsonObject[String.Format("C{0}", 17 + (repetTimes - 1) * 3)] = tax;
+                                    jsonObject[String.Format("C{0}", 15 + (repetTimes - 1) * 5)] = amountY;
+                                    jsonObject[String.Format("C{0}", 16 + (repetTimes - 1) * 5)] = amountX;
+                                    jsonObject[String.Format("C{0}", 17 + (repetTimes - 1) * 5)] = tax;
+                                    if (!String.IsNullOrEmpty(projectNumber))
+                                    {
+                                        jsonObject[String.Format("C{0}", 18 + (repetTimes - 1) * 5)] = projectNumber;
+
+                                    }
+                                    if (!String.IsNullOrEmpty(projectDirector))
+                                    {
+                                        jsonObject[String.Format("C{0}", 19 + (repetTimes - 1) * 5)] = projectDirector;
+                                    }
 
                                     objects[certificateID] = jsonObject;
                                 }

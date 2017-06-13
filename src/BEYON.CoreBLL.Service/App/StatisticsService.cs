@@ -46,6 +46,8 @@ namespace BEYON.CoreBLL.Service.App
                 columns.Add(new Column(String.Format("C{0}", columns.Count), String.Format("第{0}次税前", i + 1)));
                 columns.Add(new Column(String.Format("C{0}", columns.Count), String.Format("第{0}次税后", i + 1)));
                 columns.Add(new Column(String.Format("C{0}", columns.Count), String.Format("第{0}次税额", i + 1)));
+                columns.Add(new Column(String.Format("C{0}", columns.Count), String.Format("第{0}次课题号", i + 1)));
+                columns.Add(new Column(String.Format("C{0}", columns.Count), String.Format("第{0}次课题负责人", i + 1)));
             }
             return columns.ToArray();
         }
@@ -84,6 +86,8 @@ namespace BEYON.CoreBLL.Service.App
                 columns.Add(new Column(String.Format("C{0}", columns.Count), String.Format("第{0}次税前", i + 1)));
                 columns.Add(new Column(String.Format("C{0}", columns.Count), String.Format("第{0}次税后", i + 1)));
                 columns.Add(new Column(String.Format("C{0}", columns.Count), String.Format("第{0}次税额", i + 1)));
+                columns.Add(new Column(String.Format("C{0}", columns.Count), String.Format("第{0}次课题号", i + 1)));
+                columns.Add(new Column(String.Format("C{0}", columns.Count), String.Format("第{0}次课题负责人", i + 1)));
             }
             return columns.ToArray();
         }
