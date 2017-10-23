@@ -299,6 +299,7 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
 
             var resultTemp = new List<Object>();
             var serializer = new JavaScriptSerializer();
+            serializer.MaxJsonLength = Int32.MaxValue;    //设置为int的最大值 
             int nPos = 1;
             foreach (var item in objects.Values)
             {

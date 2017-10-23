@@ -88,11 +88,14 @@ namespace BEYON.Web.Areas.App.Controllers
 
         //
         // GET: /App/Statistics/LaborStatisticsDatas
-        public ActionResult LaborStatisticsDatas()
+        public String LaborStatisticsDatas()
         {
             var datas = this._statisticsServer.GetLaborStatisticsDetail();
 
-            return Json(new { total = datas.Count, data = datas }, JsonRequestBehavior.AllowGet);
+            var serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+            serializer.MaxJsonLength = Int32.MaxValue;    //设置为int的最大值 
+            return serializer.Serialize(new { total = datas.Count, data = datas });
+            //return Json(new { total = datas.Count, data = datas }, JsonRequestBehavior.AllowGet);
         }
         #endregion
 
