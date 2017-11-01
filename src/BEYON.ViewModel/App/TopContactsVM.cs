@@ -1,4 +1,4 @@
-﻿using System;
+﻿//using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace BEYON.ViewModel.App
@@ -20,7 +20,7 @@ namespace BEYON.ViewModel.App
 
         [Display(Name = "证件类型")]
         [StringLength(36)]
-        public String CertificateType { get; set; }
+        public string CertificateType { get; set; }
 
         [Display(Name = "证件号码")]
         [StringLength(36)]

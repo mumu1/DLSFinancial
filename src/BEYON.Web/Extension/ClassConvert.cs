@@ -6,11 +6,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net.Http.Formatting;
 using System.Reflection;
+using log4net;
 
 namespace BEYON.Web
 {
     public static class ClassConvert<T>
     {
+
         public static T[] Parse(FormDataCollection formData)
         {
             return null;
@@ -18,95 +20,104 @@ namespace BEYON.Web
 
         public static T[] Process(NameValueCollection data = null)
         {
-            var list = new List<KeyValuePair<string, string>>();
-
-            if (data != null)
+            try
             {
-                foreach (var key in data.AllKeys)
-                {
-                    list.Add(new KeyValuePair<string, string>(key, data[key]));
-                }
-            }
+                var list = new List<KeyValuePair<string, string>>();
 
-            var datas = HttpData(list);
-            if (!datas.ContainsKey("data"))
-                return null;
-            Dictionary<String, object> items = datas["data"] as Dictionary<String, object>;
-            if (items == null)
-                return null;
-            List<T> results = new List<T>();
-            foreach(var item in items)
-            {
-                T t = System.Activator.CreateInstance<T>();
-                PropertyInfo[] pc = t.GetType().GetProperties();
-                PropertyInfo key = pc.Where(pr=>pr.Name == "Id").FirstOrDefault();
-                if(key != null)
+                if (data != null)
                 {
-                    int lastIndex = item.Key.LastIndexOf('_');
-                    if(lastIndex > -1)
+                    foreach (var key in data.AllKeys)
                     {
-                        key.SetValue(t, Int32.Parse(item.Key.Substring(lastIndex+1, item.Key.Length - lastIndex-1)));
+                        list.Add(new KeyValuePair<string, string>(key, data[key]));
                     }
                 }
 
-                Dictionary<String, object> values = item.Value as Dictionary<String, object>;
-                foreach (PropertyInfo pi in pc)
+                var datas = HttpData(list);
+                if (!datas.ContainsKey("data"))
+                    return null;
+                Dictionary<String, object> items = datas["data"] as Dictionary<String, object>;
+                if (items == null)
+                    return null;
+                List<T> results = new List<T>();
+                foreach (var item in items)
                 {
-                    if (values.ContainsKey(pi.Name))
+                    T t = System.Activator.CreateInstance<T>();
+                    PropertyInfo[] pc = t.GetType().GetProperties();
+                    PropertyInfo key = pc.Where(pr => pr.Name == "Id").FirstOrDefault();
+                    if (key != null)
                     {
-                        MethodInfo info = pi.GetSetMethod();
-                        if (info == null || info.IsPrivate)
-                            continue;
-                        var value = values[pi.Name];
-                        if (pi.PropertyType.Equals(typeof(string)))
+                        int lastIndex = item.Key.LastIndexOf('_');
+                        if (lastIndex > -1)
                         {
-                            pi.SetValue(t, value.ToString());
+                            key.SetValue(t, Int32.Parse(item.Key.Substring(lastIndex + 1, item.Key.Length - lastIndex - 1)));
                         }
-                        else if(pi.PropertyType.Equals(typeof(DateTime)))
-                        {
-                            try
-                            {
-                                pi.SetValue(t, DateTime.Parse(value.ToString()));
-                            }
-                            catch
-                            {
-
-                            }
-                            
-                        }
-                        else if(pi.PropertyType.Equals(typeof(Double)))
-                        {
-                            try
-                            {
-                                pi.SetValue(t, Double.Parse(value.ToString()));
-                            }
-                            catch
-                            {
-
-                            }
-                        }
-                        else if(pi.PropertyType.Equals(typeof(float)))
-                        {
-                            try
-                            {
-                                pi.SetValue(t, float.Parse(value.ToString()));
-                            }
-                            catch
-                            {
-
-                            }
-                        }
-                        else
-                        {
-                            pi.SetValue(t, value);
-                        }
-                        
                     }
-                }
-                results.Add(t);
-            }
 
-            return results.ToArray();
+                    Dictionary<String, object> values = item.Value as Dictionary<String, object>;
+                    foreach (PropertyInfo pi in pc)
+                    {
+                        if (values.ContainsKey(pi.Name))
+                        {
+                            MethodInfo info = pi.GetSetMethod();
+                            if (info == null || info.IsPrivate)
+                                continue;
+                            var value = values[pi.Name];
+                            if (pi.PropertyType.Equals(typeof(string)))
+                            {
+                                pi.SetValue(t, value.ToString());
+                            }
+                            else if (pi.PropertyType.Equals(typeof(DateTime)))
+                            {
+                                try
+                                {
+                                    pi.SetValue(t, DateTime.Parse(value.ToString()));
+                                }
+                                catch
+                                {
+
+                                }
+
+                            }
+                            else if (pi.PropertyType.Equals(typeof(Double)))
+                            {
+                                try
+                                {
+                                    pi.SetValue(t, Double.Parse(value.ToString()));
+                                }
+                                catch
+                                {
+
+                                }
+                            }
+                            else if (pi.PropertyType.Equals(typeof(float)))
+                            {
+                                try
+                                {
+                                    pi.SetValue(t, float.Parse(value.ToString()));
+                                }
+                                catch
+                                {
+
+                                }
+                            }
+                            else
+                            {
+                                pi.SetValue(t, value);
+                            }
+
+                        }
+                    }
+                    results.Add(t);
+                }
+
+                return results.ToArray();
+            }
+            catch(Exception ex)
+            {
+                LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType).Error("转换类出错！", ex);
+                return null;
+            }
+            
         }
 
         /// <summary>
