@@ -44,9 +44,10 @@ namespace BEYON.Web.Areas.BasicDataManagement.Controllers
         // GET: /BasicDataManagement/TaskManage/GetAllData/
         public ActionResult GetAllData()
         {
-            var result = this._taskManageService.TaskManages.ToList();
-            return Json(new { total = result.Count, data = result }, JsonRequestBehavior.AllowGet);
-
+            var taskList = this._taskManageService.TaskManages.ToList();
+            var result = Json(new { total = taskList.Count, data = taskList }, JsonRequestBehavior.AllowGet);
+            result.MaxJsonLength = Int32.MaxValue;
+            return result;
         }
 
         // GET: /BasicDataManagement/TaskManage/GetTaskByTaskLeader/

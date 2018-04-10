@@ -47,9 +47,9 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
             return q.ToList();
         }
 
-        public IList<TopContacts> GetTopContactsByName(String name)
+        public IList<TopContacts> GetTopContactsByName(String name, String userID)
         {
-            var q = from p in Context.TopContactss.Where(w => w.Name == name)
+            var q = from p in Context.TopContactss.Where(w => w.Name == name && w.UserID == userID)
                     select p;
             return q.ToList();
         }

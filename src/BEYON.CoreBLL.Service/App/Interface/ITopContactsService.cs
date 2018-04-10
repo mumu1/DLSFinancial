@@ -24,6 +24,6 @@ namespace BEYON.CoreBLL.Service.App.Interface
 
         IList<TopContacts> GetTopContactsByUserID(String userID);
 
-        IList<TopContacts> GetTopContactsByName(String name);
+        IList<TopContacts> GetTopContactsByName(String name, String userID);
     }
 }

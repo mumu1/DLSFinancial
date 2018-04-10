@@ -49,6 +49,8 @@ namespace BEYON.Web.Areas.App.Controllers
         // GET: /App/TopContacts/GetContactsByName/
         public ActionResult GetContactsByName(String name)
         {
+            string userid = ((System.Web.Security.FormsIdentity)(System.Web.HttpContext.Current.User.Identity)).Ticket.UserData;
+          
             //若姓名为英文字母，不需去除字符串中的空格，若为中文，需去除空格
             String nameFormat = "";
             if (IsEnCh(name.Trim()))
@@ -59,7 +61,7 @@ namespace BEYON.Web.Areas.App.Controllers
             {
                 nameFormat = name.Trim().Replace("\n", "").Replace("\t", "").Replace("\r", "").Replace(" ", "");
             }
-            var result = this._topContactsService.GetTopContactsByName(nameFormat);
+            var result = this._topContactsService.GetTopContactsByName(nameFormat, userid);
             return Json(new { total = result.Count, data = result }, JsonRequestBehavior.AllowGet);
 
         }

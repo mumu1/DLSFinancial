@@ -35,7 +35,7 @@ namespace BEYON.Domain.Data.Repositories.App
     {
         IList<TopContacts> GetTopContactsByUserID(String userID);
 
-        IList<TopContacts> GetTopContactsByName(String name);
+        IList<TopContacts> GetTopContactsByName(String name, String userID);
 
         void InsertOrUpdate(TopContacts contact);
     }

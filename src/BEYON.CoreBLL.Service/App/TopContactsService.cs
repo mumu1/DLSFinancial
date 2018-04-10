@@ -26,9 +26,9 @@ namespace BEYON.CoreBLL.Service.App
             return _TopContactsRepository.GetTopContactsByUserID(userID);
         }
 
-        public IList<TopContacts> GetTopContactsByName(String name)
+        public IList<TopContacts> GetTopContactsByName(String name, String userID)
         {
-            return _TopContactsRepository.GetTopContactsByName(name);
+            return _TopContactsRepository.GetTopContactsByName(name, userID);
         }
 
 
