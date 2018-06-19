@@ -27,6 +27,7 @@ namespace BEYON.Web.Areas.App.Controllers
 {
     public class ApplyFormController : Controller
     {
+        private static object _lockObj = new object();
         private readonly log4net.ILog _log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private readonly IApplicationFormService _applicationFormService;
         private readonly IPersonalRecordService _personalRecordService;
@@ -403,21 +404,30 @@ namespace BEYON.Web.Areas.App.Controllers
                 Directory.CreateDirectory(filePath);
             }
 
-            string tempName = DateTime.Now.ToString("yyyyMMddHHMMss") + DateTime.Now.Millisecond;
+            string userid = ((System.Web.Security.FormsIdentity)(System.Web.HttpContext.Current.User.Identity)).Ticket.UserData;
+            string tempName = String.Format("{0}_{1}{2}", userid, DateTime.Now.ToString("yyyyMMddHHMMss"), DateTime.Now.Millisecond);
             if (upload.ContentLength > 0)
             {
                 fileName = tempName + Path.GetFileName(upload.FileName);
                 var path = Path.Combine(filePath, fileName);
                 upload.SaveAs(path);
-                //获取映射文件
-                ImportData importData;
-                if (!ExcelService.Get(Request.Path, out importData))
-                {
-                    importData = null;
-                }
 
-                //实现文件导入
-                var result = _personalRecordService.Import(path, importData);
+                //防止Excel并发读取
+                OperationResult result;
+                lock(_lockObj)
+                {
+                    //获取映射文件
+                    ImportData importData;
+                    if (!ExcelService.Get(Request.Path, out importData))
+                    {
+                        importData = null;
+                    }
+
+                    //实现文件导入
+                    result = _personalRecordService.Import(path, importData);
+                }
+                
+
                 //删除临时创建文件
                 System.IO.File.Delete(path);
 
