@@ -535,6 +535,10 @@ namespace BEYON.CoreBLL.Service.App
                         feedBack.ExceptionContent.Add("第" + num + "行记录  证件号码格式有误！");
                     }
                 }
+                //验证身份证号码后三位是否为000
+                if (personal.CertificateID.Substring(personal.CertificateID.Length - 3).Equals("000")) {
+                    feedBack.ExceptionContent.Add("第" + num + "行记录  请检查证件号码后三位！");
+                }
 
             }
             //联系电话
@@ -545,6 +549,23 @@ namespace BEYON.CoreBLL.Service.App
             {
                 feedBack.ExceptionContent.Add("第" + num + "行记录  联系电话格式有误！若为座机请填写区号，如01082306380");
             }
+            //银行名称是否包含在开户行详细名称中
+
+            if (!String.IsNullOrEmpty(personal.Bank) && !String.IsNullOrEmpty(personal.BankDetailName)) { 
+                if(personal.Bank.Equals("工商银行")){
+                    if(!personal.BankDetailName.Contains(personal.Bank)){
+                        feedBack.ExceptionContent.Add("第" + num + "行记录  所选银行与开户行详细名称不符，工商银行可不填写开户行详细名称");
+                    }
+                }
+                if (!personal.Bank.Equals("工商银行"))
+                {
+                    if(!personal.BankDetailName.Contains(personal.Bank)){
+                        feedBack.ExceptionContent.Add("第" + num + "行记录  所选银行与开户行详细名称不符，开户行详细名称应包含所选银行名称");
+                    }
+                }
+            }
+         
+
             //银行卡号
             Regex regAccountNumber1 = new Regex("^(\\d{4}[\\s\\-]?){4,5}\\d{3}$");
             Regex regAccountNumber2 = new Regex("^(\\d{16}|\\d{17}|\\d{18}|\\d{19}|\\d{20}|\\d{21})$");
@@ -556,6 +577,11 @@ namespace BEYON.CoreBLL.Service.App
                     {
                         feedBack.ExceptionContent.Add("第" + num + "行记录  银行卡号格式有误！");
                     }
+                }
+                //验证号码后三位是否为000
+                if (personal.AccountNumber.Substring(personal.AccountNumber.Length - 3).Equals("000"))
+                {
+                    feedBack.ExceptionContent.Add("第" + num + "行记录  请检查银行卡号后三位！");
                 }
             }
             if (feedBack.ExceptionContent.Count > 0)

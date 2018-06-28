@@ -431,11 +431,25 @@
             if (paymentType == "银行转账" && AccountNumber.val().trim() == "") {
                 AccountNumber.error("请填写银行账号");
             }
-            if (Bank.val().trim() !== "工商银行") {
-                if (BankDetailName.val().trim() == "") {
+
+            //check bankdetailname includes bankname && banddetailname not null
+            var b_name = Bank.val().trim();
+            var bd_name = BankDetailName.val().trim();
+            if (b_name !== "工商银行") {
+                if (bd_name == "") {
                     BankDetailName.error("请填写开户行详细名称");
                 }
+                else if (!bd_name.includes(b_name)) {
+                    BankDetailName.error("所选银行与开户行详细名称不符，开户行详细名称应包含所选银行名称")
+                }
             }
+           
+            if (b_name == "工商银行" && bd_name !== "") {
+                if (!bd_name.includes(b_name)) {
+                    BankDetailName.error("所选银行与开户行详细名称不符，工商银行可不填写开户行详细名称")
+                }
+            }
+            
 
             //1.身份证检查
             if (action === 'edit' && CertificateType.isMultiValue()) {
@@ -467,6 +481,10 @@
                     var checkagain = isIDCard1.test(CertificateID.val());
                     if (checkagain != true) {
                         CertificateID.error('身份证号码不正确');
+                    }
+                    var c_id = CertificateID.val().trim();
+                    if ("000" === c_id.substr(c_id.length - 3)) {
+                        CertificateID.error('身份证号码不正确，请检查后三位');
                     }
                 }
             }
@@ -548,6 +566,10 @@
                     if (regex2.test(str1) !== true) {
                         AccountNumber.error("银行卡号有误，请检查！");
                     }
+                }
+                var p_id = AccountNumber.val().trim();
+                if ("000" === p_id.substr(p_id.length - 3)) {
+                    AccountNumber.error('银行卡号有误，请检查后三位');
                 }
             }
 
