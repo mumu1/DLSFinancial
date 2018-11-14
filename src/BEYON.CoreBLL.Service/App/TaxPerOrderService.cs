@@ -52,7 +52,7 @@ namespace BEYON.CoreBLL.Service.App
                     //1.查询已发放总金额，查询已计税总额【Tax和】
                     //double amount = GetPayTaxAmount(model.CertificateID, model.TaxOrNot);
                     //都按税前加和
-                    double amount = GetPayTaxAmountY(model.CertificateID);
+                    double amount = GetPayTaxAmount(model.CertificateID, model.TaxOrNot);
                     //double amount = 0.0;
                     double deductTaxSum = GetDeductTaxSum(model.CertificateID);
                     //double deductTaxSum = 0.0;
