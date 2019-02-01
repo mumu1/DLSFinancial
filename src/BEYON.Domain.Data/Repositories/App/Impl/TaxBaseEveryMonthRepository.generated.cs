@@ -33,80 +33,60 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
 	/// <summary>
     ///   仓储操作层实现——用户信息
     /// </summary>
-    public partial class TaxBaseByMonthRepository : EFRepositoryBase<TaxBaseByMonth, Int32>, ITaxBaseByMonthRepository
+    public partial class TaxBaseEveryMonthRepository : EFRepositoryBase<TaxBaseEveryMonth, Int32>, ITaxBaseEveryMonthRepository
     {
-        public TaxBaseByMonthRepository(IUnitOfWork unitOfWork)
+        public TaxBaseEveryMonthRepository(IUnitOfWork unitOfWork)
             : base()
         { }
 
-        public Double GetBaseSalary(String certificateID)
+        public Double GetTotalIncome(String period_year, String certificateID)
         {
-            var record = from p in Context.TaxBaseByMonths.Where(w => w.CertificateID == certificateID)
-                         select p;
+            var record = from p in Context.TaxBaseEveryMonths.Where(w => w.CertificateID == certificateID && w.Period == period_year)
+                         select p; 
+                
             var lists = record.ToList();
-            Double baseSalary = 0.0;
+            Double totalIncome = 0.0;
             if (lists.Count > 0) {
-               // baseSalary = lists[0].InitialEaring - lists[0].TaxFree - lists[0].AmountDeducted;
-                baseSalary = lists[0].InitialEaring - lists[0].TaxFree - lists[0].AmountDeducted - lists[0].SpecialDeduction;
+                totalIncome = lists[0].TotalIncome;
             }
-            return baseSalary;  
+            return totalIncome;  
         }
 
-        public Double GetBaseTax(String certificateID)
+        public Double GetTotalTax(String period_year, String certificateID)
         {
-            var record = from p in Context.TaxBaseByMonths.Where(w => w.CertificateID == certificateID)
+            var record = from p in Context.TaxBaseEveryMonths.Where(w => w.CertificateID == certificateID && w.Period == period_year)
                          select p;
             var lists = record.ToList();
-            Double baseTax = 0.0;
+            Double totalTax = 0.0;
             if (lists.Count > 0)
             {
-                baseTax = lists[0].InitialTax;
+                totalTax = lists[0].TotalTax;
             }
-            return baseTax;
+            return totalTax;
         }
 
-        public String GetNameByCerID(String certificateID) {
-            String name = ",";     
-            //验证完全一致
-            var record = from p in Context.TaxBaseByMonths.Where(w => w.CertificateID == certificateID.Trim().Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", ""))
+        public TaxBaseEveryMonth GetExistRecord(String period_year, String certificateID) {
+            TaxBaseEveryMonth taxBaseEveryMonth = null;
+            var record = from p in Context.TaxBaseEveryMonths.Where(w => w.CertificateID == certificateID && w.Period == period_year)
                          select p;
             var lists = record.ToList();
             if (lists.Count > 0)
             {
-                name = lists[0].Name+",same";
+                taxBaseEveryMonth = lists[0];
             }
-            //验证身份证尾号X大小写完全一致
-            else {
-                var record2 = from p in Context.TaxBaseByMonths.Where(w => w.CertificateID.ToUpper() == certificateID.Trim().Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", ""))
-                             select p;
-                var lists2 = record2.ToList();
-                if (lists2.Count > 0)
-                {
-                    name = lists2[0].Name + ",lower";
-                }
-                else {
-                    var record3 = from p in Context.TaxBaseByMonths.Where(w => w.CertificateID.ToLower() == certificateID.Trim().Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", ""))
-                                  select p;
-                    var lists3 = record3.ToList();
-                    if (lists3.Count > 0)
-                    {
-                        name = lists3[0].Name + ",upper";
-                    }
-                }
-            }
-            return name;
+            return taxBaseEveryMonth;
         }
 
-        public void InsertOrUpdate(TaxBaseByMonth record)
+        public void InsertOrUpdate(TaxBaseEveryMonth record)
         {
             //1.构造插入或更新SQL
             string[] columns = new string[]{
                 "CertificateID","Name","CertificateType","InitialEaring",
                 "TaxFree","AmountDeducted","InitialTaxPayable","InitialTax","Period",
-                "UpdateDate","SpecialDeduction"
+                "UpdateDate","SpecialDeduction","TotalIncome" , "TotalTax" , "TotalTemp"
             };
             StringBuilder sql = new StringBuilder();
-            sql.Append("INSERT INTO dbo.\"TaxBaseByMonths\" ( ");
+            sql.Append("INSERT INTO dbo.\"TaxBaseEveryMonths\" ( ");
             foreach (var column in columns)
             {
                 sql.Append(String.Format("\"{0}\",", column));
@@ -119,7 +99,7 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                 sql.Append(String.Format(":{0},", column));
             }
             sql.Remove(sql.Length - 1, 1);
-            sql.Append(" )  ON CONFLICT (\"CertificateID\", \"CertificateType\") DO UPDATE SET ");
+            sql.Append(" )  ON CONFLICT ( \"Period\", \"CertificateID\", \"CertificateType\") DO UPDATE SET ");
 
             foreach (var column in columns)
             {

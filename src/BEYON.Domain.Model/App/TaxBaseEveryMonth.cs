@@ -1,14 +1,28 @@
-﻿using System;
+﻿/************************************
+ * 描述：按年累计每月工资表--TaxBaseEveryMonth（每月工资及汇总值）
+ * 作者：张硕
+ * 日期：2019/01/29
+*************************************/
+
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using BEYON.Component.Tools;
 
-namespace BEYON.ViewModel.App
+namespace BEYON.Domain.Model.App
 {
-    public class TaxBaseByMonthVM
+    [Description("每月初始化工资表")]
+    public class TaxBaseEveryMonth : EntityBase<int>
     {
-        public TaxBaseByMonthVM()
-        {
-
+        public TaxBaseEveryMonth()
+        { 
+        
         }
+
         [Required]
         [Display(Name = "证件号码")]
         [StringLength(36)]
@@ -43,14 +57,25 @@ namespace BEYON.ViewModel.App
 
         [Display(Name = "专项扣除额")]
         public Double SpecialDeduction { get; set; }
-/*
+
+        [Display(Name = "月收入总额")]
+        public Double TotalIncome { get; set; }
+
+        [Display(Name = "月税总额")]
+        public Double TotalTax { get; set; }
+
+        [Display(Name = "预留字段")]
+        public Double TotalTemp { get; set; }
+        
+
+        /*
         [Display(Name = "人员类型")]
         [StringLength(36)]
         public string PersonType { get; set; }
-
+ 
         [Display(Name = "职称")]
         [StringLength(36)]
         public string Title { get; set; }
- * */
+        */
     }
 }

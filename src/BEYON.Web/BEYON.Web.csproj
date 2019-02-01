@@ -188,6 +188,7 @@
     <Compile Include="Areas\BasicDataManagement\Controllers\DepartmentController.cs" />
     <Compile Include="Areas\BasicDataManagement\Controllers\ProfessionalController.cs" />
     <Compile Include="Areas\BasicDataManagement\Controllers\ReimbursementController.cs" />
+    <Compile Include="Areas\BasicDataManagement\Controllers\YearBaseTableController.cs" />
     <Compile Include="Areas\BasicDataManagement\Controllers\WageBaseTableController.cs" />
     <Compile Include="Areas\Common\CommonAreaRegistration.cs" />
     <Compile Include="Areas\Common\Controllers\HomeController.cs" />
@@ -641,6 +642,7 @@
     <Content Include="Areas\BasicDataManagement\Views\TaxPerOrderHistory\Index.cshtml" />
     <Content Include="Areas\App\Views\Statistics\SerNumberStatistic.cshtml" />
     <Content Include="Areas\App\Views\TopContacts\Index.cshtml" />
+    <Content Include="Areas\BasicDataManagement\Views\YearBaseTable\Index.cshtml" />
     <None Include="Properties\PublishProfiles\beyondb.pubxml" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Scripts\AdminLTE2.3.0\bootstrap\css\bootstrap.css" />

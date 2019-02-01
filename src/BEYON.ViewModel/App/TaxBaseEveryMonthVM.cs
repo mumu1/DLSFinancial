@@ -3,9 +3,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BEYON.ViewModel.App
 {
-    public class TaxBaseByMonthVM
+    public class TaxBaseEveryMonthVM
     {
-        public TaxBaseByMonthVM()
+        public TaxBaseEveryMonthVM()
         {
 
         }
@@ -43,6 +43,15 @@ namespace BEYON.ViewModel.App
 
         [Display(Name = "专项扣除额")]
         public Double SpecialDeduction { get; set; }
+
+        [Display(Name = "月收入总额")]
+        public Double TotalIncome { get; set; }
+
+        [Display(Name = "月税总额")]
+        public Double TotalTax { get; set; }
+
+        [Display(Name = "预留字段")]
+        public Double TotalTemp { get; set; }
 /*
         [Display(Name = "人员类型")]
         [StringLength(36)]

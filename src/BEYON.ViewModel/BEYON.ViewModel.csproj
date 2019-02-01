@@ -52,6 +52,7 @@
     <Compile Include="App\AuditOpinionVM.cs" />
     <Compile Include="App\DepartmentVM.cs" />
     <Compile Include="App\PerOrderDetailVM.cs" />
+    <Compile Include="App\TaxBaseEveryMonthVM.cs" />
     <Compile Include="App\TopContactsVM.cs" />
     <Compile Include="App\TaskManageVM.cs" />
     <Compile Include="App\TaxPerOrderHistroyVM.cs" />

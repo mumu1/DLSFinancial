@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="App\AuditOpinion.cs" />
     <Compile Include="App\AuditStatus.cs" />
+    <Compile Include="App\TaxBaseEveryMonth.cs" />
     <Compile Include="App\TopContacts.cs" />
     <Compile Include="App\SafeguardTime.cs" />
     <Compile Include="App\Department.cs" />

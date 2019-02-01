@@ -25,13 +25,15 @@ namespace BEYON.Web.Areas.BasicDataManagement.Controllers
     public class WageBaseTableController : Controller
     {
          private readonly ITaxBaseByMonthService _taxBaseByMonthService;
+         private readonly ITaxBaseEveryMonthService _taxBaseEveryMonthService;
          private readonly ITaxPerOrderHistoryService _taxPerOrderHistoryService;
          private readonly ITaxPerOrderService _taxPerOrderService;
          private readonly ISafeguardTimeService _safeguardTimeService;
 
-         public WageBaseTableController(ITaxBaseByMonthService taxBaseByMonthService, ITaxPerOrderHistoryService taxPerOrderHistoryService, ITaxPerOrderService taxPerOrderService, ISafeguardTimeService safeguardTimeService)
+         public WageBaseTableController(ITaxBaseByMonthService taxBaseByMonthService, ITaxBaseEveryMonthService taxBaseEveryMonthService, ITaxPerOrderHistoryService taxPerOrderHistoryService, ITaxPerOrderService taxPerOrderService, ISafeguardTimeService safeguardTimeService)
         {
             this._taxBaseByMonthService = taxBaseByMonthService;
+            this._taxBaseEveryMonthService = taxBaseEveryMonthService;
             this._taxPerOrderHistoryService = taxPerOrderHistoryService;
             this._taxPerOrderService = taxPerOrderService;
             this._safeguardTimeService = safeguardTimeService;
@@ -144,6 +146,78 @@ namespace BEYON.Web.Areas.BasicDataManagement.Controllers
                 return Json( JsonRequestBehavior.AllowGet);
            
         }
+
+        // POST: /BasicDataManagement/WageBaseTable/AddToYearBaseTable/
+        public ActionResult AddToYearBaseTable()
+        {
+           
+            var result = this._taxBaseByMonthService.TaxBaseByMonths.ToList();
+            String period = _taxBaseByMonthService.TaxBaseByMonths.First().Period;
+            String period_year = period.Split('-')[0]; //get year
+            TaxBaseEveryMonthVM taxBaseEveryMonth = null;
+            try
+            {
+                foreach (var model in result)
+                {
+                    double monthIncome = _taxPerOrderService.GetPayTaxAmount(model.CertificateID, "含税");
+                    double monthIncomeAfter = _taxPerOrderService.GetPayTaxAmount(model.CertificateID, "不含税");
+                    double monthTax = _taxPerOrderService.GetDeductTaxSum(model.CertificateID);
+                    ;
+                    //检查年度累计底表中是否已存在该人员在该年度的记录，若存在，则进行数据累计，若不存在，则新增
+                    var taxBaseEveryMonth_exsit = _taxBaseEveryMonthService.GetExistRecord(period_year, model.CertificateID);
+                    if (taxBaseEveryMonth_exsit != null)
+                    {
+                        taxBaseEveryMonth = new TaxBaseEveryMonthVM();
+                        taxBaseEveryMonth.CertificateID = model.CertificateID;
+                        taxBaseEveryMonth.CertificateType = model.CertificateType;
+                        taxBaseEveryMonth.Name = model.Name;
+                        taxBaseEveryMonth.Period = period_year;
+                        taxBaseEveryMonth.InitialTaxPayable = model.InitialTaxPayable + taxBaseEveryMonth_exsit.InitialTaxPayable;
+                        taxBaseEveryMonth.InitialEaring = model.InitialEaring + taxBaseEveryMonth_exsit.InitialEaring;
+                        //calculate totalincome in this month
+                        taxBaseEveryMonth.TotalIncome = model.InitialEaring + monthIncome + taxBaseEveryMonth_exsit.TotalIncome;
+                        taxBaseEveryMonth.TotalTax = model.InitialTax + monthTax + taxBaseEveryMonth_exsit.TotalTax;
+                        taxBaseEveryMonth.TotalTemp = model.InitialEaring - model.InitialTax + monthIncomeAfter + taxBaseEveryMonth_exsit.TotalTemp;
+                        taxBaseEveryMonth.InitialTax = model.InitialTax + taxBaseEveryMonth_exsit.InitialTax;
+                        taxBaseEveryMonth.SpecialDeduction = model.SpecialDeduction + taxBaseEveryMonth_exsit.SpecialDeduction;
+                        taxBaseEveryMonth.TaxFree = model.TaxFree + taxBaseEveryMonth_exsit.TaxFree;
+                        taxBaseEveryMonth.AmountDeducted = model.AmountDeducted + taxBaseEveryMonth_exsit.AmountDeducted;
+
+                        _taxBaseEveryMonthService.Insert(taxBaseEveryMonth);
+                    }
+                    else
+                    {
+                        taxBaseEveryMonth = new TaxBaseEveryMonthVM();
+                        taxBaseEveryMonth.CertificateID = model.CertificateID;
+                        taxBaseEveryMonth.CertificateType = model.CertificateType;
+                        taxBaseEveryMonth.Name = model.Name;
+                        taxBaseEveryMonth.Period = period_year;
+                        taxBaseEveryMonth.InitialTaxPayable = model.InitialTaxPayable;
+                        taxBaseEveryMonth.InitialEaring = model.InitialEaring;
+                        //calculate totalincome in this month
+                        taxBaseEveryMonth.TotalIncome = model.InitialEaring + monthIncome;
+                        taxBaseEveryMonth.TotalTax = model.InitialTax + monthTax;
+                        taxBaseEveryMonth.TotalTemp = model.InitialEaring - model.InitialTax + monthIncomeAfter;
+                        taxBaseEveryMonth.InitialTax = model.InitialTax;
+                        taxBaseEveryMonth.SpecialDeduction = model.SpecialDeduction;
+                        taxBaseEveryMonth.TaxFree = model.TaxFree;
+                        taxBaseEveryMonth.AmountDeducted = model.AmountDeducted;
+
+                        _taxBaseEveryMonthService.Insert(taxBaseEveryMonth);
+                    }
+
+
+                }
+            }
+
+            catch
+            {
+                return Json(new { erro = "计算累计数据失败！" });
+            }
+            return Json(new { });
+
+        }
+
 
         // POST: /BasicDataManagement/WageBaseTable/TaxPerOrderBackUp/
         public ActionResult TaxPerOrderBackUp()

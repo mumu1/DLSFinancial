@@ -71,6 +71,8 @@ namespace BEYON.Component.Data.EF
 
         public DbSet<TaxBaseByMonth> TaxBaseByMonths { get; set; }
 
+        public DbSet<TaxBaseEveryMonth> TaxBaseEveryMonths { get; set; }
+
 
         //[ImportMany(typeof(IEntityMapper))]
         //public IEnumerable<IEntityMapper> EntityMappers { get; set; }
@@ -106,6 +108,7 @@ namespace BEYON.Component.Data.EF
             modelBuilder.Configurations.Add(new DepartmentConfiguration());
             modelBuilder.Configurations.Add(new TaskManageConfiguration());
             modelBuilder.Configurations.Add(new TaxBaseByMonthConfiguration());
+            modelBuilder.Configurations.Add(new TaxBaseEveryMonthConfiguration());
             modelBuilder.Configurations.Add(new AuditStatusConfiguration());
             modelBuilder.Configurations.Add(new AuditOpinionConfiguration());
             //if (EntityMappers == null)

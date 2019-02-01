@@ -27,6 +27,7 @@ namespace BEYON.CoreBLL.Service.App.Interface
 
         int DeleteBySerialNumber(String serialNumber);
 
+        Double GetDeductTaxSum(String certificateID);
 
     }
 }

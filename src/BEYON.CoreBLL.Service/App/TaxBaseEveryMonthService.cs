@@ -12,33 +12,33 @@ using EntityFramework.Extensions;
 
 namespace BEYON.CoreBLL.Service.App
 {
-    public class TaxBaseByMonthService : CoreServiceBase, ITaxBaseByMonthService
+    public class TaxBaseEveryMonthService : CoreServiceBase, ITaxBaseEveryMonthService
     {
         private readonly log4net.ILog _log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        private readonly ITaxBaseByMonthRepository _TaxBaseByMonthRepository;
+        private readonly ITaxBaseEveryMonthRepository _TaxBaseEveryMonthRepository;
 
-        public TaxBaseByMonthService(ITaxBaseByMonthRepository taxBaseByMonthRepository, IUnitOfWork unitOfWork)
+        public TaxBaseEveryMonthService(ITaxBaseEveryMonthRepository taxBaseEveryMonthRepository, IUnitOfWork unitOfWork)
             : base(unitOfWork)
         {
-            this._TaxBaseByMonthRepository = taxBaseByMonthRepository;
+            this._TaxBaseEveryMonthRepository = taxBaseEveryMonthRepository;
         }
-        public IQueryable<TaxBaseByMonth> TaxBaseByMonths
+        public IQueryable<TaxBaseEveryMonth> TaxBaseEveryMonths
         {
-            get { return _TaxBaseByMonthRepository.Entities; }
+            get { return _TaxBaseEveryMonthRepository.Entities; }
         }
 
-        public OperationResult Insert(TaxBaseByMonthVM model)
+        public OperationResult Insert(TaxBaseEveryMonthVM model)
         {
             try
             {
-                TaxBaseByMonth taxBaseByMonth = _TaxBaseByMonthRepository.Entities.FirstOrDefault(c => c.CertificateID == model.CertificateID.Trim());
-                if (taxBaseByMonth != null)
+                TaxBaseEveryMonth taxBaseEveryMonth = _TaxBaseEveryMonthRepository.Entities.FirstOrDefault(c => c.CertificateID == model.CertificateID.Trim());
+                if (taxBaseEveryMonth != null)
                 {
                     return new OperationResult(OperationResultType.Warning, "数据库中已经存在相同的基本工资信息，请修改后重新提交！");
                 }
                 if (model.Name == null || model.Name.Trim() == "")
                     return new OperationResult(OperationResultType.Warning, "姓名不能为空，请修改后重新提交！");
-                var entity = new TaxBaseByMonth
+                var entity = new TaxBaseEveryMonth
                 {
                     Period = model.Period,
                     Name = model.Name,
@@ -50,11 +50,15 @@ namespace BEYON.CoreBLL.Service.App
                     InitialTaxPayable = model.InitialTaxPayable,
                     InitialTax = model.InitialTax,
                     SpecialDeduction = model.SpecialDeduction,
+                    TotalIncome = model.TotalIncome,
+                    TotalTax = model.TotalTax,
+                    TotalTemp = model.TotalTemp,
+
                     //PersonType = model.PersonType,
                     //Title = model.Title,
                     UpdateDate = DateTime.Now
                 };
-                _TaxBaseByMonthRepository.Insert(entity);
+                _TaxBaseEveryMonthRepository.Insert(entity);
 
                 return new OperationResult(OperationResultType.Success, "新增数据成功！");
             }
@@ -63,29 +67,32 @@ namespace BEYON.CoreBLL.Service.App
                 return new OperationResult(OperationResultType.Error, "新增数据失败，数据库插入数据时发生了错误!");
             }
         }
-        public OperationResult Update(TaxBaseByMonthVM model)
+        public OperationResult Update(TaxBaseEveryMonthVM model)
         {
             try
             {
-                TaxBaseByMonth taxBaseByMonth = _TaxBaseByMonthRepository.Entities.FirstOrDefault(c => c.CertificateID == model.CertificateID.Trim());
-                if (taxBaseByMonth == null)
+                TaxBaseEveryMonth taxBaseEveryMonth = _TaxBaseEveryMonthRepository.Entities.FirstOrDefault(c => c.CertificateID == model.CertificateID.Trim());
+                if (taxBaseEveryMonth == null)
                 {
                     throw new Exception();
                 }
-                taxBaseByMonth.Period = model.Period;
-                taxBaseByMonth.Name = model.Name;
-                taxBaseByMonth.CertificateType = model.CertificateType;
-                taxBaseByMonth.CertificateID = model.CertificateID;
-                taxBaseByMonth.InitialEaring = model.InitialEaring;
-                taxBaseByMonth.InitialTax = model.InitialTax;
-                taxBaseByMonth.InitialTaxPayable = model.InitialTaxPayable;
-                taxBaseByMonth.AmountDeducted = model.AmountDeducted;
+                taxBaseEveryMonth.Period = model.Period;
+                taxBaseEveryMonth.Name = model.Name;
+                taxBaseEveryMonth.CertificateType = model.CertificateType;
+                taxBaseEveryMonth.CertificateID = model.CertificateID;
+                taxBaseEveryMonth.InitialEaring = model.InitialEaring;
+                taxBaseEveryMonth.InitialTax = model.InitialTax;
+                taxBaseEveryMonth.InitialTaxPayable = model.InitialTaxPayable;
+                taxBaseEveryMonth.AmountDeducted = model.AmountDeducted;
                 //taxBaseByMonth.PersonType = model.PersonType;
-                taxBaseByMonth.TaxFree = model.TaxFree;
-                taxBaseByMonth.SpecialDeduction = model.SpecialDeduction;
+                taxBaseEveryMonth.TaxFree = model.TaxFree;
+                taxBaseEveryMonth.SpecialDeduction = model.SpecialDeduction;
+                taxBaseEveryMonth.TotalIncome = model.TotalIncome;
+                taxBaseEveryMonth.TotalTax = model.TotalTax;
+                taxBaseEveryMonth.TotalTemp = model.TotalTemp;
                 //taxBaseByMonth.Title = model.Title;
-                taxBaseByMonth.UpdateDate = DateTime.Now;
-                _TaxBaseByMonthRepository.Update(taxBaseByMonth);
+                taxBaseEveryMonth.UpdateDate = DateTime.Now;
+                _TaxBaseEveryMonthRepository.Update(taxBaseEveryMonth);
                 return new OperationResult(OperationResultType.Success, "更新数据成功！");
             }
             catch
@@ -100,7 +107,7 @@ namespace BEYON.CoreBLL.Service.App
             {
                 if (certificateID != null)
                 {
-                    int count = _TaxBaseByMonthRepository.Delete(_TaxBaseByMonthRepository.Entities.Where(c => certificateID.Contains(c.CertificateID)));
+                    int count = _TaxBaseEveryMonthRepository.Delete(_TaxBaseEveryMonthRepository.Entities.Where(c => certificateID.Contains(c.CertificateID)));
                     if (count > 0)
                     {
                         return new OperationResult(OperationResultType.Success, "删除数据成功！");
@@ -120,12 +127,12 @@ namespace BEYON.CoreBLL.Service.App
                 return new OperationResult(OperationResultType.Error, "删除数据失败!");
             }
         }
-        public OperationResult Update(TaxBaseByMonth model)
+        public OperationResult Update(TaxBaseEveryMonth model)
         {
             try
             {
                 model.UpdateDate = DateTime.Now;
-                _TaxBaseByMonthRepository.Update(model);
+                _TaxBaseEveryMonthRepository.Update(model);
                 return new OperationResult(OperationResultType.Success, "更新数据成功！");
             }
             catch
@@ -134,12 +141,12 @@ namespace BEYON.CoreBLL.Service.App
             }
         }
 
-        public OperationResult Delete(TaxBaseByMonth model)
+        public OperationResult Delete(TaxBaseEveryMonth model)
         {
             try
             {
                 model.UpdateDate = DateTime.Now;
-                _TaxBaseByMonthRepository.Delete(model);
+                _TaxBaseEveryMonthRepository.Delete(model);
                 return new OperationResult(OperationResultType.Success, "更新数据成功！");
             }
             catch
@@ -160,7 +167,7 @@ namespace BEYON.CoreBLL.Service.App
                     int num = 1;
                     foreach (var item in items)
                     {
-                        TaxBaseByMonth record = new TaxBaseByMonth();
+                        TaxBaseEveryMonth record = new TaxBaseEveryMonth();
                         List<ImportFeedBack> errors = ImportUtil.ValidateImportRecord(item, num++, maps, ref record);
                         if (errors.Count > 0)
                         {
@@ -168,7 +175,7 @@ namespace BEYON.CoreBLL.Service.App
                         }
 
                         //插入或更新数据
-                        _TaxBaseByMonthRepository.InsertOrUpdate(record);
+                        _TaxBaseEveryMonthRepository.InsertOrUpdate(record);
                     }
                 }
 
@@ -201,20 +208,29 @@ namespace BEYON.CoreBLL.Service.App
         //    }
         //}
 
-        public Double GetBaseSalary(String certificateID) {
-            Double baseSalary = _TaxBaseByMonthRepository.GetBaseSalary(certificateID);
-            return baseSalary;
+        public Double GetTotalIncome(String period_year, String certificateID)
+        {
+            Double totalIncome = _TaxBaseEveryMonthRepository.GetTotalIncome(period_year, certificateID);
+            return totalIncome;
         }
 
-        public String GetNameByCerID(String certificateID) {
-            String name = _TaxBaseByMonthRepository.GetNameByCerID(certificateID);
-            return name;
+        public Double GetTotalTax(String period_year, String certificateID)
+        {
+            Double totalTax = _TaxBaseEveryMonthRepository.GetTotalTax(period_year, certificateID);
+            return totalTax;
         }
+
+
+        public TaxBaseEveryMonth GetExistRecord(String period_year, String certificateID) {
+            TaxBaseEveryMonth taxBaseEveryMonth = _TaxBaseEveryMonthRepository.GetExistRecord(period_year, certificateID);
+            return taxBaseEveryMonth;
+        }
+   
 
         public OperationResult DeleteAll() {
             try
             {               
-                _TaxBaseByMonthRepository.Delete(_TaxBaseByMonthRepository.Entities);
+                _TaxBaseEveryMonthRepository.Delete(_TaxBaseEveryMonthRepository.Entities);
                 return new OperationResult(OperationResultType.Success, "清空数据成功！");
             }
             catch

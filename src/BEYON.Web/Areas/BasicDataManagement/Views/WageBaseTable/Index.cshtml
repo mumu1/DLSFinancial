@@ -47,6 +47,10 @@
     <div id="confirmDialog_backupTax" title="确认备份本月算税记录" style="display:none;">
         备份计税数据后本月算税记录会被清空，当前的算税记录会全部转存到历史算税记录中，该操作应该在当月初始化工资表导入前进行。您确定要备份计税数据吗？
     </div>​
+    <!--确认当月数据汇入年度累计表对话框-->
+    <div id="confirmDialog_AddYearTable" title="确认将当月数据汇入年度累计表" style="display:none;">
+        将当月汇总数据汇入当年累计数据，从1月开始累计。该操作应该在备份本月算税记录前进行。您确定要汇总累计数据吗？
+    </div>​
     <!--确认清空初始化工资表对话框-->
     <div id="confirmDialog_clearVageBase" title="确认清空当前基础工资表" style="display:none;">
         点击确认后初始化基础工资表（即下表）记录会被清空，该操作应该在当月初始化工资表导入前进行。您确定要清空基础工资表吗？
@@ -138,7 +142,7 @@
 
     });
 
-    //加载职称列表
+    //加载列表
     function loadTableData() {
         $.ajax({
             type: "GET",
@@ -212,7 +216,11 @@
              {
                  label: "初始税额:",
                  name: "InitialTax"
-             }
+             },
+              {
+                  label: "专项扣除额:",
+                  name: "SpecialDeduction"
+              }
             ]
         });
 
@@ -240,13 +248,13 @@
                     ]
                 },
                  {
-                     text: "5刷新",
+                     text: "6刷新",
                      action: function (e, dt, node, config) {
                          dt.ajax.reload();
                      }
                  },
                 {
-                    text: "4导入",
+                    text: "5导入",
                     action: function (e, dt, node, config) {
                         alert("若为当月初始化整表导入，请先执行清空，再导入。");
                         var ColumnDatas = [];
@@ -276,7 +284,7 @@
                     }
                 },              
                 {
-                    text: "3清空",
+                    text: "4清空",
                     action: function (e, dt, node, config) {
                         clearWageBase(dt);
                         //$("#confirmDialog_clearVageBase").dialog("open");
@@ -286,12 +294,19 @@
                     }
                 },
                 {
-                    text: "2备份计税数据",
+                    text: "3备份计税数据",
                     action: function (e, dt, node, config) {
                         $("#confirmDialog_backupTax").dialog("open");
                            
                     }
                 },
+                   {
+                       text: "2当月数据汇入年度累计表",
+                       action: function (e, dt, node, config) {
+                           $("#confirmDialog_AddYearTable").dialog("open");
+
+                       }
+                   },
                  {
                      text: "1更新开放时间",
                      action: function (e, dt, node, config) {
@@ -322,6 +337,7 @@
                                     { data: "AmountDeducted", title: "基本扣除" },
                                     { data: "InitialTaxPayable", title: "初始应纳税所得额" },
                                     { data: "InitialTax", title: "初始税额" },
+                                    { data: "SpecialDeduction", title: "专项扣除额" },
                                    // { data: "PersonType", title: "人员类型" },
                                     //{ data: "Title", title: "职称" }
             ],
@@ -414,6 +430,35 @@
             }
         }
     });
+
+    //当月数据汇入年度累计表的确认对话框
+    $("#confirmDialog_AddYearTable").dialog({
+        autoOpen: false,
+        modal: true,
+        buttons: {
+            "确认": function () {
+                $.ajax({
+                    type: "POST",
+                    async: false,
+                    url: "../BasicDataManagement/WageBaseTable/AddToYearBaseTable",
+                    //data: params,
+                    contentType: "application/json; charset=utf-8",
+                    datatype: "json",
+                    success: function (data) {
+                        toastr.info("当月数据汇入年度累计表成功");
+                    },
+                    error: function () {
+                        toastr.error('当月数据汇入年度累计表失败！');
+                    }
+                });
+                $(this).dialog("close");
+            },
+            "取消": function () {
+                $(this).dialog("close");
+            }
+        }
+    });
+
 
     //清空初始化工资表确认对话框       
     function clearWageBase(dt) {

@@ -55,6 +55,10 @@ namespace BEYON.Domain.Model.App
         [StringLength(50)]
         public String Period { get; set; }
 
+        [Display(Name = "专项扣除额")]
+        public Double SpecialDeduction { get; set; }
+        
+
         /*
         [Display(Name = "人员类型")]
         [StringLength(36)]
