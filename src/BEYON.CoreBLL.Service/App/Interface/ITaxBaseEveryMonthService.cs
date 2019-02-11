@@ -27,5 +27,7 @@ namespace BEYON.CoreBLL.Service.App.Interface
         TaxBaseEveryMonth GetExistRecord(String period_year, String certificateID);
 
         OperationResult DeleteAll();
+
+        void InsertOrUpdate(TaxBaseEveryMonth record);
     }
 }

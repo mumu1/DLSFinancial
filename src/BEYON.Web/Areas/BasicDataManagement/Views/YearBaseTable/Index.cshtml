@@ -186,10 +186,39 @@
                      }
                  },
                 
-   
-                /*
+     {
+         text: "导入",
+         action: function (e, dt, node, config) {
+             alert("导入的新表数据将覆盖原始表。");
+             var ColumnDatas = [];
+             var columns = dt.settings().init().columns;
+             dt.columns().every(function (index) {
+                 ColumnDatas.push({ ColumnName: columns[index].data, TitleName: columns[index].title })
+             })
+
+             $.ajax({
+                 url: '../App/Import/ImportData',
+                 type: 'POST',
+                 data: JSON.stringify({ ActionUrl: "@Url.Action("Import")", Columns: ColumnDatas }),
+             contentType: 'application/json; charset=utf8',
+             cache: false,
+             dataType: 'html',
+             success: function (data) {
+                 $('#importDataDialog').html(data);
+                                
+
+             },
+             error: function (xhr) {
+                 alert("出现错误，请稍后再试:" + xhr.responseText);
+             }
+         });
+         dt.ajax.reload();
+         //$('#importDataDialog').load('../App/Import/ImportData', );
+         }
+         },     
+                
                 {
-                    text: "3清空",
+                    text: "清空",
                     action: function (e, dt, node, config) {
                         clearWageBase(dt);
                         //$("#confirmDialog_clearVageBase").dialog("open");
@@ -198,7 +227,7 @@
                                                
                     }
                 },
-                */
+                
                  
             ],
             searching: true,
@@ -262,16 +291,16 @@
                     $.ajax({
                         type: "POST",
                         async: false,
-                        url: "../BasicDataManagement/WageBaseTable/DeleteAll",
+                        url: "../BasicDataManagement/YearBaseTable/DeleteAll",
                         //data: params,
                         contentType: "application/json; charset=utf-8",
                         datatype: "json",
                         success: function (data) {
-                            dt.ajax.reload();                      
-                            toastr.info("工资基础表清空成功");
+                            dt.ajax.reload();
+                            toastr.info("累计表清空成功");
                         },
                         error: function () {
-                            toastr.error('工资基础表清空失败！');
+                            toastr.error('累计表清空失败！');
                         }
                     });
                     $(this).dialog("close");

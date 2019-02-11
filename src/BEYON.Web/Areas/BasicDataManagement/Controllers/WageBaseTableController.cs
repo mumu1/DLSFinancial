@@ -154,9 +154,8 @@ namespace BEYON.Web.Areas.BasicDataManagement.Controllers
             var result = this._taxBaseByMonthService.TaxBaseByMonths.ToList();
             String period = _taxBaseByMonthService.TaxBaseByMonths.First().Period;
             String period_year = period.Split('-')[0]; //get year
-            TaxBaseEveryMonthVM taxBaseEveryMonth = null;
-            try
-            {
+            TaxBaseEveryMonth taxBaseEveryMonth = new TaxBaseEveryMonth();
+           
                 foreach (var model in result)
                 {
                     double monthIncome = _taxPerOrderService.GetPayTaxAmount(model.CertificateID, "含税");
@@ -167,7 +166,7 @@ namespace BEYON.Web.Areas.BasicDataManagement.Controllers
                     var taxBaseEveryMonth_exsit = _taxBaseEveryMonthService.GetExistRecord(period_year, model.CertificateID);
                     if (taxBaseEveryMonth_exsit != null)
                     {
-                        taxBaseEveryMonth = new TaxBaseEveryMonthVM();
+                        
                         taxBaseEveryMonth.CertificateID = model.CertificateID;
                         taxBaseEveryMonth.CertificateType = model.CertificateType;
                         taxBaseEveryMonth.Name = model.Name;
@@ -183,11 +182,11 @@ namespace BEYON.Web.Areas.BasicDataManagement.Controllers
                         taxBaseEveryMonth.TaxFree = model.TaxFree + taxBaseEveryMonth_exsit.TaxFree;
                         taxBaseEveryMonth.AmountDeducted = model.AmountDeducted + taxBaseEveryMonth_exsit.AmountDeducted;
 
-                        _taxBaseEveryMonthService.Insert(taxBaseEveryMonth);
+                        
                     }
                     else
                     {
-                        taxBaseEveryMonth = new TaxBaseEveryMonthVM();
+                        
                         taxBaseEveryMonth.CertificateID = model.CertificateID;
                         taxBaseEveryMonth.CertificateType = model.CertificateType;
                         taxBaseEveryMonth.Name = model.Name;
@@ -203,18 +202,15 @@ namespace BEYON.Web.Areas.BasicDataManagement.Controllers
                         taxBaseEveryMonth.TaxFree = model.TaxFree;
                         taxBaseEveryMonth.AmountDeducted = model.AmountDeducted;
 
-                        _taxBaseEveryMonthService.Insert(taxBaseEveryMonth);
+                       
                     }
-
+                    _taxBaseEveryMonthService.InsertOrUpdate(taxBaseEveryMonth);
 
                 }
-            }
-
-            catch
-            {
-                return Json(new { erro = "计算累计数据失败！" });
-            }
             return Json(new { });
+            
+
+            
 
         }
 

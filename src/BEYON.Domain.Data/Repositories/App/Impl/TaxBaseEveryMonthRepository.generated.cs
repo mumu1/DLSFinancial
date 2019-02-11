@@ -83,7 +83,7 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
             string[] columns = new string[]{
                 "CertificateID","Name","CertificateType","InitialEaring",
                 "TaxFree","AmountDeducted","InitialTaxPayable","InitialTax","Period",
-                "UpdateDate","SpecialDeduction","TotalIncome" , "TotalTax" , "TotalTemp"
+                "SpecialDeduction","TotalIncome" , "TotalTax" , "TotalTemp","UpdateDate"
             };
             StringBuilder sql = new StringBuilder();
             sql.Append("INSERT INTO dbo.\"TaxBaseEveryMonths\" ( ");
@@ -99,13 +99,14 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                 sql.Append(String.Format(":{0},", column));
             }
             sql.Remove(sql.Length - 1, 1);
-            sql.Append(" )  ON CONFLICT ( \"Period\", \"CertificateID\", \"CertificateType\") DO UPDATE SET ");
+            sql.Append(" )  ON CONFLICT ( \"Period\", \"CertificateID\") DO UPDATE SET ");
 
             foreach (var column in columns)
             {
                 sql.Append(String.Format("\"{0}\"=:{1},", column, column));
             }
             sql.Remove(sql.Length - 1, 1);
+
 
             //2.添加参数变量
             List<NpgsqlParameter> parameters = new List<NpgsqlParameter>();
@@ -114,8 +115,13 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                 var value = PropertyUtil.GetPropValue(record, column);
                 if (value == null)
                     value = "";
+                if (value is String && !String.IsNullOrEmpty(value.ToString()))
+                {
+                    value = value.ToString().Trim().Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", "");
+                }
                 parameters.Add(new NpgsqlParameter(String.Format(":{0}", column), value));
             }
+
 
             //3.执行SQL
             var connectString = System.Configuration.ConfigurationManager.ConnectionStrings["BeyonDBGuMu"];
@@ -129,6 +135,7 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                     command.ExecuteNonQuery();
                 }
             }
+
         }
 
     }

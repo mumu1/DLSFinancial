@@ -238,5 +238,12 @@ namespace BEYON.CoreBLL.Service.App
                 return new OperationResult(OperationResultType.Error, "清空数据失败!");
             }
         }
+
+        public void InsertOrUpdate(TaxBaseEveryMonth record)
+        {
+
+            this._TaxBaseEveryMonthRepository.InsertOrUpdate(record);
+
+        }
     }
 }

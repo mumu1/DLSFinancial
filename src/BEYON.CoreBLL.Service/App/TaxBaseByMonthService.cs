@@ -138,13 +138,13 @@ namespace BEYON.CoreBLL.Service.App
         {
             try
             {
-                model.UpdateDate = DateTime.Now;
+               // model.UpdateDate = DateTime.Now;
                 _TaxBaseByMonthRepository.Delete(model);
-                return new OperationResult(OperationResultType.Success, "更新数据成功！");
+                return new OperationResult(OperationResultType.Success, "删除数据成功！");
             }
             catch
             {
-                return new OperationResult(OperationResultType.Error, "更新数据失败!");
+                return new OperationResult(OperationResultType.Error, "删除数据失败!");
             }
         }
 
