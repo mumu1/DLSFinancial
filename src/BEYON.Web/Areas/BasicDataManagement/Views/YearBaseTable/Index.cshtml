@@ -46,11 +46,11 @@
   
     
     <!--确认清空初始化工资表对话框-->
-    <!--
-    <div id="confirmDialog_clearVageBase" title="确认清空当前基础工资表" style="display:none;">
-        点击确认后初始化基础工资表（即下表）记录会被清空，该操作应该在当月初始化工资表导入前进行。您确定要清空基础工资表吗？
+   
+    <div id="confirmDialog_clearVageBase" title="确认清空当前累计计算表" style="display:none;">
+        点击确认后累计计算表（即下表）记录会被清空。您确定要清空累计计算表吗？
     </div>​
-    -->
+   
    
 </div>
 
@@ -152,7 +152,15 @@
               {
                   label: "年度税额累计:",
                   name: "TotalTax"
-              }
+              },
+               {
+                   label: "年度不含税收入累计:",
+                   name: "TotalTemp"
+               },
+                {
+                    label: "当前已累计月:",
+                    name: "LastMonths"
+                }
             ]
         });
 
@@ -256,6 +264,8 @@
                                     { data: "SpecialDeduction", title: "专项扣除额累计" },
                                     { data: "TotalIncome", title: "年度收入累计" },
                                     { data: "TotalTax", title: "年度税额累计" },
+                                    { data: "TotalTemp", title: "年度不含税收入累计" },
+                                    { data: "LastMonths", title: "当前已累计月" },
                                    // { data: "PersonType", title: "人员类型" },
                                     //{ data: "Title", title: "职称" }
             ],

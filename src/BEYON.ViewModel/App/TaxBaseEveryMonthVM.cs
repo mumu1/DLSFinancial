@@ -50,8 +50,12 @@ namespace BEYON.ViewModel.App
         [Display(Name = "月税总额")]
         public Double TotalTax { get; set; }
 
-        [Display(Name = "预留字段")]
+        [Display(Name = "年度不含税收入累计")]
         public Double TotalTemp { get; set; }
+
+
+        [Display(Name = "当前已累计月")]
+        public String LastMonths { get; set; }
 /*
         [Display(Name = "人员类型")]
         [StringLength(36)]

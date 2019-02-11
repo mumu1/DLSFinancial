@@ -83,7 +83,7 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
             string[] columns = new string[]{
                 "CertificateID","Name","CertificateType","InitialEaring",
                 "TaxFree","AmountDeducted","InitialTaxPayable","InitialTax","Period",
-                "SpecialDeduction","TotalIncome" , "TotalTax" , "TotalTemp","UpdateDate"
+                "SpecialDeduction","TotalIncome" , "TotalTax" , "TotalTemp","UpdateDate","LastMonths"
             };
             StringBuilder sql = new StringBuilder();
             sql.Append("INSERT INTO dbo.\"TaxBaseEveryMonths\" ( ");

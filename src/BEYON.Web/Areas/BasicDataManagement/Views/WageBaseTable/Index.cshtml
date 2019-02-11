@@ -49,12 +49,14 @@
     </div>​
     <!--确认当月数据汇入年度累计表对话框-->
     <div id="confirmDialog_AddYearTable" title="确认将当月数据汇入年度累计表" style="display:none;">
-        将当月汇总数据汇入当年累计数据，从1月开始累计。该操作应该在备份本月算税记录前进行。您确定要汇总累计数据吗？
+        将当月汇总数据汇入当年累计数据，从1月开始累计。该操作应该在备份本月算税记录前进行。该操作执行完毕，初始化基础工资表（即下表）记录会被清空，您确定要汇总累计数据吗？
     </div>​
     <!--确认清空初始化工资表对话框-->
+   
     <div id="confirmDialog_clearVageBase" title="确认清空当前基础工资表" style="display:none;">
         点击确认后初始化基础工资表（即下表）记录会被清空，该操作应该在当月初始化工资表导入前进行。您确定要清空基础工资表吗？
     </div>​
+       
     <!--更新系统开放时间对话框-->
     <div id="dialog-setSafeguardTime" title="更新系统开放时间" style="display:none;">
         <p class="validateTips">请设置系统本月的普通用户开放时间，结束时间需晚于开始时间。</p>
@@ -282,7 +284,8 @@
                         dt.ajax.reload();
                         //$('#importDataDialog').load('../App/Import/ImportData', );
                     }
-                },              
+                },
+                
                 {
                     text: "4清空",
                     action: function (e, dt, node, config) {
@@ -293,6 +296,7 @@
                                                
                     }
                 },
+                
                 {
                     text: "3备份计税数据",
                     action: function (e, dt, node, config) {

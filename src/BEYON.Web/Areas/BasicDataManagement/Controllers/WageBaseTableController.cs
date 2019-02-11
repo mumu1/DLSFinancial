@@ -154,6 +154,7 @@ namespace BEYON.Web.Areas.BasicDataManagement.Controllers
             var result = this._taxBaseByMonthService.TaxBaseByMonths.ToList();
             String period = _taxBaseByMonthService.TaxBaseByMonths.First().Period;
             String period_year = period.Split('-')[0]; //get year
+            String period_month = period.Split('-')[1]; //get month
             TaxBaseEveryMonth taxBaseEveryMonth = new TaxBaseEveryMonth();
            
                 foreach (var model in result)
@@ -181,7 +182,7 @@ namespace BEYON.Web.Areas.BasicDataManagement.Controllers
                         taxBaseEveryMonth.SpecialDeduction = model.SpecialDeduction + taxBaseEveryMonth_exsit.SpecialDeduction;
                         taxBaseEveryMonth.TaxFree = model.TaxFree + taxBaseEveryMonth_exsit.TaxFree;
                         taxBaseEveryMonth.AmountDeducted = model.AmountDeducted + taxBaseEveryMonth_exsit.AmountDeducted;
-
+                        taxBaseEveryMonth.LastMonths = period_month;
                         
                     }
                     else
@@ -201,11 +202,18 @@ namespace BEYON.Web.Areas.BasicDataManagement.Controllers
                         taxBaseEveryMonth.SpecialDeduction = model.SpecialDeduction;
                         taxBaseEveryMonth.TaxFree = model.TaxFree;
                         taxBaseEveryMonth.AmountDeducted = model.AmountDeducted;
-
+                        taxBaseEveryMonth.LastMonths = period_month;
                        
                     }
-                    _taxBaseEveryMonthService.InsertOrUpdate(taxBaseEveryMonth);
-
+                    try
+                    {
+                        _taxBaseEveryMonthService.InsertOrUpdate(taxBaseEveryMonth);
+                 //       _taxBaseByMonthService.Delete(model);
+                    }
+                    catch (Exception ex)
+                    {
+                        return null;
+                    }   
                 }
             return Json(new { });
             

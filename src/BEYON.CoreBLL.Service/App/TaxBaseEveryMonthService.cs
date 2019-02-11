@@ -53,6 +53,7 @@ namespace BEYON.CoreBLL.Service.App
                     TotalIncome = model.TotalIncome,
                     TotalTax = model.TotalTax,
                     TotalTemp = model.TotalTemp,
+                    LastMonths = model.LastMonths,
 
                     //PersonType = model.PersonType,
                     //Title = model.Title,
@@ -90,6 +91,7 @@ namespace BEYON.CoreBLL.Service.App
                 taxBaseEveryMonth.TotalIncome = model.TotalIncome;
                 taxBaseEveryMonth.TotalTax = model.TotalTax;
                 taxBaseEveryMonth.TotalTemp = model.TotalTemp;
+                taxBaseEveryMonth.LastMonths = model.LastMonths;
                 //taxBaseByMonth.Title = model.Title;
                 taxBaseEveryMonth.UpdateDate = DateTime.Now;
                 _TaxBaseEveryMonthRepository.Update(taxBaseEveryMonth);
