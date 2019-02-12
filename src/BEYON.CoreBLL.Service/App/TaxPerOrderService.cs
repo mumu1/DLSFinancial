@@ -349,7 +349,7 @@ namespace BEYON.CoreBLL.Service.App
                 if (model.PersonType.Equals("所内"))
                 {
                     //按照工资进行算税
-                    String period_year = new DateTime().Year.ToString();
+                    String period_year =DateTime.Now.Year.ToString();
                     TaxBaseEveryMonth taxBaseEveryMonth = _TaxBaseEveryMonthRepository.GetExistRecord(period_year, model.CertificateID);
                     //1.查询当月已发放总金额，查询当月已计税总额【Tax和】                                  
                     double amount = GetPayTaxAmount(model.CertificateID, model.TaxOrNot);
@@ -369,7 +369,14 @@ namespace BEYON.CoreBLL.Service.App
                     //4.计算Tax(税额),AmountX(税后),AmountY(税前)
                     if (model.TaxOrNot.Equals("含税"))
                     {
-                        double interval = model.Amount + amount + baseSalary + taxBaseEveryMonth.TotalIncome - taxBaseEveryMonth.TaxFree - taxBaseEveryMonth.SpecialDeduction - taxBaseEveryMonth.AmountDeducted;
+                        double interval = 0.0;
+                        if (taxBaseEveryMonth != null)
+                        {
+                            interval = model.Amount + amount + baseSalary + taxBaseEveryMonth.TotalIncome - taxBaseEveryMonth.TaxFree - taxBaseEveryMonth.SpecialDeduction - taxBaseEveryMonth.AmountDeducted;
+                        }
+                        else {
+                            interval = model.Amount + amount + baseSalary;
+                        }
                         if (interval <= 0)
                         {
                             tax = 0.0;
@@ -377,45 +384,55 @@ namespace BEYON.CoreBLL.Service.App
                         //不超过3000元，税率3%，速算扣除数0
                         else if (interval > 0 && interval <= 36000)
                         {
-                            tax = interval * 0.03 - deductTaxSum - baseTax;
+                            tax = interval * 0.03 - deductTaxSum - baseTax-taxBaseEveryMonth.TotalTax;
                         }
                         //超过3000至12000元，税率10%，速算扣除数210
                         else if (interval > 36000 && interval <= 144000)
                         {
-                            tax = interval * 0.1 - 2520 - deductTaxSum - baseTax;
+                            tax = interval * 0.1 - 2520 - deductTaxSum - baseTax - taxBaseEveryMonth.TotalTax;
                         }
                         //超过12000至25000元，税率20%，速算扣除数1410
                         else if (interval > 144000 && interval <= 300000)
                         {
-                            tax = interval * 0.2 - 16920 - deductTaxSum - baseTax;
+                            tax = interval * 0.2 - 16920 - deductTaxSum - baseTax - taxBaseEveryMonth.TotalTax;
                         }
                         //超过25000至35000元，税率25%，速算扣除数2660
                         else if (interval > 300000 && interval <= 420000)
                         {
-                            tax = interval * 0.25 - 31920 - deductTaxSum - baseTax;
+                            tax = interval * 0.25 - 31920 - deductTaxSum - baseTax - taxBaseEveryMonth.TotalTax;
                         }
                         //超过35000至55000元，税率30%，速算扣除数4410
                         else if (interval > 420000 && interval <= 660000)
                         {
-                            tax = interval * 0.3 - 52920 - deductTaxSum - baseTax;
+                            tax = interval * 0.3 - 52920 - deductTaxSum - baseTax - taxBaseEveryMonth.TotalTax;
                         }
                         //超过55000至80000元，税率35%，速算扣除数7160
                         else if (interval > 660000 && interval <= 960000)
                         {
-                            tax = interval * 0.35 - 85920- deductTaxSum - baseTax;
+                            tax = interval * 0.35 - 85920 - deductTaxSum - baseTax - taxBaseEveryMonth.TotalTax;
                         }
                         //超过80000元，税率45%，速算扣除数15160
                         else if (interval > 960000)
                         {
-                            tax = interval * 0.45 - 181920 - deductTaxSum - baseTax;
+                            tax = interval * 0.45 - 181920 - deductTaxSum - baseTax - taxBaseEveryMonth.TotalTax;
+                        }
+                        if (tax < 0) {
+                            tax = 0.0;
                         }
                         amountX = model.Amount - tax;
                         amountY = model.Amount;
                     }
                     else if (model.TaxOrNot.Equals("不含税"))
                     {
-                        double interval_1 = model.Amount + amount + baseSalary - baseTax + taxBaseEveryMonth.TotalTemp - taxBaseEveryMonth.TaxFree - taxBaseEveryMonth.SpecialDeduction - taxBaseEveryMonth.AmountDeducted;
-                        double tax_1 = 0.0;
+                        double interval_1 = 0.0;
+                        if (taxBaseEveryMonth != null)
+                        {
+                            interval_1 = model.Amount + amount + baseSalary - baseTax + taxBaseEveryMonth.TotalTemp - taxBaseEveryMonth.TaxFree - taxBaseEveryMonth.SpecialDeduction - taxBaseEveryMonth.AmountDeducted;
+                        }
+                        else {
+                            interval_1 = model.Amount + amount + baseSalary - baseTax;
+                        }
+                             double tax_1 = 0.0;
                         //first step
                         if (interval_1 <= 0)
                         {
@@ -481,37 +498,40 @@ namespace BEYON.CoreBLL.Service.App
                         //不超过3000元，税率3%，速算扣除数0
                         else if (tax_1 > 0 && tax_1 <= 36000)
                         {
-                            tax = tax_1 * 0.03 - baseTax - deductTaxSum;
+                            tax = tax_1 * 0.03 - baseTax - deductTaxSum - taxBaseEveryMonth.TotalTax;
                         }
                         //超过3000至12000元，税率10%，速算扣除数210
                         else if (tax_1 > 36000 && tax_1 <= 144000)
                         {
-                            tax = tax_1 * 0.1 - baseTax - 2520 - deductTaxSum;
+                            tax = tax_1 * 0.1 - baseTax - 2520 - deductTaxSum - taxBaseEveryMonth.TotalTax;
                         }
                         //超过12000至25000元，税率20%，速算扣除数1410
                         else if (tax_1 > 144000 && tax_1 <= 300000)
                         {
-                            tax = tax_1 * 0.2 - baseTax - 16920 - deductTaxSum;
+                            tax = tax_1 * 0.2 - baseTax - 16920 - deductTaxSum - taxBaseEveryMonth.TotalTax;
                         }
                         //超过25000至35000元，税率25%，速算扣除数2660
                         else if (tax_1 > 300000 && tax_1 <= 420000)
                         {
-                            tax = tax_1 * 0.25 - baseTax - 31920 - deductTaxSum;
+                            tax = tax_1 * 0.25 - baseTax - 31920 - deductTaxSum - taxBaseEveryMonth.TotalTax;
                         }
                         //超过35000至55000元，税率30%，速算扣除数4410
                         else if (tax_1 > 420000 && tax_1 <= 660000)
                         {
-                            tax = tax_1 * 0.3 - baseTax - 52920 - deductTaxSum;
+                            tax = tax_1 * 0.3 - baseTax - 52920 - deductTaxSum - taxBaseEveryMonth.TotalTax;
                         }
                         //超过55000至80000元，税率35%，速算扣除数7160
                         else if (tax_1 > 660000 && tax_1 <= 960000)
                         {
-                            tax = tax_1 * 0.35 - baseTax - 85920 - deductTaxSum;
+                            tax = tax_1 * 0.35 - baseTax - 85920 - deductTaxSum - taxBaseEveryMonth.TotalTax;
                         }
                         //超过80000元，税率45%，速算扣除数15160
                         else if (tax_1 > 960000)
                         {
-                            tax = tax_1 * 0.45 - baseTax - 181920 - deductTaxSum;
+                            tax = tax_1 * 0.45 - baseTax - 181920 - deductTaxSum - taxBaseEveryMonth.TotalTax;
+                        }
+                        if (tax < 0) {
+                            tax = 0.0;
                         }
                         amountX = model.Amount;
                         amountY = model.Amount + tax;
