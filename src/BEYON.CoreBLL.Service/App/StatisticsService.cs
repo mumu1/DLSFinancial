@@ -30,16 +30,24 @@ namespace BEYON.CoreBLL.Service.App
             columns.Add(new Column("C4", "证件号码"));
 
             columns.Add(new Column("C5", "收入额"));
-            columns.Add(new Column("C6", "免税金额"));
-            columns.Add(new Column("C7", "基本扣除"));
-            columns.Add(new Column("C8", "已扣缴税额"));
-            columns.Add(new Column("C9", "应纳税所得额"));//从应纳税额改过来20170214
-            //应纳税所得额=收入额C5-免税金额C6-基本扣除C7，若值<0,则改为0
-            columns.Add(new Column("C10", "联系电话"));
-            columns.Add(new Column("C11", "国籍"));
-            columns.Add(new Column("C12", "单位"));
-            columns.Add(new Column("C13", "职称"));
-            columns.Add(new Column("C14", "次数"));
+            columns.Add(new Column("C6", "本期免税收入"));
+            columns.Add(new Column("C7", "本期基本扣除"));
+            columns.Add(new Column("C8", "本期养老保险"));
+            columns.Add(new Column("C9", "本期失业保险"));
+            columns.Add(new Column("C10", "本期医疗保险"));
+            columns.Add(new Column("C11", "本期职业年金"));
+            columns.Add(new Column("C12", "本期住房公积金"));
+            columns.Add(new Column("C13", "本期专项附加扣除"));
+            columns.Add(new Column("C14", "本期初始税后收入额"));
+           
+            columns.Add(new Column("C15", "已扣缴税额"));
+            columns.Add(new Column("C16", "应纳税所得额"));
+           
+            columns.Add(new Column("C17", "联系电话"));
+            columns.Add(new Column("C18", "国籍"));
+            columns.Add(new Column("C19", "单位"));
+            columns.Add(new Column("C20", "职称"));
+            columns.Add(new Column("C21", "次数"));
             int count = _statisticsRepository.GetMaxCountPerMonthPerPerson();
             for (var i = 0; i < count; i++)
             {

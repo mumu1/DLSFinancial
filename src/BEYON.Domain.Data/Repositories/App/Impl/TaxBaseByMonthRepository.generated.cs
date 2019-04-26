@@ -47,7 +47,7 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
             Double baseSalary = 0.0;
             if (lists.Count > 0) {
                // baseSalary = lists[0].InitialEaring - lists[0].TaxFree - lists[0].AmountDeducted;
-                baseSalary = lists[0].InitialEaring - lists[0].TaxFree - lists[0].AmountDeducted - lists[0].SpecialDeduction;
+               // baseSalary = lists[0].InitialEaring - lists[0].TaxFree - lists[0].AmountDeducted - lists[0].SpecialDeduction;
             }
             return baseSalary;  
         }
@@ -63,6 +63,77 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                 baseTax = lists[0].InitialTax;
             }
             return baseTax;
+        }
+
+        public Double GetInitialTaxPayable(String certificateID)
+        {
+            var record = from p in Context.TaxBaseByMonths.Where(w => w.CertificateID == certificateID)
+                         select p;
+            var lists = record.ToList();
+            Double initialTaxPayable = 0.0;
+            if (lists.Count > 0)
+            {
+                initialTaxPayable = lists[0].InitialTaxPayable;
+            }
+            return initialTaxPayable;
+        }
+
+        //（本期初始税前收入额TaxBaseByMonth.InitialEaring—本期免税收入TaxFreeIncome
+        //—本期养老保险—本期失业保险—本期医疗保险—本期职业年金—本期住房公积金
+        //—本期基本扣除—本期专项附加扣除）
+        public Double GetPart1(String certificateID) {
+            var record = from p in Context.TaxBaseByMonths.Where(w => w.CertificateID == certificateID)
+                         select p;
+            var lists = record.ToList();
+            Double part1 = 0.0;
+            if (lists.Count > 0)
+            {
+                part1 = lists[0].InitialEaring - lists[0].TaxFreeIncome - lists[0].EndowmentInsurance - lists[0].UnemployedInsurance - lists[0].MedicalInsurance - lists[0].OccupationalAnnuity - lists[0].HousingFund - lists[0].AmountDeducted - lists[0].SpecialDeduction;
+            }
+            return part1;
+        }
+
+
+        public Double GetPart2(String certificateID)
+        {
+            var record = from p in Context.TaxBaseByMonths.Where(w => w.CertificateID == certificateID)
+                         select p;
+            var lists = record.ToList();
+            Double part2 = 0.0;
+            if (lists.Count > 0)
+            {
+                part2 = lists[0].InitialEaring - lists[0].TaxFreeIncome - lists[0].EndowmentInsurance - lists[0].UnemployedInsurance - lists[0].MedicalInsurance - lists[0].OccupationalAnnuity - lists[0].HousingFund - lists[0].AmountDeducted - lists[0].SpecialDeduction;
+            }
+            return part2;
+        }
+
+        public Double GetInitialTax(String certificateID)
+        {
+            var record = from p in Context.TaxBaseByMonths.Where(w => w.CertificateID == certificateID)
+                         select p;
+            var lists = record.ToList();
+            Double initialTax = 0.0;
+            if (lists.Count > 0)
+            {
+                initialTax = lists[0].InitialTax;
+            }
+            return initialTax;
+        }
+
+        public Double GetWithoutInsurance(String certificateID)
+        {
+            var record = from p in Context.TaxBaseByMonths.Where(w => w.CertificateID == certificateID)
+                         select p;
+            var lists = record.ToList();
+            Double withoutInsurance = 0.0;
+            //1.（本期初始税后收入额—本期免税收入 —本期养老保险—本期失业保险
+            //—本期医疗保险—本期职业年金—本期住房公积金—本期基本扣除
+            //—本期专项附加扣除）
+            if (lists.Count > 0)
+            {
+                withoutInsurance = lists[0].InitialAfterTaxIncome - lists[0].TaxFreeIncome - lists[0].EndowmentInsurance - lists[0].UnemployedInsurance - lists[0].MedicalInsurance - lists[0].OccupationalAnnuity - lists[0].HousingFund - lists[0].AmountDeducted - lists[0].SpecialDeduction;
+            }
+            return withoutInsurance;
         }
 
         public String GetNameByCerID(String certificateID) {
@@ -102,8 +173,8 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
             //1.构造插入或更新SQL
             string[] columns = new string[]{
                 "CertificateID","Name","CertificateType","InitialEaring",
-                "TaxFree","AmountDeducted","InitialTaxPayable","InitialTax","Period",
-                "UpdateDate","SpecialDeduction"
+                "TaxFreeIncome","EndowmentInsurance","UnemployedInsurance","MedicalInsurance","OccupationalAnnuity","HousingFund","AmountDeducted","SpecialDeduction","InitialTaxPayable","InitialTax","Period",
+                "UpdateDate","InitialAfterTaxIncome"
             };
             StringBuilder sql = new StringBuilder();
             sql.Append("INSERT INTO dbo.\"TaxBaseByMonths\" ( ");

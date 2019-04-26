@@ -200,29 +200,59 @@
                 name: "CertificateID"
             },
             {
-                label: "初始应发数:",
+                label: "本期初始税前收入额:",
                 name: "InitialEaring"
             },
+            {
+                label: "本期免税收入:",
+                name: "TaxFreeIncome"
+            },
+            {
+                label: "本期养老保险:",
+                name: "EndowmentInsurance"
+            },
+            {
+                label: "本期失业保险:",
+                name: "UnemployedInsurance"
+            },
+            {
+                label: "本期医疗保险:",
+                name: "MedicalInsurance"
+            },
+            {
+                label: "本期职业年金:",
+                name: "OccupationalAnnuity"
+            },
+            {
+                label: "本期住房公积金:",
+                name: "HousingFund"
+            },
+            /*
             {
                 label: "免税额:",
                 name: "TaxFree"
             },
+            */
             {
-                label: "基本扣除:",
+                label: "本期基本扣除:",
                 name: "AmountDeducted"
             },
             {
-                label: "初始应纳税所得额:",
+                label: "本期专项附加扣除:",
+                name: "SpecialDeduction"
+            },
+            {
+                label: "本期应纳税所得额:",
                 name: "InitialTaxPayable"
             },
              {
-                 label: "初始税额:",
+                 label: "本期初始已扣缴税额:",
                  name: "InitialTax"
              },
-              {
-                  label: "专项扣除额:",
-                  name: "SpecialDeduction"
-              }
+            {
+                label: "本期初始税后收入额:",
+                name: "InitialAfterTaxIncome"
+             }
             ]
         });
 
@@ -336,12 +366,21 @@
                                     { data: "Name", title: "姓名" },
                                     { data: "CertificateType", title: "证件类型" },
                                     { data: "CertificateID", title: "证件号码" },
-                                    { data: "InitialEaring", title: "初始应发数" },
-                                    { data: "TaxFree", title: "免税额" },
-                                    { data: "AmountDeducted", title: "基本扣除" },
-                                    { data: "InitialTaxPayable", title: "初始应纳税所得额" },
-                                    { data: "InitialTax", title: "初始税额" },
-                                    { data: "SpecialDeduction", title: "专项扣除额" },
+                                    { data: "InitialEaring", title: "本期初始税前收入额" },
+                                    { data: "TaxFreeIncome", title: "本期免税收入" },
+                                    { data: "EndowmentInsurance", title: "本期养老保险" },
+                                    { data: "UnemployedInsurance", title: "本期失业保险" },
+                                    { data: "MedicalInsurance", title: "本期医疗保险" },
+                                    { data: "OccupationalAnnuity", title: "本期职业年金" },
+                                    { data: "HousingFund", title: "本期住房公积金" },
+                                    //{ data: "TaxFree", title: "免税额" },
+                                    { data: "AmountDeducted", title: "本期基本扣除" },
+                                    { data: "SpecialDeduction", title: "本期专项附加扣除" },
+                                    { data: "InitialTaxPayable", title: "本期应纳税所得额" },
+                                    { data: "InitialTax", title: "本期初始已扣缴税额" },
+                                    { data: "InitialAfterTaxIncome", title: "本期初始税后收入额" }
+                                    
+                                    
                                    // { data: "PersonType", title: "人员类型" },
                                     //{ data: "Title", title: "职称" }
             ],

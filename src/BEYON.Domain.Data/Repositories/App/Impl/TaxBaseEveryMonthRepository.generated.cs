@@ -47,7 +47,7 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
             var lists = record.ToList();
             Double totalIncome = 0.0;
             if (lists.Count > 0) {
-                totalIncome = lists[0].TotalIncome;
+             //   totalIncome = lists[0].TotalIncome;
             }
             return totalIncome;  
         }
@@ -82,8 +82,8 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
             //1.构造插入或更新SQL
             string[] columns = new string[]{
                 "CertificateID","Name","CertificateType","InitialEaring",
-                "TaxFree","AmountDeducted","InitialTaxPayable","InitialTax","Period",
-                "SpecialDeduction","TotalIncome" , "TotalTax" , "TotalTemp","UpdateDate","LastMonths"
+                "TaxFreeIncome","AmountDeducted","InitialTaxPayable","Period","EndowmentInsurance","MedicalInsurance","OccupationalAnnuity","HousingFund","UnemployedInsurance",
+                "SpecialDeduction", "TotalTax" , "TotalTemp","UpdateDate","LastMonths"
             };
             StringBuilder sql = new StringBuilder();
             sql.Append("INSERT INTO dbo.\"TaxBaseEveryMonths\" ( ");

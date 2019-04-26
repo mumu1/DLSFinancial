@@ -122,29 +122,67 @@
                 name: "CertificateID"
             },
             {
-                label: "初始应发数累计:",
+                label: "年度累计税前收入:",
                 name: "InitialEaring"
             },
+            {
+                label: "年度累计免税收入:",
+                name: "TaxFreeIncome"
+            },
+            {
+                label: "年度累计养老保险:",
+                name: "EndowmentInsurance"
+            },
+             {
+                 label: "年度累计失业保险:",
+                 name: "UnemployedInsurance"
+             },
+            {
+                label: "年度累计医疗保险:",
+                name: "MedicalInsurance"
+            },
+            {
+                label: "年度累计职业年金:",
+                name: "OccupationalAnnuity"
+            },
+            {
+                label: "年度累计住房公积金:",
+                name: "HousingFund"
+            },
+            /*
             {
                 label: "免税额累计:",
                 name: "TaxFree"
             },
+            */
             {
-                label: "基本扣除累计:",
+                label: "年度累计基本扣除:",
                 name: "AmountDeducted"
             },
             {
-                label: "初始应纳税所得额累计:",
+                label: "年度累计专项附加扣除:",
+                name: "SpecialDeduction"
+            },
+            {
+                label: "年度累计应纳税所得额:",
                 name: "InitialTaxPayable"
             },
+             {
+                 label: "年度累计已扣缴税额:",
+                 name: "TotalTax"
+             },
+            
+               
+                 {
+                     label: "年度累计税后收入:",
+                     name: "TotalTemp"
+                 },
+            /*
              {
                  label: "初始税额累计:",
                  name: "InitialTax"
              },
-              {
-                  label: "专项扣除额累计:",
-                  name: "SpecialDeduction"
-              },
+              
               {
                   label: "年度收入累计:",
                   name: "TotalIncome"
@@ -153,10 +191,8 @@
                   label: "年度税额累计:",
                   name: "TotalTax"
               },
-               {
-                   label: "年度不含税收入累计:",
-                   name: "TotalTemp"
-               },
+             
+               */
                 {
                     label: "当前已累计月:",
                     name: "LastMonths"
@@ -252,20 +288,23 @@
             paging: true,
             columns: [
                                     { data: "Id", title: "编号" },
-                                    { data: "Period", title: "期间" },
+                                    { data: "Period", title: "年度" },
                                     { data: "Name", title: "姓名" },
                                     { data: "CertificateType", title: "证件类型" },
                                     { data: "CertificateID", title: "证件号码" },
-                                    { data: "InitialEaring", title: "初始应发数累计" },
-                                    { data: "TaxFree", title: "免税额累计" },
-                                    { data: "AmountDeducted", title: "基本扣除累计" },
-                                    { data: "InitialTaxPayable", title: "初始应纳税所得额累计" },
-                                    { data: "InitialTax", title: "初始税额累计" },
-                                    { data: "SpecialDeduction", title: "专项扣除额累计" },
-                                    { data: "TotalIncome", title: "年度收入累计" },
-                                    { data: "TotalTax", title: "年度税额累计" },
-                                    { data: "TotalTemp", title: "年度不含税收入累计" },
-                                    { data: "LastMonths", title: "当前已累计月" },
+                                    { data: "InitialEaring", title: "年度累计税前收入" },
+                                    { data: "TaxFreeIncome", title: "年度累计免税收入" },
+                                    { data: "EndowmentInsurance", title: "年度累计养老保险" },
+                                    { data: "UnemployedInsurance", title: "年度累计失业保险" },
+                                    { data: "MedicalInsurance", title: "年度累计医疗保险" },
+                                    { data: "OccupationalAnnuity", title: "年度累计职业年金" },
+                                    { data: "HousingFund", title: "年度累计住房公积金" },
+                                    { data: "AmountDeducted", title: "年度累计基本扣除" },
+                                    { data: "SpecialDeduction", title: "年度累计专项附加扣除" },
+                                    { data: "InitialTaxPayable", title: "年度累计应纳税所得额" },
+                                    { data: "TotalTax", title: "年度累计已扣缴税额" },
+                                    { data: "TotalTemp", title: "年度累计税后收入" },
+                                    { data: "LastMonths", title: "当前已累计月数" }
                                    // { data: "PersonType", title: "人员类型" },
                                     //{ data: "Title", title: "职称" }
             ],

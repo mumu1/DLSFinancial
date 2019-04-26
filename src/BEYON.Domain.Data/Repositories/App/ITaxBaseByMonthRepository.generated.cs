@@ -38,6 +38,16 @@ namespace BEYON.Domain.Data.Repositories.App
 
         Double GetBaseTax(String certificateID);
 
+        Double GetInitialTaxPayable(String certificateID);
+
+        Double GetInitialTax(String certificateID);
+
+        Double GetWithoutInsurance(String certificateID);
+
+        Double GetPart1(String certificateID);
+
+        Double GetPart2(String certificateID);
+
         void InsertOrUpdate(TaxBaseByMonth record);
     }
 }

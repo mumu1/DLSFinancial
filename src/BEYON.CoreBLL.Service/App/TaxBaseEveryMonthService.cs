@@ -45,12 +45,18 @@ namespace BEYON.CoreBLL.Service.App
                     CertificateType = model.CertificateType,
                     CertificateID = model.CertificateID,
                     InitialEaring = model.InitialEaring,
-                    TaxFree = model.TaxFree,
+                    TaxFreeIncome = model.TaxFreeIncome,
+                    EndowmentInsurance = model.EndowmentInsurance,
+                    UnemployedInsurance = model.UnemployedInsurance,
+                    MedicalInsurance = model.MedicalInsurance,
+                    OccupationalAnnuity = model.OccupationalAnnuity,
+                    HousingFund = model.HousingFund,
+                    //TaxFree = model.TaxFree,
                     AmountDeducted = model.AmountDeducted,
                     InitialTaxPayable = model.InitialTaxPayable,
-                    InitialTax = model.InitialTax,
+                    //InitialTax = model.InitialTax,
                     SpecialDeduction = model.SpecialDeduction,
-                    TotalIncome = model.TotalIncome,
+                    //TotalIncome = model.TotalIncome,
                     TotalTax = model.TotalTax,
                     TotalTemp = model.TotalTemp,
                     LastMonths = model.LastMonths,
@@ -82,13 +88,19 @@ namespace BEYON.CoreBLL.Service.App
                 taxBaseEveryMonth.CertificateType = model.CertificateType;
                 taxBaseEveryMonth.CertificateID = model.CertificateID;
                 taxBaseEveryMonth.InitialEaring = model.InitialEaring;
-                taxBaseEveryMonth.InitialTax = model.InitialTax;
+                taxBaseEveryMonth.TaxFreeIncome = model.TaxFreeIncome;
+                taxBaseEveryMonth.EndowmentInsurance = model.EndowmentInsurance;
+                taxBaseEveryMonth.MedicalInsurance = model.MedicalInsurance;
+                taxBaseEveryMonth.UnemployedInsurance = model.UnemployedInsurance;
+                taxBaseEveryMonth.HousingFund = model.HousingFund;
+                taxBaseEveryMonth.OccupationalAnnuity = model.OccupationalAnnuity;
+                //taxBaseEveryMonth.InitialTax = model.InitialTax;
                 taxBaseEveryMonth.InitialTaxPayable = model.InitialTaxPayable;
                 taxBaseEveryMonth.AmountDeducted = model.AmountDeducted;
                 //taxBaseByMonth.PersonType = model.PersonType;
-                taxBaseEveryMonth.TaxFree = model.TaxFree;
+               // taxBaseEveryMonth.TaxFree = model.TaxFree;
                 taxBaseEveryMonth.SpecialDeduction = model.SpecialDeduction;
-                taxBaseEveryMonth.TotalIncome = model.TotalIncome;
+               // taxBaseEveryMonth.TotalIncome = model.TotalIncome;
                 taxBaseEveryMonth.TotalTax = model.TotalTax;
                 taxBaseEveryMonth.TotalTemp = model.TotalTemp;
                 taxBaseEveryMonth.LastMonths = model.LastMonths;
@@ -162,7 +174,7 @@ namespace BEYON.CoreBLL.Service.App
             try
             {
                 var columns = importData == null ? null : importData.Columns;
-                var maps = ImportUtil.GetColumns(columns, new TaxBaseByMonth());
+                var maps = ImportUtil.GetColumns(columns, new TaxBaseEveryMonth());
                 var items = ExcelService.GetObjects(fileName, columns);
                 if (importData != null)
                 {

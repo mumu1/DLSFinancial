@@ -41,6 +41,8 @@ namespace BEYON.Domain.Data.Repositories.App
 
         Double GetDeductTaxSum(String certificateID);
 
+     
+
         int GetCashCount(String certificateID);
 
     }

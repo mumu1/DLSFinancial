@@ -172,16 +172,18 @@ namespace BEYON.Web.Areas.BasicDataManagement.Controllers
                         taxBaseEveryMonth.CertificateType = model.CertificateType;
                         taxBaseEveryMonth.Name = model.Name;
                         taxBaseEveryMonth.Period = period_year;
-                        taxBaseEveryMonth.InitialTaxPayable = model.InitialTaxPayable + taxBaseEveryMonth_exsit.InitialTaxPayable;
                         taxBaseEveryMonth.InitialEaring = model.InitialEaring + taxBaseEveryMonth_exsit.InitialEaring;
-                        //calculate totalincome in this month
-                        taxBaseEveryMonth.TotalIncome = model.InitialEaring + monthIncome + taxBaseEveryMonth_exsit.TotalIncome;
-                        taxBaseEveryMonth.TotalTax = model.InitialTax + monthTax + taxBaseEveryMonth_exsit.TotalTax;
-                        taxBaseEveryMonth.TotalTemp = model.InitialEaring - model.InitialTax + monthIncomeAfter + taxBaseEveryMonth_exsit.TotalTemp;
-                        taxBaseEveryMonth.InitialTax = model.InitialTax + taxBaseEveryMonth_exsit.InitialTax;
-                        taxBaseEveryMonth.SpecialDeduction = model.SpecialDeduction + taxBaseEveryMonth_exsit.SpecialDeduction;
-                        taxBaseEveryMonth.TaxFree = model.TaxFree + taxBaseEveryMonth_exsit.TaxFree;
+                        taxBaseEveryMonth.TaxFreeIncome = model.TaxFreeIncome + taxBaseEveryMonth_exsit.TaxFreeIncome;
+                        taxBaseEveryMonth.EndowmentInsurance = model.EndowmentInsurance + taxBaseEveryMonth_exsit.EndowmentInsurance;
+                        taxBaseEveryMonth.UnemployedInsurance = model.UnemployedInsurance + taxBaseEveryMonth_exsit.UnemployedInsurance;
+                        taxBaseEveryMonth.MedicalInsurance = model.MedicalInsurance + taxBaseEveryMonth_exsit.MedicalInsurance;
+                        taxBaseEveryMonth.OccupationalAnnuity = model.OccupationalAnnuity + taxBaseEveryMonth_exsit.OccupationalAnnuity;
+                        taxBaseEveryMonth.HousingFund = model.HousingFund + taxBaseEveryMonth_exsit.HousingFund;
                         taxBaseEveryMonth.AmountDeducted = model.AmountDeducted + taxBaseEveryMonth_exsit.AmountDeducted;
+                        taxBaseEveryMonth.SpecialDeduction = model.SpecialDeduction + taxBaseEveryMonth_exsit.SpecialDeduction;
+                        taxBaseEveryMonth.TotalTax = model.InitialTax + monthTax + taxBaseEveryMonth_exsit.TotalTax;
+                        taxBaseEveryMonth.InitialTaxPayable = taxBaseEveryMonth.InitialEaring - taxBaseEveryMonth.TaxFreeIncome - taxBaseEveryMonth.EndowmentInsurance - taxBaseEveryMonth.UnemployedInsurance - taxBaseEveryMonth.MedicalInsurance - taxBaseEveryMonth.OccupationalAnnuity - taxBaseEveryMonth.HousingFund - taxBaseEveryMonth.AmountDeducted - taxBaseEveryMonth.SpecialDeduction;
+                        taxBaseEveryMonth.TotalTemp = taxBaseEveryMonth.InitialEaring - taxBaseEveryMonth.TotalTax;
                         taxBaseEveryMonth.LastMonths = period_month;
                         
                     }
@@ -192,17 +194,19 @@ namespace BEYON.Web.Areas.BasicDataManagement.Controllers
                         taxBaseEveryMonth.CertificateType = model.CertificateType;
                         taxBaseEveryMonth.Name = model.Name;
                         taxBaseEveryMonth.Period = period_year;
-                        taxBaseEveryMonth.InitialTaxPayable = model.InitialTaxPayable;
                         taxBaseEveryMonth.InitialEaring = model.InitialEaring;
-                        //calculate totalincome in this month
-                        taxBaseEveryMonth.TotalIncome = model.InitialEaring + monthIncome;
-                        taxBaseEveryMonth.TotalTax = model.InitialTax + monthTax;
-                        taxBaseEveryMonth.TotalTemp = model.InitialEaring - model.InitialTax + monthIncomeAfter;
-                        taxBaseEveryMonth.InitialTax = model.InitialTax;
-                        taxBaseEveryMonth.SpecialDeduction = model.SpecialDeduction;
-                        taxBaseEveryMonth.TaxFree = model.TaxFree;
+                        taxBaseEveryMonth.TaxFreeIncome = model.TaxFreeIncome;
+                        taxBaseEveryMonth.EndowmentInsurance = model.EndowmentInsurance;
+                        taxBaseEveryMonth.UnemployedInsurance = model.UnemployedInsurance;
+                        taxBaseEveryMonth.MedicalInsurance = model.MedicalInsurance;
+                        taxBaseEveryMonth.OccupationalAnnuity = model.OccupationalAnnuity;
+                        taxBaseEveryMonth.HousingFund = model.HousingFund;
                         taxBaseEveryMonth.AmountDeducted = model.AmountDeducted;
-                        taxBaseEveryMonth.LastMonths = period_month;
+                        taxBaseEveryMonth.SpecialDeduction = model.SpecialDeduction;
+                        taxBaseEveryMonth.TotalTax = model.InitialTax + monthTax;
+                        taxBaseEveryMonth.InitialTaxPayable = taxBaseEveryMonth.InitialEaring - taxBaseEveryMonth.TaxFreeIncome - taxBaseEveryMonth.EndowmentInsurance - taxBaseEveryMonth.UnemployedInsurance - taxBaseEveryMonth.MedicalInsurance - taxBaseEveryMonth.OccupationalAnnuity - taxBaseEveryMonth.HousingFund - taxBaseEveryMonth.AmountDeducted - taxBaseEveryMonth.SpecialDeduction;
+                        taxBaseEveryMonth.TotalTemp = taxBaseEveryMonth.InitialEaring - taxBaseEveryMonth.TotalTax;
+                        taxBaseEveryMonth.LastMonths = period_month;                
                        
                     }
                     try

@@ -349,193 +349,221 @@ namespace BEYON.CoreBLL.Service.App
                 if (model.PersonType.Equals("所内"))
                 {
                     //按照工资进行算税
+                    //2019.4.12
+                    
                     String period_year =DateTime.Now.Year.ToString();
                     TaxBaseEveryMonth taxBaseEveryMonth = _TaxBaseEveryMonthRepository.GetExistRecord(period_year, model.CertificateID);
-                    //1.查询当月已发放总金额，查询当月已计税总额【Tax和】                                  
-                    double amount = GetPayTaxAmount(model.CertificateID, model.TaxOrNot);
-                    
-                    double deductTaxSum = GetDeductTaxSum(model.CertificateID);
+                    //含税
+                    //本次劳务应纳税所得额taxableIncome=当次劳务税前收入额model.Amount
+                    //+本期应纳税所得额TaxBaseByMonth.InitialTaxPayable
+                    //+年度累计应纳税所得额TaxBaseEveryMonth.InitialTaxPayable
+                    //+本期已计算劳务税前收入总额GetPayTaxAmount(model.CertificateID, model.TaxOrNot)//含税
 
-                    //2.从基本工资表TaxBaseByMonth中查询  当月 （初始应发工资-免税额-基本扣除-专项扣除额）
-                    double baseSalary = _TaxBaseByMonthRepository.GetBaseSalary(model.CertificateID);
-                    //从基本工资表里读取初始税额,InitialTax
-                    double baseTax = _TaxBaseByMonthRepository.GetBaseTax(model.CertificateID);
-                   
-                    //3.根据已发放总金额，判断算税公式 
-                    //含税与不含税的税率区间不同，分开判断
-                    //含税公式：T=【Y+(初始应发工资-免税额-基本扣除数)】*税率-速算扣除数-初始表税-前几次税额总数
-
-
-                    //4.计算Tax(税额),AmountX(税后),AmountY(税前)
-                    if (model.TaxOrNot.Equals("含税"))
-                    {
-                        double interval = 0.0;
-                        if (taxBaseEveryMonth != null)
-                        {
-                            interval = model.Amount + amount + baseSalary + taxBaseEveryMonth.TotalIncome - taxBaseEveryMonth.TaxFree - taxBaseEveryMonth.SpecialDeduction - taxBaseEveryMonth.AmountDeducted;
-                        }
-                        else {
-                            interval = model.Amount + amount + baseSalary;
-                        }
-                        if (interval <= 0)
-                        {
-                            tax = 0.0;
-                        }
-                        //不超过3000元，税率3%，速算扣除数0
-                        else if (interval > 0 && interval <= 36000)
-                        {
-                            tax = interval * 0.03 - deductTaxSum - baseTax-taxBaseEveryMonth.TotalTax;
-                        }
-                        //超过3000至12000元，税率10%，速算扣除数210
-                        else if (interval > 36000 && interval <= 144000)
-                        {
-                            tax = interval * 0.1 - 2520 - deductTaxSum - baseTax - taxBaseEveryMonth.TotalTax;
-                        }
-                        //超过12000至25000元，税率20%，速算扣除数1410
-                        else if (interval > 144000 && interval <= 300000)
-                        {
-                            tax = interval * 0.2 - 16920 - deductTaxSum - baseTax - taxBaseEveryMonth.TotalTax;
-                        }
-                        //超过25000至35000元，税率25%，速算扣除数2660
-                        else if (interval > 300000 && interval <= 420000)
-                        {
-                            tax = interval * 0.25 - 31920 - deductTaxSum - baseTax - taxBaseEveryMonth.TotalTax;
-                        }
-                        //超过35000至55000元，税率30%，速算扣除数4410
-                        else if (interval > 420000 && interval <= 660000)
-                        {
-                            tax = interval * 0.3 - 52920 - deductTaxSum - baseTax - taxBaseEveryMonth.TotalTax;
-                        }
-                        //超过55000至80000元，税率35%，速算扣除数7160
-                        else if (interval > 660000 && interval <= 960000)
-                        {
-                            tax = interval * 0.35 - 85920 - deductTaxSum - baseTax - taxBaseEveryMonth.TotalTax;
-                        }
-                        //超过80000元，税率45%，速算扣除数15160
-                        else if (interval > 960000)
-                        {
-                            tax = interval * 0.45 - 181920 - deductTaxSum - baseTax - taxBaseEveryMonth.TotalTax;
-                        }
-                        if (tax < 0) {
-                            tax = 0.0;
-                        }
-                        amountX = model.Amount - tax;
-                        amountY = model.Amount;
+                    //第一步：本次劳务应纳税所得额taxableIncome=当次劳务税前收入额model.Amount
+                    //+本期已计算劳务税前收入总额GetPayTaxAmount(model.CertificateID, model.TaxOrNot)//含税
+                    //+（本期初始税前收入额TaxBaseByMonth.InitialEaring—本期免税收入TaxFreeIncome
+                    //—本期养老保险—本期失业保险—本期医疗保险—本期职业年金—本期住房公积金
+                    //—本期基本扣除—本期专项附加扣除）part1
+                    //+（年度累计税前收入InitalEaring—年度累计免税收入TaxFreeIncome
+                    //—年度累计养老保险—年度累计失业保险—年度累计医疗保险—年度累计职业年金—年度累计住房公积金
+                    //—年度累计基本扣除—年度累计专项附加扣除）part2
+                    double part1 = _TaxBaseByMonthRepository.GetPart1(model.CertificateID);
+                    double part2 = 0.0;
+                    if (taxBaseEveryMonth != null) { 
+                        part2 = taxBaseEveryMonth.InitialEaring - taxBaseEveryMonth.TaxFreeIncome - taxBaseEveryMonth.EndowmentInsurance - taxBaseEveryMonth.UnemployedInsurance - taxBaseEveryMonth.MedicalInsurance - taxBaseEveryMonth.OccupationalAnnuity - taxBaseEveryMonth.HousingFund - taxBaseEveryMonth.AmountDeducted - taxBaseEveryMonth.SpecialDeduction;
                     }
-                    else if (model.TaxOrNot.Equals("不含税"))
-                    {
-                        double interval_1 = 0.0;
+                    //1.查询本期已计算劳务含税/不含税收入总额                                  
+                    double amountTotal = GetPayTaxAmount(model.CertificateID, model.TaxOrNot);
+                    //2.本期应纳税所得额
+                    double InitialTaxPayable = _TaxBaseByMonthRepository.GetInitialTaxPayable(model.CertificateID);
+                    //3.年度累计应纳税所得额
+                    double InitialTaxPayableInYear = 0.0;
+                    //4.年度累计已扣缴税额
+                    double TotalTaxInYear = 0.0;
+                    if(taxBaseEveryMonth != null){
+                         InitialTaxPayableInYear = taxBaseEveryMonth.InitialTaxPayable;
+                         TotalTaxInYear = taxBaseEveryMonth.TotalTax;
+                    }
+                    //5.本期已计算劳务税额总额
+                    double deductTaxSum = GetDeductTaxSum(model.CertificateID);
+                    //6.本期初始已扣缴税额
+                    double InitialTax = _TaxBaseByMonthRepository.GetInitialTax(model.CertificateID);
+                    //7.本次劳务应纳税额tax=（本次应纳税所得额taxableIncome*税率
+                    //-速算扣除数）-本期初始已扣缴税额TaxBaseByMonth.InitialTax
+                    //—年度累计已扣缴税额TaxBaseEveryMonth.TotalTax
+                    //—本期已计算劳务税额总额deductTaxSum
+                   
+                    if (model.TaxOrNot.Equals("含税")){
+                         double taxableIncome = model.Amount + part1 + part2 + amountTotal;
+                         //比较税率
+                         //不超过36000元，税率3%，速算扣除数0
+                         if (taxableIncome <= 36000) {
+                             tax = taxableIncome * 0.03 - InitialTax - TotalTaxInYear - deductTaxSum;
+                         }
+                         //超过36000至144000元，税率10%，速算扣除数2520
+                         else if (taxableIncome > 36000 && taxableIncome <= 144000)
+                         {
+                             tax = taxableIncome * 0.1 - 2520 - InitialTax - TotalTaxInYear - deductTaxSum;
+                         }
+                         //超过144000至300000元，税率20%，速算扣除数16920
+                         else if (taxableIncome > 144000 && taxableIncome <= 300000)
+                         {
+                             tax = taxableIncome * 0.2 - 16920 - InitialTax - TotalTaxInYear - deductTaxSum;
+                         }
+                         //超过300000至420000元，税率25%，速算扣除数31920
+                         else if (taxableIncome > 300000 && taxableIncome <= 420000)
+                         {
+                             tax = taxableIncome * 0.25 - 31920 - InitialTax - TotalTaxInYear - deductTaxSum;
+                         }
+                         //超过420000至660000元，税率30%，速算扣除数52920
+                         else if (taxableIncome > 420000 && taxableIncome <= 660000)
+                         {
+                             tax = taxableIncome * 0.3 - 52920 - InitialTax - TotalTaxInYear - deductTaxSum;
+                         }
+                         //超过660000至960000元，税率35%，速算扣除数85920
+                         else if (taxableIncome > 660000 && taxableIncome <= 960000)
+                         {
+                             tax = taxableIncome * 0.35 - 85920 - InitialTax - TotalTaxInYear - deductTaxSum;
+                         }
+                         //超过960000元，税率45%，速算扣除数181920
+                         else if (taxableIncome > 960000)
+                         {
+                             tax = taxableIncome * 0.45 - 181920 - InitialTax - TotalTaxInYear - deductTaxSum;
+                         }
+                         
+                         if (tax < 0)
+                         {
+                             tax = 0.0;
+                         }
+                         amountX = model.Amount - tax;
+                         amountY = model.Amount;
+
+                     }
+                    else if (model.TaxOrNot.Equals("不含税")) {
+                        //【当次劳务税后收入额model.Amount+本期已计算劳务税后收入总额amountTotal
+                        //+（本期初始税后收入额—本期免税收入 —本期养老保险—本期失业保险
+                        //—本期医疗保险—本期职业年金—本期住房公积金—本期基本扣除
+                        //—本期专项附加扣除）
+                        //+（年度累计税后收入—年度累计免税收入—年度累计养老保险
+                        //—年度累计失业保险—年度累计医疗保险—年度累计职业年金
+                        // —年度累计住房公积金—年度累计基本扣除—年度累计专项附加扣除）】
+
+                        //1.（本期初始税后收入额—本期免税收入 —本期养老保险—本期失业保险
+                        //—本期医疗保险—本期职业年金—本期住房公积金—本期基本扣除
+                        //—本期专项附加扣除）
+                        double withoutInsurance = _TaxBaseByMonthRepository.GetWithoutInsurance(model.CertificateID);
+                        //2.（年度累计税后收入—年度累计免税收入—年度累计养老保险
+                        //—年度累计失业保险—年度累计医疗保险—年度累计职业年金
+                        // —年度累计住房公积金—年度累计基本扣除—年度累计专项附加扣除）
+                        double withoutInsuranceInYear = 0.0;
                         if (taxBaseEveryMonth != null)
                         {
-                            interval_1 = model.Amount + amount + baseSalary - baseTax + taxBaseEveryMonth.TotalTemp - taxBaseEveryMonth.TaxFree - taxBaseEveryMonth.SpecialDeduction - taxBaseEveryMonth.AmountDeducted;
+                            withoutInsuranceInYear = taxBaseEveryMonth.TotalTemp - taxBaseEveryMonth.TaxFreeIncome - taxBaseEveryMonth.EndowmentInsurance - taxBaseEveryMonth.UnemployedInsurance - taxBaseEveryMonth.OccupationalAnnuity - taxBaseEveryMonth.HousingFund - taxBaseEveryMonth.MedicalInsurance - taxBaseEveryMonth.AmountDeducted - taxBaseEveryMonth.SpecialDeduction;
                         }
-                        else {
-                            interval_1 = model.Amount + amount + baseSalary - baseTax;
-                        }
-                             double tax_1 = 0.0;
-                        //first step
-                        if (interval_1 <= 0)
-                        {
-                            tax_1 = 0.0;
-                        }
+                        //3.中间对比不含税级距值
+                        double interval_1 = model.Amount + amountTotal + withoutInsurance + withoutInsuranceInYear;
+                        //4.不含税级距值
+                        //本次劳务应纳税所得额taxableIncome1={interval_1—累计速算扣除数}/（1-税率）
+                        double taxableIncome1 = 0.0;
 
-                        //不超过2910元，税率3%，速算扣除数0
-                        else if (interval_1 > 0 && interval_1 <= 34920)
+                        //不超过34920元，税率3%，速算扣除数0
+                        if (interval_1 <= 34920)
                         {
 
-                            tax_1 = interval_1 / (1 - 0.03);
+                            taxableIncome1 = interval_1 / (1 - 0.03);
                         }
 
-                        //超过2910至11010元，税率10%，速算扣除数210
+                        //超过34920至132120元，税率10%，速算扣除数2520
                         else if (interval_1 > 34920 && interval_1 <= 132120)
                         {
-                            tax_1 = (interval_1 - 2520) / (1 - 0.1);
+                            taxableIncome1 = (interval_1 - 2520) / (1 - 0.1);
 
                         }
 
-                        //超过11010至21410元，税率20%，速算扣除数1410
+                        //超过132120至256920元，税率20%，速算扣除数16920
                         else if (interval_1 > 132120 && interval_1 <= 256920)
                         {
-                            tax_1 = (interval_1 - 16920) / (1 - 0.2);
+                            taxableIncome1 = (interval_1 - 16920) / (1 - 0.2);
 
                         }
 
-                        //超过21410至28910元，税率25%，速算扣除数2660
+                        //超过21410至346920元，税率25%，速算扣除数31920
                         else if (interval_1 > 256920 && interval_1 <= 346920)
                         {
-                            tax_1 = (interval_1 - 31920) / (1 - 0.25);
+                            taxableIncome1 = (interval_1 - 31920) / (1 - 0.25);
 
                         }
 
-                        //超过28910至42910元，税率30%，速算扣除数4410
+                        //超过346920至514920元，税率30%，速算扣除数52920
                         else if (interval_1 > 346920 && interval_1 <= 514920)
                         {
-                            tax_1 = (interval_1 - 52920) / (1 - 0.3);
+                            taxableIncome1 = (interval_1 - 52920) / (1 - 0.3);
 
                         }
 
-                        //超过42910至59160元，税率35%，速算扣除数7160
+                        //超过514920至709920元，税率35%，速算扣除数85920
                         else if (interval_1 > 514920 && interval_1 <= 709920)
                         {
-                            tax_1 = (interval_1 - 85920) / (1 - 0.35);
+                            taxableIncome1 = (interval_1 - 85920) / (1 - 0.35);
 
                         }
 
-                        //超过59160元，税率45%，速算扣除数15160
+                        //超过709920元，税率45%，速算扣除数181920
                         else if (interval_1 > 709920)
                         {
-                            tax_1 = (interval_1 - 181920) / (1 - 0.45);
+                            taxableIncome1 = (interval_1 - 181920) / (1 - 0.45);
 
                         }
 
 
-                        //secend step
+                        //4.本次劳务应纳税额=（本次劳务应纳税所得额*税率—速算扣除数）
+                        //—本期初始已扣缴税额—年度累计已扣缴税额—本期已计算劳务税额总额
 
-                        if (tax_1 <= 0)
+                        //5.第二次税率级距判断
+                        //不超过36000元，税率3%，速算扣除数0
+                        if (taxableIncome1 <= 36000)
                         {
-                            tax = 0.0;
+                            tax = taxableIncome1 * 0.03 - InitialTax - TotalTaxInYear - deductTaxSum;
                         }
-                        //不超过3000元，税率3%，速算扣除数0
-                        else if (tax_1 > 0 && tax_1 <= 36000)
+                        //超过36000至144000元，税率10%，速算扣除数2520
+                        else if (taxableIncome1 > 36000 && taxableIncome1 <= 144000)
                         {
-                            tax = tax_1 * 0.03 - baseTax - deductTaxSum - taxBaseEveryMonth.TotalTax;
+                            tax = taxableIncome1 * 0.1 - 2520 - InitialTax - TotalTaxInYear - deductTaxSum;
                         }
-                        //超过3000至12000元，税率10%，速算扣除数210
-                        else if (tax_1 > 36000 && tax_1 <= 144000)
+                        //超过144000至300000元，税率20%，速算扣除数16920
+                        else if (taxableIncome1 > 144000 && taxableIncome1 <= 300000)
                         {
-                            tax = tax_1 * 0.1 - baseTax - 2520 - deductTaxSum - taxBaseEveryMonth.TotalTax;
+                            tax = taxableIncome1 * 0.2 - 16920 - InitialTax - TotalTaxInYear - deductTaxSum;
                         }
-                        //超过12000至25000元，税率20%，速算扣除数1410
-                        else if (tax_1 > 144000 && tax_1 <= 300000)
+                        //超过300000至420000元，税率25%，速算扣除数31920
+                        else if (taxableIncome1 > 300000 && taxableIncome1 <= 420000)
                         {
-                            tax = tax_1 * 0.2 - baseTax - 16920 - deductTaxSum - taxBaseEveryMonth.TotalTax;
+                            tax = taxableIncome1 * 0.25 - 31920 - InitialTax - TotalTaxInYear - deductTaxSum;
                         }
-                        //超过25000至35000元，税率25%，速算扣除数2660
-                        else if (tax_1 > 300000 && tax_1 <= 420000)
+                        //超过420000至660000元，税率30%，速算扣除数52920
+                        else if (taxableIncome1 > 420000 && taxableIncome1 <= 660000)
                         {
-                            tax = tax_1 * 0.25 - baseTax - 31920 - deductTaxSum - taxBaseEveryMonth.TotalTax;
+                            tax = taxableIncome1 * 0.3 - 52920 - InitialTax - TotalTaxInYear - deductTaxSum;
                         }
-                        //超过35000至55000元，税率30%，速算扣除数4410
-                        else if (tax_1 > 420000 && tax_1 <= 660000)
+                        //超过660000至960000元，税率35%，速算扣除数85920
+                        else if (taxableIncome1 > 660000 && taxableIncome1 <= 960000)
                         {
-                            tax = tax_1 * 0.3 - baseTax - 52920 - deductTaxSum - taxBaseEveryMonth.TotalTax;
+                            tax = taxableIncome1 * 0.35 - 85920 - InitialTax - TotalTaxInYear - deductTaxSum;
                         }
-                        //超过55000至80000元，税率35%，速算扣除数7160
-                        else if (tax_1 > 660000 && tax_1 <= 960000)
+                        //超过960000元，税率45%，速算扣除数181920
+                        else if (taxableIncome1 > 960000)
                         {
-                            tax = tax_1 * 0.35 - baseTax - 85920 - deductTaxSum - taxBaseEveryMonth.TotalTax;
+                            tax = taxableIncome1 * 0.45 - 181920 - InitialTax - TotalTaxInYear - deductTaxSum;
                         }
-                        //超过80000元，税率45%，速算扣除数15160
-                        else if (tax_1 > 960000)
+
+                        if (tax < 0)
                         {
-                            tax = tax_1 * 0.45 - baseTax - 181920 - deductTaxSum - taxBaseEveryMonth.TotalTax;
-                        }
-                        if (tax < 0) {
                             tax = 0.0;
                         }
                         amountX = model.Amount;
                         amountY = model.Amount + tax;
-                    }
+                    }                  
+
                 }
                 else if (model.PersonType.Equals("所外"))
                 {
