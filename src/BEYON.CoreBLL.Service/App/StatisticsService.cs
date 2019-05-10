@@ -47,7 +47,8 @@ namespace BEYON.CoreBLL.Service.App
             columns.Add(new Column("C17", "国籍"));
             columns.Add(new Column("C18", "单位"));
             columns.Add(new Column("C19", "职称"));
-            columns.Add(new Column("C20", "次数"));
+            columns.Add(new Column("C20", "本期劳务费税前合计"));
+            columns.Add(new Column("C21", "次数"));
             int count = _statisticsRepository.GetMaxCountPerMonthPerPerson();
             for (var i = 0; i < count; i++)
             {

@@ -91,6 +91,12 @@ namespace BEYON.Domain.Model.App
         [Display(Name = "年度累计已扣缴税额")]
         public Double TotalTax { get; set; }
 
+        [Display(Name = "年度累计工资税前收入额")]
+        public Double TotalSalaryIncomeBeforeTax { get; set; }
+
+        [Display(Name = "年度累计劳务费税前收入额")]
+        public Double TotalLaborIncomeBeforeTax { get; set; }
+
 
         /*
         [Display(Name = "人员类型")]

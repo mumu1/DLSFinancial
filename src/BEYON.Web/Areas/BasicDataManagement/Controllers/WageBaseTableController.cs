@@ -182,6 +182,8 @@ namespace BEYON.Web.Areas.BasicDataManagement.Controllers
                         taxBaseEveryMonth.AmountDeducted = model.AmountDeducted + taxBaseEveryMonth_exsit.AmountDeducted;
                         taxBaseEveryMonth.SpecialDeduction = model.SpecialDeduction + taxBaseEveryMonth_exsit.SpecialDeduction;
                         taxBaseEveryMonth.TotalTax = model.InitialTax + monthTax + taxBaseEveryMonth_exsit.TotalTax;
+                        taxBaseEveryMonth.TotalSalaryIncomeBeforeTax = model.InitialEaring + taxBaseEveryMonth_exsit.TotalSalaryIncomeBeforeTax;
+                        taxBaseEveryMonth.TotalLaborIncomeBeforeTax = monthIncome + taxBaseEveryMonth_exsit.TotalLaborIncomeBeforeTax;
                         taxBaseEveryMonth.InitialTaxPayable = taxBaseEveryMonth.InitialEaring - taxBaseEveryMonth.TaxFreeIncome - taxBaseEveryMonth.EndowmentInsurance - taxBaseEveryMonth.UnemployedInsurance - taxBaseEveryMonth.MedicalInsurance - taxBaseEveryMonth.OccupationalAnnuity - taxBaseEveryMonth.HousingFund - taxBaseEveryMonth.AmountDeducted - taxBaseEveryMonth.SpecialDeduction;
                         taxBaseEveryMonth.TotalTemp = taxBaseEveryMonth.InitialEaring - taxBaseEveryMonth.TotalTax;
                         taxBaseEveryMonth.LastMonths = period_month;
@@ -204,6 +206,8 @@ namespace BEYON.Web.Areas.BasicDataManagement.Controllers
                         taxBaseEveryMonth.AmountDeducted = model.AmountDeducted;
                         taxBaseEveryMonth.SpecialDeduction = model.SpecialDeduction;
                         taxBaseEveryMonth.TotalTax = model.InitialTax + monthTax;
+                        taxBaseEveryMonth.TotalSalaryIncomeBeforeTax = model.InitialEaring;
+                        taxBaseEveryMonth.TotalLaborIncomeBeforeTax = monthIncome;
                         taxBaseEveryMonth.InitialTaxPayable = taxBaseEveryMonth.InitialEaring - taxBaseEveryMonth.TaxFreeIncome - taxBaseEveryMonth.EndowmentInsurance - taxBaseEveryMonth.UnemployedInsurance - taxBaseEveryMonth.MedicalInsurance - taxBaseEveryMonth.OccupationalAnnuity - taxBaseEveryMonth.HousingFund - taxBaseEveryMonth.AmountDeducted - taxBaseEveryMonth.SpecialDeduction;
                         taxBaseEveryMonth.TotalTemp = taxBaseEveryMonth.InitialEaring - taxBaseEveryMonth.TotalTax;
                         taxBaseEveryMonth.LastMonths = period_month;                

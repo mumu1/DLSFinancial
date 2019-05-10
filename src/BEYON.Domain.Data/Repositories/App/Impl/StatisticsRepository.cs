@@ -148,6 +148,7 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                                 var PersonalRecord = GetPersonRecordInfo(certificateID);
                                 var initialEaring = reader["C5"] != null ? Convert.ToSingle(reader["C5"]) : 0;
                                 var TaxFreeIncome = reader["C6"] != null ? Convert.ToSingle(reader["C6"]) : 0;
+                                var AmountDeducted = reader["C7"] != null ? Convert.ToSingle(reader["C7"]) : 0;
                                 var EndowmentInsurance = reader["C8"] != null ? Convert.ToSingle(reader["C8"]) : 0;
                                 var UnemployedInsurance = reader["C9"] != null ? Convert.ToSingle(reader["C9"]) : 0;
                                 var MedicalInsurance = reader["C10"] != null ? Convert.ToSingle(reader["C10"]) : 0;
@@ -162,6 +163,7 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                                 var amountY = String.IsNullOrEmpty(reader["C18"].ToString()) ? 0 : Convert.ToSingle(reader["C18"]);
                                 var projectNumber = reader["C19"].ToString();
                                 var projectDirector = reader["C20"].ToString();
+                                
                                 //返回前端显示结果数据
                                 if (!objects.ContainsKey(certificateID))
                                 {
@@ -181,8 +183,8 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                                     result["C13"] = SpecialDeduction;
                                    
                                     result["C14"] = initialTax + tax;
-                                   
-                                    result["C15"] =0.0;
+
+                                    result["C15"] = 0.0;
                                     if (PersonalRecord != null)
                                     {
                                         if (!String.IsNullOrEmpty(PersonalRecord.Tele))
@@ -217,22 +219,23 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                                             result["C19"] = "";
                                         }
                                     }
+                                    result["C20"] = amountY;
                                     if (String.IsNullOrEmpty(reader["C16"].ToString()))
-                                        result["C20"] = 0;
+                                        result["C21"] = 0;
                                     else
-                                        result["C20"] = 1;
-                                    result["C21"] = amountY;
-                                    result["C22"] = amountX;
-                                    result["C23"] = tax;
-                                    result["C24"] = projectNumber;
-                                    result["C25"] = projectDirector;
+                                        result["C21"] = 1;
+                                    result["C22"] = amountY;
+                                    result["C23"] = amountX;
+                                    result["C24"] = tax;
+                                    result["C25"] = projectNumber;
+                                    result["C26"] = projectDirector;
                                     for (var i = 1; i < addColumns; i++)
                                     {
-                                        result[String.Format("C{0}", 21 + i * 5)] = "";
                                         result[String.Format("C{0}", 22 + i * 5)] = "";
                                         result[String.Format("C{0}", 23 + i * 5)] = "";
                                         result[String.Format("C{0}", 24 + i * 5)] = "";
                                         result[String.Format("C{0}", 25 + i * 5)] = "";
+                                        result[String.Format("C{0}", 26 + i * 5)] = "";
                                     }
                                     objects.Add(certificateID, result);
                                 }
@@ -240,31 +243,33 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                                 {
                                     JObject jsonObject = objects[certificateID] as JObject;
                                     jsonObject["C5"] = jsonObject["C5"].ToObject<float>() + amountY;
-                                    jsonObject["C14"] = jsonObject["C8"].ToObject<float>() + tax;
-                                    jsonObject["C15"] = jsonObject["C9"].ToObject<float>() ;
-                                    int repetTimes = jsonObject["C20"].ToObject<int>() + 1;
-                                    jsonObject["C20"] = repetTimes;
+                                    jsonObject["C14"] = jsonObject["C14"].ToObject<float>() + tax;
+                                    //jsonObject["C15"] = jsonObject["C15"].ToObject<float>() + amountY;
+                                    jsonObject["C20"] = jsonObject["C20"].ToObject<float>() + amountY;
+                                    int repetTimes = jsonObject["C21"].ToObject<int>() + 1;
+                                    jsonObject["C21"] = repetTimes;
 
-                                    jsonObject[String.Format("C{0}", 21 + (repetTimes - 1) * 5)] = amountY;
-                                    jsonObject[String.Format("C{0}", 22 + (repetTimes - 1) * 5)] = amountX;
-                                    jsonObject[String.Format("C{0}", 23 + (repetTimes - 1) * 5)] = tax;
+                                    jsonObject[String.Format("C{0}", 22 + (repetTimes - 1) * 5)] = amountY;
+                                    jsonObject[String.Format("C{0}", 23 + (repetTimes - 1) * 5)] = amountX;
+                                    jsonObject[String.Format("C{0}", 24 + (repetTimes - 1) * 5)] = tax;
                                     if (!String.IsNullOrEmpty(projectNumber))
                                     {
-                                        jsonObject[String.Format("C{0}", 24 + (repetTimes - 1) * 5)] = projectNumber;
+                                        jsonObject[String.Format("C{0}", 25 + (repetTimes - 1) * 5)] = projectNumber;
                                         
                                     }
                                     if (!String.IsNullOrEmpty(projectDirector))
                                     {
-                                        jsonObject[String.Format("C{0}", 25 + (repetTimes - 1) * 5)] = projectDirector;
+                                        jsonObject[String.Format("C{0}", 26 + (repetTimes - 1) * 5)] = projectDirector;
                                     }
 
                                     objects[certificateID] = jsonObject;
                                 }
                             }
-                            //计算应纳税所得额    =收入额C5-免税金额C6-基本扣除C7，若值<0,则改为0
+                            //计算应纳税所得额   =税前收入总额-本期免税收入-本期基本扣除-本期养老保险-本期失业保险-本期医疗保险-本期职业年金-本期住房公积金-本期专项附加扣除，若值<0,则改为0
+                            
                             foreach (var obj in objects)
                             {
-                                double temp = obj.Value["C5"].ToObject<float>() - obj.Value["C6"].ToObject<float>() - obj.Value["C8"].ToObject<float>() - obj.Value["C9"].ToObject<float>() - obj.Value["C10"].ToObject<float>() - obj.Value["C11"].ToObject<float>() - obj.Value["C12"].ToObject<float>() - obj.Value["C7"].ToObject<float>();
+                                double temp = obj.Value["C5"].ToObject<float>() - obj.Value["C6"].ToObject<float>() - obj.Value["C8"].ToObject<float>() - obj.Value["C9"].ToObject<float>() - obj.Value["C10"].ToObject<float>() - obj.Value["C11"].ToObject<float>() - obj.Value["C12"].ToObject<float>() - obj.Value["C7"].ToObject<float>() - obj.Value["C13"].ToObject<float>();
                                 if (temp < 0)
                                 {
                                     obj.Value["C15"] = 0.0;
