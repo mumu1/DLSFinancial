@@ -167,7 +167,7 @@ namespace BEYON.Web.Areas.BasicDataManagement.Controllers
                     var taxBaseEveryMonth_exsit = _taxBaseEveryMonthService.GetExistRecord(period_year, model.CertificateID);
                     if (taxBaseEveryMonth_exsit != null)
                     {
-                        
+                        /*
                         taxBaseEveryMonth.CertificateID = model.CertificateID;
                         taxBaseEveryMonth.CertificateType = model.CertificateType;
                         taxBaseEveryMonth.Name = model.Name;
@@ -187,11 +187,45 @@ namespace BEYON.Web.Areas.BasicDataManagement.Controllers
                         taxBaseEveryMonth.InitialTaxPayable = taxBaseEveryMonth.InitialEaring - taxBaseEveryMonth.TaxFreeIncome - taxBaseEveryMonth.EndowmentInsurance - taxBaseEveryMonth.UnemployedInsurance - taxBaseEveryMonth.MedicalInsurance - taxBaseEveryMonth.OccupationalAnnuity - taxBaseEveryMonth.HousingFund - taxBaseEveryMonth.AmountDeducted - taxBaseEveryMonth.SpecialDeduction;
                         taxBaseEveryMonth.TotalTemp = taxBaseEveryMonth.InitialEaring - taxBaseEveryMonth.TotalTax;
                         taxBaseEveryMonth.LastMonths = period_month;
-                        
+                        */
+                        taxBaseEveryMonth.CertificateID = model.CertificateID;     //保存证件号码
+                        taxBaseEveryMonth.CertificateType = model.CertificateType;   //保存证件类型
+                        taxBaseEveryMonth.Name = model.Name;//保存人员姓名
+                        taxBaseEveryMonth.Period = period_year;//保存年度，如2019
+                        //新的年度累计表中的“年度累计税前收入”= 该用户  当月底表中的 “本期初始税前收入额“ + 系统中已存在的年度累计表中的“年度累计税前收入” + 当月下发的劳务费含税总和
+                        taxBaseEveryMonth.InitialEaring = model.InitialEaring + taxBaseEveryMonth_exsit.InitialEaring + monthIncome;
+                        //新的年度累计表中的“年度累计免税收入”= 该用户 当月底表中的 “本期免税收入“ + 系统中已存在的年度累计表中的“年度累计免税收入”
+                        taxBaseEveryMonth.TaxFreeIncome = model.TaxFreeIncome + taxBaseEveryMonth_exsit.TaxFreeIncome;
+                        //新的年度累计表中的“年度累计养老保险”= 该用户 当月底表中的 “本期养老保险“ + 系统中已存在的年度累计表中的“年度累计养老保险”
+                        taxBaseEveryMonth.EndowmentInsurance = model.EndowmentInsurance + taxBaseEveryMonth_exsit.EndowmentInsurance;
+                        //新的年度累计表中的“年度累计失业保险”= 该用户 当月底表中的 “本期失业保险“ + 系统中已存在的年度累计表中的“年度累计失业保险”
+                        taxBaseEveryMonth.UnemployedInsurance = model.UnemployedInsurance + taxBaseEveryMonth_exsit.UnemployedInsurance;
+                        //新的年度累计表中的“年度累计医疗保险”= 该用户 当月底表中的 “本期医疗保险“ + 系统中已存在的年度累计表中的“年度累计医疗保险”
+                        taxBaseEveryMonth.MedicalInsurance = model.MedicalInsurance + taxBaseEveryMonth_exsit.MedicalInsurance;
+                        //新的年度累计表中的“年度累计职业年金”= 该用户 当月底表中的 “本期职业年金“ + 系统中已存在的年度累计表中的“年度累计职业年金”
+                        taxBaseEveryMonth.OccupationalAnnuity = model.OccupationalAnnuity + taxBaseEveryMonth_exsit.OccupationalAnnuity;
+                        //新的年度累计表中的“年度累计住房公积金”= 该用户 当月底表中的 “本期住房公积金“ + 系统中已存在的年度累计表中的“年度累计住房公积金”
+                        taxBaseEveryMonth.HousingFund = model.HousingFund + taxBaseEveryMonth_exsit.HousingFund;
+                        //新的年度累计表中的“年度累计基本扣除”= 该用户 当月底表中的 “本期基本扣除“ + 系统中已存在的年度累计表中的“年度累计基本扣除”
+                        taxBaseEveryMonth.AmountDeducted = model.AmountDeducted + taxBaseEveryMonth_exsit.AmountDeducted;
+                        //新的年度累计表中的“年度累计专项附加扣除”= 该用户 当月底表中的 “本期专项附加扣除“ + 系统中已存在的年度累计表中的“年度累计专项附加扣除”
+                        taxBaseEveryMonth.SpecialDeduction = model.SpecialDeduction + taxBaseEveryMonth_exsit.SpecialDeduction;
+                        //新的年度累计表中的“年度累计已扣缴税额”= 该用户 当月底表中的 “本期初始已扣缴税额“+ 当月下发的劳务费税总和+ 系统中已存在的年度累计表中的“年度累计已扣缴税额”
+                        taxBaseEveryMonth.TotalTax = model.InitialTax + monthTax + taxBaseEveryMonth_exsit.TotalTax;
+                        //新的年度累计表中的“年度累计工资税前收入额”= 该用户 当月底表中的 “本期初始税前收入额“ + 系统中已存在的年度累计表中的“年度累计工资税前收入额”
+                        taxBaseEveryMonth.TotalSalaryIncomeBeforeTax = model.InitialEaring + taxBaseEveryMonth_exsit.TotalSalaryIncomeBeforeTax;
+                        //新的年度累计表中的“年度累计劳务费税前收入额”= 该用户 当月下发的劳务费含税总和 + 系统中已存在的年度累计表中的“年度累计劳务费税前收入额”
+                        taxBaseEveryMonth.TotalLaborIncomeBeforeTax = monthIncome + taxBaseEveryMonth_exsit.TotalLaborIncomeBeforeTax;
+                        //新的年度累计表中的“年度累计应纳税所得额”= 更新后的年度累计表中的“年度累计税前收入”-  更新后的年度累计表中的“年度累计免税收入”- 更新后的年度累计表中的“年度累计养老保险”- 更新后的年度累计表中的“年度累计失业保险”- 更新后的年度累计表中的“年度累计医疗保险”- 更新后的年度累计表中的“年度累计职业年金”-  更新后的年度累计表中的“年度累计住房公积金”- 更新后的年度累计表中的“年度累计基本扣除”- 更新后的年度累计表中的“年度累计专项附加扣除”
+                        taxBaseEveryMonth.InitialTaxPayable = taxBaseEveryMonth.InitialEaring - taxBaseEveryMonth.TaxFreeIncome - taxBaseEveryMonth.EndowmentInsurance - taxBaseEveryMonth.UnemployedInsurance - taxBaseEveryMonth.MedicalInsurance - taxBaseEveryMonth.OccupationalAnnuity - taxBaseEveryMonth.HousingFund - taxBaseEveryMonth.AmountDeducted - taxBaseEveryMonth.SpecialDeduction;
+                        //新的年度累计表中的“年度累计税后收入”= 更新后的年度累计表中的“年度累计税前收入”- 更新后的年度累计表中的“年度累计已扣缴税额”
+                        taxBaseEveryMonth.TotalTemp = taxBaseEveryMonth.InitialEaring - taxBaseEveryMonth.TotalTax;
+                        //更新“当前已累计月数”，如07
+                        taxBaseEveryMonth.LastMonths = period_month;
                     }
                     else
                     {
-                        
+                        /*
                         taxBaseEveryMonth.CertificateID = model.CertificateID;
                         taxBaseEveryMonth.CertificateType = model.CertificateType;
                         taxBaseEveryMonth.Name = model.Name;
@@ -211,7 +245,42 @@ namespace BEYON.Web.Areas.BasicDataManagement.Controllers
                         taxBaseEveryMonth.InitialTaxPayable = taxBaseEveryMonth.InitialEaring - taxBaseEveryMonth.TaxFreeIncome - taxBaseEveryMonth.EndowmentInsurance - taxBaseEveryMonth.UnemployedInsurance - taxBaseEveryMonth.MedicalInsurance - taxBaseEveryMonth.OccupationalAnnuity - taxBaseEveryMonth.HousingFund - taxBaseEveryMonth.AmountDeducted - taxBaseEveryMonth.SpecialDeduction;
                         taxBaseEveryMonth.TotalTemp = taxBaseEveryMonth.InitialEaring - taxBaseEveryMonth.TotalTax;
                         taxBaseEveryMonth.LastMonths = period_month;                
-                       
+                       */
+                        //年度累计表中不存在该用户的情况（新人），将当月的数据累计到年度累计表中         
+                        taxBaseEveryMonth.CertificateID = model.CertificateID;
+                        taxBaseEveryMonth.CertificateType = model.CertificateType;
+                        taxBaseEveryMonth.Name = model.Name;
+                        taxBaseEveryMonth.Period = period_year;
+                        //新的年度累计表中的“年度累计税前收入”= 该用户  当月底表中的 “本期初始税前收入额“ + 当月下发的劳务费含税总和
+                        taxBaseEveryMonth.InitialEaring = model.InitialEaring + monthIncome;
+                        //新的年度累计表中的“年度累计免税收入”= 该用户 当月底表中的 “本期免税收入“ 
+                        taxBaseEveryMonth.TaxFreeIncome = model.TaxFreeIncome;
+                        //新的年度累计表中的“年度累计养老保险”= 该用户 当月底表中的 “本期养老保险“ 
+                        taxBaseEveryMonth.EndowmentInsurance = model.EndowmentInsurance;
+                        //新的年度累计表中的“年度累计失业保险”= 该用户 当月底表中的 “本期失业保险“
+                        taxBaseEveryMonth.UnemployedInsurance = model.UnemployedInsurance;
+                        //新的年度累计表中的“年度累计医疗保险”= 该用户 当月底表中的 “本期医疗保险“
+                        taxBaseEveryMonth.MedicalInsurance = model.MedicalInsurance;
+                        //新的年度累计表中的“年度累计职业年金”= 该用户 当月底表中的 “本期职业年金“
+                        taxBaseEveryMonth.OccupationalAnnuity = model.OccupationalAnnuity;
+                        //新的年度累计表中的“年度累计住房公积金”= 该用户 当月底表中的 “本期住房公积金“
+                        taxBaseEveryMonth.HousingFund = model.HousingFund;
+                        //新的年度累计表中的“年度累计基本扣除”= 该用户 当月底表中的 “本期基本扣除“ 
+                        taxBaseEveryMonth.AmountDeducted = model.AmountDeducted;
+                        //新的年度累计表中的“年度累计专项附加扣除”= 该用户 当月底表中的 “本期专项附加扣除“ 
+                        taxBaseEveryMonth.SpecialDeduction = model.SpecialDeduction;
+                        //新的年度累计表中的“年度累计已扣缴税额”= 该用户 当月底表中的 “本期初始已扣缴税额“+ 当月下发的劳务费税总和
+                        taxBaseEveryMonth.TotalTax = model.InitialTax + monthTax;
+                        //新的年度累计表中的“年度累计工资税前收入额”= 该用户 当月底表中的 “本期初始税前收入额“ 
+                        taxBaseEveryMonth.TotalSalaryIncomeBeforeTax = model.InitialEaring;
+                        //新的年度累计表中的“年度累计劳务费税前收入额”= 该用户 当月下发的劳务费含税总和 
+                        taxBaseEveryMonth.TotalLaborIncomeBeforeTax = monthIncome;
+                        //新的年度累计表中的“年度累计应纳税所得额”= 更新后的年度累计表中的“年度累计税前收入”-  更新后的年度累计表中的“年度累计免税收入”- 更新后的年度累计表中的“年度累计养老保险”- 更新后的年度累计表中的“年度累计失业保险”- 更新后的年度累计表中的“年度累计医疗保险”- 更新后的年度累计表中的“年度累计职业年金”-  更新后的年度累计表中的“年度累计住房公积金”- 更新后的年度累计表中的“年度累计基本扣除”- 更新后的年度累计表中的“年度累计专项附加扣除”
+                        taxBaseEveryMonth.InitialTaxPayable = taxBaseEveryMonth.InitialEaring - taxBaseEveryMonth.TaxFreeIncome - taxBaseEveryMonth.EndowmentInsurance - taxBaseEveryMonth.UnemployedInsurance - taxBaseEveryMonth.MedicalInsurance - taxBaseEveryMonth.OccupationalAnnuity - taxBaseEveryMonth.HousingFund - taxBaseEveryMonth.AmountDeducted - taxBaseEveryMonth.SpecialDeduction;
+                        //新的年度累计表中的“年度累计税后收入”= 更新后的年度累计表中的“年度累计税前收入”- 更新后的年度累计表中的“年度累计已扣缴税额”
+                        taxBaseEveryMonth.TotalTemp = taxBaseEveryMonth.InitialEaring - taxBaseEveryMonth.TotalTax;
+                        //更新“当前已累计月数”，如07
+                        taxBaseEveryMonth.LastMonths = period_month;             
                     }
                     try
                     {
