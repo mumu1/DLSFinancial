@@ -677,7 +677,7 @@ namespace BEYON.CoreBLL.Service.App
         {
             try
             {
-                TaxPerOrder taxPerOrder = _TaxPerOrderRepository.Entities.FirstOrDefault(c => c.CertificateID == model.CertificateID.Trim());
+                TaxPerOrder taxPerOrder = _TaxPerOrderRepository.Entities.FirstOrDefault(c => c.CertificateID.ToLower() == model.CertificateID.Trim().ToLower());
                 if (taxPerOrder == null)
                 {
                     throw new Exception();

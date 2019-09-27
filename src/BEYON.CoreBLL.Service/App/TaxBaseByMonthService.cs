@@ -31,7 +31,7 @@ namespace BEYON.CoreBLL.Service.App
         {
             try
             {
-                TaxBaseByMonth taxBaseByMonth = _TaxBaseByMonthRepository.Entities.FirstOrDefault(c => c.CertificateID == model.CertificateID.Trim());
+                TaxBaseByMonth taxBaseByMonth = _TaxBaseByMonthRepository.Entities.FirstOrDefault(c => c.CertificateID.ToLower() == model.CertificateID.Trim().ToLower());
                 if (taxBaseByMonth != null)
                 {
                     return new OperationResult(OperationResultType.Warning, "数据库中已经存在相同的基本工资信息，请修改后重新提交！");

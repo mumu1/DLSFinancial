@@ -55,8 +55,8 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                 //amount = (from p in Context.TaxPerOrders.Where(w => w.CertificateID == certificateID)
                 //            select p.AmountY).Sum();
 
-                var amountTemp = (from p in Context.TaxPerOrders.Where(w => w.CertificateID == certificateID && w.AmountY != null)
-                                                  group p by p.CertificateID into g
+                var amountTemp = (from p in Context.TaxPerOrders.Where(w => w.CertificateID.ToLower() == certificateID.ToLower() && w.AmountY != null)
+                                  group p by p.CertificateID.ToLower() into g
                                                   select new
                                                   {
                                                       TotalAmountY = g.Sum(t => t.AmountY)
@@ -68,8 +68,8 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
             }
             else if (taxOrNot.Equals("不含税"))
             {
-                var amountTemp = (from p in Context.TaxPerOrders.Where(w => w.CertificateID == certificateID && w.AmountX != null)
-                                                    group  p  by p.CertificateID into g
+                var amountTemp = (from p in Context.TaxPerOrders.Where(w => w.CertificateID.ToLower() == certificateID.ToLower() && w.AmountX != null)
+                                  group p by p.CertificateID.ToLower() into g
                                                         select new
                                                         {
                                                             TotalAmountX = g.Sum(t=>t.AmountX)
@@ -88,9 +88,9 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
             //若taxOrNot=='含税'，即sum(select amountY from TaxPerOrders where CertificateID = certificateID)
             //若taxOrNot=='不含税'，即sum(select amountX from TaxPerOrders where CertificateID = certificateID)
             Double amount = 0.0;
-          
-                var amountTemp = (from p in Context.TaxPerOrders.Where(w => w.CertificateID == certificateID && w.AmountY != null)
-                                  group p by p.CertificateID into g
+
+            var amountTemp = (from p in Context.TaxPerOrders.Where(w => w.CertificateID.ToLower() == certificateID.ToLower() && w.AmountY != null)
+                              group p by p.CertificateID.ToLower() into g
                                   select new
                                   {
                                       TotalAmountY = g.Sum(t => t.AmountY)
@@ -108,8 +108,8 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
             //amount = (from p in Context.TaxPerOrders.Where(w => w.CertificateID == certificateID)
             //          select p).Sum(g => g.Tax);
 
-            var amountTemp = (from p in Context.TaxPerOrders.Where(w => w.CertificateID == certificateID && w.Tax != null)
-                              group p by p.CertificateID into g
+            var amountTemp = (from p in Context.TaxPerOrders.Where(w => w.CertificateID.ToLower() == certificateID.ToLower() && w.Tax != null)
+                              group p by p.CertificateID.ToLower() into g
                               select new
                               {
                                   TotalTax = g.Sum(t => t.Tax)
@@ -125,7 +125,7 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
         public int GetCashCount(String certificateID)
         {
             int count = 0;
-            var temp = from p in Context.TaxPerOrders.Where(w => w.CertificateID == certificateID)
+            var temp = from p in Context.TaxPerOrders.Where(w => w.CertificateID.ToLower() == certificateID.ToLower())
                        select p;
             if (temp != null) {
                 List<TaxPerOrder> list = temp.ToList();

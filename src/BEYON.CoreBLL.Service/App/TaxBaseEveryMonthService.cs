@@ -31,7 +31,7 @@ namespace BEYON.CoreBLL.Service.App
         {
             try
             {
-                TaxBaseEveryMonth taxBaseEveryMonth = _TaxBaseEveryMonthRepository.Entities.FirstOrDefault(c => c.CertificateID == model.CertificateID.Trim());
+                TaxBaseEveryMonth taxBaseEveryMonth = _TaxBaseEveryMonthRepository.Entities.FirstOrDefault(c => c.CertificateID.ToLower() == model.CertificateID.Trim().ToLower());
                 if (taxBaseEveryMonth != null)
                 {
                     return new OperationResult(OperationResultType.Warning, "数据库中已经存在相同的基本工资信息，请修改后重新提交！");
@@ -80,7 +80,7 @@ namespace BEYON.CoreBLL.Service.App
         {
             try
             {
-                TaxBaseEveryMonth taxBaseEveryMonth = _TaxBaseEveryMonthRepository.Entities.FirstOrDefault(c => c.CertificateID == model.CertificateID.Trim());
+                TaxBaseEveryMonth taxBaseEveryMonth = _TaxBaseEveryMonthRepository.Entities.FirstOrDefault(c => c.CertificateID.ToLower() == model.CertificateID.Trim().ToLower());
                 if (taxBaseEveryMonth == null)
                 {
                     throw new Exception();

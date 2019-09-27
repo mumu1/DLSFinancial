@@ -41,7 +41,7 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
 
         public Double GetBaseSalary(String certificateID)
         {
-            var record = from p in Context.TaxBaseByMonths.Where(w => w.CertificateID == certificateID)
+            var record = from p in Context.TaxBaseByMonths.Where(w => w.CertificateID.ToLower() == certificateID.ToLower())
                          select p;
             var lists = record.ToList();
             Double baseSalary = 0.0;
@@ -54,7 +54,7 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
 
         public Double GetBaseTax(String certificateID)
         {
-            var record = from p in Context.TaxBaseByMonths.Where(w => w.CertificateID == certificateID)
+            var record = from p in Context.TaxBaseByMonths.Where(w => w.CertificateID.ToLower() == certificateID.ToLower())
                          select p;
             var lists = record.ToList();
             Double baseTax = 0.0;
@@ -67,7 +67,7 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
 
         public Double GetInitialTaxPayable(String certificateID)
         {
-            var record = from p in Context.TaxBaseByMonths.Where(w => w.CertificateID == certificateID)
+            var record = from p in Context.TaxBaseByMonths.Where(w => w.CertificateID.ToLower() == certificateID.ToLower())
                          select p;
             var lists = record.ToList();
             Double initialTaxPayable = 0.0;
@@ -82,7 +82,7 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
         //—本期养老保险—本期失业保险—本期医疗保险—本期职业年金—本期住房公积金
         //—本期基本扣除—本期专项附加扣除）
         public Double GetPart1(String certificateID) {
-            var record = from p in Context.TaxBaseByMonths.Where(w => w.CertificateID == certificateID)
+            var record = from p in Context.TaxBaseByMonths.Where(w => w.CertificateID.ToLower() == certificateID.ToLower())
                          select p;
             var lists = record.ToList();
             Double part1 = 0.0;
@@ -96,7 +96,7 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
 
         public Double GetPart2(String certificateID)
         {
-            var record = from p in Context.TaxBaseByMonths.Where(w => w.CertificateID == certificateID)
+            var record = from p in Context.TaxBaseByMonths.Where(w => w.CertificateID.ToLower() == certificateID.ToLower())
                          select p;
             var lists = record.ToList();
             Double part2 = 0.0;
@@ -109,7 +109,7 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
 
         public Double GetInitialTax(String certificateID)
         {
-            var record = from p in Context.TaxBaseByMonths.Where(w => w.CertificateID == certificateID)
+            var record = from p in Context.TaxBaseByMonths.Where(w => w.CertificateID.ToLower() == certificateID.ToLower())
                          select p;
             var lists = record.ToList();
             Double initialTax = 0.0;
@@ -122,7 +122,7 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
 
         public Double GetWithoutInsurance(String certificateID)
         {
-            var record = from p in Context.TaxBaseByMonths.Where(w => w.CertificateID == certificateID)
+            var record = from p in Context.TaxBaseByMonths.Where(w => w.CertificateID.ToLower() == certificateID.ToLower())
                          select p;
             var lists = record.ToList();
             Double withoutInsurance = 0.0;

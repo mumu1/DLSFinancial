@@ -41,7 +41,7 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
 
         public Double GetTotalIncome(String period_year, String certificateID)
         {
-            var record = from p in Context.TaxBaseEveryMonths.Where(w => w.CertificateID == certificateID && w.Period == period_year)
+            var record = from p in Context.TaxBaseEveryMonths.Where(w => w.CertificateID.ToLower() == certificateID.ToLower() && w.Period == period_year)
                          select p; 
                 
             var lists = record.ToList();
@@ -54,7 +54,7 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
 
         public Double GetTotalTax(String period_year, String certificateID)
         {
-            var record = from p in Context.TaxBaseEveryMonths.Where(w => w.CertificateID == certificateID && w.Period == period_year)
+            var record = from p in Context.TaxBaseEveryMonths.Where(w => w.CertificateID.ToLower() == certificateID.ToLower() && w.Period == period_year)
                          select p;
             var lists = record.ToList();
             Double totalTax = 0.0;
@@ -67,7 +67,7 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
 
         public TaxBaseEveryMonth GetExistRecord(String period_year, String certificateID) {
             TaxBaseEveryMonth taxBaseEveryMonth = null;
-            var record = from p in Context.TaxBaseEveryMonths.Where(w => w.CertificateID == certificateID && w.Period == period_year)
+            var record = from p in Context.TaxBaseEveryMonths.Where(w => w.CertificateID.ToLower() == certificateID.ToLower() && w.Period == period_year)
                          select p;
             var lists = record.ToList();
             if (lists.Count > 0)
