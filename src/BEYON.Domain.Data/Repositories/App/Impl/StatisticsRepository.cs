@@ -218,24 +218,40 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                                         {
                                             result["C19"] = "";
                                         }
+                                        if (!String.IsNullOrEmpty(PersonalRecord.Gender))
+                                        {
+                                            result["C20"] = PersonalRecord.Gender;
+                                        }
+                                        else
+                                        {
+                                            result["C20"] = "";
+                                        }
+                                        if (!String.IsNullOrEmpty(PersonalRecord.Birth))
+                                        {
+                                            result["C21"] = PersonalRecord.Birth;
+                                        }
+                                        else
+                                        {
+                                            result["C21"] = "";
+                                        }
                                     }
-                                    result["C20"] = amountY;
+                                    result["C22"] = amountY;  //old C20
                                     if (String.IsNullOrEmpty(reader["C16"].ToString()))
-                                        result["C21"] = 0;
+                                        result["C23"] = 0;
                                     else
-                                        result["C21"] = 1;
-                                    result["C22"] = amountY;
-                                    result["C23"] = amountX;
-                                    result["C24"] = tax;
-                                    result["C25"] = projectNumber;
-                                    result["C26"] = projectDirector;
+                                        result["C23"] = 1;
+                                    result["C24"] = amountY;
+                                    result["C25"] = amountX;
+                                    result["C26"] = tax;
+                                    result["C27"] = projectNumber;
+                                    result["C28"] = projectDirector;
                                     for (var i = 1; i < addColumns; i++)
                                     {
-                                        result[String.Format("C{0}", 22 + i * 5)] = "";
-                                        result[String.Format("C{0}", 23 + i * 5)] = "";
-                                        result[String.Format("C{0}", 24 + i * 5)] = "";
+                                        result[String.Format("C{0}", 24 + i * 5)] = "";//old 22
                                         result[String.Format("C{0}", 25 + i * 5)] = "";
                                         result[String.Format("C{0}", 26 + i * 5)] = "";
+                                        result[String.Format("C{0}", 27 + i * 5)] = "";
+                                        result[String.Format("C{0}", 28 + i * 5)] = "";
                                     }
                                     objects.Add(certificateID, result);
                                 }
@@ -245,21 +261,21 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                                     jsonObject["C5"] = jsonObject["C5"].ToObject<float>() + amountY;
                                     jsonObject["C14"] = jsonObject["C14"].ToObject<float>() + tax;
                                     //jsonObject["C15"] = jsonObject["C15"].ToObject<float>() + amountY;
-                                    jsonObject["C20"] = jsonObject["C20"].ToObject<float>() + amountY;
-                                    int repetTimes = jsonObject["C21"].ToObject<int>() + 1;
-                                    jsonObject["C21"] = repetTimes;
+                                    jsonObject["C22"] = jsonObject["C22"].ToObject<float>() + amountY;
+                                    int repetTimes = jsonObject["C23"].ToObject<int>() + 1;
+                                    jsonObject["C23"] = repetTimes;
 
-                                    jsonObject[String.Format("C{0}", 22 + (repetTimes - 1) * 5)] = amountY;
-                                    jsonObject[String.Format("C{0}", 23 + (repetTimes - 1) * 5)] = amountX;
-                                    jsonObject[String.Format("C{0}", 24 + (repetTimes - 1) * 5)] = tax;
+                                    jsonObject[String.Format("C{0}", 24 + (repetTimes - 1) * 5)] = amountY;
+                                    jsonObject[String.Format("C{0}", 25 + (repetTimes - 1) * 5)] = amountX;
+                                    jsonObject[String.Format("C{0}", 26 + (repetTimes - 1) * 5)] = tax;
                                     if (!String.IsNullOrEmpty(projectNumber))
                                     {
-                                        jsonObject[String.Format("C{0}", 25 + (repetTimes - 1) * 5)] = projectNumber;
+                                        jsonObject[String.Format("C{0}", 27 + (repetTimes - 1) * 5)] = projectNumber;
                                         
                                     }
                                     if (!String.IsNullOrEmpty(projectDirector))
                                     {
-                                        jsonObject[String.Format("C{0}", 26 + (repetTimes - 1) * 5)] = projectDirector;
+                                        jsonObject[String.Format("C{0}", 28 + (repetTimes - 1) * 5)] = projectDirector;
                                     }
 
                                     objects[certificateID] = jsonObject;
@@ -451,24 +467,41 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                                         {
                                             result["C13"] = "";
                                         }
+                                        if (!String.IsNullOrEmpty(PersonalRecord.Gender))
+                                        {
+                                            result["C14"] = PersonalRecord.Gender;
+                                        }
+                                        else
+                                        {
+                                            result["C14"] = "";
+                                        }
+                                        if (!String.IsNullOrEmpty(PersonalRecord.Birth))
+                                        {
+                                            result["C15"] = PersonalRecord.Birth;
+                                        }
+                                        else
+                                        {
+                                            result["C15"] = "";
+                                        }
                                     }
                                   
                                     if (String.IsNullOrEmpty(reader["C5"].ToString()))
-                                        result["C14"] = 0;
+                                        result["C16"] = 0;
                                     else
-                                        result["C14"] = 1;
-                                    result["C15"] = amountY;
-                                    result["C16"] = amountX;
-                                    result["C17"] = tax;
-                                    result["C18"] = projectNumber;
-                                    result["C19"] = projectDirector;
+                                        result["C16"] = 1;
+                                    result["C17"] = amountY;
+                                    result["C18"] = amountX;
+                                    result["C19"] = tax;
+                                    result["C20"] = projectNumber;
+                                    result["C21"] = projectDirector;
+                                   
                                     for (var i = 1; i < addColumns; i++)
                                     {
-                                        result[String.Format("C{0}", 15 + i * 5)] = "";
-                                        result[String.Format("C{0}", 16 + i * 5)] = "";
-                                        result[String.Format("C{0}", 17 + i * 5)] = "";
+                                        result[String.Format("C{0}", 17 + i * 5)] = "";//old 15+i
                                         result[String.Format("C{0}", 18 + i * 5)] = "";
                                         result[String.Format("C{0}", 19 + i * 5)] = "";
+                                        result[String.Format("C{0}", 20 + i * 5)] = "";
+                                        result[String.Format("C{0}", 21 + i * 5)] = "";
                                     }
                                     objects.Add(certificateID, result);
                                 }
@@ -478,20 +511,20 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                                     jsonObject["C5"] = jsonObject["C5"].ToObject<float>() + amountY;
                                     jsonObject["C8"] = jsonObject["C8"].ToObject<float>() + tax;
                                     jsonObject["C9"] = jsonObject["C9"].ToObject<float>() ;
-                                    int repetTimes = jsonObject["C14"].ToObject<int>() + 1;
-                                    jsonObject["C14"] = repetTimes;
+                                    int repetTimes = jsonObject["C16"].ToObject<int>() + 1;
+                                    jsonObject["C16"] = repetTimes;
 
-                                    jsonObject[String.Format("C{0}", 15 + (repetTimes - 1) * 5)] = amountY;
-                                    jsonObject[String.Format("C{0}", 16 + (repetTimes - 1) * 5)] = amountX;
-                                    jsonObject[String.Format("C{0}", 17 + (repetTimes - 1) * 5)] = tax;
+                                    jsonObject[String.Format("C{0}", 17 + (repetTimes - 1) * 5)] = amountY;
+                                    jsonObject[String.Format("C{0}", 18 + (repetTimes - 1) * 5)] = amountX;
+                                    jsonObject[String.Format("C{0}", 19 + (repetTimes - 1) * 5)] = tax;
                                     if (!String.IsNullOrEmpty(projectNumber))
                                     {
-                                        jsonObject[String.Format("C{0}", 18 + (repetTimes - 1) * 5)] = projectNumber;
+                                        jsonObject[String.Format("C{0}", 20 + (repetTimes - 1) * 5)] = projectNumber;
 
                                     }
                                     if (!String.IsNullOrEmpty(projectDirector))
                                     {
-                                        jsonObject[String.Format("C{0}", 19 + (repetTimes - 1) * 5)] = projectDirector;
+                                        jsonObject[String.Format("C{0}", 21 + (repetTimes - 1) * 5)] = projectDirector;
                                     }
 
                                     objects[certificateID] = jsonObject;
@@ -911,8 +944,12 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
 
         private PersonalRecord GetPersonRecordInfo(String certificateID)
         {
-            var person = from p in Context.PersonalRecords.Where(w => w.CertificateID == certificateID).OrderByDescending(t => t.UpdateDate)
-                         select new { Tele = p.Tele, Nationality = p.Nationality, Company = p.Company, Title = p.Title };
+            
+            //var person = from p in Context.PersonalRecords.Where(w => w.CertificateID == certificateID).OrderByDescending(t => t.UpdateDate)
+              //           select new { Tele = p.Tele, Nationality = p.Nationality, Company = p.Company, Title = p.Title, Gender = p.Gender, Birth = p.Birth };
+            var person = from p in Context.PersonalRecords.Where(w => w.CertificateID.ToLower() == certificateID.ToLower()).OrderByDescending(t => t.UpdateDate)
+                         select new { Tele = p.Tele, Nationality = p.Nationality, Company = p.Company, Title = p.Title, Gender = p.Gender, Birth = p.Birth };
+           
             var lists = person.ToList();
 
             if (lists.Count > 0)
@@ -921,8 +958,9 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                     Tele = lists[0].Tele,
                     Nationality = lists[0].Nationality,
                     Company = lists[0].Company,
-                    Title = lists[0].Title
-
+                    Title = lists[0].Title,
+                    Gender = lists[0].Gender,
+                    Birth = lists[0].Birth
                 };
             else
                 return null;
