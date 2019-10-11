@@ -96,6 +96,10 @@ namespace BEYON.Domain.Model.App
         [StringLength(100)]
         public string AccountName { get; set; }
 
+        [Display(Name = "收款账号省市")]
+        [StringLength(200)]
+        public string ProvinceCity { get; set; }
+
         [Display(Name = "支付类型")]
         [StringLength(36)]
         public string PaymentType { get; set; }

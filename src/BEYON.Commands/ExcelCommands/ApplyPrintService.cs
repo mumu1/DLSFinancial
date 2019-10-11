@@ -150,7 +150,7 @@ namespace ExcelCommands
                     infoRange.Value = String.Format("课题号：  {0}         课题负责人：  {1}         经办人：  {2}         支付类型：  {3}         合计金额：  {4} 元", applicationForm["ProjectNumber"], applicationForm["ProjectDirector"], applicationForm["Agent"], applicationForm["PaymentType"],applicationForm["Summation"]); //设置单元格内文本
                   
                     //2.设置表头
-                    string[] strHead = new string[columnCount] { "序号", "姓名", "证件类型", "证件号码", "单位", "联系电话", "国籍", "职称", "人员类型", "金额(元)", "是否含税", "开户银行", "银行存折帐号", "开户银行详细名称", "领取人签字" };
+                    string[] strHead = new string[columnCount] { "序号", "姓名", "证件类型", "证件号码", "单位", "联系电话", "国籍", "职称", "人员类型", "金额(元)", "是否含税", "开户银行", "银行存折帐号", "开户银行详细名称",  "领取人签字" };
                     int[] columnWidth = new int[columnCount] { 4, 10, 12, 14, 20, 12, 8, 8, 10, 10, 10, 10, 16, 16, 12 };
                     for (int i = 0; i < columnCount; i++)
                     {
@@ -183,6 +183,7 @@ namespace ExcelCommands
                         excelApp.Cells[k + 6, 12] = persons["Bank"];
                         excelApp.Cells[k + 6, 13] = persons["AccountNumber"].ToString().Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", "");
                         excelApp.Cells[k + 6, 14] = persons["BankDetailName"];
+                      
                     }
 
                     //for (int k = 1; k <= rowCount; k++)
@@ -255,7 +256,7 @@ namespace ExcelCommands
                     noteRange.Font.Name = "宋体";//设置字体
                     noteRange.Font.Size = 9;//字体大小
                     noteRange.Font.Bold = false;//加粗显示
-                    noteRange.Value = "填表说明:1.各类劳务费应由领款本人签收并经课题负责人、部门负责人、单位负责人、经办人签字。\n         2.现金和转账发放都可使用该表，如通过银行转账发放，请准确填写收款本人的银行账户、开户银行、账户名称等信息。\n         3.单位填写分类：所内在职职工、所内注册学生、所内劳务流程。客座学生和外单位人员填写具体工作单位。";
+                    noteRange.Value = "填表说明:1.各类劳务费应由领款本人签收并经课题负责人、部门负责人、单位负责人、经办人签字。\n         2.现金和转账发放都可使用该表，如通过银行转账发放，请准确填写收款本人的银行账户、开户银行、账户名称等信息。\n         3.收款人证件类型为外国护照的，需要填写收款人性别和出生年月日。\n         4.单位填写分类：所内在职职工、所内注册学生、所内劳务流程。客座学生和外单位人员填写具体工作单位。";
 
                     Range signRange = worksheet.get_Range(worksheet.Cells[nMax + 11, 1], worksheet.Cells[nMax + 12, columnCount]);//选取单元格
                     signRange.MergeCells = true;
@@ -408,7 +409,7 @@ namespace ExcelCommands
                     noteRange.Font.Name = "宋体";//设置字体
                     noteRange.Font.Size = 9;//字体大小
                     noteRange.Font.Bold = false;//加粗显示
-                    noteRange.Value = "填表说明:1.各类劳务费应由领款本人签收并经课题负责人、部门负责人、单位负责人、经办人签字。\n         2.现金和转账发放都可使用该表，如通过银行转账发放，请准确填写收款本人的银行账户、开户银行、账户名称等信息。\n         3.单位填写分类：所内在职职工、所内注册学生、所内劳务流程。客座学生和外单位人员填写具体工作单位。";
+                    noteRange.Value = "填表说明:1.各类劳务费应由领款本人签收并经课题负责人、部门负责人、单位负责人、经办人签字。\n         2.现金和转账发放都可使用该表，如通过银行转账发放，请准确填写收款本人的银行账户、开户银行、账户名称等信息。\n         3.收款人证件类型为外国护照的，需要填写收款人性别和出生年月日。\n         4.单位填写分类：所内在职职工、所内注册学生、所内劳务流程。客座学生和外单位人员填写具体工作单位。";
 
                     Range signRange = worksheet.get_Range(worksheet.Cells[nMax + 11, 1], worksheet.Cells[nMax + 12, columnCount]);//选取单元格
                     signRange.MergeCells = true;

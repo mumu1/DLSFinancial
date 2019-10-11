@@ -82,6 +82,10 @@ namespace BEYON.ViewModel.App
         [StringLength(36)]
         public string AccountNumber { get; set; }
 
+        [Display(Name = "收款账号省市")]
+        [StringLength(200)]
+        public string ProvinceCity { get; set; }
+
         [Display(Name = "账户名称")]
         [StringLength(100)]
         public string AccountName { get; set; }
