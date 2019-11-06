@@ -47,10 +47,8 @@ namespace BEYON.CoreBLL.Service.App
             columns.Add(new Column("C17", "国籍"));
             columns.Add(new Column("C18", "单位"));
             columns.Add(new Column("C19", "职称"));
-            columns.Add(new Column("C20", "性别"));
-            columns.Add(new Column("C21", "出生日期"));
-            columns.Add(new Column("C22", "本期劳务费税前合计"));  //old C20
-            columns.Add(new Column("C23", "次数"));   //old C21
+            columns.Add(new Column("C20", "本期劳务费税前合计"));
+            columns.Add(new Column("C21", "次数"));
             int count = _statisticsRepository.GetMaxCountPerMonthPerPerson();
             for (var i = 0; i < count; i++)
             {
@@ -90,9 +88,7 @@ namespace BEYON.CoreBLL.Service.App
             columns.Add(new Column("C11", "国籍"));
             columns.Add(new Column("C12", "单位"));
             columns.Add(new Column("C13", "职称"));
-            columns.Add(new Column("C14", "性别"));
-            columns.Add(new Column("C15", "出生日期"));
-            columns.Add(new Column("C16", "次数"));//old C14
+            columns.Add(new Column("C14", "次数"));
             int count = _statisticsRepository.GetMaxCountLaborStatistics();
             for (var i = 0; i < count; i++)
             {

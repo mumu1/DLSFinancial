@@ -330,9 +330,6 @@ namespace BEYON.Web.Areas.App.Controllers
                 BankDetailName = recordVMs[0].BankDetailName,
                 AccountName = recordVMs[0].Name,
                 AccountNumber = recordVMs[0].AccountNumber,
-                ProvinceCity = recordVMs[0].ProvinceCity,
-                Gender = recordVMs[0].Gender,
-                Birth = recordVMs[0].Birth,
                 PaymentType = recordVMs[0].PaymentType,
                 UpdateDate = DateTime.Now
             };

@@ -659,7 +659,6 @@ namespace BEYON.CoreBLL.Service.App
                     AccountName = model.AccountName,
                     AccountNumber = model.AccountNumber,
                     PaymentType = model.PaymentType,
-                    ProvinceCity = model.ProvinceCity,
                     AmountY = amountY,
                     AmountX = amountX,
                     UpdateDate = DateTime.Now
@@ -700,7 +699,6 @@ namespace BEYON.CoreBLL.Service.App
                 taxPerOrder.BankDetailName = model.BankDetailName;
                 taxPerOrder.AccountName = model.AccountName;
                 taxPerOrder.AccountNumber = model.AccountNumber;
-                taxPerOrder.ProvinceCity = model.ProvinceCity;
                 taxPerOrder.AmountY = model.AmountY;
                 taxPerOrder.AmountX = model.AmountX;
                 taxPerOrder.UpdateDate = DateTime.Now;

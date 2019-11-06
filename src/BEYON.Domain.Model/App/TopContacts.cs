@@ -72,17 +72,5 @@ namespace BEYON.Domain.Model.App
         [StringLength(36)]
         public string AccountNumber { get; set; }
 
-        [Display(Name = "收款账号省市")]
-        [StringLength(200)]
-        public string ProvinceCity { get; set; }
-
-        [Display(Name = "性别")]
-        [StringLength(6)]
-        public string Gender { get; set; }
-
-        [Display(Name = "出生日期")]
-        [StringLength(12)]
-        public string Birth { get; set; }
-
     }
 }

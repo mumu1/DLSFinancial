@@ -58,10 +58,7 @@
                                     2.现金和转账发放都可使用该表，如通过银行转账发放，请准确填写收款本人的银行账户、开户银行、账户名称等信息。
                                 </div>
                                 <div>
-                                    3.收款人证件类型为外国护照的，需要填写收款人性别和出生年月日。
-                                </div>
-                                <div>
-                                    4.单位填写分类：所内在职职工、所内注册学生、所内劳务流程。客座学生和外单位人员填写具体工作单位。
+                                    3.单位填写分类：所内在职职工、所内注册学生、所内劳务流程。客座学生和外单位人员填写具体工作单位。
                                 </div>
                             </div>
                         </section>
@@ -207,10 +204,7 @@
                     { data: "Amount", title: "金额(元)" },
                     { data: "Bank", title: "开户银行" },
                     { data: "AccountNumber", title: "银行账号" },
-                    { data: "BankDetailName", title: "开户行详细名称" },
-                    { data: "ProvinceCity", title: "收款账号省市" },
-                     { data: "Gender", title: "性别" },
-                      { data: "Birth", title: "出生日期" },
+                    { data: "BankDetailName", title: "开户行详细名称" },              
                     { data: "PaymentType", title: "支付类型", visible: false },
                     { data: "Signature", title: "领取人签字", visible: false }
 
@@ -242,12 +236,10 @@
             $('#datatable_create_form').DataTable().column(12).visible(false);   //开户银行列隐藏
             $('#datatable_create_form').DataTable().column(13).visible(false);  //银行账号列隐藏
             $('#datatable_create_form').DataTable().column(14).visible(false);  //开户行详细名称列隐藏
-            $('#datatable_create_form').DataTable().column(15).visible(false);  //ProvinceCity列隐藏
         } else if ("@Model.PaymentType" == "银行转账") {          
             $('#datatable_create_form').DataTable().column(12).visible(true);
             $('#datatable_create_form').DataTable().column(13).visible(true);
             $('#datatable_create_form').DataTable().column(14).visible(true);
-            $('#datatable_create_form').DataTable().column(15).visible(true);
         }
     }
 

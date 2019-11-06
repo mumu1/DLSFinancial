@@ -82,9 +82,6 @@ namespace BEYON.CoreBLL.Service.App
                     Bank = GetReplaceString(model.Bank),
                     BankDetailName = GetReplaceString(model.BankDetailName),
                     AccountNumber = GetReplaceString(model.AccountNumber),
-                    ProvinceCity = GetReplaceString(model.ProvinceCity),
-                    Gender = GetReplaceString(model.Gender),
-                    Birth = GetReplaceString(model.Birth),
                     UpdateDate = DateTime.Now
                 };
                 _TopContactsRepository.Insert(entity);
@@ -137,9 +134,6 @@ namespace BEYON.CoreBLL.Service.App
                     Bank = GetReplaceString(model.Bank),
                     BankDetailName = GetReplaceString(model.BankDetailName),
                     AccountNumber = GetReplaceString(model.AccountNumber),
-                    ProvinceCity = GetReplaceString(model.ProvinceCity),
-                    Gender = GetReplaceString(model.Gender),
-                    Birth = GetReplaceString(model.Birth),
                     UpdateDate = DateTime.Now
                 };
 
@@ -231,9 +225,6 @@ namespace BEYON.CoreBLL.Service.App
                 topContacts.Bank = GetReplaceString(model.Bank);
                 topContacts.BankDetailName = GetReplaceString(model.BankDetailName);
                 topContacts.AccountNumber = GetReplaceString(model.AccountNumber);
-                topContacts.ProvinceCity = GetReplaceString(model.ProvinceCity);
-                topContacts.Gender = GetReplaceString(model.Gender);
-                topContacts.Birth = GetReplaceString(model.Birth);
                 topContacts.UpdateDate = DateTime.Now;
                 _TopContactsRepository.Update(topContacts);
                 return new OperationResult(OperationResultType.Success, "更新数据成功！");

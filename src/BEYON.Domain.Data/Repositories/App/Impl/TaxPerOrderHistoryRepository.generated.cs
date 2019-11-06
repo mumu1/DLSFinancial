@@ -45,7 +45,7 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                 "SerialNumber","ProjectNumber","TaskName","Period",
                 "RefundType","ProjectDirector","Agent","PersonType","CertificateType",
                 "CertificateID","Amount","TaxOrNot","Tax",
-                "AmountY","AmountX","Bank","BankDetailName","ProvinceCity",
+                "AmountY","AmountX","Bank","BankDetailName",
                 "AccountNumber","AccountName","PaymentType","UpdateDate",
                 "Name"
             };
