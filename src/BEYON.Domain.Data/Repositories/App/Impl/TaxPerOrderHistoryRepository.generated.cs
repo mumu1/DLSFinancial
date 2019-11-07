@@ -46,7 +46,7 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                 "RefundType","ProjectDirector","Agent","PersonType","CertificateType",
                 "CertificateID","Amount","TaxOrNot","Tax",
                 "AmountY","AmountX","Bank","BankDetailName",
-                "AccountNumber","AccountName","PaymentType","UpdateDate",
+                "AccountNumber","AccountName","PaymentType","ProvinceCity","UpdateDate",
                 "Name"
             };
             StringBuilder sql = new StringBuilder();

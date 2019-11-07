@@ -87,6 +87,10 @@ namespace BEYON.Domain.Model.App
         [StringLength(36)]
         public string PaymentType { get; set; }
 
+        [Display(Name = "收款账号省市")]
+        [StringLength(200)]
+        public string ProvinceCity { get; set; }
+
         [Display(Name = "领取人签字")]
         [StringLength(36)]
         public string Signature { get; set; }

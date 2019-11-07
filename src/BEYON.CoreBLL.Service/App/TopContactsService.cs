@@ -81,6 +81,7 @@ namespace BEYON.CoreBLL.Service.App
                     Title = GetReplaceString(model.Title),
                     Bank = GetReplaceString(model.Bank),
                     BankDetailName = GetReplaceString(model.BankDetailName),
+                    ProvinceCity = GetReplaceString(model.ProvinceCity),
                     AccountNumber = GetReplaceString(model.AccountNumber),
                     UpdateDate = DateTime.Now
                 };
@@ -133,6 +134,7 @@ namespace BEYON.CoreBLL.Service.App
                     Title = GetReplaceString(model.Title),
                     Bank = GetReplaceString(model.Bank),
                     BankDetailName = GetReplaceString(model.BankDetailName),
+                    ProvinceCity = GetReplaceString(model.ProvinceCity),
                     AccountNumber = GetReplaceString(model.AccountNumber),
                     UpdateDate = DateTime.Now
                 };
@@ -224,6 +226,7 @@ namespace BEYON.CoreBLL.Service.App
                 topContacts.Title = GetReplaceString(model.Title);
                 topContacts.Bank = GetReplaceString(model.Bank);
                 topContacts.BankDetailName = GetReplaceString(model.BankDetailName);
+                topContacts.ProvinceCity = GetReplaceString(model.ProvinceCity);
                 topContacts.AccountNumber = GetReplaceString(model.AccountNumber);
                 topContacts.UpdateDate = DateTime.Now;
                 _TopContactsRepository.Update(topContacts);
@@ -274,6 +277,7 @@ namespace BEYON.CoreBLL.Service.App
                 model.UpdateDate = DateTime.Now;
                 model.AccountNumber = GetReplaceString(model.AccountNumber);
                 model.BankDetailName = GetReplaceString(model.BankDetailName);
+                model.ProvinceCity = GetReplaceString(model.ProvinceCity);
                 model.Name = nameFormat;
                 model.Nationality = GetReplaceString(model.Nationality);
                 model.Tele = GetReplaceString(model.Tele);

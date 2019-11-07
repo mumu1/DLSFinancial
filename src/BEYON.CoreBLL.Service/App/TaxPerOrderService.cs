@@ -656,6 +656,7 @@ namespace BEYON.CoreBLL.Service.App
                     Tax = tax,
                     Bank = model.Bank,
                     BankDetailName = model.BankDetailName,
+                    ProvinceCity = model.ProvinceCity,
                     AccountName = model.AccountName,
                     AccountNumber = model.AccountNumber,
                     PaymentType = model.PaymentType,
@@ -697,6 +698,7 @@ namespace BEYON.CoreBLL.Service.App
                 taxPerOrder.Tax = model.Tax;
                 taxPerOrder.Bank = model.Bank;
                 taxPerOrder.BankDetailName = model.BankDetailName;
+                taxPerOrder.ProvinceCity = model.ProvinceCity;
                 taxPerOrder.AccountName = model.AccountName;
                 taxPerOrder.AccountNumber = model.AccountNumber;
                 taxPerOrder.AmountY = model.AmountY;

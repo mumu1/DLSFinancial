@@ -53,6 +53,12 @@ namespace BEYON.CoreBLL.Service.App
 
                 if (String.IsNullOrEmpty(model.CertificateID))
                     return new OperationResult(OperationResultType.Warning, "证件号码不能为空，请修改后重新提交！");
+
+                if (String.IsNullOrEmpty(model.Nationality))
+                {
+                    return new OperationResult(OperationResultType.Warning, "国籍不能为空，请修改后重新提交！");
+                }
+
                 //若姓名为英文字母，不需去除字符串中的空格，若为中文，需去除空格
                 String nameFormat = "";
                 if (IsEnCh(model.Name.Trim()))
@@ -80,6 +86,7 @@ namespace BEYON.CoreBLL.Service.App
                     BankDetailName = GetReplaceString(model.BankDetailName),
                     AccountName = GetReplaceString(model.AccountName),
                     AccountNumber = GetReplaceString(model.AccountNumber),
+                    ProvinceCity = GetReplaceString(model.ProvinceCity),
                     PaymentType = GetReplaceString(model.PaymentType),
                     UpdateDate = DateTime.Now
                 };
@@ -107,6 +114,10 @@ namespace BEYON.CoreBLL.Service.App
                 if (!String.IsNullOrEmpty(model.AccountNumber))
                 {
                     contact.AccountNumber = GetReplaceString(model.AccountNumber);
+                }
+                if (!String.IsNullOrEmpty(model.ProvinceCity))
+                {
+                    contact.ProvinceCity = GetReplaceString(model.ProvinceCity);
                 }
                 _TopContactsService.Insert(contact);    
 
@@ -172,6 +183,7 @@ namespace BEYON.CoreBLL.Service.App
                 personalRecord.AccountName = GetReplaceString(model.AccountName);
                 personalRecord.AccountNumber = GetReplaceString(model.AccountNumber);
                 personalRecord.PaymentType = GetReplaceString(model.PaymentType);
+                personalRecord.ProvinceCity = GetReplaceString(model.ProvinceCity);
                 personalRecord.UpdateDate = DateTime.Now;
                 _PersonalRecordRepository.Update(personalRecord, isSave);
                 return new OperationResult(OperationResultType.Success, "更新数据成功！");
@@ -284,7 +296,7 @@ namespace BEYON.CoreBLL.Service.App
                         record.SerialNumber = serialNumber;
                         record.PaymentType = paymentType;
                         if (paymentType.Equals("银行转账")) {
-                            if (item.Count < 13)
+                            if (item.Count < 14)
                             {
                                 return new OperationResult(OperationResultType.Error, "导入数据失败", "<li>请增加银行账户等相关信息或修改为现金支付类型</li>");
                             }
@@ -293,6 +305,7 @@ namespace BEYON.CoreBLL.Service.App
                             record.Bank = item[10];
                             record.AccountNumber = item[11];
                             record.BankDetailName = item[12];
+                            record.ProvinceCity = item[13];
                         }
                         
                         List<ImportFeedBack> errors = ValidatePersonalRecord(item,  num++, maps, ref record);
@@ -331,6 +344,10 @@ namespace BEYON.CoreBLL.Service.App
                         if (!String.IsNullOrEmpty(record.BankDetailName))
                         {
                             contact.BankDetailName = GetReplaceString(record.BankDetailName);
+                        }
+                        if (!String.IsNullOrEmpty(record.ProvinceCity))
+                        {
+                            contact.ProvinceCity = GetReplaceString(record.ProvinceCity);
                         }
                         if (!String.IsNullOrEmpty(record.AccountNumber))
                         {
@@ -421,6 +438,19 @@ namespace BEYON.CoreBLL.Service.App
                             catch
                             {
                                 feedBack.ExceptionContent.Add(String.Format("第{0}行记录  {1}格式不正确！", num, map[property.Name]));
+                            }
+                            break;
+                        case "ProvinceCity":
+                            if (!ImportUtil.GetValue(record, map, "Bank").Equals("工商银行"))
+                            {
+                                if (String.IsNullOrEmpty(ImportUtil.GetValue(record, map, property.Name)))
+                                {
+                                    feedBack.ExceptionContent.Add(String.Format("第{0}行记录  {1}为空！", num, map[property.Name]));
+                                }
+                                else
+                                {
+                                    property.SetValue(personal, ImportUtil.GetValue(record, map, property.Name));
+                                }
                             }
                             break;
                         default:
@@ -535,9 +565,9 @@ namespace BEYON.CoreBLL.Service.App
                         feedBack.ExceptionContent.Add("第" + num + "行记录  证件号码格式有误！");
                     }
                 }
-                //验证身份证号码后三位是否为000
-                if (personal.CertificateID.Substring(personal.CertificateID.Length - 3).Equals("000")) {
-                    feedBack.ExceptionContent.Add("第" + num + "行记录  请检查证件号码后三位！");
+                //验证身份证号码后四位是否为0000
+                if (personal.CertificateID.Substring(personal.CertificateID.Length - 4).Equals("0000")) {
+                    feedBack.ExceptionContent.Add("第" + num + "行记录  请检查证件号码后四位！");
                 }
 
             }
