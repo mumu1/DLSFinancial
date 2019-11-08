@@ -91,6 +91,14 @@ namespace BEYON.Domain.Model.App
         [StringLength(200)]
         public string ProvinceCity { get; set; }
 
+        [Display(Name = "性别")]
+        [StringLength(6)]
+        public string Gender { get; set; }
+
+        [Display(Name = "出生日期")]
+        [StringLength(12)]
+        public string Birth { get; set; }
+
         [Display(Name = "领取人签字")]
         [StringLength(36)]
         public string Signature { get; set; }

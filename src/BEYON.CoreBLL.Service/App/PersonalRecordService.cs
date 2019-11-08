@@ -69,6 +69,16 @@ namespace BEYON.CoreBLL.Service.App
                 {
                     nameFormat = GetReplaceString(model.Name);
                 }
+
+                String idType = GetReplaceString(model.CertificateType);
+                String birthVar = "";
+                String genderVar = "";
+                if ("外国护照".Equals(idType))
+                {
+                    birthVar = GetReplaceString(model.Birth);
+                    genderVar = GetReplaceString(model.Gender);
+                }
+
                 var entity = new PersonalRecord
                 {
                     SerialNumber = model.SerialNumber,
@@ -87,6 +97,8 @@ namespace BEYON.CoreBLL.Service.App
                     AccountName = GetReplaceString(model.AccountName),
                     AccountNumber = GetReplaceString(model.AccountNumber),
                     ProvinceCity = GetReplaceString(model.ProvinceCity),
+                    Gender = genderVar,
+                    Birth = birthVar,
                     PaymentType = GetReplaceString(model.PaymentType),
                     UpdateDate = DateTime.Now
                 };
@@ -118,6 +130,14 @@ namespace BEYON.CoreBLL.Service.App
                 if (!String.IsNullOrEmpty(model.ProvinceCity))
                 {
                     contact.ProvinceCity = GetReplaceString(model.ProvinceCity);
+                }
+                if (!String.IsNullOrEmpty(genderVar))
+                {
+                    contact.Gender = genderVar;
+                }
+                if (!String.IsNullOrEmpty(birthVar))
+                {
+                    contact.Birth = birthVar;
                 }
                 _TopContactsService.Insert(contact);    
 
@@ -167,6 +187,16 @@ namespace BEYON.CoreBLL.Service.App
                 {
                     nameFormat = GetReplaceString(model.Name);
                 }
+
+                String idType = GetReplaceString(model.CertificateType);
+                String birthVar = "";
+                String genderVar = "";
+                if ("外国护照".Equals(idType))
+                {
+                    birthVar = GetReplaceString(model.Birth);
+                    genderVar = GetReplaceString(model.Gender);
+                }
+
                 personalRecord.SerialNumber = model.SerialNumber;
                 personalRecord.Name = nameFormat;
                 personalRecord.CertificateID = GetReplaceString(model.CertificateID);
@@ -184,6 +214,8 @@ namespace BEYON.CoreBLL.Service.App
                 personalRecord.AccountNumber = GetReplaceString(model.AccountNumber);
                 personalRecord.PaymentType = GetReplaceString(model.PaymentType);
                 personalRecord.ProvinceCity = GetReplaceString(model.ProvinceCity);
+                personalRecord.Gender = genderVar;
+                personalRecord.Birth = birthVar;
                 personalRecord.UpdateDate = DateTime.Now;
                 _PersonalRecordRepository.Update(personalRecord, isSave);
                 return new OperationResult(OperationResultType.Success, "更新数据成功！");
@@ -296,7 +328,7 @@ namespace BEYON.CoreBLL.Service.App
                         record.SerialNumber = serialNumber;
                         record.PaymentType = paymentType;
                         if (paymentType.Equals("银行转账")) {
-                            if (item.Count < 14)
+                            if (item.Count < 16)
                             {
                                 return new OperationResult(OperationResultType.Error, "导入数据失败", "<li>请增加银行账户等相关信息或修改为现金支付类型</li>");
                             }
@@ -353,6 +385,15 @@ namespace BEYON.CoreBLL.Service.App
                         {
                             contact.AccountNumber = GetReplaceString(record.AccountNumber);
                         }
+                        if (!String.IsNullOrEmpty(record.Gender))
+                        {
+                            contact.Gender = GetReplaceString(record.Gender);
+                        }
+                        if (!String.IsNullOrEmpty(record.Birth))
+                        {
+                            contact.Birth = GetReplaceString(record.Birth);
+                        }
+
                         _TopContactsService.Insert(contact);    
                     }
                 }
@@ -429,6 +470,32 @@ namespace BEYON.CoreBLL.Service.App
                                 }
                             }
                             break;
+                        case "Gender":
+                            if (ImportUtil.GetValue(record, map, "CertificateType").Equals("外国护照"))
+                            {
+                                if (String.IsNullOrEmpty(ImportUtil.GetValue(record, map, property.Name)))
+                                {
+                                    feedBack.ExceptionContent.Add(String.Format("第{0}行记录  {1}为空！", num, map[property.Name]));
+                                }
+                                else
+                                {
+                                    property.SetValue(personal, ImportUtil.GetValue(record, map, property.Name));
+                                }
+                            }
+                            break;
+                        case "Birth":
+                            if (ImportUtil.GetValue(record, map, "CertificateType").Equals("外国护照"))
+                            {
+                                if (String.IsNullOrEmpty(ImportUtil.GetValue(record, map, property.Name)))
+                                {
+                                    feedBack.ExceptionContent.Add(String.Format("第{0}行记录  {1}为空！", num, map[property.Name]));
+                                }
+                                else
+                                {
+                                    property.SetValue(personal, ImportUtil.GetValue(record, map, property.Name));
+                                }
+                            }
+                            break;
                         case "Amount":
                             try
                             {
@@ -481,6 +548,32 @@ namespace BEYON.CoreBLL.Service.App
                             else
                             {
                                 property.SetValue(personal, ImportUtil.GetValue(record, map, property.Name));
+                            }
+                            break;
+                        case "Gender":
+                            if (ImportUtil.GetValue(record, map, "CertificateType").Equals("外国护照"))
+                            {
+                                if (String.IsNullOrEmpty(ImportUtil.GetValue(record, map, property.Name)))
+                                {
+                                    feedBack.ExceptionContent.Add(String.Format("第{0}行记录  {1}为空！", num, map[property.Name]));
+                                }
+                                else
+                                {
+                                    property.SetValue(personal, ImportUtil.GetValue(record, map, property.Name));
+                                }
+                            }
+                            break;
+                        case "Birth":
+                            if (ImportUtil.GetValue(record, map, "CertificateType").Equals("外国护照"))
+                            {
+                                if (String.IsNullOrEmpty(ImportUtil.GetValue(record, map, property.Name)))
+                                {
+                                    feedBack.ExceptionContent.Add(String.Format("第{0}行记录  {1}为空！", num, map[property.Name]));
+                                }
+                                else
+                                {
+                                    property.SetValue(personal, ImportUtil.GetValue(record, map, property.Name));
+                                }
                             }
                             break;
                         case "Amount":
@@ -571,6 +664,17 @@ namespace BEYON.CoreBLL.Service.App
                 }
 
             }
+
+            //出生日期格式验证
+            Regex regBirth = new Regex("^(\\d{4})(-)(\\d{2})(-)(\\d{2})$");
+            if (!String.IsNullOrEmpty(personal.Birth))
+            {
+                if (!regBirth.IsMatch(personal.Birth))
+                {
+                    feedBack.ExceptionContent.Add("第" + num + "行记录 出生日期格式不正确，格式为1970-01-01,非外国护照可不填");
+                }
+            }
+
             //联系电话
             Regex regPhone = new Regex("^0\\d{2,3}-?\\d{7,8}$");
             Regex regMobile = new Regex("^1[34578]\\d{9}$");

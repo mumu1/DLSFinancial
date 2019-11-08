@@ -89,5 +89,6 @@ namespace BEYON.ViewModel.App
         [Display(Name = "收款账号省市")]
         [StringLength(200)]
         public string ProvinceCity { get; set; }
+
     }
 }

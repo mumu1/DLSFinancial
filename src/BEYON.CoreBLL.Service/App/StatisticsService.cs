@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 using BEYON.ViewModel.App;
 using BEYON.CoreBLL.Service.App.Interface;
 using BEYON.Domain.Data.Repositories.App;
@@ -38,17 +37,18 @@ namespace BEYON.CoreBLL.Service.App
             columns.Add(new Column("C11", "本期职业年金"));
             columns.Add(new Column("C12", "本期住房公积金"));
             columns.Add(new Column("C13", "本期专项附加扣除"));
-        
-           
+
             columns.Add(new Column("C14", "已扣缴税额"));
             columns.Add(new Column("C15", "应纳税所得额"));
-           
+
             columns.Add(new Column("C16", "联系电话"));
             columns.Add(new Column("C17", "国籍"));
             columns.Add(new Column("C18", "单位"));
             columns.Add(new Column("C19", "职称"));
-            columns.Add(new Column("C20", "本期劳务费税前合计"));
-            columns.Add(new Column("C21", "次数"));
+            columns.Add(new Column("C20", "性别"));
+            columns.Add(new Column("C21", "出生日期"));
+            columns.Add(new Column("C22", "本期劳务费税前合计"));  //old C20
+            columns.Add(new Column("C23", "次数"));   //old C21
             int count = _statisticsRepository.GetMaxCountPerMonthPerPerson();
             for (var i = 0; i < count; i++)
             {
@@ -88,7 +88,9 @@ namespace BEYON.CoreBLL.Service.App
             columns.Add(new Column("C11", "国籍"));
             columns.Add(new Column("C12", "单位"));
             columns.Add(new Column("C13", "职称"));
-            columns.Add(new Column("C14", "次数"));
+            columns.Add(new Column("C14", "性别"));
+            columns.Add(new Column("C15", "出生日期"));
+            columns.Add(new Column("C16", "次数"));//old C14
             int count = _statisticsRepository.GetMaxCountLaborStatistics();
             for (var i = 0; i < count; i++)
             {
@@ -108,7 +110,7 @@ namespace BEYON.CoreBLL.Service.App
         #endregion
 
         #region 按课题统计明细表
-       /*
+        /*
         public Column[] GetTaskStatisticsColumns()
         {
             List<Column> columns = new List<Column>();
@@ -139,7 +141,7 @@ namespace BEYON.CoreBLL.Service.App
             columns.Add(new Column("C1", "期间"));
             columns.Add(new Column("C2", "课题号"));
             columns.Add(new Column("C3", "课题负责人"));
-            columns.Add(new Column("C4", "报销事由"));           
+            columns.Add(new Column("C4", "报销事由"));
             //columns.Add(new Column("C6", "工资薪金税额"));
             //columns.Add(new Column("C7", "劳务费税额"));
             columns.Add(new Column("C5", "会计科目代码"));
@@ -148,6 +150,7 @@ namespace BEYON.CoreBLL.Service.App
             columns.Add(new Column("C8", "工资税金（银行转账）"));
             columns.Add(new Column("C9", "总税金（银行转账）"));
             columns.Add(new Column("C10", "课题名称"));
+            columns.Add(new Column("C11", "支付类型"));
             //columns.Add(new Column("C0", "序号"));
             //columns.Add(new Column("C1", "期间"));
             //columns.Add(new Column("C2", "课题号"));
@@ -187,7 +190,7 @@ namespace BEYON.CoreBLL.Service.App
             columns.Add(new Column("C9", "课题负责人"));
             columns.Add(new Column("C10", "经办人"));
             columns.Add(new Column("C11", "更新时间"));
-            
+
             return columns.ToArray();
         }
 

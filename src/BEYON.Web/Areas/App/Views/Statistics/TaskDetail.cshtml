@@ -19,7 +19,7 @@
 
     // pagefunction
     var pagefunction = function () {
-        $(document).ready(function () {
+        $(document).ready(function (){     
             initTable();
         })
     };
@@ -60,6 +60,7 @@
             dataType: "json",
             contentType: "application/json; charset=utf-8",
             success: function (columns) {
+                $.fn.dataTable.ext.errMode = 'none'; //不显示任何错误信息
                 var table = $('#datatable_task_statistics').dataTable({
                     dom: 'Bfrtip',
                     colReorder: true,
@@ -77,7 +78,7 @@
                     bProcessing: true,
                     paging: true,
                     "sScrollY": "100%",
-                    "sScrollX": "100%",
+                    "sScrollX": "110%",
                     "sScrollXInner": "110%",
                     scrollCollapse: true,
                     order: [[0, "asc"]],

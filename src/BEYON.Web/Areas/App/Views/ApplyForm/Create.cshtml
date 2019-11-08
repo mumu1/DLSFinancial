@@ -358,11 +358,22 @@
             { name: "BankDetailName", label: "开户行详细名称:", type: "text", fieldInfo: "<font color='red'>除工商银行外，选择其他银行转账均需填写该项。建议优先选择工商银行转账。</font>" },
             { name: "ProvinceCity", label: "收款账号省市:", type: "text" },
              {
+                 name: "Gender",
+                 label: "性别:",
+                 type: "select",
+                 options: [
+                           { label: "男", value: "男" },
+                           { label: "女", value: "女" }
+                 ]
+             },
+            { name: "Birth", label: "出生日期:", type: "text", fieldInfo: "<font color='red'>格式为'1970-01-01'</font>" },
+             {
                  name: "PaymentType",
                  label: "支付类型:",
                  type: "text",
                  type: "hidden"
              },
+             { name: "AccountName", label: "账户名称", type: "text", type: "hidden" },
             { name: "Signature", label: "领取人签字:", type: "text", type: "hidden" }
         ]
     });
@@ -393,11 +404,36 @@
         }
 
     });
+
+    //证件类型切换事件
+    
+    $('select', editor.field('CertificateType').node()).on('change', function () {
+        var certificateType = editor.field('CertificateType').val();
+        if (certificateType == "外国护照") {
+            editor.field('Gender').show();
+            editor.field('Birth').show();
+           // $('#datatable_create_form').DataTable().column(16).visible(true);   //gender列隐藏
+           // $('#datatable_create_form').DataTable().column(17).visible(true);  //birth列隐藏
+
+        } else {
+            editor.field('Gender').hide();
+            editor.field('Birth').hide();
+           // $('#datatable_create_form').DataTable().column(16).visible(false);   //gender列隐藏
+           // $('#datatable_create_form').DataTable().column(17).visible(false);  //birth列隐藏
+
+        }
+    });
+    
+
     //初始化创建框显示
     editor.on('onInitCreate', function () {
         //      editor.disable('Amount');
         var paymentType = $('#paymentType').val();
         editor.field('PaymentType').val(paymentType);
+        editor.field('Gender').hide();
+        editor.field('Birth').hide();
+       // $('#datatable_create_form').DataTable().column(16).visible(false);   //gender列隐藏
+      //  $('#datatable_create_form').DataTable().column(17).visible(false);  //birth列隐藏
 
         return true;
     });
@@ -408,6 +444,22 @@
     editor.on('onInitEdit', function () {
         var CertificateType = editor.field('CertificateType');
         //    editor.disable('Amount');
+        
+        var t = CertificateType.val();
+        if (t == "外国护照") {
+            editor.field('Gender').show();
+            editor.field('Birth').show();
+         //   $('#datatable_create_form').DataTable().column(16).visible(true);   //gender列隐藏
+         //   $('#datatable_create_form').DataTable().column(17).visible(true);  //birth列隐藏
+
+        } else {
+            editor.field('Gender').hide();
+            editor.field('Birth').hide();
+        //    $('#datatable_create_form').DataTable().column(16).visible(false);   //gender列隐藏
+        //    $('#datatable_create_form').DataTable().column(17).visible(false);  //birth列隐藏
+
+        }
+        
 
     });
 
@@ -428,6 +480,8 @@
             var BankDetailName = editor.field('BankDetailName');
             var nationality = editor.field('Nationality');
             var ProvinceCity = editor.field('ProvinceCity');
+            var gender = editor.field('Gender');
+            var birth = editor.field('Birth');
             var b_name = Bank.val().trim();
             var bd_name = BankDetailName.val().trim();
             //0.各项必填验证
@@ -456,6 +510,23 @@
 
             if (paymentType == "银行转账" && b_name !== "工商银行" && ProvinceCity.val().trim() == "") {
                 ProvinceCity.error("请填写收款账号省市");
+            }
+
+            if (CertificateType.val() == "外国护照" && gender.val().trim() == "") {
+                gender.error("请填写性别");
+            }
+
+            if (CertificateType.val() == "外国护照" && birth.val().trim() == "") {
+                birth.error("请填写出生日期，格式为“1970-01-01”");
+            }
+            else if (CertificateType.val() == "外国护照" && birth.val().trim() !== "") {
+                //birth format check
+                var reg = /^(\d{4})(-)(\d{2})(-)(\d{2})$/;
+                var str1 = birth.val();
+                var arr1 = reg.test(str1);
+                if (arr1 != true) {
+                    birth.error("出生日期格式不正确，格式为“1970-01-01”");
+                }
             }
 
             //check bankdetailname includes bankname && banddetailname not null
@@ -697,6 +768,8 @@
                         ColumnDatas.push({ ColumnName: 'Title', TitleName: '职称' });
                         ColumnDatas.push({ ColumnName: 'TaxOrNot', TitleName: '是否含税' });
                         ColumnDatas.push({ ColumnName: 'Amount', TitleName: '金额(元)' });
+                        ColumnDatas.push({ ColumnName: 'Gender', TitleName: '性别' });
+                        ColumnDatas.push({ ColumnName: 'Birth', TitleName: '出生日期' });
                     } else if ($('#paymentType').val() === "银行转账") {
                         ColumnDatas.push({ ColumnName: 'Id', TitleName: '编号' });
                         ColumnDatas.push({ ColumnName: 'Name', TitleName: '姓名' });
@@ -713,6 +786,8 @@
                         ColumnDatas.push({ ColumnName: 'AccountNumber', TitleName: '银行账号' });
                         ColumnDatas.push({ ColumnName: 'BankDetailName', TitleName: '开户行详细名称' });
                         ColumnDatas.push({ ColumnName: 'ProvinceCity', TitleName: '收款账号省市' });
+                        ColumnDatas.push({ ColumnName: 'Gender', TitleName: '性别' });
+                        ColumnDatas.push({ ColumnName: 'Birth', TitleName: '出生日期' });
                     }
 
                     $.ajax({
@@ -764,8 +839,8 @@
             bProcessing: true,
             paging: false,
             "sScrollY": "100%",
-            "sScrollX": "100%",
-            "sScrollXInner": "100%",
+            "sScrollX": "120%",
+            "sScrollXInner": "120%",
             buttons: buttons,
             columns: [
                 //{ data: "SerialNumber", title: "申请单流水号", visible: false },
@@ -784,6 +859,8 @@
                 { data: "AccountNumber", title: "银行账号" },
                 { data: "BankDetailName", title: "开户行详细名称" },
                 { data: "ProvinceCity", title: "收款账号省市" },
+                 { data: "Gender", title: "性别" },
+                  { data: "Birth", title: "出生日期" },
                 { data: "AccountName", title: "账户名称", visible: false },
                 { data: "PaymentType", title: "支付类型", visible: false },
                 { data: "Signature", title: "领取人签字", visible: false }
@@ -855,6 +932,8 @@
                         editor.field('Company').val(value["Company"]);
                         editor.field('Nationality').val(value["Nationality"]);
                         editor.field('Title').val(value["Title"]);
+                        editor.field('Gender').val(value["Gender"]);
+                        editor.field('Birth').val(value["Birth"]);
                         if (paymentType == "银行转账") {
                             editor.field('Bank').val(value["Bank"]);
                             editor.field('BankDetailName').val(value["BankDetailName"]);
@@ -890,6 +969,8 @@
                 { data: "AccountNumber", title: "银行账号" },
                 { data: "BankDetailName", title: "开户行详细名称" },
                 { data: "ProvinceCity", title: "收款账号省市" },
+                 { data: "Gender", title: "性别" },
+                 { data: "Birth", title: "出生日期" }
             ],
             //select: {
             //    style: 'os',
@@ -1056,9 +1137,11 @@
             editor.field('Bank').show();
             editor.field('AccountNumber').show();
             editor.field('BankDetailName').show();
+            editor.field('ProvinceCity').show();
             $('#datatable_create_form').DataTable().column(11).visible(true);
             $('#datatable_create_form').DataTable().column(12).visible(true);
             $('#datatable_create_form').DataTable().column(13).visible(true);
+            $('#datatable_create_form').DataTable().column(14).visible(true);
         }
     }
 
@@ -1207,6 +1290,14 @@
                         }
                         if (v.Title != null) {
                             editor.field('Title').val(v.Title);
+                        }
+
+                        if (v.Gender != null) {
+                            editor.field('Gender').val(v.Gender);
+                        }
+
+                        if (v.Birth != null) {
+                            editor.field('Birth').val(v.Birth);
                         }
 
                         if (paymentType == "银行转账") {

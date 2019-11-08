@@ -175,6 +175,20 @@
                  label: "银行账号:",
                  name: "AccountNumber"
              },
+              {
+                  label: "性别:",
+                  name: "Gender",
+                  type: "select",
+                  options: [
+                          { label: "男", value: "男" },
+                          { label: "女", value: "女" }
+                  ],
+                  def: "男"
+              },
+             {
+                 label: "出生日期:",
+                 name: "Birth"
+             }
             ]
         });
 
@@ -236,7 +250,9 @@
                                     { data: "Bank", title: "开户银行" },
                                     { data: "BankDetailName", title: "开户行详细名称" },
                                     { data: "ProvinceCity", title: "收款账号省市" },
-                                    { data: "AccountNumber", title: "银行账号" }
+                                    { data: "AccountNumber", title: "银行账号" },
+                                     { data: "Gender", title: "性别" },
+                                      { data: "Birth", title: "出生日期" }
             ],
             oLanguage: {
                 "sLengthMenu": "每页显示 _MENU_ 条记录",

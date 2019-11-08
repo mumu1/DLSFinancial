@@ -68,6 +68,16 @@ namespace BEYON.CoreBLL.Service.App
                 else {
                     nameFormat = GetReplaceString(model.Name);
                 }
+
+                String idType = GetReplaceString(model.CertificateType);
+                String birthVar = "";
+                String genderVar = "";
+                if ("外国护照".Equals(idType))
+                {
+                    birthVar = GetReplaceString(model.Birth);
+                    genderVar = GetReplaceString(model.Gender);
+                }
+
                 var entity = new TopContacts
                 {
                     UserID = model.UserID,
@@ -82,6 +92,8 @@ namespace BEYON.CoreBLL.Service.App
                     Bank = GetReplaceString(model.Bank),
                     BankDetailName = GetReplaceString(model.BankDetailName),
                     ProvinceCity = GetReplaceString(model.ProvinceCity),
+                    Gender = genderVar,
+                    Birth = birthVar,
                     AccountNumber = GetReplaceString(model.AccountNumber),
                     UpdateDate = DateTime.Now
                 };
@@ -121,6 +133,16 @@ namespace BEYON.CoreBLL.Service.App
                 {
                     nameFormat = GetReplaceString(model.Name);
                 }
+
+                String idType = GetReplaceString(model.CertificateType);
+                String birthVar = "";
+                String genderVar = "";
+                if ("外国护照".Equals(idType))
+                {
+                    birthVar = GetReplaceString(model.Birth);
+                    genderVar = GetReplaceString(model.Gender);
+                }
+
                 var entity = new TopContacts
                 {
                     UserID = model.UserID,
@@ -136,6 +158,8 @@ namespace BEYON.CoreBLL.Service.App
                     BankDetailName = GetReplaceString(model.BankDetailName),
                     ProvinceCity = GetReplaceString(model.ProvinceCity),
                     AccountNumber = GetReplaceString(model.AccountNumber),
+                    Gender = genderVar,
+                    Birth = birthVar,
                     UpdateDate = DateTime.Now
                 };
 
@@ -228,6 +252,8 @@ namespace BEYON.CoreBLL.Service.App
                 topContacts.BankDetailName = GetReplaceString(model.BankDetailName);
                 topContacts.ProvinceCity = GetReplaceString(model.ProvinceCity);
                 topContacts.AccountNumber = GetReplaceString(model.AccountNumber);
+                topContacts.Gender = GetReplaceString(model.Gender);
+                topContacts.Birth = GetReplaceString(model.Birth);
                 topContacts.UpdateDate = DateTime.Now;
                 _TopContactsRepository.Update(topContacts);
                 return new OperationResult(OperationResultType.Success, "更新数据成功！");

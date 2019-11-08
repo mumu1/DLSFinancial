@@ -332,6 +332,8 @@ namespace BEYON.Web.Areas.App.Controllers
                 AccountName = recordVMs[0].Name,
                 AccountNumber = recordVMs[0].AccountNumber,
                 PaymentType = recordVMs[0].PaymentType,
+                Gender = recordVMs[0].Gender,
+                Birth = recordVMs[0].Birth,
                 UpdateDate = DateTime.Now
             };
 
