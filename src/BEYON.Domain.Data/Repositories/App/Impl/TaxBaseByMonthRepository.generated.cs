@@ -65,6 +65,19 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
             return baseTax;
         }
 
+        public Double GetCutTax(String certificateID)
+        {
+            var record = from p in Context.TaxBaseByMonths.Where(w => w.CertificateID.ToLower() == certificateID.ToLower())
+                         select p;
+            var lists = record.ToList();
+            Double cutTax = 0.0;
+            if (lists.Count > 0)
+            {
+                cutTax = lists[0].CutTax;
+            }
+            return cutTax;
+        }
+
         public Double GetInitialTaxPayable(String certificateID)
         {
             var record = from p in Context.TaxBaseByMonths.Where(w => w.CertificateID.ToLower() == certificateID.ToLower())
@@ -173,7 +186,7 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
             //1.构造插入或更新SQL
             string[] columns = new string[]{
                 "CertificateID","Name","CertificateType","InitialEaring",
-                "TaxFreeIncome","EndowmentInsurance","UnemployedInsurance","MedicalInsurance","OccupationalAnnuity","HousingFund","AmountDeducted","SpecialDeduction","InitialTaxPayable","InitialTax","Period",
+                "TaxFreeIncome","EndowmentInsurance","UnemployedInsurance","MedicalInsurance","OccupationalAnnuity","HousingFund","AmountDeducted","SpecialDeduction","CutTax","InitialTaxPayable","InitialTax","Period",
                 "UpdateDate","InitialAfterTaxIncome"
             };
             StringBuilder sql = new StringBuilder();

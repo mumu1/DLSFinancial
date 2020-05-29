@@ -218,10 +218,14 @@ namespace BEYON.Web.Areas.BasicDataManagement.Controllers
                         taxBaseEveryMonth.TotalLaborIncomeBeforeTax = monthIncome + taxBaseEveryMonth_exsit.TotalLaborIncomeBeforeTax;
                         //新的年度累计表中的“年度累计应纳税所得额”= 更新后的年度累计表中的“年度累计税前收入”-  更新后的年度累计表中的“年度累计免税收入”- 更新后的年度累计表中的“年度累计养老保险”- 更新后的年度累计表中的“年度累计失业保险”- 更新后的年度累计表中的“年度累计医疗保险”- 更新后的年度累计表中的“年度累计职业年金”-  更新后的年度累计表中的“年度累计住房公积金”- 更新后的年度累计表中的“年度累计基本扣除”- 更新后的年度累计表中的“年度累计专项附加扣除”
                         taxBaseEveryMonth.InitialTaxPayable = taxBaseEveryMonth.InitialEaring - taxBaseEveryMonth.TaxFreeIncome - taxBaseEveryMonth.EndowmentInsurance - taxBaseEveryMonth.UnemployedInsurance - taxBaseEveryMonth.MedicalInsurance - taxBaseEveryMonth.OccupationalAnnuity - taxBaseEveryMonth.HousingFund - taxBaseEveryMonth.AmountDeducted - taxBaseEveryMonth.SpecialDeduction;
+                        //年度累计减免税额
+                        taxBaseEveryMonth.CutTax = model.CutTax + taxBaseEveryMonth_exsit.CutTax;
                         //新的年度累计表中的“年度累计税后收入”= 更新后的年度累计表中的“年度累计税前收入”- 更新后的年度累计表中的“年度累计已扣缴税额”
-                        taxBaseEveryMonth.TotalTemp = taxBaseEveryMonth.InitialEaring - taxBaseEveryMonth.TotalTax;
+                        //new20200407 “年度累计税后收入” = 年度累计税前收入-年度累计已扣缴税额-年度累计减免税额
+                        taxBaseEveryMonth.TotalTemp = taxBaseEveryMonth.InitialEaring - taxBaseEveryMonth.TotalTax - taxBaseEveryMonth.CutTax;
                         //更新“当前已累计月数”，如07
                         taxBaseEveryMonth.LastMonths = period_month;
+                       
                     }
                     else
                     {
@@ -275,12 +279,16 @@ namespace BEYON.Web.Areas.BasicDataManagement.Controllers
                         taxBaseEveryMonth.TotalSalaryIncomeBeforeTax = model.InitialEaring;
                         //新的年度累计表中的“年度累计劳务费税前收入额”= 该用户 当月下发的劳务费含税总和 
                         taxBaseEveryMonth.TotalLaborIncomeBeforeTax = monthIncome;
-                        //新的年度累计表中的“年度累计应纳税所得额”= 更新后的年度累计表中的“年度累计税前收入”-  更新后的年度累计表中的“年度累计免税收入”- 更新后的年度累计表中的“年度累计养老保险”- 更新后的年度累计表中的“年度累计失业保险”- 更新后的年度累计表中的“年度累计医疗保险”- 更新后的年度累计表中的“年度累计职业年金”-  更新后的年度累计表中的“年度累计住房公积金”- 更新后的年度累计表中的“年度累计基本扣除”- 更新后的年度累计表中的“年度累计专项附加扣除”
+                        //新的年度累计表中的“年度累计应纳税所得额”= 更新后的年度累计表中的“年度累计税前收入”-  更新后的年度累计表中的“年度累计免税收入”- 更新后的年度累计表中的“年度累计养老保险”- 更新后的年度累计表中的“年度累计失业保险”- 更新后的年度累计表中的“年度累计医疗保险”- 更新后的年度累计表中的“年度累计职业年金”-  更新后的年度累计表中的“年度累计住房公积金”- 更新后的年度累计表中的“年度累计基本扣除”- 更新后的年度累计表中的“年度累计专项附加扣除”                       
                         taxBaseEveryMonth.InitialTaxPayable = taxBaseEveryMonth.InitialEaring - taxBaseEveryMonth.TaxFreeIncome - taxBaseEveryMonth.EndowmentInsurance - taxBaseEveryMonth.UnemployedInsurance - taxBaseEveryMonth.MedicalInsurance - taxBaseEveryMonth.OccupationalAnnuity - taxBaseEveryMonth.HousingFund - taxBaseEveryMonth.AmountDeducted - taxBaseEveryMonth.SpecialDeduction;
+                        //年度累计减免税额
+                        taxBaseEveryMonth.CutTax = model.CutTax;
                         //新的年度累计表中的“年度累计税后收入”= 更新后的年度累计表中的“年度累计税前收入”- 更新后的年度累计表中的“年度累计已扣缴税额”
-                        taxBaseEveryMonth.TotalTemp = taxBaseEveryMonth.InitialEaring - taxBaseEveryMonth.TotalTax;
+                        //new20200407 “年度累计税后收入” = 年度累计税前收入-年度累计已扣缴税额-年度累计减免税额
+                        taxBaseEveryMonth.TotalTemp = taxBaseEveryMonth.InitialEaring - taxBaseEveryMonth.TotalTax - taxBaseEveryMonth.CutTax;
                         //更新“当前已累计月数”，如07
-                        taxBaseEveryMonth.LastMonths = period_month;             
+                        taxBaseEveryMonth.LastMonths = period_month;
+                        
                     }
                     try
                     {
@@ -329,6 +337,7 @@ namespace BEYON.Web.Areas.BasicDataManagement.Controllers
                 history.AmountY = model.AmountY;
                 history.Bank = model.Bank;
                 history.BankDetailName = model.BankDetailName;
+                history.Tele = model.Tele;
                 history.CertificateID = model.CertificateID;
                 history.CertificateType = model.CertificateType;
                 _taxPerOrderHistoryService.InsertOrUpdate(history);

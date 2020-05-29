@@ -65,6 +65,9 @@ namespace BEYON.ViewModel.App
         [Display(Name = "本期初始税后收入额")]
         public Double InitialAfterTaxIncome { get; set; }
 
+        [Display(Name = "年度累计减免税额")]
+        public Double CutTax { get; set; }
+
 /*
         [Display(Name = "人员类型")]
         [StringLength(36)]

@@ -15,7 +15,7 @@ namespace BEYON.ViewModel.App
         public string TaskID { get; set; }
 
         [Display(Name = "课题名称")]
-        [StringLength(100)]
+        [StringLength(300)]
         public string TaskName { get; set; }
 
         [Display(Name = "课题负责人")]

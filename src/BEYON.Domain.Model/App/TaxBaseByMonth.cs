@@ -79,6 +79,9 @@ namespace BEYON.Domain.Model.App
         [Display(Name = "本期初始税后收入额")]
         public Double InitialAfterTaxIncome { get; set; }
 
+        [Display(Name = "本期减免税额")]
+        public Double CutTax { get; set; }
+
         /*
         [Display(Name = "人员类型")]
         [StringLength(36)]

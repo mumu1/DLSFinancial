@@ -57,6 +57,7 @@ namespace BEYON.CoreBLL.Service.App
                     InitialTaxPayable = model.InitialTaxPayable,
                     InitialTax = model.InitialTax,
                     SpecialDeduction = model.SpecialDeduction,
+                    CutTax = model.CutTax,
                     //PersonType = model.PersonType,
                     //Title = model.Title,
                     UpdateDate = DateTime.Now
@@ -97,6 +98,7 @@ namespace BEYON.CoreBLL.Service.App
                 //taxBaseByMonth.PersonType = model.PersonType;
                // taxBaseByMonth.TaxFree = model.TaxFree;
                 taxBaseByMonth.SpecialDeduction = model.SpecialDeduction;
+                taxBaseByMonth.CutTax = model.CutTax;
                 //taxBaseByMonth.Title = model.Title;
                 taxBaseByMonth.UpdateDate = DateTime.Now;
                 _TaxBaseByMonthRepository.Update(taxBaseByMonth);

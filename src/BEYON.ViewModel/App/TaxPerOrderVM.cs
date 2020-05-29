@@ -23,7 +23,7 @@ namespace BEYON.ViewModel.App
         public string Name { get; set; }
 
         [Display(Name = "课题名称")]
-        [StringLength(100)]
+        [StringLength(300)]
         public string TaskName { get; set; }
 
         [Display(Name = "报销事由")]
@@ -89,6 +89,10 @@ namespace BEYON.ViewModel.App
         [Display(Name = "收款账号省市")]
         [StringLength(200)]
         public string ProvinceCity { get; set; }
+
+        [Display(Name = "联系电话")]
+        [StringLength(36)]
+        public string Tele { get; set; }
 
     }
 }

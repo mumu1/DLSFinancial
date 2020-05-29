@@ -33,7 +33,7 @@ namespace BEYON.Domain.Model.App
         public string ProjectNumber { get; set; }
 
         [Display(Name = "课题名称")]
-        [StringLength(100)]
+        [StringLength(300)]
         public string TaskName { get; set; }
 
         [Display(Name = "期间")]
@@ -107,6 +107,10 @@ namespace BEYON.Domain.Model.App
         [Display(Name = "收款账号省市")]
         [StringLength(200)]
         public string ProvinceCity { get; set; }
+
+        [Display(Name = "联系电话")]
+        [StringLength(36)]
+        public string Tele { get; set; }
 
     }
 }

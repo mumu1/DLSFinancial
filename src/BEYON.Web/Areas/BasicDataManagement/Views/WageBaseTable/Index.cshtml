@@ -242,6 +242,10 @@
                 name: "SpecialDeduction"
             },
             {
+                label: "本期减免税额:",
+                name: "CutTax"
+            },
+            {
                 label: "本期应纳税所得额:",
                 name: "InitialTaxPayable"
             },
@@ -252,7 +256,8 @@
             {
                 label: "本期初始税后收入额:",
                 name: "InitialAfterTaxIncome"
-             }
+            }
+            
             ]
         });
 
@@ -376,6 +381,7 @@
                                     //{ data: "TaxFree", title: "免税额" },
                                     { data: "AmountDeducted", title: "本期基本扣除" },
                                     { data: "SpecialDeduction", title: "本期专项附加扣除" },
+                                    { data: "CutTax", title: "本期减免税额" },
                                     { data: "InitialTaxPayable", title: "本期应纳税所得额" },
                                     { data: "InitialTax", title: "本期初始已扣缴税额" },
                                     { data: "InitialAfterTaxIncome", title: "本期初始税后收入额" }

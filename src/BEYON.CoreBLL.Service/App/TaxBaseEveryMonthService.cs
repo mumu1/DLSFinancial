@@ -56,6 +56,7 @@ namespace BEYON.CoreBLL.Service.App
                     InitialTaxPayable = model.InitialTaxPayable,
                     //InitialTax = model.InitialTax,
                     SpecialDeduction = model.SpecialDeduction,
+                    CutTax = model.CutTax,
                     //TotalIncome = model.TotalIncome,
                     TotalSalaryIncomeBeforeTax = model.TotalSalaryIncomeBeforeTax,
                     TotalLaborIncomeBeforeTax = model.TotalLaborIncomeBeforeTax,
@@ -102,6 +103,7 @@ namespace BEYON.CoreBLL.Service.App
                 //taxBaseByMonth.PersonType = model.PersonType;
                // taxBaseEveryMonth.TaxFree = model.TaxFree;
                 taxBaseEveryMonth.SpecialDeduction = model.SpecialDeduction;
+                taxBaseEveryMonth.CutTax = model.CutTax;
                // taxBaseEveryMonth.TotalIncome = model.TotalIncome;
                 taxBaseEveryMonth.TotalTax = model.TotalTax;
                 taxBaseEveryMonth.TotalSalaryIncomeBeforeTax = model.TotalSalaryIncomeBeforeTax;

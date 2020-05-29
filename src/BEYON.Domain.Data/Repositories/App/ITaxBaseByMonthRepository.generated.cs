@@ -40,6 +40,8 @@ namespace BEYON.Domain.Data.Repositories.App
 
         Double GetInitialTaxPayable(String certificateID);
 
+        Double GetCutTax(String certificateID);
+
         Double GetInitialTax(String certificateID);
 
         Double GetWithoutInsurance(String certificateID);
