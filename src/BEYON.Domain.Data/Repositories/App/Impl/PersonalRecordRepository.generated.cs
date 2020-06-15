@@ -64,7 +64,7 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                 "SerialNumber","Name","CertificateType","CertificateID",
                 "Company","Tele","PersonType","Nationality","Title",
                 "Amount","TaxOrNot","Bank","BankDetailName","AccountNumber",
-                "AccountName","PaymentType","Signature","ProvinceCity","Gender","Birth","UpdateDate"
+                "AccountName","PaymentType","Signature","ProvinceCity","CityField","Gender","Birth","UpdateDate"
             };
             StringBuilder sql = new StringBuilder();
             sql.Append("INSERT INTO dbo.\"PersonalRecords\" ( ");

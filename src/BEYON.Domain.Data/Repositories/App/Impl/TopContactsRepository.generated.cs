@@ -60,7 +60,7 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
             string[] columns = new string[]{
                 "UserID","Name","CertificateType","CertificateID",
                 "Company","Tele","PersonType","Nationality","Title",
-                "Bank","BankDetailName","AccountNumber","ProvinceCity","Gender","Birth",
+                "Bank","BankDetailName","AccountNumber","ProvinceCity","CityField","Gender","Birth",
                 "UpdateDate"
             };
             StringBuilder sql = new StringBuilder();

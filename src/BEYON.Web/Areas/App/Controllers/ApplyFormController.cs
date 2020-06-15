@@ -329,6 +329,7 @@ namespace BEYON.Web.Areas.App.Controllers
                 Bank = recordVMs[0].Bank,
                 BankDetailName = recordVMs[0].BankDetailName,
                 ProvinceCity = recordVMs[0].ProvinceCity,
+                CityField = recordVMs[0].CityField,
                 AccountName = recordVMs[0].Name,
                 AccountNumber = recordVMs[0].AccountNumber,
                 PaymentType = recordVMs[0].PaymentType,
@@ -555,6 +556,7 @@ namespace BEYON.Web.Areas.App.Controllers
                                 taxPerOrder.Bank = records[i].Bank;
                                 taxPerOrder.BankDetailName = records[i].BankDetailName;
                                 taxPerOrder.ProvinceCity = records[i].ProvinceCity;
+                                taxPerOrder.CityField = records[i].CityField;
                                 taxPerOrder.AccountName = records[i].AccountName;
                                 taxPerOrder.AccountNumber = records[i].AccountNumber;
                                 taxPerOrder.PaymentType = form.PaymentType;

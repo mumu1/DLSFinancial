@@ -97,6 +97,7 @@ namespace BEYON.CoreBLL.Service.App
                     AccountName = GetReplaceString(model.AccountName),
                     AccountNumber = GetReplaceString(model.AccountNumber),
                     ProvinceCity = GetReplaceString(model.ProvinceCity),
+                    CityField = GetReplaceString(model.CityField),
                     Gender = genderVar,
                     Birth = birthVar,
                     PaymentType = GetReplaceString(model.PaymentType),
@@ -130,6 +131,14 @@ namespace BEYON.CoreBLL.Service.App
                 if (!String.IsNullOrEmpty(model.ProvinceCity))
                 {
                     contact.ProvinceCity = GetReplaceString(model.ProvinceCity);
+                }
+                if (!String.IsNullOrEmpty(model.ProvinceCity))
+                {
+                    contact.ProvinceCity = GetReplaceString(model.ProvinceCity);
+                }
+                if (!String.IsNullOrEmpty(model.CityField))
+                {
+                    contact.CityField = GetReplaceString(model.CityField);
                 }
                 if (!String.IsNullOrEmpty(genderVar))
                 {
@@ -214,6 +223,7 @@ namespace BEYON.CoreBLL.Service.App
                 personalRecord.AccountNumber = GetReplaceString(model.AccountNumber);
                 personalRecord.PaymentType = GetReplaceString(model.PaymentType);
                 personalRecord.ProvinceCity = GetReplaceString(model.ProvinceCity);
+                personalRecord.CityField = GetReplaceString(model.CityField);
                 personalRecord.Gender = genderVar;
                 personalRecord.Birth = birthVar;
                 personalRecord.UpdateDate = DateTime.Now;
@@ -338,6 +348,7 @@ namespace BEYON.CoreBLL.Service.App
                             record.AccountNumber = item[11];
                             record.BankDetailName = item[12];
                             record.ProvinceCity = item[13];
+                            record.CityField = item[14];
                         }
                         
                         List<ImportFeedBack> errors = ValidatePersonalRecord(item,  num++, maps, ref record);
@@ -380,6 +391,10 @@ namespace BEYON.CoreBLL.Service.App
                         if (!String.IsNullOrEmpty(record.ProvinceCity))
                         {
                             contact.ProvinceCity = GetReplaceString(record.ProvinceCity);
+                        }
+                        if (!String.IsNullOrEmpty(record.CityField))
+                        {
+                            contact.CityField = GetReplaceString(record.CityField);
                         }
                         if (!String.IsNullOrEmpty(record.AccountNumber))
                         {
@@ -520,6 +535,19 @@ namespace BEYON.CoreBLL.Service.App
                                 }
                             }
                             break;
+                        case "CityField":
+                            if (!ImportUtil.GetValue(record, map, "Bank").Equals("工商银行"))
+                            {
+                                if (String.IsNullOrEmpty(ImportUtil.GetValue(record, map, property.Name)))
+                                {
+                                    feedBack.ExceptionContent.Add(String.Format("第{0}行记录  {1}为空！", num, map[property.Name]));
+                                }
+                                else
+                                {
+                                    property.SetValue(personal, ImportUtil.GetValue(record, map, property.Name));
+                                }
+                            }
+                            break;
                         default:
                             break;
                     }
@@ -609,10 +637,10 @@ namespace BEYON.CoreBLL.Service.App
             feedBack = new ImportFeedBack();
             feedBack.ExceptionType = "格式错误";
             //证件类型
-            String[] regCerficateType = { "居民身份证", "中国护照", "外国护照", "军官证", "士兵证", "武警警官证", "港澳居民来往内地通行证", "台湾居民来往大陆通行证", "香港身份证", "台湾身份证", "澳门身份证", "外国人永久居留证" };
+            String[] regCerficateType = {"居民身份证","中国护照","外国护照","港澳居民来往内地通行证","港澳居民居住证","台湾居民来往大陆通行证","台湾居民居住证","外国人永久居留身份证","外国人工作许可证（A类）","外国人工作许可证（B类）","外国人工作许可证（C类）"};
             if (!regCerficateType.Contains(personal.CertificateType))
             {
-                feedBack.ExceptionContent.Add("第" + num + "行记录  证件类型格式有误，必须是【居民身份证、中国护照、外国护照、军官证、士兵证、武警警官证、港澳居民来往内地通行证、台湾居民来往大陆通行证、香港身份证、台湾身份证、澳门身份证、外国人永久居留证】之一！");
+                feedBack.ExceptionContent.Add("第" + num + "行记录  证件类型格式有误，必须是【居民身份证,中国护照,外国护照,港澳居民来往内地通行证,港澳居民居住证,台湾居民来往大陆通行证,台湾居民居住证,外国人永久居留身份证,外国人工作许可证（A类）,外国人工作许可证（B类）,外国人工作许可证（C类）】之一！");
             }
             //人员类型
             String[] regPersonType = { "所内", "所外" };

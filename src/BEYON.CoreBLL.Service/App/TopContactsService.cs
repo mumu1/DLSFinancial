@@ -92,6 +92,7 @@ namespace BEYON.CoreBLL.Service.App
                     Bank = GetReplaceString(model.Bank),
                     BankDetailName = GetReplaceString(model.BankDetailName),
                     ProvinceCity = GetReplaceString(model.ProvinceCity),
+                    CityField = GetReplaceString(model.CityField),
                     Gender = genderVar,
                     Birth = birthVar,
                     AccountNumber = GetReplaceString(model.AccountNumber),
@@ -157,6 +158,7 @@ namespace BEYON.CoreBLL.Service.App
                     Bank = GetReplaceString(model.Bank),
                     BankDetailName = GetReplaceString(model.BankDetailName),
                     ProvinceCity = GetReplaceString(model.ProvinceCity),
+                    CityField = GetReplaceString(model.CityField),
                     AccountNumber = GetReplaceString(model.AccountNumber),
                     Gender = genderVar,
                     Birth = birthVar,
@@ -261,6 +263,7 @@ namespace BEYON.CoreBLL.Service.App
                 topContacts.Bank = GetReplaceString(model.Bank);
                 topContacts.BankDetailName = GetReplaceString(model.BankDetailName);
                 topContacts.ProvinceCity = GetReplaceString(model.ProvinceCity);
+                topContacts.CityField = GetReplaceString(model.CityField);
                 topContacts.AccountNumber = GetReplaceString(model.AccountNumber);
                 topContacts.Gender = genderVar;
                 topContacts.Birth = birthVar;
@@ -314,6 +317,7 @@ namespace BEYON.CoreBLL.Service.App
                 model.AccountNumber = GetReplaceString(model.AccountNumber);
                 model.BankDetailName = GetReplaceString(model.BankDetailName);
                 model.ProvinceCity = GetReplaceString(model.ProvinceCity);
+                model.CityField = GetReplaceString(model.CityField);
                 model.Name = nameFormat;
                 model.Nationality = GetReplaceString(model.Nationality);
                 model.Tele = GetReplaceString(model.Tele);

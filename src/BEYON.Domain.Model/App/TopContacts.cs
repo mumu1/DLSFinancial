@@ -72,9 +72,13 @@ namespace BEYON.Domain.Model.App
         [StringLength(36)]
         public string AccountNumber { get; set; }
 
-        [Display(Name = "收款账号省市")]
+        [Display(Name = "收款账号省份")]
         [StringLength(200)]
         public string ProvinceCity { get; set; }
+
+        [Display(Name = "收款账号地市")]
+        [StringLength(150)]
+        public string CityField { get; set; }
 
         [Display(Name = "性别")]
         [StringLength(6)]

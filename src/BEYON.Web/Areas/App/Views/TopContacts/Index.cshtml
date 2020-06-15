@@ -109,18 +109,18 @@
                 name: "CertificateType",
                 type: "select",
                 options: [
-                          { label: "居民身份证", value: "居民身份证" },
+                    { label: "居民身份证", value: "居民身份证" },
                           { label: "中国护照", value: "中国护照" },
                           { label: "外国护照", value: "外国护照" },
-                          { label: "军官证", value: "军官证" },
-                          { label: "士兵证", value: "士兵证" },
-                          { label: "武警警官证", value: "武警警官证" },
                           { label: "港澳居民来往内地通行证", value: "港澳居民来往内地通行证" },
+                          { label: "港澳居民居住证", value: "港澳居民居住证" },
                           { label: "台湾居民来往大陆通行证", value: "台湾居民来往大陆通行证" },
-                          { label: "香港身份证", value: "香港身份证" },
-                          { label: "台湾身份证", value: "台湾身份证" },
-                          { label: "澳门身份证", value: "澳门身份证" },
-                          { label: "外国人永久居留证", value: "外国人永久居留证" },
+                          { label: "台湾居民居住证", value: "台湾居民居住证" },
+                          { label: "外国人永久居留身份证", value: "外国人永久居留身份证" },
+                          { label: "外国人工作许可证（A类）", value: "外国人工作许可证（A类）" },
+                          { label: "外国人工作许可证（B类）", value: "外国人工作许可证（B类）" },
+                          { label: "外国人工作许可证（C类）", value: "外国人工作许可证（C类）" },
+                        
                 ],
                 def: "居民身份证"
             },
@@ -168,8 +168,12 @@
                  name: "BankDetailName"
              },
              {
-                 label: "收款账号省市:",
+                 label: "收款账号省份:",
                  name: "ProvinceCity"
+             },
+             {
+                 label: "收款账号地市:",
+                 name: "CityField"
              },
              {
                  label: "银行账号:",
@@ -249,7 +253,8 @@
                                     { data: "Title", title: "职称" },
                                     { data: "Bank", title: "开户银行" },
                                     { data: "BankDetailName", title: "开户行详细名称" },
-                                    { data: "ProvinceCity", title: "收款账号省市" },
+                                    { data: "ProvinceCity", title: "收款账号省份" },
+                                    { data: "CityField", title: "收款账号地市" },
                                     { data: "AccountNumber", title: "银行账号" },
                                      { data: "Gender", title: "性别" },
                                       { data: "Birth", title: "出生日期" }

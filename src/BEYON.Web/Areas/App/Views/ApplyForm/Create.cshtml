@@ -58,7 +58,7 @@
                                     1.各类劳务费应由领款本人签收并经课题负责人、经办人签字。
                                 </div>
                                 <div>
-                                    2.现金和转账发放都可使用该表，如通过银行转账发放，请准确填写收款本人的银行账户、开户银行、账户名称、收款账号省市等信息。
+                                    2.现金和转账发放都可使用该表，如通过银行转账发放，请准确填写收款本人的银行账户、开户银行、账户名称、收款账号省份、地市等信息。
                                 </div>
                                 <div>
                                     3.收款人证件类型为外国护照的，需要填写收款人性别和出生年月日。
@@ -304,19 +304,19 @@
                 name: "CertificateType",
                 label: "证件类型:",
                 type: "select",
-                options: [
+                options: [               
                           { label: "居民身份证", value: "居民身份证" },
                           { label: "中国护照", value: "中国护照" },
                           { label: "外国护照", value: "外国护照" },
-                          { label: "军官证", value: "军官证" },
-                          { label: "士兵证", value: "士兵证" },
-                          { label: "武警警官证", value: "武警警官证" },
                           { label: "港澳居民来往内地通行证", value: "港澳居民来往内地通行证" },
+                          { label: "港澳居民居住证", value: "港澳居民居住证" },
                           { label: "台湾居民来往大陆通行证", value: "台湾居民来往大陆通行证" },
-                          { label: "香港身份证", value: "香港身份证" },
-                          { label: "台湾身份证", value: "台湾身份证" },
-                          { label: "澳门身份证", value: "澳门身份证" },
-                          { label: "外国人永久居留证", value: "外国人永久居留证" },
+                          { label: "台湾居民居住证", value: "台湾居民居住证" },
+                          { label: "外国人永久居留身份证", value: "外国人永久居留身份证" },
+                          { label: "外国人工作许可证（A类）", value: "外国人工作许可证（A类）" },
+                          { label: "外国人工作许可证（B类）", value: "外国人工作许可证（B类）" },
+                          { label: "外国人工作许可证（C类）", value: "外国人工作许可证（C类）" },
+                     
                 ],
                 def: "居民身份证"
             },
@@ -359,7 +359,8 @@
             },
             { name: "AccountNumber", label: "银行账户:", type: "text" },
             { name: "BankDetailName", label: "开户行详细名称:", type: "text", fieldInfo: "<font color='red'>除工商银行外，选择其他银行转账均需填写该项。建议优先选择工商银行转账。</font>" },
-            { name: "ProvinceCity", label: "收款账号省市:", type: "text" },
+            { name: "ProvinceCity", label: "收款账号省份:", type: "text" },
+             { name: "CityField", label: "收款账号地市:", type: "text" },
              {
                  name: "Gender",
                  label: "性别:",
@@ -390,19 +391,23 @@
                 editor.field('AccountNumber').hide();
                 editor.field('BankDetailName').hide();
                 editor.field('ProvinceCity').hide();
+                editor.field('CityField').hide();
                 $('#datatable_create_form').DataTable().column(11).visible(false);   //开户银行列隐藏
                 $('#datatable_create_form').DataTable().column(12).visible(false);  //银行账号列隐藏
                 $('#datatable_create_form').DataTable().column(13).visible(false);  //开户行详细名称列隐藏
                 $('#datatable_create_form').DataTable().column(14).visible(false);
+                $('#datatable_create_form').DataTable().column(15).visible(false);
             } else if (paymentType == "银行转账") {
                 editor.field('Bank').show();
                 editor.field('AccountNumber').show();
                 editor.field('BankDetailName').show();
                 editor.field('ProvinceCity').show();
+                editor.field('CityField').show();
                 $('#datatable_create_form').DataTable().column(11).visible(true);
                 $('#datatable_create_form').DataTable().column(12).visible(true);
                 $('#datatable_create_form').DataTable().column(13).visible(true);
                 $('#datatable_create_form').DataTable().column(14).visible(true);
+                $('#datatable_create_form').DataTable().column(15).visible(true);
             }
         }
 
@@ -483,6 +488,7 @@
             var BankDetailName = editor.field('BankDetailName');
             var nationality = editor.field('Nationality');
             var ProvinceCity = editor.field('ProvinceCity');
+            var CityField = editor.field('CityField');
             var gender = editor.field('Gender');
             var birth = editor.field('Birth');
             var b_name = Bank.val().trim();
@@ -512,7 +518,11 @@
             }
 
             if (paymentType == "银行转账" && b_name !== "工商银行" && ProvinceCity.val().trim() == "") {
-                ProvinceCity.error("请填写收款账号省市");
+                ProvinceCity.error("请填写收款账号省份");
+            }
+
+            if (paymentType == "银行转账" && b_name !== "工商银行" && CityField.val().trim() == "") {
+                CityField.error("请填写收款账号地市");
             }
 
             if (CertificateType.val() == "外国护照" && gender.val().trim() == "") {
@@ -788,7 +798,8 @@
                         ColumnDatas.push({ ColumnName: 'Bank', TitleName: '开户银行' });
                         ColumnDatas.push({ ColumnName: 'AccountNumber', TitleName: '银行账号' });
                         ColumnDatas.push({ ColumnName: 'BankDetailName', TitleName: '开户行详细名称' });
-                        ColumnDatas.push({ ColumnName: 'ProvinceCity', TitleName: '收款账号省市' });
+                        ColumnDatas.push({ ColumnName: 'ProvinceCity', TitleName: '收款账号省份' });
+                        ColumnDatas.push({ ColumnName: 'CityField', TitleName: '收款账号地市' });
                         ColumnDatas.push({ ColumnName: 'Gender', TitleName: '性别' });
                         ColumnDatas.push({ ColumnName: 'Birth', TitleName: '出生日期' });
                     }
@@ -861,7 +872,8 @@
                 { data: "Bank", title: "开户银行" },
                 { data: "AccountNumber", title: "银行账号" },
                 { data: "BankDetailName", title: "开户行详细名称" },
-                { data: "ProvinceCity", title: "收款账号省市" },
+                { data: "ProvinceCity", title: "收款账号省份" },
+                { data: "CityField", title: "收款账号地市" },
                  { data: "Gender", title: "性别" },
                   { data: "Birth", title: "出生日期" },
                 { data: "AccountName", title: "账户名称", visible: false },
@@ -942,6 +954,7 @@
                             editor.field('BankDetailName').val(value["BankDetailName"]);
                             editor.field('AccountNumber').val(value["AccountNumber"]);
                             editor.field('ProvinceCity').val(value["ProvinceCity"]);
+                            editor.field('CityField').val(value["CityField"]);
                         }
                     });
                     $("#dialog-ShowContacts").dialog("close");
@@ -971,7 +984,8 @@
                 { data: "Bank", title: "开户银行" },
                 { data: "AccountNumber", title: "银行账号" },
                 { data: "BankDetailName", title: "开户行详细名称" },
-                { data: "ProvinceCity", title: "收款账号省市" },
+                { data: "ProvinceCity", title: "收款账号省份" },
+                { data: "CityField", title: "收款账号地市" },
                  { data: "Gender", title: "性别" },
                  { data: "Birth", title: "出生日期" }
             ],
@@ -1123,29 +1137,35 @@
                 editor.field('AccountNumber').hide();
                 editor.field('BankDetailName').hide();
                 editor.field('ProvinceCity').hide();
+                editor.field('CityField').hide();
                 $('#datatable_create_form').DataTable().column(11).visible(false);   //开户银行列隐藏
                 $('#datatable_create_form').DataTable().column(12).visible(false);  //银行账号列隐藏
                 $('#datatable_create_form').DataTable().column(13).visible(false);  //开户行详细名称列隐藏
                 $('#datatable_create_form').DataTable().column(14).visible(false);
+                $('#datatable_create_form').DataTable().column(15).visible(false);
             } else if (pType == "银行转账") {
                 editor.field('Bank').show();
                 editor.field('AccountNumber').show();
                 editor.field('BankDetailName').show();
                 editor.field('ProvinceCity').show();
+                editor.field('CityField').show();
                 $('#datatable_create_form').DataTable().column(11).visible(true);
                 $('#datatable_create_form').DataTable().column(12).visible(true);
                 $('#datatable_create_form').DataTable().column(13).visible(true);
                 $('#datatable_create_form').DataTable().column(14).visible(true);
+                $('#datatable_create_form').DataTable().column(15).visible(true);
             }
         } else {
             editor.field('Bank').show();
             editor.field('AccountNumber').show();
             editor.field('BankDetailName').show();
             editor.field('ProvinceCity').show();
+            editor.field('CityField').show();
             $('#datatable_create_form').DataTable().column(11).visible(true);
             $('#datatable_create_form').DataTable().column(12).visible(true);
             $('#datatable_create_form').DataTable().column(13).visible(true);
             $('#datatable_create_form').DataTable().column(14).visible(true);
+            $('#datatable_create_form').DataTable().column(15).visible(true);
         }
     }
 
@@ -1316,6 +1336,9 @@
                             }
                             if (v.ProvinceCity != null) {
                                 editor.field('ProvinceCity').val(v.ProvinceCity);
+                            }
+                            if (v.CityField != null) {
+                                editor.field('CityField').val(v.CityField);
                             }
                         }
                     })
