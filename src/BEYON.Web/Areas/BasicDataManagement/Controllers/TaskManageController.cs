@@ -121,6 +121,19 @@ namespace BEYON.Web.Areas.BasicDataManagement.Controllers
             return Json(new { total = datas.Length, data = datas }, JsonRequestBehavior.AllowGet);
         }
 
+        // POST: /BasicDataManagement/TaskManage/DeleteAll/
+        public ActionResult DeleteAll()
+        {
+
+            var result = _taskManageService.DeleteAll();
+            if (result.ResultType != OperationResultType.Success)
+            {
+                return Json(new { error = result.ResultType.GetDescription() });
+            }
+            return Json(JsonRequestBehavior.AllowGet);
+
+        }
+
         // POST: /BasicDataManagement/TaskManage/Import/
         [HttpPost]
         public ActionResult Import(System.Web.HttpPostedFileBase upload)

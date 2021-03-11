@@ -22,5 +22,6 @@ namespace BEYON.CoreBLL.Service.App.Interface
 
         TaskManage GetTaskByNumber(String projectNumber);
         List<TaskManage> GetTaskByTaskLeader(String taskLeader);
+        OperationResult DeleteAll();
     }
 }

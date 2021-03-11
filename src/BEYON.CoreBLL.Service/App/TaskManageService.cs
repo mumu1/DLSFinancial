@@ -155,5 +155,18 @@ namespace BEYON.CoreBLL.Service.App
         {
             return _TaskManageRepository.GetTaskByTaskLeader(taskLeader);
         }
+
+        public OperationResult DeleteAll()
+        {
+            try
+            {
+                _TaskManageRepository.Delete(_TaskManageRepository.Entities);
+                return new OperationResult(OperationResultType.Success, "清空数据成功！");
+            }
+            catch
+            {
+                return new OperationResult(OperationResultType.Error, "清空数据失败!");
+            }
+        }
     }
 }

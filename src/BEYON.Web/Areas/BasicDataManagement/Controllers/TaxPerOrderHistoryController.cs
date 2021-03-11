@@ -69,11 +69,21 @@ namespace BEYON.Web.Areas.BasicDataManagement.Controllers
             //    iTotalDisplayRecords = records.Count,
             //    aaData = pagedResults
             //}, JsonRequestBehavior.AllowGet);
-
+           
             var records = this._taxPerOrderHistoryService.TaxPerOrderHistorys.ToList();
-            var result = Json(new { total = records.Count, data = records }, JsonRequestBehavior.AllowGet);
-            result.MaxJsonLength = Int32.MaxValue;
-            return result;
+            /*
+           var result = Json(new { total = records.Count, data = records }, JsonRequestBehavior.AllowGet);
+           result.MaxJsonLength = Int32.MaxValue;
+
+           return result;
+            * */
+            return new JsonResult()
+            {
+                Data = new { total = records.Count, data = records },
+                MaxJsonLength = int.MaxValue,
+                ContentType = "application/json",
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
         }
     
     } 

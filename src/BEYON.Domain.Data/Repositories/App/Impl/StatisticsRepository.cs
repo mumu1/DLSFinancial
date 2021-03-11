@@ -167,7 +167,7 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                                 var cutTax = reader["C21"] != null ? Convert.ToSingle(reader["C21"]) : 0;
 
                                 //返回前端显示结果数据
-                                if (!objects.ContainsKey(certificateID))
+                                if (!(objects.ContainsKey(certificateID.ToLower()) || objects.ContainsKey(certificateID.ToUpper())))
                                 {
                                     JObject result = new JObject();
                                     result["C1"] = reader["C1"].ToString();
@@ -428,6 +428,7 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
 
                                 //返回前端显示结果数据
                                 if (!objects.ContainsKey(certificateID))
+                               // if (!(objects.ContainsKey(certificateID.ToLower()) || objects.ContainsKey(certificateID.ToUpper())))
                                 {
                                     JObject result = new JObject();
                                     result["C1"] = period;
@@ -496,11 +497,11 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                                         result["C16"] = 0;
                                     else
                                         result["C16"] = 1;
-                                    result["C17"] = amountY;
-                                    result["C18"] = amountX;
-                                    result["C19"] = tax;
-                                    result["C20"] = projectNumber;
-                                    result["C21"] = projectDirector;
+                                        result["C17"] = amountY;
+                                        result["C18"] = amountX;
+                                        result["C19"] = tax;
+                                        result["C20"] = projectNumber;
+                                        result["C21"] = projectDirector;
 
                                     for (var i = 1; i < addColumns; i++)
                                     {

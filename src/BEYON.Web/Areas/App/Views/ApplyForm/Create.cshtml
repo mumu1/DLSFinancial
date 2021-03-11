@@ -684,14 +684,15 @@
 
             //手机号码验证
             var Tele = editor.field('Tele');
-            var regMobile = /^1[34578]\d{9}$/;    //手机验证
-            var regPhone = /^0\d{2,3}-?\d{7,8}$/;///^(\(\d{3,4}\)|\d{3,4}-|\s)?\d{7,14}$/;     //座机验证
+            var regMobile = /^1[3456789]\d{9}$/;    //手机验证
+            //var regPhone = /^0\d{2,3}-?\d{7,8}$/;///^(\(\d{3,4}\)|\d{3,4}-|\s)?\d{7,14}$/;     //座机验证
             var str2 = Tele.val();
             var arr2 = regMobile.test(str2);
-            var arr3 = regPhone.test(str2);
+            //var arr3 = regPhone.test(str2);
             //alert(arr);
-            if (arr2 !== true && arr3 !== true) {
-                Tele.error("联系电话有误，请检查！若为座机请填写区号，如01082306380");
+            //if (arr2 !== true && arr3 !== true) {
+            if (arr2 !== true) {
+                Tele.error("联系电话有误，请检查！请填写11位手机号码");
             }
 
 

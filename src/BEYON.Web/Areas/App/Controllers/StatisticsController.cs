@@ -70,11 +70,26 @@ namespace BEYON.Web.Areas.App.Controllers
 
         //
         // GET: /App/Statistics/PerPersonDetailDatas
-        public ActionResult PerPersonDetailDatas()
+        public String PerPersonDetailDatas()
+            //public ActionResult PerPersonDetailDatas()
         {
             var datas = this._statisticsServer.GetPerPersonDetail();
 
-            return Json(new { total = datas.Count, data = datas }, JsonRequestBehavior.AllowGet);
+            //return Json(new { total = datas.Count, data = datas }, JsonRequestBehavior.AllowGet);
+/*
+            return new JsonResult()
+            {
+                Data = new { total = datas.Count, data = datas },
+                MaxJsonLength = int.MaxValue,
+                ContentType = "application/json",
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+            */
+            var serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+            serializer.MaxJsonLength = Int32.MaxValue;    //设置为int的最大值 
+            return serializer.Serialize(new { total = datas.Count, data = datas });
+
+          
         }
         #endregion
 

@@ -41,6 +41,12 @@
         </div>
         <!-- end widget -->
     </div>
+    <!--确认清空课题表对话框-->
+
+    <div id="confirmDialog_clearTaskManage" title="确认清空当前课题表" style="display:none;">
+        点击确认后课题表（即下表）记录会被清空，您确定要清空课题表吗？
+    </div>
+
 
     <div id="importDataDialog"></div>
 </div>
@@ -155,6 +161,14 @@
                     }
                 },
                 {
+                    text: "清空",
+                    action: function (e, dt, node, config) {
+                        clearTaskManage(dt);
+                      
+
+                    }
+                },
+                {
                     text: "刷新",
                     action: function (e, dt, node, config) {
                         dt.ajax.reload();
@@ -197,6 +211,38 @@
 
             }
         });
+    }
+
+    //清空课题表确认对话框       
+    function clearTaskManage(dt) {
+        $("#confirmDialog_clearTaskManage").dialog({
+            autoOpen: false,
+            modal: true,
+            buttons: {
+                "确认": function () {
+                    $.ajax({
+                        type: "POST",
+                        async: false,
+                        url: "../BasicDataManagement/TaskManage/DeleteAll",
+                        //data: params,
+                        contentType: "application/json; charset=utf-8",
+                        datatype: "json",
+                        success: function (data) {
+                            dt.ajax.reload();
+                            toastr.info("课题表清空成功");
+                        },
+                        error: function () {
+                            toastr.error('课题表清空失败！');
+                        }
+                    });
+                    $(this).dialog("close");
+                },
+                "取消": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+        $("#confirmDialog_clearTaskManage").dialog("open");
     }
 
 

@@ -704,12 +704,20 @@ namespace BEYON.CoreBLL.Service.App
             }
 
             //联系电话
-            Regex regPhone = new Regex("^0\\d{2,3}-?\\d{7,8}$");
-            Regex regMobile = new Regex("^1[34578]\\d{9}$");
+            //Regex regPhone = new Regex("^0\\d{2,3}-?\\d{7,8}$");
+            //Regex regMobile = new Regex("^1[34578]\\d{9}$");
            // if (!regPhone.IsMatch(personal.Tele) && !regMobile.IsMatch(personal.Tele))
-            if (String.IsNullOrEmpty(personal.Tele) || System.Text.RegularExpressions.Regex.IsMatch(personal.Tele, @"^(\d{3,4}-)?\d{6,8}$"))
+            //if (String.IsNullOrEmpty(personal.Tele) || System.Text.RegularExpressions.Regex.IsMatch(personal.Tele, @"^(\d{3,4}-)?\d{6,8}$"))
+            //{
+              //  feedBack.ExceptionContent.Add("第" + num + "行记录  联系电话格式有误！若为座机请填写区号，如01082306380");
+            //}
+            //Regex regPhone = new Regex("^0\\d{2,3}-?\\d{7,8}$");
+            //Regex regMobile = new Regex("^1[34578]\\d{9}$");
+            Regex regMobile = new Regex("^1(3|4|5|6|7|8|9)\\d{9}$");
+            // if (!regPhone.IsMatch(personal.Tele) && !regMobile.IsMatch(personal.Tele))
+            if (String.IsNullOrEmpty(personal.Tele) || !regMobile.IsMatch(personal.Tele))
             {
-                feedBack.ExceptionContent.Add("第" + num + "行记录  联系电话格式有误！若为座机请填写区号，如01082306380");
+                feedBack.ExceptionContent.Add("第" + num + "行记录  联系电话格式有误！请填写11位手机号码");
             }
             //银行名称是否包含在开户行详细名称中
 

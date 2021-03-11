@@ -607,17 +607,17 @@ namespace BEYON.CoreBLL.Service.App
                             tax = (interval - baseSalary) * 0.2 - deductTaxSum;
                         }
                         //超过4000至25000元，税率20%，速算扣除数0
-                        else if (interval > 4000 && interval <= 20000)
+                        else if (interval > 4000 && interval <= 25000)
                         {
                             tax = (interval - interval * 0.2) * 0.2 - deductTaxSum;
                         }
                         //超过25000至62500元，税率30%，速算扣除数2000
-                        else if (interval > 20000 && interval <= 50000)
+                        else if (interval > 25000 && interval <= 62500)
                         {
                             tax = (interval - interval * 0.2) * 0.3 - 2000 - deductTaxSum;
                         }
                         //超过62500元，税率40%，速算扣除数7000
-                        else if (interval > 50000)
+                        else if (interval > 62500)
                         {
                             tax = (interval - interval * 0.2) * 0.4 - 7000 - deductTaxSum;
                         }

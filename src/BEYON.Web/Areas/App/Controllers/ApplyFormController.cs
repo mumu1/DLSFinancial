@@ -525,43 +525,66 @@ namespace BEYON.Web.Areas.App.Controllers
                     {
                         List<PersonalRecord> records = GetPersonalDatas(serialNumber);
                         TaxPerOrder taxPerOrder = null;
+                        //check totalsum is equal or not 20210108
+                        //begin
+                        int equalFlag = 0;
+                        double sumTotalApp = form.Summation;
+                        double sumTotalRec = 0.0;
                         if (records != null)
-                        {
-                            for (int i = 0; i < records.Count; i++)
+                        {                          
+                            for (int c = 0; c < records.Count; c++)
                             {
-                                taxPerOrder = new TaxPerOrder();
-                                taxPerOrder.SerialNumber = form.SerialNumber;
-                                if (!String.IsNullOrEmpty(form.ProjectNumber) && !form.ProjectNumber.Equals("无"))
-                                {
-                                    string[] projectSep = form.ProjectNumber.Split('|');
-                                    taxPerOrder.ProjectNumber = projectSep[0].Trim();
-                                    if (projectSep.Length > 1)
-                                        taxPerOrder.TaskName = projectSep[1].Trim();
-                                    else
-                                        taxPerOrder.TaskName = form.TaskName;
-                                }
-                                else {
-                                    taxPerOrder.ProjectNumber = "无";
-                                    taxPerOrder.TaskName = "无";
-                                }                                                                                         
-                                taxPerOrder.RefundType = form.RefundType;
-                                taxPerOrder.ProjectDirector = form.ProjectDirector;
-                                taxPerOrder.Agent = form.Agent;
-                                taxPerOrder.Name = records[i].Name;
-                                taxPerOrder.PersonType = records[i].PersonType;
-                                taxPerOrder.CertificateType = records[i].CertificateType;
-                                taxPerOrder.CertificateID = records[i].CertificateID;
-                                taxPerOrder.Amount = records[i].Amount;
-                                taxPerOrder.TaxOrNot = records[i].TaxOrNot;
-                                taxPerOrder.Bank = records[i].Bank;
-                                taxPerOrder.BankDetailName = records[i].BankDetailName;
-                                taxPerOrder.ProvinceCity = records[i].ProvinceCity;
-                                taxPerOrder.CityField = records[i].CityField;
-                                taxPerOrder.AccountName = records[i].AccountName;
-                                taxPerOrder.AccountNumber = records[i].AccountNumber;
-                                taxPerOrder.PaymentType = form.PaymentType;
-                                _taxPerOrderService.Insert(taxPerOrder);
+                                sumTotalRec = sumTotalRec + records[c].Amount;
                             }
+                        }
+                        if (sumTotalApp == sumTotalRec) {
+                            equalFlag = 1;
+                        }
+
+                        //end
+                        if (equalFlag == 1)
+                        {
+                            if (records != null)
+                            {
+                                for (int i = 0; i < records.Count; i++)
+                                {
+                                    taxPerOrder = new TaxPerOrder();
+                                    taxPerOrder.SerialNumber = form.SerialNumber;
+                                    if (!String.IsNullOrEmpty(form.ProjectNumber) && !form.ProjectNumber.Equals("无"))
+                                    {
+                                        string[] projectSep = form.ProjectNumber.Split('|');
+                                        taxPerOrder.ProjectNumber = projectSep[0].Trim();
+                                        if (projectSep.Length > 1)
+                                            taxPerOrder.TaskName = projectSep[1].Trim();
+                                        else
+                                            taxPerOrder.TaskName = form.TaskName;
+                                    }
+                                    else
+                                    {
+                                        taxPerOrder.ProjectNumber = "无";
+                                        taxPerOrder.TaskName = "无";
+                                    }
+                                    taxPerOrder.RefundType = form.RefundType;
+                                    taxPerOrder.ProjectDirector = form.ProjectDirector;
+                                    taxPerOrder.Agent = form.Agent;
+                                    taxPerOrder.Name = records[i].Name;
+                                    taxPerOrder.PersonType = records[i].PersonType;
+                                    taxPerOrder.CertificateType = records[i].CertificateType;
+                                    taxPerOrder.CertificateID = records[i].CertificateID;
+                                    taxPerOrder.Amount = records[i].Amount;
+                                    taxPerOrder.TaxOrNot = records[i].TaxOrNot;
+                                    taxPerOrder.Bank = records[i].Bank;
+                                    taxPerOrder.BankDetailName = records[i].BankDetailName;
+                                    taxPerOrder.ProvinceCity = records[i].ProvinceCity;
+                                    taxPerOrder.CityField = records[i].CityField;
+                                    taxPerOrder.AccountName = records[i].AccountName;
+                                    taxPerOrder.AccountNumber = records[i].AccountNumber;
+                                    taxPerOrder.PaymentType = form.PaymentType;
+                                    _taxPerOrderService.Insert(taxPerOrder);
+                                }
+                            }
+                        }else {
+                            return Json("sum error", JsonRequestBehavior.AllowGet);
                         }
                     }
                     else if (formVM.AuditStatus.Equals("已退回"))
