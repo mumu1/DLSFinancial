@@ -23,6 +23,8 @@ namespace BEYON.CoreBLL.Service.App.Interface
 
         Double GetPayTaxAmount(String certificateID, String taxOrNot);
 
+        Double GetTotalAmountYByPjNum(String projectNumber);
+
         int GetCashCount(String certificateID);
 
         int DeleteBySerialNumber(String serialNumber);

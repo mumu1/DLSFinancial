@@ -3,8 +3,8 @@
 <div id="content" style="overflow-y: auto; height: 100%; opacity: 1;">
     <div class="content-wrapper">
         @*<header role="heading">
-            <h2>课题字典表维护</h2>
-        </header>*@
+        <h2>银行全称字典表维护</h2>
+    </header>*@
         <!-- widget div-->
 
         <div class="jarviswidget jarviswidget-color-darken jarviswidget-sortable" id="wid-id-0" data-widget-editbutton="false" role="widget">
@@ -41,12 +41,12 @@
         </div>
         <!-- end widget -->
     </div>
+
     <!--确认清空课题表对话框-->
 
-    <div id="confirmDialog_clearTaskManage" title="确认清空当前课题表" style="display:none;">
-        点击确认后课题表（即下表）记录会被清空，您确定要清空课题表吗？
+    <div id="confirmDialog_clearBankFullName" title="确认清空当前银行全称表" style="display:none;">
+        点击确认后银行全称表（即下表）记录会被清空，您确定要清空银行全称表吗？
     </div>
-
 
     <div id="importDataDialog"></div>
 </div>
@@ -62,7 +62,7 @@
     function loadTableData() {
         $.ajax({
             type: "GET",
-            url: "../BasicDataManagement/TaskManage/GetAllData",
+            url: "../BasicDataManagement/BankFullName/GetAllData",
             //data: params,
             contentType: "application/json; charset=utf-8",
             datatype: "json",
@@ -70,7 +70,7 @@
                 initTable(data);
             },
             error: function () {
-                toastr.error('获取课题数据失败！');
+                toastr.error('获取银行全称数据失败！');
             }
         });
     }
@@ -98,22 +98,11 @@
             },
             "table": "#datatable_tabletools",
             fields: [{
-                label: "课题号:",
-                name: "TaskID"
+                label: "银行全称代码",
+                name: "BankFullCode"
             }, {
-                label: "课题名称:",
-                name: "TaskName"
-            }, {
-                label: "课题负责人:",
-                name: "TaskLeader"
-            },
-            {
-                label: "可用资金:",
-                name: "AvailableFund"
-            },
-            {
-                label: "赤字运行:",
-                name: "Deficit"
+                label: "银行全称名称:",
+                name: "BankFullNameAddr"
             }
             ]
         });
@@ -121,7 +110,7 @@
 
         table = $('#datatable_tabletools').dataTable({
             dom: 'Bfrtip',
-            ajax : '@Url.Action("GetAllData")',
+            ajax: '@Url.Action("GetAllData")',
             buttons: [
                 {
                     text: "新增", extend: "create", editor: editor
@@ -171,8 +160,8 @@
                 {
                     text: "清空",
                     action: function (e, dt, node, config) {
-                        clearTaskManage(dt);
-                      
+                        clearBankFullName(dt);
+
 
                     }
                 },
@@ -197,11 +186,8 @@
             paging: true,
             columns: [
                                     { data: "Id", title: "编号" },
-                                    { data: "TaskID", title: "课题号" },
-                                    { data: "TaskName", title: "课题名称" },
-                                    { data: "TaskLeader", title: "课题负责人" },
-                                    { data: "AvailableFund", title: "可用资金" },
-                                    { data: "Deficit", title: "赤字运行" }
+                                    { data: "BankFullCode", title: "银行全称代码" },
+                                    { data: "BankFullNameAddr", title: "银行全称名称" }
             ],
             oLanguage: {
                 "sLengthMenu": "每页显示 _MENU_ 条记录",
@@ -222,38 +208,38 @@
             }
         });
     }
-
-    //清空课题表确认对话框       
-    function clearTaskManage(dt) {
-        $("#confirmDialog_clearTaskManage").dialog({
-            autoOpen: false,
-            modal: true,
-            buttons: {
-                "确认": function () {
-                    $.ajax({
-                        type: "POST",
-                        async: false,
-                        url: "../BasicDataManagement/TaskManage/DeleteAll",
-                        //data: params,
-                        contentType: "application/json; charset=utf-8",
-                        datatype: "json",
-                        success: function (data) {
-                            dt.ajax.reload();
-                            toastr.info("课题表清空成功");
-                        },
-                        error: function () {
-                            toastr.error('课题表清空失败！');
-                        }
-                    });
-                    $(this).dialog("close");
-                },
-                "取消": function () {
-                    $(this).dialog("close");
+        //清空课题表确认对话框       
+        function clearBankFullName(dt) {
+            $("#confirmDialog_clearBankFullName").dialog({
+                autoOpen: false,
+                modal: true,
+                buttons: {
+                    "确认": function () {
+                        $.ajax({
+                            type: "POST",
+                            async: false,
+                            url: "../BasicDataManagement/BankFullName/DeleteAll",
+                            //data: params,
+                            contentType: "application/json; charset=utf-8",
+                            datatype: "json",
+                            success: function (data) {
+                                dt.ajax.reload();
+                                toastr.info("银行全称表清空成功");
+                            },
+                            error: function () {
+                                toastr.error('银行全称表清空失败！');
+                            }
+                        });
+                        $(this).dialog("close");
+                    },
+                    "取消": function () {
+                        $(this).dialog("close");
+                    }
                 }
-            }
-        });
-        $("#confirmDialog_clearTaskManage").dialog("open");
+            });
+            $("#confirmDialog_clearBankFullName").dialog("open");
     }
+   
 
-
+   
 </script>

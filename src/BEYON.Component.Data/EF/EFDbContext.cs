@@ -59,6 +59,8 @@ namespace BEYON.Component.Data.EF
 
         public DbSet<Bank> Banks { get; set; }
 
+        public DbSet<BankFullName> BankFullNames { get; set; }
+
         public DbSet<SafeguardTime> SafeguardTimes { get; set; }
 
         public DbSet<Department> Departments { get; set; }

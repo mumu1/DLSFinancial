@@ -73,7 +73,7 @@ namespace BEYON.CoreBLL.Service.App
                 String idType = GetReplaceString(model.CertificateType);
                 String birthVar = "";
                 String genderVar = "";
-                if ("外国护照".Equals(idType))
+                if (!"居民身份证".Equals(idType))
                 {
                     birthVar = GetReplaceString(model.Birth);
                     genderVar = GetReplaceString(model.Gender);
@@ -200,7 +200,7 @@ namespace BEYON.CoreBLL.Service.App
                 String idType = GetReplaceString(model.CertificateType);
                 String birthVar = "";
                 String genderVar = "";
-                if ("外国护照".Equals(idType))
+                if (!"居民身份证".Equals(idType))
                 {
                     birthVar = GetReplaceString(model.Birth);
                     genderVar = GetReplaceString(model.Gender);
@@ -486,7 +486,7 @@ namespace BEYON.CoreBLL.Service.App
                             }
                             break;
                         case "Gender":
-                            if (ImportUtil.GetValue(record, map, "CertificateType").Equals("外国护照"))
+                            if (!ImportUtil.GetValue(record, map, "CertificateType").Equals("居民身份证"))
                             {
                                 if (String.IsNullOrEmpty(ImportUtil.GetValue(record, map, property.Name)))
                                 {
@@ -499,7 +499,7 @@ namespace BEYON.CoreBLL.Service.App
                             }
                             break;
                         case "Birth":
-                            if (ImportUtil.GetValue(record, map, "CertificateType").Equals("外国护照"))
+                            if (!ImportUtil.GetValue(record, map, "CertificateType").Equals("居民身份证"))
                             {
                                 if (String.IsNullOrEmpty(ImportUtil.GetValue(record, map, property.Name)))
                                 {
@@ -579,7 +579,7 @@ namespace BEYON.CoreBLL.Service.App
                             }
                             break;
                         case "Gender":
-                            if (ImportUtil.GetValue(record, map, "CertificateType").Equals("外国护照"))
+                            if (!ImportUtil.GetValue(record, map, "CertificateType").Equals("居民身份证"))
                             {
                                 if (String.IsNullOrEmpty(ImportUtil.GetValue(record, map, property.Name)))
                                 {
@@ -592,7 +592,7 @@ namespace BEYON.CoreBLL.Service.App
                             }
                             break;
                         case "Birth":
-                            if (ImportUtil.GetValue(record, map, "CertificateType").Equals("外国护照"))
+                            if (!ImportUtil.GetValue(record, map, "CertificateType").Equals("居民身份证"))
                             {
                                 if (String.IsNullOrEmpty(ImportUtil.GetValue(record, map, property.Name)))
                                 {
@@ -699,7 +699,7 @@ namespace BEYON.CoreBLL.Service.App
             {
                 if (!regBirth.IsMatch(personal.Birth))
                 {
-                    feedBack.ExceptionContent.Add("第" + num + "行记录 出生日期格式不正确，格式为1970-01-01,非外国护照可不填");
+                    feedBack.ExceptionContent.Add("第" + num + "行记录 出生日期格式不正确，格式为1970-01-01,居民身份证可不填");
                 }
             }
 

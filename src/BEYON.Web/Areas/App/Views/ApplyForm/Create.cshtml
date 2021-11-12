@@ -61,7 +61,7 @@
                                     2.现金和转账发放都可使用该表，如通过银行转账发放，请准确填写收款本人的银行账户、开户银行、账户名称、收款账号省份、地市等信息。
                                 </div>
                                 <div>
-                                    3.收款人证件类型为外国护照的，需要填写收款人性别和出生年月日。
+                                    3.收款人证件类型不是居民身份证的，需要填写收款人性别和出生年月日。
                                 </div>
                                 <div>
                                     4.单位填写分类：所内在职职工、所内注册学生、所内劳务流程。客座学生和外单位人员填写具体工作单位。
@@ -157,7 +157,7 @@
                     </fieldset>
                     <fieldset>
                         <section>
-                            <table id="datatable_create_form" class="table table-striped table-bordered table-hover" width="100%"></table>
+                            <table id="datatable_create_form" class="table table-striped table-bordered table-hover" width="120%"></table>
                         </section>
                     </fieldset>
 
@@ -182,7 +182,7 @@
     <div id="importDataDialog"></div>
     <div id="dialog-DownloadTemp" title="下载人员导入模板" style="display:none;">
         <p>请根据本申请单选择的支付类型下载相应的模板</p><br />
-        <label>人员导入模板1：银行转账</label><a href="@Url.Content("~/Scripts/银行转账模板new.xls")">点我下载</a><br /><br />
+        <label>人员导入模板1：银行转账</label><a href="@Url.Content("~/Scripts/银行转账模板new2.xls")">点我下载</a><br /><br />
         <label>人员导入模板2：现金支付</label><a href="@Url.Content("~/Scripts/现金支付模板new.xls")">点我下载</a><br />
     </div>
 
@@ -190,6 +190,12 @@
     <div id="dialog-ShowContacts" title="请从常用联系人列表选择" style="display:none;">
         <table id="datatable_choose_contacts" class="table table-striped table-bordered table-hover" width="100%"></table>
     </div>
+
+    <!--开户行详细名称选择对话框-->
+    <div id="dialog-ShowBankFullName" title="请从开户行详细名称列表选择" style="display:none;">
+        <table id="datatable_choose_bankFullName" class="table table-striped table-bordered table-hover" width="100%"></table>
+    </div>
+
 </section>
 
 <link rel="stylesheet" href="@Url.Content("~/Content/css/jAlert-v3.css")">
@@ -209,6 +215,7 @@
     registerRefundType();   //从数据库读取报销事由下拉菜单对应数组
     registerDepartment();   //从数据库读取部门下拉菜单对应数组
     var contactsTable;      //保存联系人选择列表
+    var bankFullNameTable;   //开户行详细名称选择列表
     var rowDataContacts;
     registerProjectNumber();
 
@@ -371,6 +378,7 @@
                  ]
              },
             { name: "Birth", label: "出生日期:", type: "text", fieldInfo: "<font color='red'>格式为'1970-01-01'</font>" },
+            //  { name: "Remarks", label: "备注:", type: "text", fieldInfo: "<font color='red'>填写15个以内的中文字符</font>" },
              {
                  name: "PaymentType",
                  label: "支付类型:",
@@ -417,7 +425,7 @@
     
     $('select', editor.field('CertificateType').node()).on('change', function () {
         var certificateType = editor.field('CertificateType').val();
-        if (certificateType == "外国护照") {
+        if (certificateType !== "居民身份证") {
             editor.field('Gender').show();
             editor.field('Birth').show();
            // $('#datatable_create_form').DataTable().column(16).visible(true);   //gender列隐藏
@@ -437,6 +445,7 @@
     editor.on('onInitCreate', function () {
         //      editor.disable('Amount');
         var paymentType = $('#paymentType').val();
+       
         editor.field('PaymentType').val(paymentType);
         editor.field('Gender').hide();
         editor.field('Birth').hide();
@@ -454,7 +463,7 @@
         //    editor.disable('Amount');
         
         var t = CertificateType.val();
-        if (t == "外国护照") {
+        if (t !== "居民身份证") {
             editor.field('Gender').show();
             editor.field('Birth').show();
          //   $('#datatable_create_form').DataTable().column(16).visible(true);   //gender列隐藏
@@ -486,6 +495,8 @@
             var Company = editor.field('Company');
             var AccountNumber = editor.field('AccountNumber');
             var BankDetailName = editor.field('BankDetailName');
+           // var BankFullCode = editor.field('BankFullCode');
+           // var Remarks = editor.field('Remarks');
             var nationality = editor.field('Nationality');
             var ProvinceCity = editor.field('ProvinceCity');
             var CityField = editor.field('CityField');
@@ -525,14 +536,14 @@
                 CityField.error("请填写收款账号地市");
             }
 
-            if (CertificateType.val() == "外国护照" && gender.val().trim() == "") {
+            if (CertificateType.val() !== "居民身份证" && gender.val().trim() == "") {
                 gender.error("请填写性别");
             }
 
-            if (CertificateType.val() == "外国护照" && birth.val().trim() == "") {
+            if (CertificateType.val() !== "居民身份证" && birth.val().trim() == "") {
                 birth.error("请填写出生日期，格式为“1970-01-01”");
             }
-            else if (CertificateType.val() == "外国护照" && birth.val().trim() !== "") {
+            else if (CertificateType.val() !== "居民身份证" && birth.val().trim() !== "") {
                 //birth format check
                 var reg = /^(\d{4})(-)(\d{2})(-)(\d{2})$/;
                 var str1 = birth.val();
@@ -803,6 +814,7 @@
                         ColumnDatas.push({ ColumnName: 'CityField', TitleName: '收款账号地市' });
                         ColumnDatas.push({ ColumnName: 'Gender', TitleName: '性别' });
                         ColumnDatas.push({ ColumnName: 'Birth', TitleName: '出生日期' });
+                      //  ColumnDatas.push({ ColumnName: 'Remarks', TitleName: '备注' });
                     }
 
                     $.ajax({
@@ -854,8 +866,8 @@
             bProcessing: true,
             paging: false,
             "sScrollY": "100%",
-            "sScrollX": "120%",
-            "sScrollXInner": "120%",
+            "sScrollX": "150%",
+            "sScrollXInner": "150%",
             buttons: buttons,
             columns: [
                 //{ data: "SerialNumber", title: "申请单流水号", visible: false },
@@ -877,7 +889,9 @@
                 { data: "CityField", title: "收款账号地市" },
                  { data: "Gender", title: "性别" },
                   { data: "Birth", title: "出生日期" },
+                 //  { data: "Remarks", title: "备注" },
                 { data: "AccountName", title: "账户名称", visible: false },
+                //{ data: "BankFullCode", title: "银行全称代码", visible: false },
                 { data: "PaymentType", title: "支付类型", visible: false },
                 { data: "Signature", title: "领取人签字", visible: false }
 
@@ -950,9 +964,11 @@
                         editor.field('Title').val(value["Title"]);
                         editor.field('Gender').val(value["Gender"]);
                         editor.field('Birth').val(value["Birth"]);
+
                         if (paymentType == "银行转账") {
                             editor.field('Bank').val(value["Bank"]);
                             editor.field('BankDetailName').val(value["BankDetailName"]);
+                          //  editor.field('BankFullCode').val(value["BankFullCode"]);
                             editor.field('AccountNumber').val(value["AccountNumber"]);
                             editor.field('ProvinceCity').val(value["ProvinceCity"]);
                             editor.field('CityField').val(value["CityField"]);
@@ -985,6 +1001,7 @@
                 { data: "Bank", title: "开户银行" },
                 { data: "AccountNumber", title: "银行账号" },
                 { data: "BankDetailName", title: "开户行详细名称" },
+               //  { data: "BankFullCode", title: "银行全称代码" },
                 { data: "ProvinceCity", title: "收款账号省份" },
                 { data: "CityField", title: "收款账号地市" },
                  { data: "Gender", title: "性别" },
@@ -1015,7 +1032,85 @@
             }
         });
 
+        
+        //new 20210312
+        bankFullNameTable = $('#datatable_choose_bankFullName').dataTable({
+            dom: 'Bfrtip',
+            searching: true,
+            ordering: true,
+            select: true,
+            info: true,
+            paginate: true, //是否显示（应用）分页器
+            sort: true, //是否启动各个字段的排序功能
+            stateSave: false,
+            stateDuration: 60 * 60 * 12,
+            iDisplayLength: 5,
+            autoWidth: true,
+            "sScrollY": "100%",
+            "sScrollX": "100%",
+            "sScrollXInner": "100%",
+            bProcessing: true,
+            paging: true,
+
+            buttons: [
+            {
+                text: "确定选择该行信息", action: function (e, dt, node, config) {
+                    var rowData = dt.rows({ selected: true }).data();
+
+                    $.each($(rowData), function (key, value) {
+                        //alert(value["CertificateID"]);
+                        editor.field('BankDetailName').val(value["BankFullNameAddr"]);
+                     //   editor.field('BankFullCode').val(value["BankFullCode"]);
+
+                    });
+                    $("#dialog-ShowBankFullName").dialog("close");
+                }
+            },
+              {
+                  text: "取消", action: function (e, dt, node, config) {
+
+                      $("#dialog-ShowBankFullName").dialog("close");
+                  }
+              }],
+            columns: [
+                 //{
+                 //    data: null,
+                 //    defaultContent: '',
+                 //    className: 'select-checkbox',
+                 //    orderable: false
+                 //},
+                { data: "BankFullNameAddr", title: "开户银行详细名称" },
+                { data: "BankFullCode", title: "银行全称代码" }
+
+            ],
+            //select: {
+            //    style: 'os',
+            //    selector: 'td:first-child'
+            //},
+            select: {
+                style: 'single'
+            },
+            oLanguage: {
+                "sLengthMenu": "每页显示 _MENU_ 条记录",
+                "sZeroRecords": "抱歉， 没有找到",
+                "sInfo": "显示 _START_ 到 _END_ 条记录，总共 _TOTAL_ 条记录",
+                "sInfoEmpty": "没有数据",
+                "sInfoFiltered": "(从 _MAX_ 条数据中检索)",
+                "sZeroRecords": "没有检索到数据",
+                "sSearch": "搜索名称:",
+                "sSelected": "选中 _TOTAL_ 条记录",
+                "oPaginate": {
+                    "sFirst": "首页",
+                    "sPrevious": "前一页",
+                    "sNext": "后一页",
+                    "sLast": "尾页"
+                }
+            }
+        });
+     
     }
+
+
 
     initTable();
 
@@ -1386,6 +1481,68 @@
         //  oSettings.aiDisplay = oSettings.aiDisplayMaster.slice();
         //$.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
         contactsTable.fnDraw();
+        //return;
+        // }
+
+    }
+
+/**
+    //点击“开户银行详细名称”字段，弹出银行全称选择对话框
+
+    $('input', editor.field('BankDetailName').node()).on('click', function () {
+        openBankFullNameDialog();
+    });
+*/
+        //弹出银行全称选择对话框,load data
+
+    function openBankFullNameDialog() {
+        $.ajax({
+            type: "GET",
+            async: false,
+            url: "../BasicDataManagement/BankFullName/GetAllData",
+            //data: params,
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            success: function (data) {
+                $("#dialog-ShowBankFullName").css("display", "block");
+                $("#dialog-ShowBankFullName").dialog("open");
+                reloadBankFullNameTable(data);
+            },
+            error: function () {
+                toastr.error('获取开户银行数据失败！');
+            }
+        });
+        
+    }
+    $("#dialog-ShowBankFullName").dialog({
+        autoOpen: false,
+        height: 320,
+        width: 700,
+        modal: true,
+        //buttons: {
+        //    "确定": function () {
+
+
+        //        $(this).dialog("close");
+        //    },
+        //    "取消": function () {
+        //        $(this).dialog("close");
+        //    }
+        //}
+    });
+
+    function reloadBankFullNameTable(data) {
+        //pageSetUp();
+        //更新数据
+        //if ($.fn.dataTable.isDataTable('#datatable_choose_contacts')) {
+        var oSettings = bankFullNameTable.fnSettings();
+        bankFullNameTable.fnClearTable(this);
+        for (var i = 0; i < data.total; i++) {
+            bankFullNameTable.oApi._fnAddData(oSettings, data.data[i]);
+        }
+        //  oSettings.aiDisplay = oSettings.aiDisplayMaster.slice();
+        //$.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
+        bankFullNameTable.fnDraw();
         //return;
         // }
 

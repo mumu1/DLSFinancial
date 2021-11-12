@@ -123,7 +123,8 @@ namespace ExcelCommands
 
                     Range tipRange = worksheet.get_Range(worksheet.Cells[3, 1], worksheet.Cells[3, columnCount]);//选取单元格
                     tipRange.Merge(true);//合并单元格
-                    tipRange.Value = "我声明，以下填写的内容是完全真实的，如有不实，由此产生的一切后果由本人承担。---声明人签字:"; //设置单元格内文本
+                    tipRange.RowHeight = 30;
+                    tipRange.Value = "我声明，以下填写的内容是完全真实的，且本人与收款人不存在夫妻关系、直系血亲关系、三代以内旁系血亲关系以及近姻亲关系。"+"\n"+"如有不实，由此产生的一切后果由本人承担。---声明人签字:"; //设置单元格内文本
                     tipRange.Font.Name = "宋体";//设置字体
                     tipRange.Font.Size = 12;//字体大小
                     tipRange.Font.Bold = true;//加粗显示
@@ -248,6 +249,7 @@ namespace ExcelCommands
 
                     Range noteRange = worksheet.get_Range(worksheet.Cells[nMax + 8, 1], worksheet.Cells[nMax + 10, columnCount]);//选取单元格
                     noteRange.MergeCells = true;
+                    noteRange.RowHeight = 15;
                     noteRange.Borders.LineStyle = XlLineStyle.xlContinuous;//设置边框
                     noteRange.Borders.Weight = XlBorderWeight.xlThin;//边框常规粗细
                     noteRange.HorizontalAlignment = XlHAlign.xlHAlignLeft;//水平居中
@@ -255,7 +257,7 @@ namespace ExcelCommands
                     noteRange.Font.Name = "宋体";//设置字体
                     noteRange.Font.Size = 9;//字体大小
                     noteRange.Font.Bold = false;//加粗显示
-                    noteRange.Value = "填表说明:1.各类劳务费应由领款本人签收并经课题负责人、部门负责人、单位负责人、经办人签字。\n         2.现金和转账发放都可使用该表，如通过银行转账发放，请准确填写收款本人的银行账户、开户银行、账户名称等信息。\n         3.收款人证件类型为外国护照的，需要填写收款人性别和出生年月日。\n         4.单位填写分类：所内在职职工、所内注册学生、所内劳务流程。客座学生和外单位人员填写具体工作单位。";
+                    noteRange.Value = "填表说明:1.各类劳务费应由领款本人签收并经课题负责人、部门负责人、单位负责人、经办人签字。\n         2.现金和转账发放都可使用该表，如通过银行转账发放，请准确填写收款本人的银行账户、开户银行、账户名称等信息。\n         3.收款人证件类型不是居民身份证的，需要填写收款人性别和出生年月日。\n         4.单位填写分类：所内在职职工、所内注册学生、所内劳务流程。客座学生和外单位人员填写具体工作单位。";
 
                     Range signRange = worksheet.get_Range(worksheet.Cells[nMax + 11, 1], worksheet.Cells[nMax + 12, columnCount]);//选取单元格
                     signRange.MergeCells = true;
@@ -287,7 +289,8 @@ namespace ExcelCommands
 
                     Range tipRange = worksheet.get_Range(worksheet.Cells[3, 1], worksheet.Cells[3, columnCount]);//选取单元格
                     tipRange.Merge(true);//合并单元格
-                    tipRange.Value = "我声明，以下填写的内容是完全真实的，如有不实，由此产生的一切后果由本人承担。---声明人签字:           "; //设置单元格内文本
+                    tipRange.RowHeight = 30;
+                    tipRange.Value = "我声明，以下填写的内容是完全真实的，且本人与收款人不存在夫妻关系、直系血亲关系、三代以内旁系血亲关系以及近姻亲关系。"+"\n"+"如有不实，由此产生的一切后果由本人承担。---声明人签字:           "; //设置单元格内文本
                     tipRange.Font.Name = "宋体";//设置字体
                     tipRange.Font.Size = 10;//字体大小
                     tipRange.Font.Bold = true;//加粗显示
@@ -401,6 +404,7 @@ namespace ExcelCommands
 
                     Range noteRange = worksheet.get_Range(worksheet.Cells[nMax + 8, 1], worksheet.Cells[nMax + 10, columnCount]);//选取单元格
                     noteRange.MergeCells = true;
+                    noteRange.RowHeight = 15;
                     noteRange.Borders.LineStyle = XlLineStyle.xlContinuous;//设置边框
                     noteRange.Borders.Weight = XlBorderWeight.xlThin;//边框常规粗细
                     noteRange.HorizontalAlignment = XlHAlign.xlHAlignLeft;//水平居中
@@ -408,7 +412,7 @@ namespace ExcelCommands
                     noteRange.Font.Name = "宋体";//设置字体
                     noteRange.Font.Size = 9;//字体大小
                     noteRange.Font.Bold = false;//加粗显示
-                    noteRange.Value = "填表说明:1.各类劳务费应由领款本人签收并经课题负责人、部门负责人、单位负责人、经办人签字。\n            2.现金和转账发放都可使用该表，如通过银行转账发放，请准确填写收款本人的银行账户、开户银行、账户名称等信息。\n         3.收款人证件类型为外国护照的，需要填写收款人性别和出生年月日。\n         4.单位填写分类：所内在职职工、所内注册学生、所内劳务流程。客座学生和外单位人员填写具体工作单位。";
+                    noteRange.Value = "填表说明:1.各类劳务费应由领款本人签收并经课题负责人、部门负责人、单位负责人、经办人签字。\n            2.现金和转账发放都可使用该表，如通过银行转账发放，请准确填写收款本人的银行账户、开户银行、账户名称等信息。\n         3.收款人证件类型不是居民身份证的，需要填写收款人性别和出生年月日。\n         4.单位填写分类：所内在职职工、所内注册学生、所内劳务流程。客座学生和外单位人员填写具体工作单位。";
 
                     Range signRange = worksheet.get_Range(worksheet.Cells[nMax + 11, 1], worksheet.Cells[nMax + 12, columnCount]);//选取单元格
                     signRange.MergeCells = true;

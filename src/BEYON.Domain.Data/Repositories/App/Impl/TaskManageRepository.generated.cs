@@ -41,7 +41,7 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
         public TaskManage GetTaskByNumber(String projectNumber) {
             //TaskManage taskManage = null;
             var taskManage = from p in Context.TaskManages.Where(w => w.TaskID == projectNumber)
-                                    select new   { TaskID = p.TaskID, TaskName = p.TaskName, TaskLeader = p.TaskLeader };
+                             select new { TaskID = p.TaskID, TaskName = p.TaskName, TaskLeader = p.TaskLeader, AvailableFund = p.AvailableFund, Deficit = p.Deficit };
             var lists = taskManage.ToList();
 
             if (lists.Count > 0)
@@ -49,7 +49,9 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                 {
                     TaskID = lists[0].TaskID,
                     TaskName = lists[0].TaskName,
-                    TaskLeader = lists[0].TaskLeader
+                    TaskLeader = lists[0].TaskLeader,
+                    AvailableFund = lists[0].AvailableFund,
+                    Deficit = lists[0].Deficit
                 };
             else
                 return null;
@@ -58,7 +60,7 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
         {
             //TaskManage taskManage = null;
             var taskManage = from p in Context.TaskManages.Where(w => w.TaskLeader == taskLeader)
-                             select new { TaskID = p.TaskID, TaskName = p.TaskName, TaskLeader = p.TaskLeader };
+                             select new { TaskID = p.TaskID, TaskName = p.TaskName, TaskLeader = p.TaskLeader, AvailableFund = p.AvailableFund, Deficit = p.Deficit };
             var listsTemp = taskManage.ToList();
             List<TaskManage> list = new List<TaskManage>();
             for (var i = 0; i < listsTemp.Count; i++)
@@ -68,6 +70,8 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                 t.TaskID = listsTemp[i].TaskID;
                 t.TaskName = listsTemp[i].TaskName;
                 t.TaskLeader = listsTemp[i].TaskLeader;
+                t.AvailableFund = listsTemp[i].AvailableFund;
+                t.Deficit = listsTemp[i].Deficit;
                 list.Add(t);
             }           
             return list;

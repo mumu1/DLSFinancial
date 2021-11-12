@@ -74,6 +74,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App\BankFullNameService.cs" />
+    <Compile Include="App\Interface\IBankFullNameService.cs" />
     <Compile Include="App\Interface\ITaxBaseEveryMonthService.cs" />
     <Compile Include="App\Interface\ITopContactsService.cs" />
     <Compile Include="App\TaxBaseEveryMonthService.cs" />

@@ -812,6 +812,10 @@ namespace BEYON.CoreBLL.Service.App
             return _TaxPerOrderRepository.GetPayTaxAmountY(certificateID);
         }
 
+        public Double GetTotalAmountYByPjNum(String projectNumber) {
+            return _TaxPerOrderRepository.GetTotalAmountYByPjNum(projectNumber);
+        }
+
         public Double GetDeductTaxSum(String certificateID)
         {
             return _TaxPerOrderRepository.GetDeductTaxSum(certificateID);

@@ -181,6 +181,7 @@
     <Compile Include="Areas\App\Controllers\TopContactsController.cs" />
     <Compile Include="Areas\BasicDataManagement\BasicDataManagementRegistration.cs" />
     <Compile Include="Areas\BasicDataManagement\Controllers\AuditOptionController.cs" />
+    <Compile Include="Areas\BasicDataManagement\Controllers\BankFullNameController.cs" />
     <Compile Include="Areas\BasicDataManagement\Controllers\BankAccountController.cs" />
     <Compile Include="Areas\BasicDataManagement\Controllers\TaxPerOrderHistoryController.cs" />
     <Compile Include="Areas\BasicDataManagement\Controllers\TaxPerOrderController.cs" />
@@ -643,6 +644,7 @@
     <Content Include="Areas\App\Views\Statistics\SerNumberStatistic.cshtml" />
     <Content Include="Areas\App\Views\TopContacts\Index.cshtml" />
     <Content Include="Areas\BasicDataManagement\Views\YearBaseTable\Index.cshtml" />
+    <Content Include="Areas\BasicDataManagement\Views\BankFullName\Index.cshtml" />
     <None Include="Properties\PublishProfiles\beyondb.pubxml" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Scripts\AdminLTE2.3.0\bootstrap\css\bootstrap.css" />

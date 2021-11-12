@@ -36,8 +36,9 @@ namespace BEYON.Web.Areas.App.Controllers
         private readonly IApplyPrintService _applyPrintService;
         private readonly IAuditOpinionService _auditOpinionService;
         private readonly ITaxPerOrderService _taxPerOrderService;
+        private readonly ITaskManageService _taskManageService;
         public ApplyFormController(IApplicationFormService applicationFormService, IPersonalRecordService personalRecordService,
-            IUserService userService, IApplyPrintService applyPrintService, IAuditOpinionService auditOpinionService, ITaxPerOrderService taxPerOrderService, ITopContactsService topContactsService)
+            IUserService userService, IApplyPrintService applyPrintService, IAuditOpinionService auditOpinionService, ITaxPerOrderService taxPerOrderService, ITopContactsService topContactsService, ITaskManageService taskManageService)
         {
             this._applicationFormService = applicationFormService;
             this._personalRecordService = personalRecordService;
@@ -46,6 +47,7 @@ namespace BEYON.Web.Areas.App.Controllers
             this._auditOpinionService = auditOpinionService;
             this._taxPerOrderService = taxPerOrderService;
             this._topContactsService = topContactsService;
+            this._taskManageService = taskManageService;
         }
 
         //
@@ -542,6 +544,25 @@ namespace BEYON.Web.Areas.App.Controllers
                         }
 
                         //end
+                        //check totalamonutY by projectnumber is available or not 20210509
+                        //begin
+                        string pjNum = form.ProjectNumber.Split('|')[0].Trim();
+                        TaskManage taskManage = _taskManageService.GetTaskByNumber(pjNum);
+                        double totalAmonutYByPjNum = _taxPerOrderService.GetTotalAmountYByPjNum(pjNum) + form.Summation;
+                        if (taskManage != null && taskManage.Deficit != null)
+                        {
+                            if ("否".Equals(taskManage.Deficit.Trim()))
+                            {
+                                if (taskManage.AvailableFund - totalAmonutYByPjNum < 0)
+                                {
+                                    return Json("availableFund insufficient,课题号为：" + form.ProjectNumber, JsonRequestBehavior.AllowGet);
+                                    //return Json("availableFund insufficient", JsonRequestBehavior.AllowGet);
+                                }
+                            }
+                        }
+                        //end
+
+
                         if (equalFlag == 1)
                         {
                             if (records != null)

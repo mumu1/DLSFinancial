@@ -35,5 +35,12 @@ namespace BEYON.Domain.Model.App
         [Display(Name = "课题负责人")]
         [StringLength(50)]
         public string TaskLeader { get; set; }
+
+        [Display(Name = "可用资金")]
+        public Double AvailableFund { get; set; }
+
+        [Display(Name = "赤字运行")]
+        [StringLength(4)]
+        public string Deficit { get; set; }
     }
 }

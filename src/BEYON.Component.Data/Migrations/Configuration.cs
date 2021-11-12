@@ -54,6 +54,7 @@ namespace BEYON.Component.Data.Migrations
                 new Module { Id = 13, ParentId = 12, Name = "报销事由字典表", LinkUrl = "~/BasicDataManagement/Reimbursement/Index",  Code = 401, Description = null, IsMenu = true, Enabled = true,  UpdateDate = DateTime.Now},
                 new Module { Id = 14, ParentId = 12, Name = "职称字典表", LinkUrl = "~/BasicDataManagement/Professional/Index",  Code = 402, Description = null, IsMenu = true, Enabled = true,  UpdateDate = DateTime.Now},
                 new Module { Id = 15, ParentId = 12, Name = "开户银行字典表", LinkUrl = "~/BasicDataManagement/BankAccount/Index",  Code = 403, Description = null, IsMenu = true, Enabled = true,  UpdateDate = DateTime.Now},
+                new Module { Id = 41, ParentId = 12, Name = "银行全称字典表", LinkUrl = "~/BasicDataManagement/BankFullName/Index",  Code = 410, Description = null, IsMenu = true, Enabled = true,  UpdateDate = DateTime.Now},   
                 new Module { Id = 16, ParentId = 12, Name = "工资基础表初始化", LinkUrl = "~/BasicDataManagement/WageBaseTable/Index",  Code = 404,Description = null, IsMenu = true, Enabled = true, UpdateDate = DateTime.Now},
                 new Module { Id = 40, ParentId = 12, Name = "年度累计底表", LinkUrl = "~/BasicDataManagement/YearBaseTable/Index",  Code = 404,Description = null, IsMenu = true, Enabled = true, UpdateDate = DateTime.Now},           
                 new Module { Id = 17, ParentId = 12, Name = "审核意见字典表", LinkUrl = "~/BasicDataManagement/AuditOption/Index",  Code = 405,Description = null, IsMenu = true, Enabled = true, UpdateDate = DateTime.Now},
@@ -135,6 +136,7 @@ namespace BEYON.Component.Data.Migrations
              new Permission{Id=36, Name="操作",Code=EnumPermissionCode.Audit.ToString(), Description="本月算税记录" ,Enabled=true,UpdateDate=DateTime.Now,module=modules[19]},     
              new Permission{Id=37, Name="操作",Code=EnumPermissionCode.Audit.ToString(), Description="历史算税记录" ,Enabled=true,UpdateDate=DateTime.Now,module=modules[20]}, 
              new Permission{Id=38, Name="操作",Code=EnumPermissionCode.Audit.ToString(), Description="年度累计底表" ,Enabled=true,UpdateDate=DateTime.Now,module=modules[21]},
+             new Permission{Id=39, Name="操作",Code=EnumPermissionCode.Audit.ToString(), Description="银行全称字典表" ,Enabled=true,UpdateDate=DateTime.Now,module=modules[22]},
            
             #endregion
             };

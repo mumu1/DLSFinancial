@@ -72,7 +72,7 @@ namespace BEYON.CoreBLL.Service.App
                 String idType = GetReplaceString(model.CertificateType);
                 String birthVar = "";
                 String genderVar = "";
-                if ("外国护照".Equals(idType))
+                if (!"居民身份证".Equals(idType))
                 {
                     birthVar = GetReplaceString(model.Birth);
                     genderVar = GetReplaceString(model.Gender);
@@ -138,7 +138,7 @@ namespace BEYON.CoreBLL.Service.App
                 String idType = GetReplaceString(model.CertificateType);
                 String birthVar = "";
                 String genderVar = "";
-                if ("外国护照".Equals(idType))
+                if (!"居民身份证".Equals(idType))
                 {
                     birthVar = GetReplaceString(model.Birth);
                     genderVar = GetReplaceString(model.Gender);
@@ -245,7 +245,7 @@ namespace BEYON.CoreBLL.Service.App
                 String idType = GetReplaceString(model.CertificateType);
                 String birthVar = "";
                 String genderVar = "";
-                if ("外国护照".Equals(idType))
+                if (!"居民身份证".Equals(idType))
                 {
                     birthVar = GetReplaceString(model.Birth);
                     genderVar = GetReplaceString(model.Gender);

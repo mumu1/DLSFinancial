@@ -42,7 +42,8 @@ namespace Beyon.Test
 
             Excel.Range tipRange = worksheet.get_Range(worksheet.Cells[2, 1], worksheet.Cells[2, columnCount]);//选取单元格
             tipRange.Merge(true);//合并单元格
-            tipRange.Value = "我声明，以下填写的内容是完全真实的，如有不实，由此产生的一切后果由本人承担。---声明人签字:           "; //设置单元格内文本
+            tipRange.RowHeight = 30;
+            tipRange.Value = "我声明，以下填写的内容是完全真实的，且本人与收款人不存在夫妻关系、直系血亲关系、三代以内旁系血亲关系以及近姻亲关系。"+"\n"+"如有不实，由此产生的一切后果由本人承担。---声明人签字:           "; //设置单元格内文本
             tipRange.Font.Name = "宋体";//设置字体
             tipRange.Font.Size = 10;//字体大小
             tipRange.Font.Bold = true;//加粗显示

@@ -31,20 +31,8 @@ namespace BEYON.Domain.Data.Repositories.App
 	/// <summary>
     ///   仓储操作层接口——用户信息
     /// </summary>
-    public partial interface ITaxPerOrderRepository : IRepository<TaxPerOrder, Int32>
+    public partial interface IBankFullNameRepository : IRepository<BankFullName, Int32>
     {
-        IList<TaxPerOrder> GetTaxPerOrderBySerialNumber(String serialNumber);
-
-        Double GetPayTaxAmount(String certificateID, String taxOrNot);
-
-        Double GetPayTaxAmountY(String certificateID);
-
-        Double GetDeductTaxSum(String certificateID);
-
-        Double GetTotalAmountYByPjNum(String projectNumber);
-
-
-        int GetCashCount(String certificateID);
-
+        BankFullName GetBankFullCodeByFullName(String bankFullName);
     }
 }

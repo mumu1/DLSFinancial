@@ -122,6 +122,26 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
             return amount;
         }
 
+        //都按税前加和,count total amountY by taskID
+        public Double GetTotalAmountYByPjNum(String projectNumber)
+        {
+           
+            Double amount = 0.0;
+
+            var amountTemp = (from p in Context.TaxPerOrders.Where(w => w.ProjectNumber.ToLower() == projectNumber.ToLower() && w.AmountY != null)
+                              group p by p.ProjectNumber.ToLower() into g
+                              select new
+                              {
+                                  TotalAmountY = g.Sum(t => t.AmountY)
+                              }).SingleOrDefault();
+            if (amountTemp != null)
+            {
+                amount = amountTemp.TotalAmountY;
+            }
+
+            return amount;
+        }
+
         public int GetCashCount(String certificateID)
         {
             int count = 0;

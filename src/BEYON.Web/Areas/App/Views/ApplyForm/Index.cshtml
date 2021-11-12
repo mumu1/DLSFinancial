@@ -289,7 +289,13 @@
                   {
                       text: "列显示",
                       extend: 'colvis'
-                  }
+                  },
+                   {
+                       text: "刷新",
+                       action: function (e, dt, node, config) {
+                           dt.ajax.reload();
+                       }
+                   }
             ]
         }
 
@@ -515,12 +521,17 @@
                                     type: "POST",
                                     url: "@Url.Action("ApplyAudit")",
                                     data: $('#apply-audit-form').serialize(),
-                                    success: function (result) {                                      
+                                    success: function (result) {
+                                        $('#datatable_tabletools').DataTable().ajax.reload();
+                                        if (result.search("availableFund insufficient") != -1) {
+                                        //if (result == "availableFund insufficient") {
+                                            alert("本申请单存在异常：" + result + "。该课题经费不足，该课题不支持赤字运行。");
+                                        }
                                         if (result == "sum error") {
                                             alert("本申请单存在异常：总金额与申请单内包含的记录总金额不符，请联系经办人检查并删除本申请单内异常多余的记录。");
-                                        } else {
-                                            $('#datatable_tabletools').DataTable().ajax.reload();
-                                        }
+                                        }                                        
+                                        
+                                            
                                     },
                                     error: function (data) {
                                         toastr.error(data.responseText);

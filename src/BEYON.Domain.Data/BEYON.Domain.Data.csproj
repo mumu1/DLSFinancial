@@ -67,6 +67,8 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropertyUtil.cs" />
+    <Compile Include="Repositories\App\IBankFullNameRepository.generated.cs" />
+    <Compile Include="Repositories\App\Impl\BankFullNameRepository.generated.cs" />
     <Compile Include="Repositories\App\Impl\TaxBaseEveryMonthRepository.generated.cs" />
     <Compile Include="Repositories\App\Impl\TopContactsRepository.generated.cs" />
     <Compile Include="Repositories\App\Impl\SafeguardTimeRepository.generated.cs" />
