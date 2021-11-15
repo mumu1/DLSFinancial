@@ -66,5 +66,11 @@ namespace BEYON.ViewModel.App
 
         [Display(Name = "报销合计")]
         public Double Summation { get; set; }
+
+        //[Display(Name = "工资税额合计")]
+        //public Double Tax { get; set; }
+
+        //[Display(Name = "劳务税额合计")]
+        //public Double ServiceTax { get; set; }
     }
 }

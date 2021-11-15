@@ -20,9 +20,9 @@ namespace BEYON.CoreBLL.Service.App.Interface
         OperationResult Update(ApplicationForm model);
         OperationResult Import(String fileName, Service.Excel.ColumnMap[] columns);
 
-        IList<ApplicationForm> GetApplicationFromByUser(String userName);
+        IList<ApplicationForm> GetApplicationFromByUser(String userName, int start, int limit, String search);
 
-        IList<ApplicationForm> GetApplicationFromByAdmin();
+        IList<ApplicationForm> GetApplicationFromByAdmin(int start, int limit, String search);
 
     }
 }

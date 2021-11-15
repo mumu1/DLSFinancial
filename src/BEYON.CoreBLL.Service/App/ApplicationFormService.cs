@@ -9,6 +9,7 @@ using BEYON.Domain.Model.App;
 using BEYON.ViewModel.App;
 using BEYON.CoreBLL.Service.Excel;
 using EntityFramework.Extensions;
+using BEYON.Component.Data.EF;
 
 namespace BEYON.CoreBLL.Service.App
 {
@@ -205,14 +206,41 @@ namespace BEYON.CoreBLL.Service.App
             }
         }
 
-        public IList<ApplicationForm> GetApplicationFromByUser(String userName)
+        public IList<ApplicationForm> GetApplicationFromByUser(String userName, int start, int limit, String search)
         {
-            return _ApplicationFormRepository.GetApplicationFromByUser(userName);
+            var applys = _ApplicationFormRepository.GetApplicationFromByUser(userName, start, limit,search);
+            Dictionary<String, IList<Double>> totalTaxs = new Dictionary<string, IList<Double>>();
+            _ApplicationFormRepository.GetSerNumberTotalTax(ref totalTaxs);
+            for (var i = 0; i < applys.Count; i++)
+            {
+                var item = applys[i];
+                if (totalTaxs.ContainsKey(item.SerialNumber))
+                {
+                    var taxs = totalTaxs[item.SerialNumber];
+                    item.Tax = Math.Round(taxs[0], 2);
+                    item.ServiceTax = Math.Round(taxs[1], 2);
+                }
+            }
+            return applys;
         }
 
-        public IList<ApplicationForm> GetApplicationFromByAdmin()
+        public IList<ApplicationForm> GetApplicationFromByAdmin(int start, int limit, String search)
         {
-            return _ApplicationFormRepository.GetApplicationFromByAdmin();
+            var applys = _ApplicationFormRepository.GetApplicationFromByAdmin(start,limit, search);
+            
+            Dictionary<String, IList<Double>> totalTaxs = new Dictionary<string, IList<Double>>();
+            _ApplicationFormRepository.GetSerNumberTotalTax(ref totalTaxs);
+            for (var i = 0; i < applys.Count; i++)
+            {
+                var item = applys[i];
+                if(totalTaxs.ContainsKey(item.SerialNumber))
+                {
+                    var taxs = totalTaxs[item.SerialNumber];
+                    item.Tax = Math.Round(taxs[0],2);
+                    item.ServiceTax = Math.Round(taxs[1],2);
+                }
+            }
+            return applys;
         }
 
     }

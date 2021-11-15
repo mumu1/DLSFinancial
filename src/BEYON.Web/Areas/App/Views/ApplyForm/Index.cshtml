@@ -303,8 +303,6 @@
         var table = $('#datatable_tabletools').dataTable({
             dom: 'Bfrtip',
             colReorder: true,
-            ajax: '@Url.Action("GetAllData")',
-            searching: true,
             ordering: true,
             select: true,
             info: true,
@@ -312,15 +310,18 @@
             sort: true, //是否启动各个字段的排序功能
             stateSave: false,
             stateDuration: 60 * 60 * 12,
-            iDisplayLength: 15,
+            iDisplayLength: 30,
             autoWidth: true,
             bProcessing: true,
             paging: true,
+            serverSide: true,  //启用服务器端分页
+            searching: true,  //禁用原生搜索
             "sScrollY": "100%",
             "sScrollX": "100%",
             "sScrollXInner": "100%",
+            ajax: '@Url.Action("GetAllData")',
             sAjaxSource: '@Url.Action("GetAllData")',
-            order: [[11, "desc"]],
+            order: [[13, "desc"]],
             buttons: buttons,
             columns: [
                 { data: "SerialNumber", title: "申请单流水号" },
@@ -329,6 +330,8 @@
                 { data: "ProjectDirector", title: "课题负责人" },
                 { data: "Agent", title: "经办人" },
                 { data: "Summation", title: "报销合计" },
+                { data: "Tax", title: "工资税额合计" },
+                { data: "ServiceTax", title: "劳务税额合计" },
                 { data: "PaymentType", title: "支付类型" },
                 {
                     data: "SubmitTime", title: "提交时间", type: "date",
@@ -351,6 +354,7 @@
                 { data: "UpdateDate", title: "更新时间", visible: false }
             ],
             "fnServerData": function (sSource, aoData, fnCallback) {
+                console.debug("fnServerData", aoData);
                 $.ajax({
                     "type": 'get',
                     "url": sSource,

@@ -69,17 +69,32 @@ namespace BEYON.Web.Areas.App.Controllers
             var userID = Int32.Parse(userid);
             User user = this._userService.Users.FirstOrDefault(t => t.Id == userID);
             var role = user.Roles.First();
+            var start = 0;
+            var limit = 0;
+
+            if(Request.Params["iDisplayStart"] != null)
+            {
+                start = Int32.Parse(Request.Params["iDisplayStart"]);
+                limit = Int32.Parse(Request.Params["iDisplayLength"]);
+            }
+
+            var searchText = Request.Params["sSearch"];
+            
+            ////数据起始位置
+            //String startIndex = System.Web.HttpContext.Current.Request.getParameter("startIndex");
+            ////数据长度
+            //String pageSize = request.getParameter("pageSize");
 
             if (role.RoleName == "系统管理员")
             {
-                var result = this._applicationFormService.GetApplicationFromByAdmin();
+                var result = this._applicationFormService.GetApplicationFromByAdmin(start, limit, searchText);
                 var jsonResult = Json(new { total = result.Count, data = result }, JsonRequestBehavior.AllowGet);
                 jsonResult.MaxJsonLength = Int32.MaxValue;
                 return jsonResult;
             }
             else
             {
-                var result = _applicationFormService.GetApplicationFromByUser(user.UserName);
+                var result = _applicationFormService.GetApplicationFromByUser(user.UserName, start, limit, searchText);
                 //var result = this._applicationFormService.ApplicationForms.ToList();
                 var jsonResult = Json(new { total = result.Count, data = result }, JsonRequestBehavior.AllowGet);
                 jsonResult.MaxJsonLength = Int32.MaxValue;

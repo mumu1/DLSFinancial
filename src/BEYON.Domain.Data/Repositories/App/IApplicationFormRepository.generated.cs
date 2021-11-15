@@ -33,7 +33,9 @@ namespace BEYON.Domain.Data.Repositories.App
     /// </summary>
     public partial interface IApplicationFormRepository : IRepository<ApplicationForm, Int32>
     {
-        IList<ApplicationForm> GetApplicationFromByUser(String userName);
-        IList<ApplicationForm> GetApplicationFromByAdmin();
+        IList<ApplicationForm> GetApplicationFromByUser(String userName, int start, int limit, String search);
+        IList<ApplicationForm> GetApplicationFromByAdmin(int start, int limit, String search);
+
+        void GetSerNumberTotalTax(ref Dictionary<String, IList<Double>> outSerTotalTax);
     }
 }

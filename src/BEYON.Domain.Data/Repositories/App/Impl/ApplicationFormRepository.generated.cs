@@ -21,11 +21,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Npgsql;
+using Npgsql.Schema;
 using BEYON.Component.Data;
 using BEYON.Component.Data.EF;
 using BEYON.Component.Data.EF.Interface;
 using BEYON.Domain.Model.App;
-
 
 namespace BEYON.Domain.Data.Repositories.App.Impl
 {
@@ -40,18 +41,156 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
             
         }
 
-        public IList<ApplicationForm> GetApplicationFromByUser(String userName)
+        public IList<ApplicationForm> GetApplicationFromByUser(String userName, int start, int limit, String search)
         {
-            var q = from p in Context.ApplicationForms.Where(w => w.UserName == userName).OrderByDescending(t => t.UpdateDate)
-                        select p;
-            return q.ToList();
+            if (String.IsNullOrWhiteSpace(search))
+            {
+                if (limit > 0)
+                {
+                    var q = from p in Context.ApplicationForms.Where(w => w.UserName == userName).OrderByDescending(t => t.UpdateDate).Skip(start).Take(limit)
+                            select p;
+                    return q.ToList();
+                }
+                else
+                {
+                    var q = from p in Context.ApplicationForms.Where(w => w.UserName == userName).OrderByDescending(t => t.UpdateDate)
+                            select p;
+                    return q.ToList();
+                }
+            }
+            else
+            {
+                if (limit > 0)
+                {
+                    var q = from p in Context.ApplicationForms.Where(w => w.UserName == userName
+                                && (w.ProjectDirector.Contains(search) || 
+                                w.Agent.Contains(search) ||
+                                w.ProjectNumber.Contains(search))
+                                ).OrderByDescending(t => t.UpdateDate).Skip(start).Take(limit)
+                            select p;
+                    return q.ToList();
+                }
+                else
+                {
+                    var q = from p in Context.ApplicationForms.Where(w => w.UserName == userName
+                                && (w.ProjectDirector.Contains(search) ||
+                                w.Agent.Contains(search) ||
+                                w.ProjectNumber.Contains(search))
+                                ).OrderByDescending(t => t.UpdateDate)
+                            select p;
+                    return q.ToList();
+                }
+            }
+            
         }
 
-        public IList<ApplicationForm> GetApplicationFromByAdmin()
+        public IList<ApplicationForm> GetApplicationFromByAdmin(int start, int limit, String search)
         {
-            var q = from p in Context.ApplicationForms.Where(w => w.AuditStatus == "待审核" || w.AuditStatus == "审核通过" || w.AuditStatus == "已退回").OrderByDescending(t => t.UpdateDate)
-                    select p;
-            return q.ToList();
+            if (String.IsNullOrWhiteSpace(search))
+            {
+                if (limit > 0)
+                {
+                    var q = from p in Context.ApplicationForms.Where(w => w.AuditStatus == "待审核" || w.AuditStatus == "审核通过" || w.AuditStatus == "已退回").OrderByDescending(t => t.UpdateDate).Skip(start).Take(limit)
+                            select p;
+                    return q.ToList();
+                }
+                else
+                {
+                    var q = from p in Context.ApplicationForms.Where(w => w.AuditStatus == "待审核" || w.AuditStatus == "审核通过" || w.AuditStatus == "已退回").OrderByDescending(t => t.UpdateDate)
+                            select p;
+                    return q.ToList();
+                }
+            }
+            else
+            {
+                if (limit > 0)
+                {
+                    var q = from p in Context.ApplicationForms.Where(w => (w.AuditStatus == "待审核" || w.AuditStatus == "审核通过" || w.AuditStatus == "已退回") &&
+                                (w.ProjectDirector.Contains(search) ||
+                                w.Agent.Contains(search) ||
+                                w.ProjectNumber.Contains(search))).OrderByDescending(t => t.UpdateDate).Skip(start).Take(limit)
+                            select p;
+                    return q.ToList();
+                }
+                else
+                {
+                    var q = from p in Context.ApplicationForms.Where(w => (w.AuditStatus == "待审核" || w.AuditStatus == "审核通过" || w.AuditStatus == "已退回") &&
+                                (w.ProjectDirector.Contains(search) ||
+                                w.Agent.Contains(search) ||
+                                w.ProjectNumber.Contains(search))).OrderByDescending(t => t.UpdateDate)
+                            select p;
+                    return q.ToList();
+                }
+            }
+        }
+
+        public void GetSerNumberTotalTax(ref Dictionary<String, IList<Double>> outSerTotalTax)
+        {
+            try
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.Append("SELECT ");
+                //1.添加列名
+                sb.Append("a.\"SerialNumber\" as C1,");
+                sb.Append("a.\"Tax\" as C5,");
+                sb.Append("a.\"PersonType\" as C8 ");
+                //2.添加表
+                sb.Append(" FROM  dbo.\"TaxPerOrders\" a ");
+                //3.条件
+                sb.Append(" ORDER BY C1 ASC");
+
+                var connectString = System.Configuration.ConfigurationManager.ConnectionStrings["BeyonDBGuMu"];
+                using (var conntion = new NpgsqlConnection(connectString.ToString()))
+                {
+                    conntion.Open();
+                    using (var command = conntion.CreateCommand())
+                    {
+                        command.CommandText = sb.ToString();
+                        using (NpgsqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                var serNumber = reader["C1"].ToString();
+                                
+                                var tax = String.IsNullOrEmpty(reader["C5"].ToString()) ? 0 : Convert.ToSingle(reader["C5"]);
+                                var personType = reader["C8"].ToString();
+
+                                //返回前端显示结果数据
+                                if (!outSerTotalTax.ContainsKey(serNumber))
+                                {
+                                    IList<Double> result = new List<Double>(2) { 0.00, 0.00 };
+                                    if (personType.Equals("所内"))
+                                    {
+                                        result[0] = tax;
+                                    }
+                                    else
+                                    {
+                                        result[1] = tax;
+                                    }
+                                    outSerTotalTax.Add(serNumber, result);
+                                }
+                                else
+                                {
+                                    var listObject = outSerTotalTax[serNumber];
+                                    if (personType.Equals("所内"))
+                                    {
+                                        listObject[0] = listObject[0] + tax;
+                                    }
+                                    else
+                                    {
+                                        listObject[1] = listObject[1] + tax;
+                                    }
+                                    outSerTotalTax[serNumber] = listObject;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                //_log.Error(ex);
+            }
         }
      }
 }
