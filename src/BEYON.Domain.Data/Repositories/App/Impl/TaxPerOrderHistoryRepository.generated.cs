@@ -38,6 +38,60 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
             : base()
         { }
 
+        public int GetTotal(String search)
+        {
+            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            sb.Append("SELECT COUNT(*) FROM \"dbo\".\"TaxPerOrderHistories\" ");
+            if (!String.IsNullOrWhiteSpace(search))
+            {
+                sb.Append(String.Format(" WHERE \"ProjectDirector\" like '%{0}%' or \"Agent\" like '%{0}%' or \"ProjectNumber\" like '%{0}%' or \"SerialNumber\" like '%{0}%'", search));
+                sb.Append(String.Format(" OR \"CertificateID\" like '%{0}%' ", search));
+                sb.Append(String.Format(" OR \"Name\" like '%{0}%' ", search));
+                sb.Append(String.Format(" OR \"AccountNumber\" like '%{0}%' ", search));
+            }
+
+            //3.执行SQL
+            var connectString = System.Configuration.ConfigurationManager.ConnectionStrings["BeyonDBGuMu"];
+            using (var conntion = new NpgsqlConnection(connectString.ToString()))
+            {
+                conntion.Open();
+                using (var command = conntion.CreateCommand())
+                {
+                    command.CommandText = sb.ToString();
+                    return int.Parse(command.ExecuteScalar().ToString());
+                }
+            }
+        }
+
+        public IList<TaxPerOrderHistory> GetAllData(String search, String sortName, String sortType, int start,int limit)
+        {
+            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            sb.Append("SELECT \"Id\", \"SerialNumber\", \"ProjectNumber\", \"TaskName\", \"Period\", \"RefundType\", \"Name\", \"ProjectDirector\", \"Agent\", \"PersonType\", \"CertificateType\", \"CertificateID\", \"Amount\", \"TaxOrNot\", \"Tax\", \"AmountY\", \"AmountX\", \"Bank\", \"BankDetailName\", \"AccountNumber\", \"AccountName\", \"PaymentType\", \"ProvinceCity\", \"CityField\", \"Tele\", \"UpdateDate\" FROM \"dbo\".\"TaxPerOrderHistories\" ");
+            if (!String.IsNullOrWhiteSpace(search))
+            {
+                sb.Append(String.Format(" WHERE \"ProjectDirector\" like '%{0}%' or \"Agent\" like '%{0}%' or \"ProjectNumber\" like '%{0}%' or \"SerialNumber\" like '%{0}%'", search));
+                sb.Append(String.Format(" OR \"CertificateID\" like '%{0}%' ", search));
+                sb.Append(String.Format(" OR \"Name\" like '%{0}%' ", search));
+                sb.Append(String.Format(" OR \"AccountNumber\" like '%{0}%' ", search));
+            }
+
+            if (sortName != "UpdateDate")
+            {
+                sb.Append(" ORDER BY \"" + sortName + "\" " + sortType + ", \"UpdateDate\" DESC ");
+            }
+            else
+            {
+                sb.Append(" ORDER BY \"" + sortName + "\" " + sortType);
+            }
+
+            if (limit > 0)
+            {
+                sb.Append(String.Format(" offset {0} limit {1}", start, limit));
+            }
+
+            return Context.TaxPerOrderHistorys.SqlQuery(sb.ToString()).ToList();
+        }
+
         public void InsertOrUpdate(TaxPerOrderHistory contact)
         {
             //1.构造插入或更新SQL

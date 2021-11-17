@@ -34,5 +34,9 @@ namespace BEYON.Domain.Data.Repositories.App
     public partial interface ITaxPerOrderHistoryRepository : IRepository<TaxPerOrderHistory, Int32>
     {
         void InsertOrUpdate(TaxPerOrderHistory contact);
+
+        int GetTotal(String search);
+
+        IList<TaxPerOrderHistory> GetAllData(String search, String sortName, String sortType, int start, int limit);
     }
 }

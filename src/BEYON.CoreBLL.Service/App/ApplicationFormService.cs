@@ -206,27 +206,32 @@ namespace BEYON.CoreBLL.Service.App
             }
         }
 
-        public IList<ApplicationForm> GetApplicationFromByUser(String userName, int start, int limit, String search)
+        public int GetTotal(String userName, String search)
         {
-            var applys = _ApplicationFormRepository.GetApplicationFromByUser(userName, start, limit,search);
-            Dictionary<String, IList<Double>> totalTaxs = new Dictionary<string, IList<Double>>();
-            _ApplicationFormRepository.GetSerNumberTotalTax(ref totalTaxs);
-            for (var i = 0; i < applys.Count; i++)
-            {
-                var item = applys[i];
-                if (totalTaxs.ContainsKey(item.SerialNumber))
-                {
-                    var taxs = totalTaxs[item.SerialNumber];
-                    item.Tax = Math.Round(taxs[0], 2);
-                    item.ServiceTax = Math.Round(taxs[1], 2);
-                }
-            }
+            return _ApplicationFormRepository.GetTotal(userName, search);
+        }
+
+        public IList<ApplicationForm> GetApplicationFromByUser(String userName, int start, int limit, String search, String sortName, String sortType)
+        {
+            var applys = _ApplicationFormRepository.GetApplicationFromByUser(userName, start, limit,search, sortName, sortType);
+            //Dictionary<String, IList<Double>> totalTaxs = new Dictionary<string, IList<Double>>();
+            //_ApplicationFormRepository.GetSerNumberTotalTax(ref totalTaxs);
+            //for (var i = 0; i < applys.Count; i++)
+            //{
+            //    var item = applys[i];
+            //    if (totalTaxs.ContainsKey(item.SerialNumber))
+            //    {
+            //        var taxs = totalTaxs[item.SerialNumber];
+            //        item.Tax = Math.Round(taxs[0], 2);
+            //        item.ServiceTax = Math.Round(taxs[1], 2);
+            //    }
+            //}
             return applys;
         }
 
-        public IList<ApplicationForm> GetApplicationFromByAdmin(int start, int limit, String search)
+        public IList<ApplicationForm> GetApplicationFromByAdmin(int start, int limit, String search, String sortName, String sortType)
         {
-            var applys = _ApplicationFormRepository.GetApplicationFromByAdmin(start,limit, search);
+            var applys = _ApplicationFormRepository.GetApplicationFromByAdmin(start,limit, search, sortName, sortType);
             
             Dictionary<String, IList<Double>> totalTaxs = new Dictionary<string, IList<Double>>();
             _ApplicationFormRepository.GetSerNumberTotalTax(ref totalTaxs);

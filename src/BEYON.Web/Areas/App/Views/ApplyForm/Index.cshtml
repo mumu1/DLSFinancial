@@ -300,30 +300,68 @@
         }
 
 
-        var table = $('#datatable_tabletools').dataTable({
-            dom: 'Bfrtip',
-            colReorder: true,
-            ordering: true,
-            select: true,
-            info: true,
-            paginate: false, //是否显示（应用）分页器
-            sort: true, //是否启动各个字段的排序功能
-            stateSave: false,
-            stateDuration: 60 * 60 * 12,
-            iDisplayLength: 30,
-            autoWidth: true,
-            bProcessing: true,
-            paging: true,
-            serverSide: true,  //启用服务器端分页
-            searching: true,  //禁用原生搜索
-            "sScrollY": "100%",
-            "sScrollX": "100%",
-            "sScrollXInner": "100%",
-            ajax: '@Url.Action("GetAllData")',
-            sAjaxSource: '@Url.Action("GetAllData")',
-            order: [[13, "desc"]],
-            buttons: buttons,
-            columns: [
+        var columns = [
+                { data: "SerialNumber", title: "申请单流水号" },
+                { data: "ProjectNumber", title: "课题号" },
+                { data: "RefundType", title: "报销事由" },
+                { data: "ProjectDirector", title: "课题负责人" },
+                { data: "Agent", title: "经办人" },
+                { data: "Summation", title: "报销合计" },
+                
+                { data: "PaymentType", title: "支付类型" },
+                {
+                    data: "SubmitTime", title: "提交时间", type: "date",
+                    "render": function (data, type, full, meta) {
+                        var dtStart = new Date(parseInt(data.substr(6)));
+                        return dtStart.getFullYear() + '-' + (dtStart.getMonth() +1)+ '-' + dtStart.getDate();
+                        //return dtStart.toString();
+                    }
+                },
+                { data: "AuditStatus", title: "审核状态" },
+                {
+                    data: "AuditTime", title: "审核时间", type: "date", visible: false,
+                    "render": function (data, type, full, meta) {
+                        var dtStart = new Date(parseInt(data.substr(6)));
+                        return dtStart.getFullYear() + '-' + (dtStart.getMonth()+1) + '-' + dtStart.getDate();
+                        //return dtStart.toString();
+                    }
+                },
+                { data: "AuditOpinion", title: "审核意见", visible: false },
+                { data: "UpdateDate", title: "更新时间", visible: false }
+        ];
+
+        var orderdatas = [[11, "desc"]];
+        var columndatas = [
+                { data: "SerialNumber", title: "申请单流水号" },
+                { data: "ProjectNumber", title: "课题号" },
+                { data: "RefundType", title: "报销事由" },
+                { data: "ProjectDirector", title: "课题负责人" },
+                { data: "Agent", title: "经办人" },
+                { data: "Summation", title: "报销合计" },
+                
+                { data: "PaymentType", title: "支付类型" },
+                {
+                    data: "SubmitTime", title: "提交时间", type: "date",
+                    "render": function (data, type, full, meta) {
+                        var dtStart = new Date(parseInt(data.substr(6)));
+                        return dtStart.getFullYear() + '-' + (dtStart.getMonth() +1)+ '-' + dtStart.getDate();
+                        //return dtStart.toString();
+                    }
+                },
+                { data: "AuditStatus", title: "审核状态" },
+                {
+                    data: "AuditTime", title: "审核时间", type: "date", visible: false,
+                    "render": function (data, type, full, meta) {
+                        var dtStart = new Date(parseInt(data.substr(6)));
+                        return dtStart.getFullYear() + '-' + (dtStart.getMonth()+1) + '-' + dtStart.getDate();
+                        //return dtStart.toString();
+                    }
+                },
+                { data: "AuditOpinion", title: "审核意见", visible: false },
+                { data: "UpdateDate", title: "更新时间", visible: false }
+        ];
+        if ('@Model' === '系统管理员') {
+            columndatas = [
                 { data: "SerialNumber", title: "申请单流水号" },
                 { data: "ProjectNumber", title: "课题号" },
                 { data: "RefundType", title: "报销事由" },
@@ -352,7 +390,35 @@
                 },
                 { data: "AuditOpinion", title: "审核意见", visible: false },
                 { data: "UpdateDate", title: "更新时间", visible: false }
-            ],
+            ];
+
+            orderdatas = [[13, "desc"]]
+        }
+
+        var table = $('#datatable_tabletools').dataTable({
+            dom: 'Bfrtip',
+            colReorder: true,
+            ordering: true,
+            select: true,
+            info: true,
+            paginate: false, //是否显示（应用）分页器
+            sort: true, //是否启动各个字段的排序功能
+            stateSave: false,
+            stateDuration: 60 * 60 * 12,
+            iDisplayLength: 15,
+            autoWidth: true,
+            bProcessing: true,
+            paging: true,
+            serverSide: true,  //启用服务器端分页
+            searching: true,  //禁用原生搜索
+            "sScrollY": "100%",
+            "sScrollX": "100%",
+            "sScrollXInner": "100%",
+            ajax: '@Url.Action("GetAllData")',
+            sAjaxSource: '@Url.Action("GetAllData")',
+            order: orderdatas,
+            buttons: buttons,
+            columns: columndatas,
             "fnServerData": function (sSource, aoData, fnCallback) {
                 console.debug("fnServerData", aoData);
                 $.ajax({
@@ -528,11 +594,13 @@
                                     success: function (result) {
                                         $('#datatable_tabletools').DataTable().ajax.reload();
                                         if (result.search("availableFund insufficient") != -1) {
-                                        //if (result == "availableFund insufficient") {
-                                            alert("本申请单存在异常：" + result + "。该课题经费不足，该课题不支持赤字运行。");
+                                            //if (result == "availableFund insufficient") {
+                                            toastr.error("本申请单存在异常：" + result + "。该课题经费不足，该课题不支持赤字运行。");
+                                            //alert("本申请单存在异常：" + result + "。该课题经费不足，该课题不支持赤字运行。");
                                         }
                                         if (result == "sum error") {
-                                            alert("本申请单存在异常：总金额与申请单内包含的记录总金额不符，请联系经办人检查并删除本申请单内异常多余的记录。");
+                                            toastr.error("本申请单存在异常：总金额与申请单内包含的记录总金额不符，请联系经办人检查并删除本申请单内异常多余的记录。");
+                                            //alert("本申请单存在异常：总金额与申请单内包含的记录总金额不符，请联系经办人检查并删除本申请单内异常多余的记录。");
                                         }                                        
                                         
                                             

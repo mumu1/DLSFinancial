@@ -41,87 +41,112 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
             
         }
 
-        public IList<ApplicationForm> GetApplicationFromByUser(String userName, int start, int limit, String search)
+        public int GetTotal(String userName, String search)
         {
-            if (String.IsNullOrWhiteSpace(search))
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append("SELECT COUNT(*) FROM \"dbo\".\"ApplicationForms\" ");
+            if (!String.IsNullOrEmpty(userName))
+                sb.Append(String.Format(" Where (\"UserName\" = '{0}'  ) ", userName));
+            else
+                sb.Append(" Where (\"AuditStatus\" = '待审核' or \"AuditStatus\" = '审核通过' or \"AuditStatus\" = '已退回' ) ");
+
+            if (!String.IsNullOrWhiteSpace(search))
             {
-                if (limit > 0)
+                sb.Append(String.Format(" AND (\"ProjectDirector\" like '%{0}%'", search));
+                sb.Append(String.Format(" or \"Agent\" like '%{0}%'", search));
+                sb.Append(String.Format(" or \"ProjectNumber\" like '%{0}%'", search));
+                sb.Append(String.Format(" or \"SerialNumber\" like '%{0}%'", search));
+                sb.Append(String.Format(" or \"AuditStatus\" like '%{0}%'", search));
+                sb.Append(")");
+            }
+
+            //3.执行SQL
+            var connectString = System.Configuration.ConfigurationManager.ConnectionStrings["BeyonDBGuMu"];
+            using (var conntion = new NpgsqlConnection(connectString.ToString()))
+            {
+                conntion.Open();
+                using (var command = conntion.CreateCommand())
                 {
-                    var q = from p in Context.ApplicationForms.Where(w => w.UserName == userName).OrderByDescending(t => t.UpdateDate).Skip(start).Take(limit)
-                            select p;
-                    return q.ToList();
+                    command.CommandText = sb.ToString();
+                    return int.Parse(command.ExecuteScalar().ToString());
                 }
-                else
-                {
-                    var q = from p in Context.ApplicationForms.Where(w => w.UserName == userName).OrderByDescending(t => t.UpdateDate)
-                            select p;
-                    return q.ToList();
-                }
+            }
+
+        }
+        public IList<ApplicationForm> GetApplicationFromByUser(String userName, int start, int limit, String search, String sortName, String sortType)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append("SELECT \"Id\", \"SerialNumber\", \"ProjectNumber\", \"TaskName\", \"RefundType\", \"DepartmentName\", \"ProjectDirector\", \"Agent\", \"PaymentType\", \"AuditStatus\", \"SubmitTime\", \"AuditTime\", \"AuditOpinion\", \"ApplyDesp\", \"UserName\", \"Summation\", 0 as \"Tax\", 0 as \"ServiceTax\", \"UpdateDate\" FROM \"dbo\".\"ApplicationForms\" ");
+            sb.Append(String.Format(" Where (\"UserName\" = '{0}'  ) ", userName));
+            if (!String.IsNullOrWhiteSpace(search))
+            {
+                sb.Append(String.Format(" AND (\"ProjectDirector\" like '%{0}%'", search));
+                sb.Append(String.Format(" or \"Agent\" like '%{0}%'", search));
+                sb.Append(String.Format(" or \"ProjectNumber\" like '%{0}%'", search));
+                sb.Append(String.Format(" or \"SerialNumber\" like '%{0}%'", search));
+                sb.Append(String.Format(" or \"AuditStatus\" like '%{0}%'", search));
+                sb.Append(")");
+            }
+
+            if (sortName != "UpdateDate")
+            {
+                sb.Append(" ORDER BY \"" + sortName + "\" " + sortType + ", \"UpdateDate\" DESC ");
             }
             else
             {
-                if (limit > 0)
-                {
-                    var q = from p in Context.ApplicationForms.Where(w => w.UserName == userName
-                                && (w.ProjectDirector.Contains(search) || 
-                                w.Agent.Contains(search) ||
-                                w.ProjectNumber.Contains(search))
-                                ).OrderByDescending(t => t.UpdateDate).Skip(start).Take(limit)
-                            select p;
-                    return q.ToList();
-                }
-                else
-                {
-                    var q = from p in Context.ApplicationForms.Where(w => w.UserName == userName
-                                && (w.ProjectDirector.Contains(search) ||
-                                w.Agent.Contains(search) ||
-                                w.ProjectNumber.Contains(search))
-                                ).OrderByDescending(t => t.UpdateDate)
-                            select p;
-                    return q.ToList();
-                }
+                sb.Append(" ORDER BY \"" + sortName + "\" " + sortType);
             }
-            
+
+            if (limit > 0)
+            {
+                sb.Append(String.Format(" offset {0} limit {1}", start, limit));
+            }
+            return Context.ApplicationForms.SqlQuery(sb.ToString()).ToList();
         }
 
-        public IList<ApplicationForm> GetApplicationFromByAdmin(int start, int limit, String search)
+        public IList<ApplicationForm> GetApplicationFromByAdmin(int start, int limit, String search, String sortName, String sortType)
         {
-            if (String.IsNullOrWhiteSpace(search))
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append("SELECT \"Id\", \"SerialNumber\", \"ProjectNumber\", \"TaskName\", \"RefundType\", \"DepartmentName\", \"ProjectDirector\", \"Agent\", \"PaymentType\", \"AuditStatus\", \"SubmitTime\", \"AuditTime\", \"AuditOpinion\", \"ApplyDesp\", \"UserName\", \"Summation\", 0 as \"Tax\", 0 as \"ServiceTax\", \"UpdateDate\" FROM \"dbo\".\"ApplicationForms\" " );
+            sb.Append(" Where (\"AuditStatus\" = '待审核' or \"AuditStatus\" = '审核通过' or \"AuditStatus\" = '已退回' ) ");
+            if(!String.IsNullOrWhiteSpace(search))
             {
-                if (limit > 0)
+                sb.Append(String.Format(" AND (\"ProjectDirector\" like '%{0}%'", search));
+                sb.Append(String.Format(" or \"Agent\" like '%{0}%'", search));
+                sb.Append(String.Format(" or \"ProjectNumber\" like '%{0}%'", search));
+                sb.Append(String.Format(" or \"SerialNumber\" like '%{0}%'", search));
+                sb.Append(String.Format(" or \"AuditStatus\" like '%{0}%'", search));
+                sb.Append(")");
+            }
+
+            if (sortName != "UpdateDate")
+            {
+                if(sortName == "AuditStatus")
                 {
-                    var q = from p in Context.ApplicationForms.Where(w => w.AuditStatus == "待审核" || w.AuditStatus == "审核通过" || w.AuditStatus == "已退回").OrderByDescending(t => t.UpdateDate).Skip(start).Take(limit)
-                            select p;
-                    return q.ToList();
+                    sb.Append(" ORDER BY CASE when \"AuditStatus\" = '待审核' then 1 ");
+                    sb.Append(" WHEN \"AuditStatus\" = '审核通过' then 2 " );
+                    sb.Append(" WHEN \"AuditStatus\" = '已退回' then 3 ");
+                    sb.Append(" END ");
+                    sb.Append(sortType + ", \"UpdateDate\" DESC ");
                 }
                 else
                 {
-                    var q = from p in Context.ApplicationForms.Where(w => w.AuditStatus == "待审核" || w.AuditStatus == "审核通过" || w.AuditStatus == "已退回").OrderByDescending(t => t.UpdateDate)
-                            select p;
-                    return q.ToList();
+                    sb.Append(" ORDER BY \"" + sortName + "\" " + sortType + ", \"UpdateDate\" DESC ");
                 }
             }
             else
             {
-                if (limit > 0)
-                {
-                    var q = from p in Context.ApplicationForms.Where(w => (w.AuditStatus == "待审核" || w.AuditStatus == "审核通过" || w.AuditStatus == "已退回") &&
-                                (w.ProjectDirector.Contains(search) ||
-                                w.Agent.Contains(search) ||
-                                w.ProjectNumber.Contains(search))).OrderByDescending(t => t.UpdateDate).Skip(start).Take(limit)
-                            select p;
-                    return q.ToList();
-                }
-                else
-                {
-                    var q = from p in Context.ApplicationForms.Where(w => (w.AuditStatus == "待审核" || w.AuditStatus == "审核通过" || w.AuditStatus == "已退回") &&
-                                (w.ProjectDirector.Contains(search) ||
-                                w.Agent.Contains(search) ||
-                                w.ProjectNumber.Contains(search))).OrderByDescending(t => t.UpdateDate)
-                            select p;
-                    return q.ToList();
-                }
+                sb.Append(" ORDER BY \"" + sortName + "\" " + sortType);
             }
+            
+            if (limit > 0)
+            {
+                sb.Append(String.Format(" offset {0} limit {1}", start, limit));
+            }
+            return Context.ApplicationForms.SqlQuery(sb.ToString()).ToList();
         }
 
         public void GetSerNumberTotalTax(ref Dictionary<String, IList<Double>> outSerTotalTax)

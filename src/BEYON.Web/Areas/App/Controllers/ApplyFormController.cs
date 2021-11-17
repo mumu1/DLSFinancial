@@ -74,12 +74,22 @@ namespace BEYON.Web.Areas.App.Controllers
 
             if(Request.Params["iDisplayStart"] != null)
             {
+                //数据起始位置
                 start = Int32.Parse(Request.Params["iDisplayStart"]);
+                //数据长度
                 limit = Int32.Parse(Request.Params["iDisplayLength"]);
             }
 
+            String sortName = null;
+            String sortType = null;
             var searchText = Request.Params["sSearch"];
-            
+            var sortidx = Request.Params["iSortCol_0"];
+            if(!String.IsNullOrEmpty(sortidx))
+            {
+                sortName = Request.Params["mDataProp_"+sortidx];
+                sortType = Request.Params["sSortDir_0"];
+            }
+   
             ////数据起始位置
             //String startIndex = System.Web.HttpContext.Current.Request.getParameter("startIndex");
             ////数据长度
@@ -87,54 +97,21 @@ namespace BEYON.Web.Areas.App.Controllers
 
             if (role.RoleName == "系统管理员")
             {
-                var result = this._applicationFormService.GetApplicationFromByAdmin(start, limit, searchText);
-                var jsonResult = Json(new { total = result.Count, data = result }, JsonRequestBehavior.AllowGet);
+                int total = this._applicationFormService.GetTotal(null, searchText);
+                var result = this._applicationFormService.GetApplicationFromByAdmin(start, limit, searchText,sortName, sortType);
+                var jsonResult = Json(new { status = "success",  recordsTotal = total, recordsFiltered = total, data = result }, JsonRequestBehavior.AllowGet);
                 jsonResult.MaxJsonLength = Int32.MaxValue;
                 return jsonResult;
             }
             else
             {
-                var result = _applicationFormService.GetApplicationFromByUser(user.UserName, start, limit, searchText);
+                int total = this._applicationFormService.GetTotal(user.UserName, searchText);
+                var result = _applicationFormService.GetApplicationFromByUser(user.UserName, start, limit, searchText, sortName, sortType);
                 //var result = this._applicationFormService.ApplicationForms.ToList();
-                var jsonResult = Json(new { total = result.Count, data = result }, JsonRequestBehavior.AllowGet);
+                var jsonResult = Json(new { status = "success", recordsTotal = total, recordsFiltered = total, data = result }, JsonRequestBehavior.AllowGet);
                 jsonResult.MaxJsonLength = Int32.MaxValue;
                 return jsonResult;
             }
-
-            //var search = HttpContext.Request.Params["sSearch"].ToString();
-            //var sortOrder = HttpContext.Request.Params["sSortDir_0"].ToString();
-            //var sortCol = HttpContext.Request.Params["iSortCol_0"].ToString();
-            //var echo = int.Parse(HttpContext.Request.Params["sEcho"]);
-            //var displayLength = int.Parse(HttpContext.Request.Params["iDisplayLength"]);
-            //var displayStart = int.Parse(HttpContext.Request.Params["iDisplayStart"]);
-            //var itemsToSkip = displayStart == 0 ? 0 : displayStart + 1;
-            //var sortName = GetSortCol(sortCol);
-            //IList<ApplicationForm> records;
-            //if (role.RoleName == "系统管理员")
-            //{
-            //    records = this._applicationFormService.GetApplicationFromByAdmin(search, sortName, sortOrder);
-            //}
-            //else
-            //{
-            //    records = _applicationFormService.GetApplicationFromByUser(user.UserName, search, sortName, sortOrder);
-            //}
-
-     
-            //var orderedResults = sortOrder == "asc"
-            //                  ? records.OrderBy(o => o.UpdateDate)
-            //                  : records.OrderByDescending(o => o.UpdateDate);
-
-            //var pagedResults = orderedResults.Skip(itemsToSkip).Take(displayLength).ToList();
-
-            //return Json(new
-            //{
-            //    sEcho = echo,
-            //    recordsTotal = records.Count,
-            //    recordsFiltered = records.Count,
-            //    iTotalRecords = records.Count,
-            //    iTotalDisplayRecords = records.Count,
-            //    aaData = pagedResults
-            //}, JsonRequestBehavior.AllowGet);
         }
 
         private String GetSortCol(String sortCol)

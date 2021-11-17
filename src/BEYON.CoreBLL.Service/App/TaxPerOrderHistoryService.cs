@@ -106,5 +106,15 @@ namespace BEYON.CoreBLL.Service.App
         {
             this._TaxPerOrderHistoryRepository.InsertOrUpdate(contact);
         }
+
+        public int GetTotal(String search)
+        {
+            return this._TaxPerOrderHistoryRepository.GetTotal(search);
+        }
+
+        public IList<TaxPerOrderHistory> GetAllData(String search, String sortName, String sortType, int start, int limit)
+        {
+            return this._TaxPerOrderHistoryRepository.GetAllData(search, sortName, sortType, start, limit);
+        }
     }
 }

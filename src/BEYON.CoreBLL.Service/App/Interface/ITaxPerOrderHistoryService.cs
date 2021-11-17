@@ -19,5 +19,8 @@ namespace BEYON.CoreBLL.Service.App.Interface
         OperationResult Update(TaxPerOrderHistory model, bool isSave = true);
 
         void InsertOrUpdate(TaxPerOrderHistory contact);
+
+        int GetTotal(String search);
+        IList<TaxPerOrderHistory> GetAllData(String search, String sortName, String sortType, int start, int limit);
     }
 }

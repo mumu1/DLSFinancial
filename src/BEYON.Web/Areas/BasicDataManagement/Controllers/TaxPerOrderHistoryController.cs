@@ -69,8 +69,33 @@ namespace BEYON.Web.Areas.BasicDataManagement.Controllers
             //    iTotalDisplayRecords = records.Count,
             //    aaData = pagedResults
             //}, JsonRequestBehavior.AllowGet);
-           
-            var records = this._taxPerOrderHistoryService.TaxPerOrderHistorys.ToList();
+
+            var start = 0;
+            var limit = 0;
+
+            if (Request.Params["iDisplayStart"] != null)
+            {
+                //数据起始位置
+                start = Int32.Parse(Request.Params["iDisplayStart"]);
+                //数据长度
+                limit = Int32.Parse(Request.Params["iDisplayLength"]);
+            }
+
+            String sortName = null;
+            String sortType = null;
+            var searchText = Request.Params["sSearch"];
+            var sortidx = Request.Params["iSortCol_0"];
+            if (!String.IsNullOrEmpty(sortidx))
+            {
+                sortName = Request.Params["mDataProp_" + sortidx];
+                sortType = Request.Params["sSortDir_0"];
+            }
+
+            var total = this._taxPerOrderHistoryService.GetTotal(searchText);
+            var records = this._taxPerOrderHistoryService.GetAllData(searchText, sortName, sortType, start, limit);
+
+            //var records = this._taxPerOrderHistoryService.TaxPerOrderHistorys.ToList();
+
             /*
            var result = Json(new { total = records.Count, data = records }, JsonRequestBehavior.AllowGet);
            result.MaxJsonLength = Int32.MaxValue;
@@ -79,7 +104,8 @@ namespace BEYON.Web.Areas.BasicDataManagement.Controllers
             * */
             return new JsonResult()
             {
-                Data = new { total = records.Count, data = records },
+                //Data = new { total = records.Count, data = records },
+                Data = new { status = "success",  recordsTotal = total, recordsFiltered = total, data = records },
                 MaxJsonLength = int.MaxValue,
                 ContentType = "application/json",
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
