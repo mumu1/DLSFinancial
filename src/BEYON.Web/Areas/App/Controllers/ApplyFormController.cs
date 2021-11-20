@@ -65,6 +65,7 @@ namespace BEYON.Web.Areas.App.Controllers
         // GET: /App/ApplyForm/GetAllData/
         public ActionResult GetAllData()
         {
+            string userName = System.Web.HttpContext.Current.User.Identity.Name;
             string userid = ((System.Web.Security.FormsIdentity)(System.Web.HttpContext.Current.User.Identity)).Ticket.UserData;
             var userID = Int32.Parse(userid);
             User user = this._userService.Users.FirstOrDefault(t => t.Id == userID);
@@ -145,6 +146,7 @@ namespace BEYON.Web.Areas.App.Controllers
         {
             //申请单流水号
             var timeNow = System.DateTime.Now;
+
             string userid = ((System.Web.Security.FormsIdentity)(System.Web.HttpContext.Current.User.Identity)).Ticket.UserData;
             var serialNumber = String.Format("S{0}_{1}", userid, timeNow.ToString("yyyyMMddHHmmssffff"));
 
@@ -497,6 +499,7 @@ namespace BEYON.Web.Areas.App.Controllers
         [HttpPost]
         public ActionResult ApplyAudit(ApplicationFormVM formVM)
         {
+            bool hasAudit = false;
             var serialNumbers = Session["AuditSerials"] as String[];
             foreach (var serialNumber in serialNumbers)
             {
@@ -507,13 +510,15 @@ namespace BEYON.Web.Areas.App.Controllers
                     {
                         continue;
                     }
+
                     form.AuditStatus = formVM.AuditStatus;
                     if (!string.IsNullOrEmpty(formVM.AuditOpinion))
                     {
                         form.AuditOpinion = formVM.AuditOpinion;
                         form.AuditTime = DateTime.Now;
                     }
-                    
+
+                    hasAudit = true;
                     //若审核通过，开始算税，单笔税保存在TaxPerOrder表
                     if (formVM.AuditStatus.Equals("审核通过"))
                     {
@@ -610,7 +615,16 @@ namespace BEYON.Web.Areas.App.Controllers
                 }
             }
             Session.Remove("AuditSerials");
-            return Json(new { }, JsonRequestBehavior.AllowGet);
+
+            if (hasAudit)
+            {
+                return Json("sum success", JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json("no sum", JsonRequestBehavior.AllowGet);
+            }
+            
         }
 
         // GET: /App/ApplyForm/CashCountCheckBeforeAudit
