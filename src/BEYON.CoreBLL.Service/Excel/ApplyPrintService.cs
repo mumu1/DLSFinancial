@@ -63,6 +63,84 @@ namespace BEYON.CoreBLL.Service.Excel
             return SaveExcel(filePath, fileName, applicationForm, persons);
         }
 
+        public String ExportAllExcel(String filePath, String title, IList<String> headNames, IList<int> headWidths, object[,] cellDatas)
+        {
+            var fileName = GetFileName();
+
+            var fullPath = GetFilePath(filePath, fileName);
+            if (System.IO.File.Exists(fullPath))
+            {
+                System.IO.File.Delete(fullPath);
+            }
+            try
+            {
+                //创建Excel对象
+                Application excelApp = new ApplicationClass();
+                //新建工作簿
+                Workbook workBook = excelApp.Workbooks.Add(true);
+                //新建工作表
+                Worksheet worksheet = workBook.ActiveSheet as Worksheet;
+                worksheet.Cells.NumberFormat = "@";     //文本输出格式
+
+                //worksheet.PageSetup.Orientation = XlPageOrientation.xlLandscape;//页面方向横向
+
+                //worksheet.PageSetup.Zoom = false; //打印时页面设置,必须设置为false,下面的二行页高,页宽才有效
+                //worksheet.PageSetup.FitToPagesWide = 1; //页宽
+                //worksheet.PageSetup.FitToPagesTall = false; //页高
+
+                //1.设置标题
+                int columnCount = headNames.Count;
+                Range titleRange = worksheet.get_Range(worksheet.Cells[1, 1], worksheet.Cells[1, columnCount]);//选取单元格
+                titleRange.Merge(true);//合并单元格
+                titleRange.Value = String.Format("{0} 明细表", title); //设置单元格内文本
+                titleRange.Font.Name = "黑体";//设置字体
+                titleRange.Font.Size = 15;//字体大小
+                titleRange.Font.Bold = true;//加粗显示
+                titleRange.Font.Underline = true;
+                titleRange.HorizontalAlignment = XlHAlign.xlHAlignCenter; //水平居中
+                titleRange.VerticalAlignment = XlVAlign.xlVAlignCenter;   //垂直居中
+
+                ////设置空行
+                //Range Range2 = worksheet.get_Range(worksheet.Cells[2, 1], worksheet.Cells[2, columnCount]);//选取单元格
+                //Range2.Merge(true);
+
+                //2.设置表头
+                for (int i = 0; i < columnCount; i++)
+                {
+                    Range headRange = worksheet.Cells[2, i + 1] as Range;//获取表头单元格,不用标题则从1开始
+                    headRange.Value2 = headNames[i];//设置单元格文本
+                    headRange.Font.Name = "宋体";//设置字体
+                    headRange.Font.Size = 13;//字体大小
+                    headRange.Font.Bold = true;//加粗显示
+                    headRange.HorizontalAlignment = XlHAlign.xlHAlignCenter;//水平居中
+                    headRange.VerticalAlignment = XlVAlign.xlVAlignCenter;//垂直居中
+                    headRange.ColumnWidth = headWidths[i];//设置列宽
+                }
+
+                //3.填充数据
+                int rowCount = cellDatas.Length / columnCount;
+                Range range = worksheet.get_Range("A3", Missing.Value);
+                range = range.get_Resize(rowCount, columnCount);
+                range.set_Value(Missing.Value, cellDatas);
+
+                workBook.SaveAs(fullPath, "51", Missing.Value, Missing.Value, true,
+                        false, XlSaveAsAccessMode.xlNoChange, Missing.Value, Missing.Value, Missing.Value, Missing.Value, Missing.Value);
+
+                //释放工作资源
+                workBook.Close();
+                ReleaseCOM(worksheet);
+                ReleaseCOM(workBook);
+                excelApp.Quit();
+                ReleaseCOM(excelApp);
+            }
+            catch (Exception ex)
+            {
+                _log.Error(ex);
+                Console.WriteLine(ex.Message);
+            }
+
+            return fileName;
+        }
 
          private bool ExecuteProcess(String path, string execute,string parameters)
         {

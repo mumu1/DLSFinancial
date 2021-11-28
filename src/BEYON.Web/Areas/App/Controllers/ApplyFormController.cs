@@ -65,7 +65,6 @@ namespace BEYON.Web.Areas.App.Controllers
         // GET: /App/ApplyForm/GetAllData/
         public ActionResult GetAllData()
         {
-            string userName = System.Web.HttpContext.Current.User.Identity.Name;
             string userid = ((System.Web.Security.FormsIdentity)(System.Web.HttpContext.Current.User.Identity)).Ticket.UserData;
             var userID = Int32.Parse(userid);
             User user = this._userService.Users.FirstOrDefault(t => t.Id == userID);
@@ -113,6 +112,75 @@ namespace BEYON.Web.Areas.App.Controllers
                 jsonResult.MaxJsonLength = Int32.MaxValue;
                 return jsonResult;
             }
+        }
+
+        // POST: /App/ApplyForm/ExportAllExcels
+        public ActionResult ExportAllExcels()
+        {
+            string fullPath = Server.MapPath("/Exports/");
+
+            string userid = ((System.Web.Security.FormsIdentity)(System.Web.HttpContext.Current.User.Identity)).Ticket.UserData;
+            var userID = Int32.Parse(userid);
+            User user = this._userService.Users.FirstOrDefault(t => t.Id == userID);
+            var role = user.Roles.First();
+            var start = 0;
+            var limit = 0;
+
+            //数据起始位置
+            start = 0;
+            //数据长度
+            limit = -1;
+
+            String sortName = null;
+            String sortType = null;
+            var searchText = Request.Params["sSearch"];
+            var sortidx = Request.Params["iSortCol_0"];
+            if (!String.IsNullOrEmpty(sortidx))
+            {
+                sortName = Request.Params["mDataProp_" + sortidx];
+                sortType = Request.Params["sSortDir_0"];
+            }
+
+            IList<ApplicationForm> rows = null;
+
+            if (role.RoleName == "系统管理员")
+            {
+                int total = this._applicationFormService.GetTotal(null, searchText);
+                rows = this._applicationFormService.GetApplicationFromByAdmin(start, limit, searchText, sortName, sortType);
+            }
+            else
+            {
+                int total = this._applicationFormService.GetTotal(user.UserName, searchText);
+                rows = _applicationFormService.GetApplicationFromByUser(user.UserName, start, limit, searchText, sortName, sortType);
+            }
+
+            IList<String> headNames = new List<String> { "申请单流水号", "课题号","报销事由","课题负责人","经办人","报销合计","工资税额合计","劳务税额合计","支付类型","提交时间","审核状态","审核时间","审核意见","更新时间" };
+            IList<int> headWidths = new List<int> { 25, 40, 10, 10, 8, 10, 10, 10, 10, 10, 10, 20, 10, 20 };
+            int rowCount = rows.Count;
+            int columnCount = headNames.Count;
+            object[,] cellData = new object[rowCount, columnCount];
+            for (int iRow = 0; iRow < rowCount; iRow++)
+            {
+                var row = rows[iRow];
+                cellData[iRow, 0] = row.SerialNumber;
+                cellData[iRow, 1] = row.ProjectNumber;
+                cellData[iRow, 2] = row.RefundType;
+                cellData[iRow, 3] = row.ProjectDirector;
+                cellData[iRow, 4] = row.Agent;
+                cellData[iRow, 5] = row.Summation;
+                cellData[iRow, 6] = row.Tax;
+                cellData[iRow, 7] = row.ServiceTax;
+                cellData[iRow, 8] = row.PaymentType;
+                cellData[iRow, 9] = row.SubmitTime;
+                cellData[iRow, 10] = row.AuditStatus;
+                cellData[iRow, 11] = row.AuditTime;
+                cellData[iRow, 12] = row.AuditOpinion;
+                cellData[iRow, 13] = row.UpdateDate;
+            }
+
+            String fileName = this._applyPrintService.ExportAllExcel(fullPath, "申请单", headNames, headWidths, cellData);
+            var jsonResult = Json(fileName, JsonRequestBehavior.AllowGet);
+            return jsonResult;
         }
 
         private String GetSortCol(String sortCol)
@@ -598,6 +666,7 @@ namespace BEYON.Web.Areas.App.Controllers
                                     taxPerOrder.AccountName = records[i].AccountName;
                                     taxPerOrder.AccountNumber = records[i].AccountNumber;
                                     taxPerOrder.PaymentType = form.PaymentType;
+                                    taxPerOrder.Tele = records[i].Tele;
                                     _taxPerOrderService.Insert(taxPerOrder);
                                 }
                             }
@@ -610,7 +679,7 @@ namespace BEYON.Web.Areas.App.Controllers
                         //删除TaxPerOrder表中审核通过时的记录（主要是保证多次审核的情况，如第一次审核通过，发现问题，重新审核为退回）
                         _taxPerOrderService.DeleteBySerialNumber(serialNumber);
                     }
-                    form.UpdateDate = DateTime.Now;
+                    form.UpdateDate = DateTime.Now;                   
                     _applicationFormService.Update(form);
                 }
             }

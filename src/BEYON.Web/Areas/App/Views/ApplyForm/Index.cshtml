@@ -78,6 +78,8 @@
         //        buttons.disable();
         //    }
         //});
+        var globalAoData = {};
+        var globalResp = undefined;
 
         var buttons = [
             {
@@ -143,12 +145,11 @@
                             contentType: "application/json; charset=utf-8",
                             data: JSON.stringify({ SerialNumber: value["SerialNumber"] }),
                             success: function (result) {
-                                if (result == undefined || result == "")
-                                {
+                                if (result == undefined || result == "") {
                                     toastr.success('服务器无法执行Excel输出！');
                                     return;
                                 }
-                                    
+
                                 fileDownload('../App/ApplyForm/DownloadFile', result);
                                 toastr.success('数据导出完成');
                                 @*$.ajax({
@@ -276,16 +277,57 @@
                   },
                   enabled: false
               },
-                {
-                    extend: 'collection',
-                    text: '导出',
-                    buttons: [
-                      //  { text: "拷贝", extend: 'copy' },
-                        { text: "EXCEL表格", extend: 'excel' },
-                       // { text: "CSV表格", extend: 'csv' },
-                       // { text: "PDF文档", extend: 'pdf' }
-                    ]
-                },
+              {
+                  'extend': 'excelHtml5', //导出文件格式为excel
+                  'text': '导出当前页',  //按钮标题
+                  'title': '申请单管理', //导出的excel标题
+                  //'className': 'btn btn-primary', //按钮的class样式
+                  'exportOptions': { //从DataTable中选择要收集的数据。这包括列、行、排序和搜索的选项。请参阅button.exportdata()方法以获得完整的详细信息——该参数所提供的对象将直接传递到该操作中，以收集所需的数据，更多options选项参见：https://datatables.net/reference/api/buttons.exportData()
+                      'format': { //用于导出将使用的单元格格式化函数的容器对象 format有三个子标签，header，body和foot
+                          body: function (data, row, column, node) { //body区域的function，可以操作需要导出excel的数据格式
+                              return data;
+
+                          }
+                      }
+                  }
+              },
+              {
+                  'extend': 'excelHtml5', //导出文件格式为excel
+                  'text': '导出所有',  //按钮标题
+                  'title': '申请单管理', //导出的excel标题
+                  action: function (e, dt, node, config) {
+                      toastr.info('数据导出中，请稍等。。。');
+                      $.ajax({
+                          type: "GET",
+                          url: "@Url.Action("ExportAllExcels")",
+                          dataType: "json",
+                          contentType: "application/json; charset=utf-8",
+                          data: globalAoData,
+                          success: function (result) {
+                              if (result == undefined || result == "") {
+                                  toastr.success('服务器无法执行Excel输出！');
+                                  return;
+                              }
+
+                              fileDownload('../App/ApplyForm/DownloadFile', result);
+                              toastr.success('数据导出完成');
+                          },
+                          error: function () {
+                              toastr.error('网络错误，请重新提交！');
+                          }
+                      });
+                  }
+              },
+                //{
+                //    extend: 'collection',
+                //    text: '导出',
+                //    buttons: [
+                //      //  { text: "拷贝", extend: 'copy' },
+                //        { text: "EXCEL表格", extend: 'excel' },
+                //       // { text: "CSV表格", extend: 'csv' },
+                //       // { text: "PDF文档", extend: 'pdf' }
+                //    ]
+                //},
                   {
                       text: "列显示",
                       extend: 'colvis'
@@ -293,11 +335,73 @@
                    {
                        text: "刷新",
                        action: function (e, dt, node, config) {
-                           dt.ajax.reload();
+                           var src_keyword = $('.dataTables_filter input').val();
+
+                           // make columns for sorting
+                           var columns = [];
+                           $.each(this.context[0].aoColumns, function (key, value) {
+                               columns.push({
+                                   'data': value.data,
+                                   'name': value.name,
+                                   'searchable': value.bSearchable,
+                                   'orderable': value.bSortable
+                               });
+                           });
+
+                           // make option for sorting
+                           var order = [];
+                           $.each(this.context[0].aaSorting, function (key, value) {
+                               order.push({
+                                   'column': value[0],
+                                   'dir': value[1]
+                               });
+                           });
+
+                           // make value for search
+                           var search = {
+                               'value': this.context[0].oPreviousSearch.sSearch,
+                               'regex': this.context[0].oPreviousSearch.bRegex
+                           };
+
+                           var items = [];
+                           var status = $('#status').val();
+                           $.ajax({
+                               url: '@Url.Action("GetAllData")',
+                               data: { columns: columns, order: order, search: search, status: status, page: 'all' },
+                               "success": function (result) {
+
+                                   $.each(result.data, function (key, value) {
+
+                                       var item = [];
+                                       console.error(key);
+                                       console.error(value);
+                                       item.push(key + 1);
+                                       item.push(value.username);
+                                       item.push(value.email);
+                                       item.push(value.created_at);
+                                       item.push(value.status);
+
+                                       items.push(item);
+                                   });
+                               },
+                               async: false
+                           });
+
+                           return {
+                               body: items,
+                               // skip actions header
+                               header: $("#datatable_tabletools thead tr th").map(function () {
+                                   if (this.innerHTML != 'Actions')
+                                       return this.innerHTML;
+                               }).get()
+                           };
                        }
                    }
+
             ]
         }
+
+
 
 
         var columns = [
@@ -307,13 +411,13 @@
                 { data: "ProjectDirector", title: "课题负责人" },
                 { data: "Agent", title: "经办人" },
                 { data: "Summation", title: "报销合计" },
-                
+
                 { data: "PaymentType", title: "支付类型" },
                 {
                     data: "SubmitTime", title: "提交时间", type: "date",
                     "render": function (data, type, full, meta) {
                         var dtStart = new Date(parseInt(data.substr(6)));
-                        return dtStart.getFullYear() + '-' + (dtStart.getMonth() +1)+ '-' + dtStart.getDate();
+                        return dtStart.getFullYear() + '-' + (dtStart.getMonth() + 1) + '-' + dtStart.getDate();
                         //return dtStart.toString();
                     }
                 },
@@ -322,7 +426,7 @@
                     data: "AuditTime", title: "审核时间", type: "date", visible: false,
                     "render": function (data, type, full, meta) {
                         var dtStart = new Date(parseInt(data.substr(6)));
-                        return dtStart.getFullYear() + '-' + (dtStart.getMonth()+1) + '-' + dtStart.getDate();
+                        return dtStart.getFullYear() + '-' + (dtStart.getMonth() + 1) + '-' + dtStart.getDate();
                         //return dtStart.toString();
                     }
                 },
@@ -338,13 +442,13 @@
                 { data: "ProjectDirector", title: "课题负责人" },
                 { data: "Agent", title: "经办人" },
                 { data: "Summation", title: "报销合计" },
-                
+
                 { data: "PaymentType", title: "支付类型" },
                 {
                     data: "SubmitTime", title: "提交时间", type: "date",
                     "render": function (data, type, full, meta) {
                         var dtStart = new Date(parseInt(data.substr(6)));
-                        return dtStart.getFullYear() + '-' + (dtStart.getMonth() +1)+ '-' + dtStart.getDate();
+                        return dtStart.getFullYear() + '-' + (dtStart.getMonth() + 1) + '-' + dtStart.getDate();
                         //return dtStart.toString();
                     }
                 },
@@ -353,7 +457,7 @@
                     data: "AuditTime", title: "审核时间", type: "date", visible: false,
                     "render": function (data, type, full, meta) {
                         var dtStart = new Date(parseInt(data.substr(6)));
-                        return dtStart.getFullYear() + '-' + (dtStart.getMonth()+1) + '-' + dtStart.getDate();
+                        return dtStart.getFullYear() + '-' + (dtStart.getMonth() + 1) + '-' + dtStart.getDate();
                         //return dtStart.toString();
                     }
                 },
@@ -375,7 +479,7 @@
                     data: "SubmitTime", title: "提交时间", type: "date",
                     "render": function (data, type, full, meta) {
                         var dtStart = new Date(parseInt(data.substr(6)));
-                        return dtStart.getFullYear() + '-' + (dtStart.getMonth() +1)+ '-' + dtStart.getDate();
+                        return dtStart.getFullYear() + '-' + (dtStart.getMonth() + 1) + '-' + dtStart.getDate();
                         //return dtStart.toString();
                     }
                 },
@@ -384,7 +488,7 @@
                     data: "AuditTime", title: "审核时间", type: "date", visible: false,
                     "render": function (data, type, full, meta) {
                         var dtStart = new Date(parseInt(data.substr(6)));
-                        return dtStart.getFullYear() + '-' + (dtStart.getMonth()+1) + '-' + dtStart.getDate();
+                        return dtStart.getFullYear() + '-' + (dtStart.getMonth() + 1) + '-' + dtStart.getDate();
                         //return dtStart.toString();
                     }
                 },
@@ -396,7 +500,7 @@
         }
 
         var table = $('#datatable_tabletools').dataTable({
-            dom: 'Bfrtip',
+            dom: 'Blfrtip', //'Bfrtip',
             colReorder: true,
             ordering: true,
             select: true,
@@ -419,17 +523,22 @@
             order: orderdatas,
             buttons: buttons,
             columns: columndatas,
+            lengthMenu: [
+                [15, 50, 2000, 10000],
+                ['15', '50', '2000', '1万']
+            ],
             "fnServerData": function (sSource, aoData, fnCallback) {
-                console.debug("fnServerData", aoData);
+                globalAoData = aoData;
+
                 $.ajax({
                     "type": 'get',
                     "url": sSource,
                     "dataType": 'json',
                     "contentType": "application/json; charset=utf-8",
                     "data": aoData,
-                    //"data" : {  
-                    //    aoData : JSON.stringify(aoData)  
-                    //},  
+                    //"data" : {
+                    //    aoData : JSON.stringify(aoData)
+                    //},
                     "success": function (resp) {
                         fnCallback(resp);
                     }
@@ -601,7 +710,7 @@
                                         else if (result == "sum error") {
                                             toastr.error("本申请单存在异常：总金额与申请单内包含的记录总金额不符，请联系经办人检查并删除本申请单内异常多余的记录。");
                                             //alert("本申请单存在异常：总金额与申请单内包含的记录总金额不符，请联系经办人检查并删除本申请单内异常多余的记录。");
-                                        }                                        
+                                        }
                                         else if (result == "sum success") {
                                             toastr.success("审核通过！");
                                         }
