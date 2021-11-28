@@ -19,6 +19,7 @@ using BEYON.Web.Extension.Filters;
 using BEYON.Domain.Model.App;
 using BEYON.ViewModel.App;
 using BEYON.CoreBLL.Service.App.Interface;
+using BEYON.CoreBLL.Service.Excel.Interface;
 using System.IO;
 using BEYON.CoreBLL.Service.Excel;
 
@@ -26,10 +27,14 @@ namespace BEYON.Web.Areas.BasicDataManagement.Controllers
 {
     public class TaxPerOrderHistoryController : Controller
     {
+        private readonly log4net.ILog _log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
          private readonly ITaxPerOrderHistoryService _taxPerOrderHistoryService;
-         public TaxPerOrderHistoryController(ITaxPerOrderHistoryService taxPerOrderHistoryService)
+         private readonly IApplyPrintService _applyPrintService;
+
+         public TaxPerOrderHistoryController(ITaxPerOrderHistoryService taxPerOrderHistoryService, IApplyPrintService applyPrintService)
         {
             this._taxPerOrderHistoryService = taxPerOrderHistoryService;
+            this._applyPrintService = applyPrintService;
         }
 
 
@@ -110,6 +115,123 @@ namespace BEYON.Web.Areas.BasicDataManagement.Controllers
                 ContentType = "application/json",
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
+        }
+
+        // GET: /BasicDataManagement/TaxPerOrderHistory/ExportAllExcels
+        public ActionResult ExportAllExcels()
+        {
+            string fullPath = Server.MapPath("/Exports/");
+
+            string userid = ((System.Web.Security.FormsIdentity)(System.Web.HttpContext.Current.User.Identity)).Ticket.UserData;
+            var userID = Int32.Parse(userid);
+        
+            //数据起始位置
+            int start = 0;
+            //数据长度
+            int limit = -1;
+
+            String sortName = null;
+            String sortType = null;
+            var searchText = Request.Params["sSearch"];
+            var sortidx = Request.Params["iSortCol_0"];
+            if (!String.IsNullOrEmpty(sortidx))
+            {
+                sortName = Request.Params["mDataProp_" + sortidx];
+                sortType = Request.Params["sSortDir_0"];
+            }
+
+            var rows = this._taxPerOrderHistoryService.GetAllData(searchText, sortName, sortType, start, limit);
+
+            IList<String> headNames = new List<String> { "期间", "申请单流水号","姓名","人员类型","证件类型","证件号码","支付类型","金额","是否含税","应纳税额","税前金额","税后金额", "课题号", "课题名称", "课题负责人", "经办人", "开户银行", "银行账号", "收款账号省份", "收款账号地市", "开户行详细名称", "联系电话"};
+            IList<int> headWidths = new List<int>      { 8,      15,            8,    10,        10,        18,       10,         10,    8,         8,        8,         8,         10,         30,        10,            8,        10,        20,          10,             10,             30,               10 };
+            int rowCount = rows.Count;
+            int columnCount = headNames.Count;
+            object[,] cellData = new object[rowCount, columnCount];
+            for (int iRow = 0; iRow < rowCount; iRow++)
+            {
+                var row = rows[iRow];
+                cellData[iRow, 0] = row.Period;
+                cellData[iRow, 1] = row.ProjectNumber;
+                cellData[iRow, 2] = row.Name;
+                cellData[iRow, 3] = row.PersonType;
+                cellData[iRow, 4] = row.CertificateType;
+                cellData[iRow, 5] = row.CertificateID;
+                cellData[iRow, 6] = row.PaymentType;
+                cellData[iRow, 7] = row.Amount;
+                cellData[iRow, 8] = row.TaxOrNot;
+                cellData[iRow, 9] = row.Tax;
+                cellData[iRow, 10] = row.AmountX;
+                cellData[iRow, 11] = row.AmountY;
+                cellData[iRow, 12] = row.ProjectNumber;
+                cellData[iRow, 13] = row.TaskName;
+                cellData[iRow, 14] = row.ProjectDirector;
+                cellData[iRow, 15] = row.Agent;
+                cellData[iRow, 16] = row.Bank;
+                cellData[iRow, 17] = row.AccountNumber;
+                cellData[iRow, 18] = row.ProvinceCity;
+                cellData[iRow, 19] = row.CityField;
+                cellData[iRow, 20] = row.BankDetailName;
+                cellData[iRow, 21] = row.Tele;
+            }
+
+            String fileName = this._applyPrintService.ExportAllExcel(fullPath, "历史算税记录", headNames, headWidths, cellData);
+            var jsonResult = Json(fileName, JsonRequestBehavior.AllowGet);
+            return jsonResult;
+        }
+
+        [HttpPost]
+        public void DownloadFile(string filePath)
+        {
+            try
+            {
+                if (String.IsNullOrEmpty(filePath))
+                    return;
+
+                var filepath = System.IO.Path.Combine(Server.MapPath("/Exports/"), filePath);
+                _log.Info(filepath);
+                System.IO.FileInfo file = new System.IO.FileInfo(filepath);
+                if (file.Exists)//判断文件是否存在
+                {
+                    Response.Clear();
+                    Response.ClearHeaders();
+                    Response.AddHeader("Content-Disposition", "attachment;filename=" + System.Web.HttpUtility.UrlEncode("历史算税记录.xlsx"));
+                    Response.AddHeader("Content-Length", new FileInfo(filepath).Length.ToString());
+                    Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                    Response.TransmitFile(filepath);
+
+                    if (Response.IsClientConnected)
+                    {
+                        //Response.Close();
+                        Response.End();
+                    }
+
+                    System.IO.File.SetAttributes(filepath, System.IO.FileAttributes.Normal);
+                    System.IO.File.Delete(filepath);
+                }
+            }
+            catch (Exception e)
+            {
+                _log.Error(e);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult DeleteFile(string fileName)
+        {
+            if (String.IsNullOrEmpty(fileName))
+                return Json(new { });
+            var filepath = System.IO.Path.Combine(Server.MapPath("/Exports/"), fileName);
+            System.IO.FileInfo file = new System.IO.FileInfo(filepath);
+            if (file.Exists)
+            {
+                if (file.Attributes.ToString().IndexOf("ReadOnly") != -1)
+                {
+                    file.Attributes = System.IO.FileAttributes.Normal;
+                }
+                System.IO.File.Delete(file.FullName);
+            }
+
+            return Json(new { });
         }
     
     } 

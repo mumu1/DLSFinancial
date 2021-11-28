@@ -75,15 +75,18 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                 sb.Append(String.Format(" OR \"AccountNumber\" like '%{0}%' ", search));
             }
 
-            if (sortName != "UpdateDate")
+            if (!string.IsNullOrEmpty(sortName))
             {
-                sb.Append(" ORDER BY \"" + sortName + "\" " + sortType + ", \"UpdateDate\" DESC ");
+                if (sortName != "UpdateDate")
+                {
+                    sb.Append(" ORDER BY \"" + sortName + "\" " + sortType + ", \"UpdateDate\" DESC ");
+                }
+                else
+                {
+                    sb.Append(" ORDER BY \"" + sortName + "\" " + sortType);
+                }
             }
-            else
-            {
-                sb.Append(" ORDER BY \"" + sortName + "\" " + sortType);
-            }
-
+            
             if (limit > 0)
             {
                 sb.Append(String.Format(" offset {0} limit {1}", start, limit));

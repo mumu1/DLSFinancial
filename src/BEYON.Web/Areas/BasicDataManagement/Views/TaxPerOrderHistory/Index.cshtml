@@ -68,6 +68,8 @@
         //});
     }
 
+    
+
     function initTable(data) {
         pageSetUp();
         //更新数据
@@ -100,9 +102,11 @@
             ]
         });*@
 
+        var globalAoData = {};
+
         table = $('#datatable_tabletools').dataTable({
-            dom: 'Bfrtip',
-            ajax : '@Url.Action("GetAllData")',
+            dom: 'Blfrtip',
+            ajax: '@Url.Action("GetAllData")',
             buttons: [
                 //{
                 //    text: "新增", extend: "create", editor: editor
@@ -111,17 +115,58 @@
                 //    text: "修改", extend: "edit", editor: editor
                 //},
                 //{ text: "删除", extend: "remove", editor: editor },
-                {
-                    extend: 'collection',
-                    text: '导出',
-                    buttons: [
-                        //{ text: "拷贝", extend: 'copy' },
-                        { text: "EXCEL表格", extend: 'excel' },
-                        //{ text: "CSV表格", extend: 'csv' },
-                        //{ text: "PDF文档", extend: 'pdf' },
-                        //{ text: "打印", extend: 'print' }
-                    ]
-                },           
+                //{
+                //    extend: 'collection',
+                //    text: '导出',
+                //    buttons: [
+                //        //{ text: "拷贝", extend: 'copy' },
+                //        { text: "EXCEL表格", extend: 'excel' },
+                //        //{ text: "CSV表格", extend: 'csv' },
+                //        //{ text: "PDF文档", extend: 'pdf' },
+                //        //{ text: "打印", extend: 'print' }
+                //    ]
+                //},
+              {
+                  'extend': 'excelHtml5', //导出文件格式为excel
+                  'text': '导出当前页',  //按钮标题
+                  'title': '历史算税记录', //导出的excel标题
+                  //'className': 'btn btn-primary', //按钮的class样式
+                  'exportOptions': { //从DataTable中选择要收集的数据。这包括列、行、排序和搜索的选项。请参阅button.exportdata()方法以获得完整的详细信息——该参数所提供的对象将直接传递到该操作中，以收集所需的数据，更多options选项参见：https://datatables.net/reference/api/buttons.exportData()
+                      'format': { //用于导出将使用的单元格格式化函数的容器对象 format有三个子标签，header，body和foot
+                          body: function (data, row, column, node) { //body区域的function，可以操作需要导出excel的数据格式
+                              return data;
+
+                          }
+                      }
+                  }
+              },
+              {
+                  'extend': 'excelHtml5', //导出文件格式为excel
+                  'text': '导出所有',  //按钮标题
+                  'title': '历史算税记录', //导出的excel标题
+                  action: function (e, dt, node, config) {
+                      toastr.info('数据导出中，请稍等。。。');
+                      $.ajax({
+                          type: "GET",
+                          url: "@Url.Action("ExportAllExcels")",
+                          dataType: "json",
+                          contentType: "application/json; charset=utf-8",
+                          data: globalAoData,
+                          success: function (result) {
+                              if (result == undefined || result == "") {
+                                  toastr.success('服务器无法执行Excel输出！');
+                                  return;
+                              }
+
+                              fileDownload('../App/ApplyForm/DownloadFile', result);
+                              toastr.success('数据导出完成');
+                          },
+                          error: function () {
+                              toastr.error('网络错误，请重新提交！');
+                          }
+                      });
+                  }
+              },
                 {
                     text: "刷新",
                     action: function (e, dt, node, config) {
@@ -147,6 +192,10 @@
             "sScrollY": "100%",
             "sScrollX": "200%",
             "sScrollXInner": "200%",
+            lengthMenu: [
+                [15, 50, 2000],
+                ['15', '50', '2000']
+            ],
             columns: [
                                    // { data: "Id", title: "编号" },
                                     { data: "Period", title: "期间" },
@@ -172,20 +221,21 @@
                                     { data: "BankDetailName", title: "开户行详细名称" },
                                     { data: "Tele", title: "联系电话" }
             ],
-            "fnServerData" : function(sSource, aoData, fnCallback) {  
-                $.ajax({  
-                    "type" : 'get',  
-                    "url" : sSource,  
+            "fnServerData": function (sSource, aoData, fnCallback) {
+                globalAoData = aoData;
+                $.ajax({
+                    "type": 'get',
+                    "url": sSource,
                     "dataType": 'json',
                     "contentType": "application/json; charset=utf-8",
                     "data": aoData,
-                    //"data" : {  
-                    //    aoData : JSON.stringify(aoData)  
-                    //},  
-                    "success" : function(resp) {  
-                        fnCallback(resp);  
-                    }  
-                });  
+                    //"data" : {
+                    //    aoData : JSON.stringify(aoData)
+                    //},
+                    "success": function (resp) {
+                        fnCallback(resp);
+                    }
+                });
             },
             oLanguage: {
                 "sLengthMenu": "每页显示 _MENU_ 条记录",

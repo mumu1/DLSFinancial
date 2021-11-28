@@ -127,7 +127,7 @@ namespace BEYON.CoreBLL.Service.Excel
                         false, XlSaveAsAccessMode.xlNoChange, Missing.Value, Missing.Value, Missing.Value, Missing.Value, Missing.Value);
 
                 //释放工作资源
-                workBook.Close();
+                //workBook.Close();
                 ReleaseCOM(worksheet);
                 ReleaseCOM(workBook);
                 excelApp.Quit();
