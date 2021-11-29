@@ -143,7 +143,7 @@ namespace BEYON.Web.Areas.BasicDataManagement.Controllers
             var rows = this._taxPerOrderHistoryService.GetAllData(searchText, sortName, sortType, start, limit);
 
             IList<String> headNames = new List<String> { "期间", "申请单流水号","姓名","人员类型","证件类型","证件号码","支付类型","金额","是否含税","应纳税额","税前金额","税后金额", "课题号", "课题名称", "课题负责人", "经办人", "开户银行", "银行账号", "收款账号省份", "收款账号地市", "开户行详细名称", "联系电话"};
-            IList<int> headWidths = new List<int>      { 8,      15,            8,    10,        10,        18,       10,         10,    8,         8,        8,         8,         10,         30,        10,            8,        10,        20,          10,             10,             30,               10 };
+            IList<int> headWidths = new List<int>      { 8,      25,            8,    10,        10,        18,       10,         10,    8,         8,        8,         8,         10,         30,        10,            8,        10,        20,          10,             10,             30,               10 };
             int rowCount = rows.Count;
             int columnCount = headNames.Count;
             object[,] cellData = new object[rowCount, columnCount];
@@ -151,7 +151,7 @@ namespace BEYON.Web.Areas.BasicDataManagement.Controllers
             {
                 var row = rows[iRow];
                 cellData[iRow, 0] = row.Period;
-                cellData[iRow, 1] = row.ProjectNumber;
+                cellData[iRow, 1] = row.SerialNumber;
                 cellData[iRow, 2] = row.Name;
                 cellData[iRow, 3] = row.PersonType;
                 cellData[iRow, 4] = row.CertificateType;
