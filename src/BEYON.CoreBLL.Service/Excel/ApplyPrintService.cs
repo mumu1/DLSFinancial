@@ -72,14 +72,19 @@ namespace BEYON.CoreBLL.Service.Excel
             {
                 System.IO.File.Delete(fullPath);
             }
+
+            Application excelApp = null;
+            Workbook workBook = null;
+            Worksheet worksheet = null;
+
             try
             {
                 //创建Excel对象
-                Application excelApp = new ApplicationClass();
+                excelApp = new ApplicationClass();
                 //新建工作簿
-                Workbook workBook = excelApp.Workbooks.Add(true);
+                workBook = excelApp.Workbooks.Add(true);
                 //新建工作表
-                Worksheet worksheet = workBook.ActiveSheet as Worksheet;
+                worksheet = workBook.ActiveSheet as Worksheet;
                 worksheet.Cells.NumberFormat = "@";     //文本输出格式
 
                 //worksheet.PageSetup.Orientation = XlPageOrientation.xlLandscape;//页面方向横向
@@ -119,26 +124,49 @@ namespace BEYON.CoreBLL.Service.Excel
 
                 //3.填充数据
                 int rowCount = cellDatas.Length / columnCount;
-                Range range = worksheet.get_Range("A3", Missing.Value);
-                range = range.get_Resize(rowCount, columnCount);
-                range.set_Value(Missing.Value, cellDatas);
+
+                int step = 20000;
+                for (int i = 0; i < rowCount; i += step)
+                {
+                    int start = i;
+                    int end = (start + step) < rowCount ? (start + step) : rowCount;
+                    Range range = worksheet.get_Range(String.Format("A{0}", start + 3), Missing.Value);
+                    range = range.get_Resize((end-start), columnCount);
+
+                    object[,] spanDatas = new object[end - start, columnCount];
+                    for (int j = start; j < end; j++ )
+                    {
+                        for (int col = 0; col < columnCount; col++ )
+                            spanDatas[j - start, col] = cellDatas[j, col];
+                    }
+                    range.set_Value(Missing.Value, spanDatas);
+                }
 
                 workBook.SaveAs(fullPath, "51", Missing.Value, Missing.Value, true,
                         false, XlSaveAsAccessMode.xlNoChange, Missing.Value, Missing.Value, Missing.Value, Missing.Value, Missing.Value);
-
-                //释放工作资源
-                //workBook.Close();
-                ReleaseCOM(worksheet);
-                ReleaseCOM(workBook);
-                excelApp.Quit();
-                ReleaseCOM(excelApp);
             }
             catch (Exception ex)
             {
                 _log.Error(ex);
                 Console.WriteLine(ex.Message);
             }
-
+            //释放工作资源
+            if (worksheet != null)
+            {
+                ReleaseCOM(worksheet);
+            }
+                
+            if (workBook != null)
+            {
+                ReleaseCOM(workBook);
+            }
+                
+            if (excelApp != null)
+            {
+                excelApp.Quit();
+                ReleaseCOM(excelApp);
+            }
+            
             return fileName;
         }
 
