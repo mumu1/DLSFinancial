@@ -189,7 +189,7 @@ namespace BEYON.CoreBLL.Service.App
             columns.Add(new Column("C8", "报销事由"));
             columns.Add(new Column("C9", "课题负责人"));
             columns.Add(new Column("C10", "经办人"));
-            columns.Add(new Column("C11", "更新时间"));
+            columns.Add(new Column("C11", "审核时间"));
 
             return columns.ToArray();
         }

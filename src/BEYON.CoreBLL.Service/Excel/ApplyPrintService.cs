@@ -144,27 +144,26 @@ namespace BEYON.CoreBLL.Service.Excel
 
                 workBook.SaveAs(fullPath, "51", Missing.Value, Missing.Value, true,
                         false, XlSaveAsAccessMode.xlNoChange, Missing.Value, Missing.Value, Missing.Value, Missing.Value, Missing.Value);
+                workBook.Close();
+                workBook = null;
             }
             catch (Exception ex)
             {
                 _log.Error(ex);
                 Console.WriteLine(ex.Message);
             }
+
             //释放工作资源
-            if (worksheet != null)
-            {
-                ReleaseCOM(worksheet);
-            }
-                
             if (workBook != null)
             {
-                ReleaseCOM(workBook);
+                workBook.Close();
+                workBook = null;
             }
                 
             if (excelApp != null)
             {
                 excelApp.Quit();
-                ReleaseCOM(excelApp);
+                excelApp = null;
             }
             
             return fileName;

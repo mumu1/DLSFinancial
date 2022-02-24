@@ -1149,7 +1149,7 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
                 sb.Append(" FROM  dbo.\"TaxPerOrders\" a ");
                 //3.条件
                 sb.Append(" ORDER BY C2 ASC");
-
+               
                 var connectString = System.Configuration.ConfigurationManager.ConnectionStrings["BeyonDBGuMu"];
                 using (var conntion = new NpgsqlConnection(connectString.ToString()))
                 {
