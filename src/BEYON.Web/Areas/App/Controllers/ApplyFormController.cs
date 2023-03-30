@@ -37,8 +37,9 @@ namespace BEYON.Web.Areas.App.Controllers
         private readonly IAuditOpinionService _auditOpinionService;
         private readonly ITaxPerOrderService _taxPerOrderService;
         private readonly ITaskManageService _taskManageService;
+        private readonly ITaxBaseByMonthService _taxBaseByMonthService;
         public ApplyFormController(IApplicationFormService applicationFormService, IPersonalRecordService personalRecordService,
-            IUserService userService, IApplyPrintService applyPrintService, IAuditOpinionService auditOpinionService, ITaxPerOrderService taxPerOrderService, ITopContactsService topContactsService, ITaskManageService taskManageService)
+            IUserService userService, IApplyPrintService applyPrintService, IAuditOpinionService auditOpinionService, ITaxPerOrderService taxPerOrderService, ITopContactsService topContactsService, ITaskManageService taskManageService, ITaxBaseByMonthService taxBaseByMonthService)
         {
             this._applicationFormService = applicationFormService;
             this._personalRecordService = personalRecordService;
@@ -48,6 +49,7 @@ namespace BEYON.Web.Areas.App.Controllers
             this._taxPerOrderService = taxPerOrderService;
             this._topContactsService = topContactsService;
             this._taskManageService = taskManageService;
+            this._taxBaseByMonthService = taxBaseByMonthService;
         }
 
         //
@@ -597,11 +599,27 @@ namespace BEYON.Web.Areas.App.Controllers
                         int equalFlag = 0;
                         double sumTotalApp = form.Summation;
                         double sumTotalRec = 0.0;
+                        Boolean isInDepart = true;
+                        Boolean ff = true;
                         if (records != null)
                         {                          
                             for (int c = 0; c < records.Count; c++)
                             {
                                 sumTotalRec = sumTotalRec + records[c].Amount;
+                                //验证该人员是否为所内人员，与当月工资底表进行比对
+                                if ("所内".Equals(records[c].PersonType))
+                                {
+                                    ff = true;
+                                }
+                                else {
+                                    ff = false;
+                                }
+                                isInDepart = _taxBaseByMonthService.IsInDepartment(records[c].CertificateID);
+                                if (isInDepart != ff)
+                                {
+                                    return Json("in or out gov error,姓名为：" + records[c].Name, JsonRequestBehavior.AllowGet);
+                                }
+                                
                             }
                         }
                         if (sumTotalApp == sumTotalRec) {

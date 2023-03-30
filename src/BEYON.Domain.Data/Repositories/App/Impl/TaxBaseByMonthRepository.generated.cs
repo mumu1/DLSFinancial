@@ -181,6 +181,22 @@ namespace BEYON.Domain.Data.Repositories.App.Impl
             return name;
         }
 
+        //是否所内
+        public Boolean IsInDepartment(String certificateID)
+        {
+            Boolean flag = false;
+            //验证完全一致
+            var record = from p in Context.TaxBaseByMonths.Where(w => w.CertificateID.ToUpper() == certificateID.Trim().Replace("\n", "").Replace(" ", "").Replace("\t", "").Replace("\r", "").ToUpper())
+                         select p;
+            var lists = record.ToList();
+            if (lists.Count > 0)
+            {
+                flag = true;
+            }
+           
+            return flag;
+        }
+
         public void InsertOrUpdate(TaxBaseByMonth record)
         {
             //1.构造插入或更新SQL

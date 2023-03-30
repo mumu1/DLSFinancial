@@ -24,6 +24,8 @@ namespace BEYON.CoreBLL.Service.App.Interface
 
         String GetNameByCerID(String certificateID);
 
+        Boolean IsInDepartment(String certificateID);
+
         OperationResult DeleteAll();
     }
 }

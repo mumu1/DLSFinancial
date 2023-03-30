@@ -55,6 +55,14 @@ namespace BEYON.Web.Areas.BasicDataManagement.Controllers
 
         }
 
+        // GET: /BasicDataManagement/WageBaseTable/IsInDepartment/
+        public Boolean IsInDepartment(String certificateID)
+        {
+            Boolean result = this._taxBaseByMonthService.IsInDepartment(certificateID);
+            return result;
+
+        }
+
         // GET: /BasicDataManagement/WageBaseTable/GetNameByCerID/
         public String GetNameByCerID(String certificateID)
         {

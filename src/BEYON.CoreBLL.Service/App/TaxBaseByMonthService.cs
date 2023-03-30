@@ -227,6 +227,12 @@ namespace BEYON.CoreBLL.Service.App
             return name;
         }
 
+        public Boolean IsInDepartment(String certificateID)
+        {
+            Boolean flag = _TaxBaseByMonthRepository.IsInDepartment(certificateID);
+            return flag;
+        }
+
         public OperationResult DeleteAll() {
             try
             {               
