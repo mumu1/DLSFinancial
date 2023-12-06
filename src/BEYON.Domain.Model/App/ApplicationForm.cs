@@ -29,7 +29,7 @@ namespace BEYON.Domain.Model.App
         public string SerialNumber { get; set; }
 
         [Display(Name = "课题号")]
-        [StringLength(128)]
+        [StringLength(300)]
         public string ProjectNumber { get; set; }
 
         [Display(Name = "课题名称")]
@@ -45,11 +45,11 @@ namespace BEYON.Domain.Model.App
         public String DepartmentName { get; set; }
 
         [Display(Name = "课题负责人")]
-        [StringLength(36)]
+        [StringLength(50)]
         public string ProjectDirector { get; set; }
 
         [Display(Name = "经办人")]
-        [StringLength(36)]
+        [StringLength(50)]
         public string Agent { get; set; }
 
         [Display(Name = "支付类型")]

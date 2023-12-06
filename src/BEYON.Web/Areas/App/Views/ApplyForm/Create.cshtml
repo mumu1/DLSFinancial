@@ -66,6 +66,9 @@
                                 <div>
                                     4.单位填写分类：所内在职职工、所内注册学生、所内劳务流程。客座学生和外单位人员填写具体工作单位。
                                 </div>
+                                <div style="color:#F00">
+                                    5.临时聘用期限在3个月以上的人员，须签订劳务聘用合同，执行我所人事管理的相关规定。
+                                </div>
                             </div>
                         </section>
                         <div class="row">
@@ -504,11 +507,12 @@
             var birth = editor.field('Birth');
             var b_name = Bank.val().trim();
             var bd_name = BankDetailName.val().trim();
+            var company_ck = Company.val().trim();
             //0.各项必填验证
             if (personName.val().trim() == "") {
                 personName.error("请填写人员姓名");
             }
-            if (Company.val().trim() == "") {
+            if (company_ck == "") {
                 Company.error("请填写人员单位");
             }
 
@@ -551,6 +555,10 @@
                 if (arr1 != true) {
                     birth.error("出生日期格式不正确，格式为“1970-01-01”");
                 }
+            }
+
+            if (company_ck == "中国科学院") {
+                Company.error("人员单位不能为中国科学院");
             }
 
             //check bankdetailname includes bankname && banddetailname not null
@@ -1140,7 +1148,7 @@
                     closeFrom();
                     return;
                 }
-                alert("重要提示：'\n'若连续三个月为同一人发放劳务费，请尽快与人事处联系签订劳务合同，以免触犯劳动法！！！");
+                alert("重要提示：'\n'临时聘用期限在3个月以上的人员，须签订劳务聘用合同，执行我所人事管理的相关规定。");
 
                 var rowDatas = rows.data();
                 var queryDatas = [];

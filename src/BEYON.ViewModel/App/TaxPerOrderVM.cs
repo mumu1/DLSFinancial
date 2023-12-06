@@ -19,7 +19,7 @@ namespace BEYON.ViewModel.App
         public string ProjectNumber { get; set; }
 
         [Display(Name = "姓名")]
-        [StringLength(36)]
+        [StringLength(50)]
         public string Name { get; set; }
 
         [Display(Name = "课题名称")]
@@ -31,11 +31,11 @@ namespace BEYON.ViewModel.App
         public String RefundType { get; set; }
 
         [Display(Name = "课题负责人")]
-        [StringLength(36)]
+        [StringLength(50)]
         public string ProjectDirector { get; set; }
 
         [Display(Name = "经办人")]
-        [StringLength(36)]
+        [StringLength(50)]
         public string Agent { get; set; }
 
         [Display(Name = "人员类型")]

@@ -29,7 +29,7 @@ namespace BEYON.Domain.Model.App
         public string UserID { get; set; }
 
         [Display(Name = "姓名")]
-        [StringLength(36)]
+        [StringLength(50)]
         public string Name { get; set; }
 
         [Display(Name = "证件类型")]

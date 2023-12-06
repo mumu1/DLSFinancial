@@ -22,7 +22,7 @@ namespace BEYON.ViewModel.App
         public String RefundType { get; set; }
 
         [Display(Name = "课题负责人")]
-        [StringLength(36)]
+        [StringLength(50)]
         public string ProjectDirector { get; set; }
 
         [Display(Name = "工资薪金税额")]

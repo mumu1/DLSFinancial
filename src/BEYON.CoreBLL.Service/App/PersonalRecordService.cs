@@ -648,12 +648,18 @@ namespace BEYON.CoreBLL.Service.App
             {
                 feedBack.ExceptionContent.Add("第" + num + "行记录  人员类型格式有误，必须是【所内、所外】之一！");
             }
+
             //是否含税
             String[] regTaxOrNot = { "含税", "不含税" };
             if (!regTaxOrNot.Contains(personal.TaxOrNot))
             {
                 feedBack.ExceptionContent.Add("第" + num + "行记录  是否含税格式有误，必须是【含税、不含税】之一！");
             }
+
+            if (personal.Company.Equals("中国科学院")) {
+                feedBack.ExceptionContent.Add("第" + num + "行记录  单位不能为中国科学院！");
+            }
+
             //证件号码
            // Regex regCerficateID = new Regex("^\\d{15}|\\d{18}$");
             //Regex regCerficateID = new Regex("^[1-9]\\d{5}[1-9]9\\d{4}3[0-1]\\d{4}$|^[1-9]\\d{5}[1-9]9\\d{4}[0-2][0-9]\\d{4}$|^[1-9]\\d{5}[1-9]9\\d{4}3[0-1]\\d{3}X$|^[1-9]\\d{5}[1-9]9\\d{4}[0-2][0-9]\\d{3}X$|^[1-9]\\d{5}\\d{4}3[0-1]\\d{4}$|^[1-9]\\d{5}\\d{4}[0-2][0-9]\\d{4}$|^[1-9]\\d{5}\\d{4}3[0-1]\\d{3}X$|^[1-9]\\d{5}\\d{4}[0-2][0-9]\\d{3}X$");

@@ -15,7 +15,7 @@ namespace BEYON.ViewModel.App
         public string SerialNumber { get; set; }
 
         [Display(Name = "姓名")]
-        [StringLength(36)]
+        [StringLength(50)]
         public string Name { get; set; }
 
         [Display(Name = "证件类型")]

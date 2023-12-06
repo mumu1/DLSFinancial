@@ -37,7 +37,7 @@ namespace BEYON.Domain.Model.App
         public string TaskName { get; set; }
 
         [Display(Name = "姓名")]
-        [StringLength(36)]
+        [StringLength(50)]
         public string Name { get; set; }
 
         [Display(Name = "报销事由")]
@@ -45,11 +45,11 @@ namespace BEYON.Domain.Model.App
         public String RefundType { get; set; }
 
         [Display(Name = "课题负责人")]
-        [StringLength(36)]
+        [StringLength(50)]
         public string ProjectDirector { get; set; }
 
         [Display(Name = "经办人")]
-        [StringLength(36)]
+        [StringLength(50)]
         public string Agent { get; set; }
 
         [Display(Name = "人员类型")]
